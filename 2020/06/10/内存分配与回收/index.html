@@ -110,7 +110,7 @@
                   
                     id="home"
                   >
-                  <i class='fas fa-rss fa-fw'></i>博客
+                  <i class='fas fa-rss fa-fw'></i>主页
                 </a>
                 
               </li>
@@ -174,7 +174,7 @@
                   
                     id="books"
                   >
-                  <i class='fas fa-link fa-fw'></i>书单
+                  <i class='fas fa-book fa-fw'></i>书单
                 </a>
                 
               </li>
@@ -224,7 +224,7 @@
                   
                     id="home"
                   >
-                  <i class='fas fa-rss fa-fw'></i>博客
+                  <i class='fas fa-rss fa-fw'></i>主页
                 </a>
                 
               </li>
@@ -288,7 +288,7 @@
                   
                     id="books"
                   >
-                  <i class='fas fa-link fa-fw'></i>书单
+                  <i class='fas fa-book fa-fw'></i>书单
                 </a>
                 
               </li>
@@ -357,7 +357,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -453,26 +453,26 @@
 </ul>
 <h4 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h4><p>标记需要被回收的对象后，回收掉所有被标记的对象；<br>或者标记不需要被回收的对象，同一回收未被标记的对象。</p>
 <p>缺点：<br>不稳定，标记清除的性能随着对象的增多而降低；<br>空间碎片化问题，肯能会导致在分配较大对象时无法找到足够的连续空间内存不得不提前触发另一次垃圾收集动作。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ms.jpeg" alt="mark-sweep"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ms.jpeg" alt="mark-sweep"></p>
 <h4 id="标记复制算法"><a href="#标记复制算法" class="headerlink" title="标记复制算法"></a>标记复制算法</h4><p>为了解决标记清除算法面对大量可回收对象时执行效率低的问题。</p>
 <p>优点：只需要复制少数存活对象，简单高效<br>缺点：浪费内存空间。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mc.jpeg" alt="mark-copy"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mc.jpeg" alt="mark-copy"></p>
 <p>根据弱分代假说，以及实际情况，大部分的对象在第一次垃圾回收时就会被回收，因此并不需要按照1:1的比例来划分新生代的内存空间。<br>内存被分为较大的Eden区和较小的两个Survivor区域，HotSpot默认比例是8:1:1。<br>打给你Survivor空间不足容纳一次MinorGC后存活的对戏那个时，就需要依赖其他内存区域进行分配担保。</p>
 <h4 id="标记整理算法"><a href="#标记整理算法" class="headerlink" title="标记整理算法"></a>标记整理算法</h4><p>根据老年代对象的存亡特征以及强分代假说提出的算法。<br>将所有存活的对象向内存空间的一端移动，然后直接清理掉边界以外的内存。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mark-compact.jpeg" alt="mark-compact"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mark-compact.jpeg" alt="mark-compact"></p>
 <p>吞吐量：赋值器和收集器的效率总和。<br>如果在清理时移动，必然会影响到对象回收的效率。<br>如果清理时不移动，必然会影响到对象分配的效率。</p>
 <h2 id="常见的垃圾收集器"><a href="#常见的垃圾收集器" class="headerlink" title="常见的垃圾收集器"></a>常见的垃圾收集器</h2><h4 id="Serial-SerialOld"><a href="#Serial-SerialOld" class="headerlink" title="Serial / SerialOld"></a>Serial / SerialOld</h4><p>Serial收集器是最古老的收集器，使用标记拷贝算法，在进行垃圾收集时，必须暂停其他所有工作线程，直到它收集结束。<br>优点：在内存较小的桌面应用或者Client模式下，额外内存消耗最小，简单高效。</p>
 <p>SerialOld同样是单线程收集起，使用标记整理算法。当CMS收集起发生失败时会转为SerialOld工作。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/serialGC.jpeg" alt="Serial GC"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/serialGC.jpeg" alt="Serial GC"></p>
 <h4 id="PS-PO"><a href="#PS-PO" class="headerlink" title="PS / PO"></a>PS / PO</h4><p>Paralle Scavenge/ Paralle Old 的目标是达到一个可控的吞吐量。</p>
 <p>ParalleScavenge 同样是基于标记-复制算法，支持多线程并发收集，<br>吞吐量 = （运行用户代码时间）/(运行用户代码时间+运行垃圾收集时间)<br>-XX:MaxGCPauseMillis 控制最大垃圾收集停顿时间<br>-XX:GCTimeRatio 控制垃圾收集时间占总时间的比率<br>-XX:+UseAdaptiveSizePolicy 就不需要人工指定新生代的大小，Eden于Survivor的比例，以及晋升老年代的大小，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量。</p>
 <p>ParalleOld 收集老年代，基于标记整理算法。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/pspo.jpeg" alt="Paralle Scavenge / Paralle Old"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/pspo.jpeg" alt="Paralle Scavenge / Paralle Old"></p>
 <h4 id="ParNew-CMS"><a href="#ParNew-CMS" class="headerlink" title="ParNew / CMS"></a>ParNew / CMS</h4><p>ParNew是Serial收集器的多线程并行版本，除了使用多条线程进行垃圾收集之外，其余行为与Serial收集起完全一致。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ParNewSerialOld.jpeg" alt="ParNew / SerialOld"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ParNewSerialOld.jpeg" alt="ParNew / SerialOld"></p>
 <p>CMD是一种以获取最短回收停顿时间为目的的收集器。符合希望系统停顿时间尽可能短，以给用户带来良好交互体验的需求。他是一种标记-清除算法实现的。<br>包含四个步骤：<br>1）初始标记<br>2）并发标记<br>3）重新标记<br>4）并发清除</p>
 <p>其中初始标记和重新标记这两个步骤仍需要STW。<br>初始标记仅仅只是标记一下GC Roots能直接关联到的对象、速度很快；<br>并发标记阶段就是从GC Roots的直接关联对象开始遍历整个对象图的过程，这个过程耗时长，但不需要停顿用户线程，可以与垃圾收集线程一起并发运行；<br>重新标记为了修正并发标记期间因为用户程序继续运行导致标记产生变动的部分，这个阶段比初始标记耗时稍长；<br>并发清除，清理删除掉标记阶段判断已经死亡的对象，不需要移动哦存活对象，因此这个阶段也是与用户线程同时并发。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/cms.jpeg" alt="CMS"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/cms.jpeg" alt="CMS"></p>
 <p>CMS缺点：<br>1） 耗CPU资源<br>2） 无法处理浮动垃圾，由于预留的内存无法分配新对象时，有可能出现回收失败而导致退化到Serial Old的模式收集。<br>3）分配占用大空间的对象时，会出现老年代还有很多剩余空间，但是无法找到足够大的连续空间分配对象，不得不提前触发FullGC。<br>提供了两个参数优化，但是JDK1.9之后已经废弃：<br>-XX:UseCMS-CompactAtFullCollection 不得不进行FullGC时开启内存碎片的合并整理。<br>-XX:CMSFullGCsBefore-Compaction，要求CMS收集器在执行过若干次不整理空间的FullGC之后，下一次进入FullGC前进行碎片整理。</p>
 <h4 id="Garbage-First"><a href="#Garbage-First" class="headerlink" title="Garbage First"></a>Garbage First</h4><p>G1时一款主要面向服务端应用的垃圾收集器。</p>
 <p>在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间大概率不超过N毫秒这样的目标。</p>
@@ -480,7 +480,7 @@
 <p>G1把连续的Java堆内存划分为多个大小相等的独立区域（Region），每个Region都可以根据需要扮演 新生代的Eden空间Survivor空间，或者老年代空间。收集器能够对不同角色的Region采用不同的=策略取处理，这样无论是新创建的对象还是存活了一段时间、经过多次收集的旧对象都能获得很好的收集再熬过。</p>
 <p>Region中有一类Humongous区域专门存放大对象。 G1认为只要大小超过了一个Region容量的一般的对象就可以判定为大对象。每个Region的大小可以通过参数-XX:G1HeapRegionSize设定，取值范围1MB～32MB，且应为2的N次幂。那些超过了整个Region容量的超级大对象，会被存放在N个连续的HumongousRegion之中，G1的大多数行为都把HumongousRegion作为老年代的一部分进行看待。</p>
 <p>G因为将Region作为单词回收的最小单元，所以可以建立可预测的停顿时间模型。<br>每次根据用户设置的停顿时间-XX:MaxGCPauseMillis， 优先处理回收价值收益最大的那些Region。<br>这种使用Region划分内存空间，以及具有优先级的区域回收方式，保证了G1收集器在悠闲的时间内获取尽可能高的收集效率。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/G1Region.jpeg" alt="G1 Region"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/G1Region.jpeg" alt="G1 Region"></p>
 <h5 id="需要解决的问题"><a href="#需要解决的问题" class="headerlink" title="需要解决的问题"></a>需要解决的问题</h5><p>1）跨Region引用的对象： 每个Region都维护自己的记忆集避免全堆作为GCRoots扫描， 这些记忆集会记录下别的Region指向自己的指针，并标记这些指针分别在哪些卡页的范围之内。<br>G1的记忆集是一种Hash表，Key时别的Region的起始地址，Value时一个集合，里面存储的元素时卡表的索引号。这种双向的卡表结构记录了我指向谁和谁指向了我，因此G1只少需要耗费大约10%～20%的额外内存来维持收集工作。</p>
 <p>2）在并发阶段如何保证收集线程与用户线程互不干扰地运行？<br>用户线程在改变对象引用关系的时候，必须保证不能打破原本的对象图结构，导致比阿吉结果出现错误，<br>CMS使用增量更新算法，G1使用原始快照算法来实现。</p>
 <p>垃圾收集对用户线程的影响还体现在回收过程中心窗卷对象的内存分配上，程序要继续运行就肯定会持续有新对象呗创建，G1位每个Region设计了两个名为TAMS（TOp at Mark Start）的指针，把Region中的一部分空间划分出来用于并发回收过程中的新对象分配，并发回收时心分配的对象地址都必须要在这两个指针位置以上。G1收集器默认在这个地址以上的对象时被隐式标记过的，不纳入回收范围。如果内存回收的速度赶不上内存分配的速度，G1收集器也要被迫冻结用户线程执行，导致FullGC而产生长时间的STW。</p>
@@ -489,7 +489,7 @@
 <h5 id="并发标记"><a href="#并发标记" class="headerlink" title="并发标记"></a>并发标记</h5><p>从GCRoots开始对对子红对象进行可达性分析，递归扫描整个堆里的对象图，找出要回收的对象，这个阶段耗时较长，但是可以和用户程序并发执行，当对象图扫描完成以后，还要重新处理SATB记录下的在并发时有引用变动的对象。</p>
 <h5 id="最终标记"><a href="#最终标记" class="headerlink" title="最终标记"></a>最终标记</h5><p>对用户线程做另外一个短暂的暂停，用于处理并发阶段结束后仍遗留下来的最后那少量的SATB记录。</p>
 <h5 id="筛选回收"><a href="#筛选回收" class="headerlink" title="筛选回收"></a>筛选回收</h5><p>负责更新Region的统计数据，对哥哥Region的回收价值和成本进行排序，根据用户所期望的停顿时间来制定回收计划，可以自由选择任意多个Region构成回收集，然后把决定回收的那一部分Region的存活对象复制到空的Region中，再清理掉整个旧的Region的全部空间，对存活对象移动时必须暂停用户线程，但是由多条线程完成的。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/g1.jpeg" alt="G1"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/g1.jpeg" alt="G1"></p>
 <p>G1从整体上来看是基于标记整理算法，但从局部来看时基于标记复制算法。无论如何，这两种算法意味着G1再与性期间不会产生内存空间碎片，垃圾收集完成之后能提供规整的可用内存。这种特性有利于程序长时间运行，在程序为大对象分配内存时不容易因无法找到连续内存空间而提前触发限一次收集。</p>
 <p>G1位了垃圾收集产生的内存占用以及额外的执行副在都比CMS搞。<br>内存占用是由于双向卡表占用空间大。CMs只记录了老年代到新生代的卡表记录。</p>
 <p>负载：CMS用写后屏障维护更新卡表；<br>G1除了使用写后屏障维护卡表外，位了实现原始快照搜索（SATB）算法，还需要使用写前屏障来跟踪并发前的指针变化。 原始快照搜索能够减少并发标记和重新标记阶段的消耗，避免CMS那样在最终标记阶段停顿时间过长的缺点。</p>

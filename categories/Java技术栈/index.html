@@ -110,7 +110,7 @@
                   
                     id="home"
                   >
-                  <i class='fas fa-rss fa-fw'></i>博客
+                  <i class='fas fa-rss fa-fw'></i>主页
                 </a>
                 
               </li>
@@ -174,7 +174,7 @@
                   
                     id="books"
                   >
-                  <i class='fas fa-link fa-fw'></i>书单
+                  <i class='fas fa-book fa-fw'></i>书单
                 </a>
                 
               </li>
@@ -224,7 +224,7 @@
                   
                     id="home"
                   >
-                  <i class='fas fa-rss fa-fw'></i>博客
+                  <i class='fas fa-rss fa-fw'></i>主页
                 </a>
                 
               </li>
@@ -288,7 +288,7 @@
                   
                     id="books"
                   >
-                  <i class='fas fa-link fa-fw'></i>书单
+                  <i class='fas fa-book fa-fw'></i>书单
                 </a>
                 
               </li>
@@ -380,7 +380,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -460,7 +460,7 @@
 <li>本地方法栈</li>
 <li>PC计数器</li>
 </ul>
-<p><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/runtime_dataarea.webp" alt="Runtime DataArea"></p>
+<p><img src="/blog/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/runtime_dataarea.webp" alt="Runtime DataArea"></p>
 <h3 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h3><p>  几乎所有的对象以及数组都存放在堆区。</p>
 <h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>  用于存储已经被虚拟机加载的类型信息、常量、静态变量、及时编译器变异后的代码缓存等数据。</p>
 <h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>  运行时常量池是方法区的一部分，用于存放编译期或者运行期生成的各种字面量和符号引用。</p>
@@ -469,7 +469,7 @@
 <h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>与虚拟机栈作用类似，为虚拟机使用到的本地方法服务。</p>
 <h3 id="PC计数器"><a href="#PC计数器" class="headerlink" title="PC计数器"></a>PC计数器</h3><p>   当前线程所执行的字节码的行号指示器。在Java虚拟机的概念模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。</p>
 <p>对于JDK1.8以后HotSpot虚拟机改用与Jrokit、J9一样与本地内存中实现的元空间（Meta-space）来实现方法区。无论是原空间还是永久代，他们只是方法区的实现，字符串常量池和静态变量的存储逻辑上仍然属于方法区。元空间使用的是物理内存、永久代使用的是JVM内存。因此元空间的大小只受限于物理内存。</p>
-<p><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/hotspot_runtimearea.png" alt="HotSpot 虚拟机实现"></p>
+<p><img src="/blog/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/hotspot_runtimearea.png" alt="HotSpot 虚拟机实现"></p>
 <h2 id="HotSpot-虚拟机对象的创建与引用"><a href="#HotSpot-虚拟机对象的创建与引用" class="headerlink" title="HotSpot 虚拟机对象的创建与引用"></a>HotSpot 虚拟机对象的创建与引用</h2><h4 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h4><p>1） 在new一个对象的时候，先需要通过类加载检查，然后虚拟机为新生对象分配内存。</p>
 <p>对象所需要的内存大小在类加载完成后便可以完全确定，为对象分配空间的任务实际上便等同于把一块确定大小的内存块从Java堆中划分出来。</p>
 <ul>
@@ -495,8 +495,8 @@
 </ul>
 <h3 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h3><p>对象在堆中创建好了，Java程序会通过栈上局部变量表中的reference字段来引用堆上的对象。</p>
 <ul>
-<li>句柄访问<br>Java堆中划分出一块内存作为句柄池，reference中存储的就是对象的句柄地址，句柄中包含了对象实例数据与类型数据各自具体的地址信息。<br>好处：reference中存储的事稳定的句柄地址，对象被移动时只会改变句柄中的实例数据指针。<br><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/jubing.jpeg" alt="句柄访问"></li>
-<li>直接指针<br>reference中存储的是对象的地址。好处是速度快，节约了指针定位的时间开销。<br><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/direct.jpeg" alt="直接指针"></li>
+<li>句柄访问<br>Java堆中划分出一块内存作为句柄池，reference中存储的就是对象的句柄地址，句柄中包含了对象实例数据与类型数据各自具体的地址信息。<br>好处：reference中存储的事稳定的句柄地址，对象被移动时只会改变句柄中的实例数据指针。<br><img src="/blog/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/jubing.jpeg" alt="句柄访问"></li>
+<li>直接指针<br>reference中存储的是对象的地址。好处是速度快，节约了指针定位的时间开销。<br><img src="/blog/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/direct.jpeg" alt="直接指针"></li>
 </ul>
 
       
@@ -538,7 +538,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -599,12 +599,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>计算机为了提升效率，增加了多内核，并且为每个内核增加了自己的高速缓存，而他们又共享同一个主内存。</p>
-<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm01.jpeg" alt="计算机处理器、高速缓存、主内存之间的交互关系"></p>
+<p><img src="/blog/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm01.jpeg" alt="计算机处理器、高速缓存、主内存之间的交互关系"></p>
 <p>除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，但保证结果与顺序执行的结果一致。</p>
 <p>与处理器的乱序执行优化类似，Java虚拟机的即时编译器也有指令重排序优化。</p>
 <h2 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h2><p>《Java虚拟机规范》中曾试图定义一种Java内存模型来屏蔽各种硬件和操作系统的内存访问差异。</p>
 <h4 id="主内存与工作内存"><a href="#主内存与工作内存" class="headerlink" title="主内存与工作内存"></a>主内存与工作内存</h4><p>Java内存模型的主要目的是定义程序中各种变量的访问规则（关注虚拟机中把变量存储到内存和从内存中取出变量的底层细节。）<br>Java内存模型规定了所有的变量都存储在主内存（除线程私有的以外）。<br>线程的工作内存保存了被该线程使用的变量的主内存副本，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存的数据。不同的线程之间也无法直接访问对方工作内存的变量，线程之间变量值的传递均需要通过主内存来完成。</p>
-<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm02.jpeg" alt></p>
+<p><img src="/blog/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm02.jpeg" alt></p>
 <h3 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h3><p>关于主内存与工作内存之间的交互协议，Java内存模型中定义了8种的操作。</p>
 <p>Java虚拟机实现时必须保证每种操作都是原子的，不可再分的（对于double和long来讲，load、store、、read、write允许有例外）。</p>
 <ul>
@@ -707,7 +707,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -827,7 +827,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -911,7 +911,7 @@
 <p>编译器会把语句块、变量变量初始化、调用父类的实例构造器方等操作收敛到&lt;init&gt;()和&lt;cinit&gt;()方法中，并且保证无论源码中出现的顺序如何，都一定是按先执行父类的实例构造器，然后初始化变量，最后执行语句块的顺序执行，</p>
 </li>
 </ul>
-<p><img src="/2020/06/11/%E7%BC%96%E8%AF%91%E4%B8%8E%E4%BC%98%E5%8C%96/javac.jpeg" alt></p>
+<p><img src="/blog/2020/06/11/%E7%BC%96%E8%AF%91%E4%B8%8E%E4%BC%98%E5%8C%96/javac.jpeg" alt></p>
 <h3 id="语法糖"><a href="#语法糖" class="headerlink" title="语法糖"></a>语法糖</h3><p>泛型、自动装箱、拆箱、遍历循环、变长参数和条件编译、内部类、枚举类、断言、数值直面量、枚举和字符串的switch、try with resource， lambda等。</p>
 <h4 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h4><p>类型擦除</p>
 <h4 id="自动装箱、拆箱和循环遍历"><a href="#自动装箱、拆箱和循环遍历" class="headerlink" title="自动装箱、拆箱和循环遍历"></a>自动装箱、拆箱和循环遍历</h4><p>1）大于127的值不会自动拆箱<br>2）没有遇到运算符的情况下不会自动拆箱<br>3）equals方法不处理数据转型</p>
@@ -957,7 +957,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -1058,26 +1058,26 @@
 </ul>
 <h4 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h4><p>标记需要被回收的对象后，回收掉所有被标记的对象；<br>或者标记不需要被回收的对象，同一回收未被标记的对象。</p>
 <p>缺点：<br>不稳定，标记清除的性能随着对象的增多而降低；<br>空间碎片化问题，肯能会导致在分配较大对象时无法找到足够的连续空间内存不得不提前触发另一次垃圾收集动作。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ms.jpeg" alt="mark-sweep"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ms.jpeg" alt="mark-sweep"></p>
 <h4 id="标记复制算法"><a href="#标记复制算法" class="headerlink" title="标记复制算法"></a>标记复制算法</h4><p>为了解决标记清除算法面对大量可回收对象时执行效率低的问题。</p>
 <p>优点：只需要复制少数存活对象，简单高效<br>缺点：浪费内存空间。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mc.jpeg" alt="mark-copy"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mc.jpeg" alt="mark-copy"></p>
 <p>根据弱分代假说，以及实际情况，大部分的对象在第一次垃圾回收时就会被回收，因此并不需要按照1:1的比例来划分新生代的内存空间。<br>内存被分为较大的Eden区和较小的两个Survivor区域，HotSpot默认比例是8:1:1。<br>打给你Survivor空间不足容纳一次MinorGC后存活的对戏那个时，就需要依赖其他内存区域进行分配担保。</p>
 <h4 id="标记整理算法"><a href="#标记整理算法" class="headerlink" title="标记整理算法"></a>标记整理算法</h4><p>根据老年代对象的存亡特征以及强分代假说提出的算法。<br>将所有存活的对象向内存空间的一端移动，然后直接清理掉边界以外的内存。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mark-compact.jpeg" alt="mark-compact"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mark-compact.jpeg" alt="mark-compact"></p>
 <p>吞吐量：赋值器和收集器的效率总和。<br>如果在清理时移动，必然会影响到对象回收的效率。<br>如果清理时不移动，必然会影响到对象分配的效率。</p>
 <h2 id="常见的垃圾收集器"><a href="#常见的垃圾收集器" class="headerlink" title="常见的垃圾收集器"></a>常见的垃圾收集器</h2><h4 id="Serial-SerialOld"><a href="#Serial-SerialOld" class="headerlink" title="Serial / SerialOld"></a>Serial / SerialOld</h4><p>Serial收集器是最古老的收集器，使用标记拷贝算法，在进行垃圾收集时，必须暂停其他所有工作线程，直到它收集结束。<br>优点：在内存较小的桌面应用或者Client模式下，额外内存消耗最小，简单高效。</p>
 <p>SerialOld同样是单线程收集起，使用标记整理算法。当CMS收集起发生失败时会转为SerialOld工作。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/serialGC.jpeg" alt="Serial GC"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/serialGC.jpeg" alt="Serial GC"></p>
 <h4 id="PS-PO"><a href="#PS-PO" class="headerlink" title="PS / PO"></a>PS / PO</h4><p>Paralle Scavenge/ Paralle Old 的目标是达到一个可控的吞吐量。</p>
 <p>ParalleScavenge 同样是基于标记-复制算法，支持多线程并发收集，<br>吞吐量 = （运行用户代码时间）/(运行用户代码时间+运行垃圾收集时间)<br>-XX:MaxGCPauseMillis 控制最大垃圾收集停顿时间<br>-XX:GCTimeRatio 控制垃圾收集时间占总时间的比率<br>-XX:+UseAdaptiveSizePolicy 就不需要人工指定新生代的大小，Eden于Survivor的比例，以及晋升老年代的大小，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量。</p>
 <p>ParalleOld 收集老年代，基于标记整理算法。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/pspo.jpeg" alt="Paralle Scavenge / Paralle Old"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/pspo.jpeg" alt="Paralle Scavenge / Paralle Old"></p>
 <h4 id="ParNew-CMS"><a href="#ParNew-CMS" class="headerlink" title="ParNew / CMS"></a>ParNew / CMS</h4><p>ParNew是Serial收集器的多线程并行版本，除了使用多条线程进行垃圾收集之外，其余行为与Serial收集起完全一致。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ParNewSerialOld.jpeg" alt="ParNew / SerialOld"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ParNewSerialOld.jpeg" alt="ParNew / SerialOld"></p>
 <p>CMD是一种以获取最短回收停顿时间为目的的收集器。符合希望系统停顿时间尽可能短，以给用户带来良好交互体验的需求。他是一种标记-清除算法实现的。<br>包含四个步骤：<br>1）初始标记<br>2）并发标记<br>3）重新标记<br>4）并发清除</p>
 <p>其中初始标记和重新标记这两个步骤仍需要STW。<br>初始标记仅仅只是标记一下GC Roots能直接关联到的对象、速度很快；<br>并发标记阶段就是从GC Roots的直接关联对象开始遍历整个对象图的过程，这个过程耗时长，但不需要停顿用户线程，可以与垃圾收集线程一起并发运行；<br>重新标记为了修正并发标记期间因为用户程序继续运行导致标记产生变动的部分，这个阶段比初始标记耗时稍长；<br>并发清除，清理删除掉标记阶段判断已经死亡的对象，不需要移动哦存活对象，因此这个阶段也是与用户线程同时并发。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/cms.jpeg" alt="CMS"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/cms.jpeg" alt="CMS"></p>
 <p>CMS缺点：<br>1） 耗CPU资源<br>2） 无法处理浮动垃圾，由于预留的内存无法分配新对象时，有可能出现回收失败而导致退化到Serial Old的模式收集。<br>3）分配占用大空间的对象时，会出现老年代还有很多剩余空间，但是无法找到足够大的连续空间分配对象，不得不提前触发FullGC。<br>提供了两个参数优化，但是JDK1.9之后已经废弃：<br>-XX:UseCMS-CompactAtFullCollection 不得不进行FullGC时开启内存碎片的合并整理。<br>-XX:CMSFullGCsBefore-Compaction，要求CMS收集器在执行过若干次不整理空间的FullGC之后，下一次进入FullGC前进行碎片整理。</p>
 <h4 id="Garbage-First"><a href="#Garbage-First" class="headerlink" title="Garbage First"></a>Garbage First</h4><p>G1时一款主要面向服务端应用的垃圾收集器。</p>
 <p>在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间大概率不超过N毫秒这样的目标。</p>
@@ -1085,7 +1085,7 @@
 <p>G1把连续的Java堆内存划分为多个大小相等的独立区域（Region），每个Region都可以根据需要扮演 新生代的Eden空间Survivor空间，或者老年代空间。收集器能够对不同角色的Region采用不同的=策略取处理，这样无论是新创建的对象还是存活了一段时间、经过多次收集的旧对象都能获得很好的收集再熬过。</p>
 <p>Region中有一类Humongous区域专门存放大对象。 G1认为只要大小超过了一个Region容量的一般的对象就可以判定为大对象。每个Region的大小可以通过参数-XX:G1HeapRegionSize设定，取值范围1MB～32MB，且应为2的N次幂。那些超过了整个Region容量的超级大对象，会被存放在N个连续的HumongousRegion之中，G1的大多数行为都把HumongousRegion作为老年代的一部分进行看待。</p>
 <p>G因为将Region作为单词回收的最小单元，所以可以建立可预测的停顿时间模型。<br>每次根据用户设置的停顿时间-XX:MaxGCPauseMillis， 优先处理回收价值收益最大的那些Region。<br>这种使用Region划分内存空间，以及具有优先级的区域回收方式，保证了G1收集器在悠闲的时间内获取尽可能高的收集效率。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/G1Region.jpeg" alt="G1 Region"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/G1Region.jpeg" alt="G1 Region"></p>
 <h5 id="需要解决的问题"><a href="#需要解决的问题" class="headerlink" title="需要解决的问题"></a>需要解决的问题</h5><p>1）跨Region引用的对象： 每个Region都维护自己的记忆集避免全堆作为GCRoots扫描， 这些记忆集会记录下别的Region指向自己的指针，并标记这些指针分别在哪些卡页的范围之内。<br>G1的记忆集是一种Hash表，Key时别的Region的起始地址，Value时一个集合，里面存储的元素时卡表的索引号。这种双向的卡表结构记录了我指向谁和谁指向了我，因此G1只少需要耗费大约10%～20%的额外内存来维持收集工作。</p>
 <p>2）在并发阶段如何保证收集线程与用户线程互不干扰地运行？<br>用户线程在改变对象引用关系的时候，必须保证不能打破原本的对象图结构，导致比阿吉结果出现错误，<br>CMS使用增量更新算法，G1使用原始快照算法来实现。</p>
 <p>垃圾收集对用户线程的影响还体现在回收过程中心窗卷对象的内存分配上，程序要继续运行就肯定会持续有新对象呗创建，G1位每个Region设计了两个名为TAMS（TOp at Mark Start）的指针，把Region中的一部分空间划分出来用于并发回收过程中的新对象分配，并发回收时心分配的对象地址都必须要在这两个指针位置以上。G1收集器默认在这个地址以上的对象时被隐式标记过的，不纳入回收范围。如果内存回收的速度赶不上内存分配的速度，G1收集器也要被迫冻结用户线程执行，导致FullGC而产生长时间的STW。</p>
@@ -1094,7 +1094,7 @@
 <h5 id="并发标记"><a href="#并发标记" class="headerlink" title="并发标记"></a>并发标记</h5><p>从GCRoots开始对对子红对象进行可达性分析，递归扫描整个堆里的对象图，找出要回收的对象，这个阶段耗时较长，但是可以和用户程序并发执行，当对象图扫描完成以后，还要重新处理SATB记录下的在并发时有引用变动的对象。</p>
 <h5 id="最终标记"><a href="#最终标记" class="headerlink" title="最终标记"></a>最终标记</h5><p>对用户线程做另外一个短暂的暂停，用于处理并发阶段结束后仍遗留下来的最后那少量的SATB记录。</p>
 <h5 id="筛选回收"><a href="#筛选回收" class="headerlink" title="筛选回收"></a>筛选回收</h5><p>负责更新Region的统计数据，对哥哥Region的回收价值和成本进行排序，根据用户所期望的停顿时间来制定回收计划，可以自由选择任意多个Region构成回收集，然后把决定回收的那一部分Region的存活对象复制到空的Region中，再清理掉整个旧的Region的全部空间，对存活对象移动时必须暂停用户线程，但是由多条线程完成的。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/g1.jpeg" alt="G1"></p>
+<p><img src="/blog/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/g1.jpeg" alt="G1"></p>
 <p>G1从整体上来看是基于标记整理算法，但从局部来看时基于标记复制算法。无论如何，这两种算法意味着G1再与性期间不会产生内存空间碎片，垃圾收集完成之后能提供规整的可用内存。这种特性有利于程序长时间运行，在程序为大对象分配内存时不容易因无法找到连续内存空间而提前触发限一次收集。</p>
 <p>G1位了垃圾收集产生的内存占用以及额外的执行副在都比CMS搞。<br>内存占用是由于双向卡表占用空间大。CMs只记录了老年代到新生代的卡表记录。</p>
 <p>负载：CMS用写后屏障维护更新卡表；<br>G1除了使用写后屏障维护卡表外，位了实现原始快照搜索（SATB）算法，还需要使用写前屏障来跟踪并发前的指针变化。 原始快照搜索能够减少并发标记和重新标记阶段的消耗，避免CMS那样在最终标记阶段停顿时间过长的缺点。</p>
@@ -1139,7 +1139,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -1197,15 +1197,15 @@
 <ol>
 <li>使用内核线程1:1实现；<br>内核系统就是由操作系统内核支持的线程，这种线程由内核来完成线程切换，内核通过操纵调度器对线程进行调度，并负责将线程的任务映射到各个处理器上。</li>
 </ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/1.1.jpeg" alt="内核线程"></p>
+<p><img src="/blog/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/1.1.jpeg" alt="内核线程"></p>
 <ol start="2">
 <li>使用用户线程1:n实现；</li>
 </ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/1.n.jpeg" alt="用户线程"></p>
+<p><img src="/blog/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/1.n.jpeg" alt="用户线程"></p>
 <ol start="3">
 <li>使用用户线程价轻量级进程混合实现（n：M实现）</li>
 </ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/m.n.jpeg" alt="混合实现"></p>
+<p><img src="/blog/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/m.n.jpeg" alt="混合实现"></p>
 <h2 id="Java线程的实现"><a href="#Java线程的实现" class="headerlink" title="Java线程的实现"></a>Java线程的实现</h2><p>《Java虚拟机规范》中没有限定使用哪种线程模型来实现，主流平台上的主流商用Java虚拟机线程模型普遍都给予操作系统原生线程模型来实现（1:1的线程模型）</p>
 <h2 id="Java线程调度"><a href="#Java线程调度" class="headerlink" title="Java线程调度"></a>Java线程调度</h2><p>线程调度是指系统为线程分配处理器使用权的过程，调度方式分为两种：</p>
 <ul>
@@ -1234,7 +1234,7 @@
 <li>阻塞：Blocked，在程序等待进入同步区域的时候，线程将进入阻塞状态。</li>
 <li>结束: Terminated，已终止线程的线程状态，线程已经结束执行。</li>
 </ul>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/ThreadState.jpeg" alt="线程状态图"></p>
+<p><img src="/blog/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/ThreadState.jpeg" alt="线程状态图"></p>
 <h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>当多个线程同时访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要执行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果，那就称这个对象是线程安全的。</p>
 <p>也就是代码本身封装了所有必要的正确性保障手段，令调用者无序关心多线程下的调用问题，更无需自己实现任何措施来保证多线程环境下的正确调用。</p>
 <h4 id="不可变"><a href="#不可变" class="headerlink" title="不可变"></a>不可变</h4><p>在Java语言中，不可变对象一定是线程安全的，无论是对象的方法实现还是方法的调用者，都不需要再进行任何线程安全保障措施。</p>
@@ -1273,18 +1273,18 @@
 <h4 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h4><p>在没有多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗。</p>
 <p>Hotspot对象头分为两部分：<br>1）用于存储对象自身运行的数据，如哈希吗，GC分代年龄。这部分数据的长度在32位和64位的Java虚拟机中分别占用32个或者64比特。这部分是实现轻量级锁和偏向锁的关键。<br>2）用于存储指向方法区对象类型数据的指针，如果是数组对象，还会有一个额外的部分存储数组长度。</p>
 <p>由于对象头信息是与对象自身定义的数据无关的额外存储成本，考虑到Java虚拟机的空间使用效率，MarkWord被设计成一个非固定的动态数据结构，以便在极小的空间内存储尽量多的信息。<br>它会根据对象的状态服用自己的存储空间。<br>在32位的Hotspot虚拟机中，对象未被锁定的状态下，MarkWord的32个比特空间有25个比特用于存储对象的哈希码，4个比特用于存储对象分代年龄，2个比特用于存储锁标志位，还有1个比特股定位0（表示未进入偏向模式）。对象除了违背锁定的正常状态外，还有轻量级锁定、重量级锁定、GC标记、可偏向等几种状态。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/light_.jpeg" alt></p>
+<p><img src="/blog/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/light_.jpeg" alt></p>
 <p>如果代码即将进入同步块的时候，如果此同步对象没有被锁定（标志位位01），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（LockRecord）的空间,用于存储锁对象目前的MarkWord的拷贝。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/markword.jpeg" alt></p>
+<p><img src="/blog/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/markword.jpeg" alt></p>
 <p>然后虚拟机将使用CAS操作尝试把对象的markword更新为指向LockRecord的指针。如果这个更新成功，那么代表该线程拥有了这个对象的锁，并且对像MarkWord的锁标志位将转变为00，表示此对象处于轻量级锁定状态。</p>
 <p>如果更新操作失败，意味着至少存在一个线程与当前线程竞争获取该对象的锁。虚拟机首先检查对象的MarkWord是否只想当前线程的栈帧，如果是，说明线程已经拥有了这个对象的锁，那么直接进入同步块继续执行，否则说明这个对象已经被其他线程抢占了。<br>如果出现两条以上的线程争用同一个锁的情况，那么轻量级锁不再有效，必须要膨胀为重量级锁，锁标志的状态变为10， 此时Markword中存储的就是指向重量级锁的指针，后面等待锁的线程也必须进入阻塞状态。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/light_lock.jpeg" alt></p>
+<p><img src="/blog/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/light_lock.jpeg" alt></p>
 <p>它的解锁过程也是通过CAS来进行的，如果对象的MarkWord仍然指向线程的锁记录，那就用CAS操作把对象当前的MarkWord和线程中复制的DisplacedMarkWord替换回来，如果替换成功，说明解锁成功。<br>替换失败，说明有其他线程尝试过获取该锁，需要在释放锁的同时唤醒被挂起的线程。</p>
 <p>如果没有竞争，轻量级锁能通过CAS操作成功避免使用互斥量的开销；<br>如果存在竞争，除了互斥量本身开销外，还额外发生了CAS操作的开销，因此性能更差。</p>
 <h4 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h4><p>用于消除数据在无竞争情况下的同步，连CAS都去掉了，进一步提高程序的运行性能。<br>偏向锁会偏向于第一个获得它的线程，如果在接下来的执行过程中，该锁一致没有被其他的线程获取，则持有偏向锁的线程永远不需要再同步。</p>
 <p>如果当前虚拟机启用了偏向锁，那么当锁对象第一次被线程获取的时候，虚拟机将会把对象头中的标志位设置为01，把偏向模式设置为1，表示进入偏向模式。<br>同时使用CAS操作把获取到这个锁的线程ID记录在对象的MarkWord中。<br>如果CAS成功，持有偏向锁的线程以后每次进入这个锁相关的同步块是，虚拟机都可以不再进行任何同步操作。</p>
 <p>一旦出现另外一个线程尝试获取这个锁的情况，偏向模式马上宣告结束。<br>根据锁对象目前是否处于被锁定的状态决定是否撤销偏向（把偏向模式设置为0），撤销后标志位恢复到为锁定或者轻量级锁定的轧辊台，后续的同步操作按照轻量级锁执行。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/pian.jpeg" alt="偏向锁"></p>
+<p><img src="/blog/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/pian.jpeg" alt="偏向锁"></p>
 <p>当进入偏向状态是，MarkWord大部分的空间都用于存储持有锁的线程ID，这部分空间占用了原有存储对象Hash码的位置。当一个对象已经计算过一次一致性哈希码后，它就再也无法进入偏向锁状态。<br>当一个对象正在处于偏向锁状态时，受到计算hash码的请求时，它的偏向状态会被立即撤销，并且锁会膨胀为重量级锁。</p>
 <p>在重量级锁的实现中，对象头指向了重量级锁的位置，代表重量级锁的ObjectMonitor类中有字段可以记录非加锁状态下的MarkWork，其中自然可以存储原来的哈希码。</p>
 <p>偏向锁可以提高带有同步但无竞争的程序性能，但如果程序中大多数的锁都总是被多个不同的线程访问，那偏向锁就是多余的。</p>
@@ -1328,7 +1328,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -1425,7 +1425,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -1519,7 +1519,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
@@ -1582,7 +1582,7 @@
 </ul>
 <h2 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h2><p>栈帧是用于支持虚拟机方法进行调用和执行的数据结构，每个方法从调用开始到执行结束的过程，都对应一个栈帧从虚拟机栈中入栈到出栈的过程。</p>
 <p>栈帧存储了方法的局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</p>
-<p><img src="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/stackframe.jpeg" alt="栈帧"></p>
+<p><img src="/blog/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/stackframe.jpeg" alt="栈帧"></p>
 <p>栈帧中需要多大的局部变量表、多深的操作数栈在编译Java的时候就已经计算出来存放在方法表的Code属性中。</p>
 <h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><p>用于存放方法参数和方法内部定义的局部变量。</p>
 <p>在代码被编译成Class文件时，在方法的Code属性中max_locals数据项中确定了该方法所需要分配的局部变量表的最大容量。局部变量表的容量以变量槽（Variable Slot）为最小单位，每个变量槽应该可以存放一个boolean、byte、char、short、int、float、reference、returnAddress这8种不超过32位数据类型（对于超过32位的long和double，则使用两个32位的变量槽）。</p>
@@ -1625,7 +1625,7 @@
 <li><p>单分派和多分派<br>方法的接收者（要被执行的方法的所有者叫接收者）与参数统称为方法的宗量。<br>单分派是根据一个宗量对目标方法进行选择；<br>多分派是根据多个宗量对目标方法进行选择；</p>
 </li>
 </ul>
-<h4 id="Java中的解释执行与编译执行"><a href="#Java中的解释执行与编译执行" class="headerlink" title="Java中的解释执行与编译执行"></a>Java中的解释执行与编译执行</h4><p><img src="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E.jpeg" alt="编译过程"></p>
+<h4 id="Java中的解释执行与编译执行"><a href="#Java中的解释执行与编译执行" class="headerlink" title="Java中的解释执行与编译执行"></a>Java中的解释执行与编译执行</h4><p><img src="/blog/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E.jpeg" alt="编译过程"></p>
 <p>在执行前先对程序源码进行词法分析和语法分析处理，把源码转化为抽象语法树。</p>
 <p>对于C/C++来说，词法、语法分析以后到后面的优化器和目标代码生成器都可以选择独立于执行引擎，形成一个完整有意义的编译器去实现，这类就是编译执行。</p>
 <p>对于Java来说，javac编译器完成了程序代码经过词法分析、语法分析到抽象语法树，再便利语法树生成线性的字节码指令流的过程。</p>
@@ -1676,7 +1676,7 @@
             
               
 <div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
+  <a href="https://pickonebyone.github.io" target="_blank" rel="nofollow noopener">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
     <p>Picker</p>
   </a>
