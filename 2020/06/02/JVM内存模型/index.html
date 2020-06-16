@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#®️'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+    <title>JVM内存模型 - 碎碎念</title>
+  
+    <meta name="keywords" content="JVM,JMM">
+  
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+<header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h'>
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+          
+          
+          
+            碎碎念 <b><sup style='color:#3AA757'>®️</sup></b>
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-link fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-link fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+<script>setLoadingBarProgress(40);</script>
+
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper'>
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+      JVM内存模型
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>Picker</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月2日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          <p>计算机为了提升效率，增加了多内核，并且为每个内核增加了自己的高速缓存，而他们又共享同一个主内存。</p>
+<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm01.jpeg" alt="计算机处理器、高速缓存、主内存之间的交互关系"></p>
+<p>除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，但保证结果与顺序执行的结果一致。</p>
+<p>与处理器的乱序执行优化类似，Java虚拟机的即时编译器也有指令重排序优化。</p>
+<h2 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h2><p>《Java虚拟机规范》中曾试图定义一种Java内存模型来屏蔽各种硬件和操作系统的内存访问差异。</p>
+<h4 id="主内存与工作内存"><a href="#主内存与工作内存" class="headerlink" title="主内存与工作内存"></a>主内存与工作内存</h4><p>Java内存模型的主要目的是定义程序中各种变量的访问规则（关注虚拟机中把变量存储到内存和从内存中取出变量的底层细节。）<br>Java内存模型规定了所有的变量都存储在主内存（除线程私有的以外）。<br>线程的工作内存保存了被该线程使用的变量的主内存副本，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存的数据。不同的线程之间也无法直接访问对方工作内存的变量，线程之间变量值的传递均需要通过主内存来完成。</p>
+<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm02.jpeg" alt></p>
+<h3 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h3><p>关于主内存与工作内存之间的交互协议，Java内存模型中定义了8种的操作。</p>
+<p>Java虚拟机实现时必须保证每种操作都是原子的，不可再分的（对于double和long来讲，load、store、、read、write允许有例外）。</p>
+<ul>
+<li><p>lock ： 锁定，作用于主内存的变量，把一个变量标识为一条线程独占的状态。</p>
+</li>
+<li><p>unlock: 解锁，作用于主内存的变量，把一个处于锁定状体的变量释放出来，释放后的变量才可以被其他线程锁定。</p>
+</li>
+<li><p>read: 读取，作用于主内存的变量，把一个变量的值从主内存传输到工作内存，以便随后的load动作使用。</p>
+</li>
+<li><p>write: 写入，作用于主内存的变量，把store操作从工作内存中得到的变量值存放到主内存变量中。</p>
+</li>
+<li><p>load: 载入，作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。</p>
+</li>
+<li><p>use：使用，作用于工作内存的变量，把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。</p>
+</li>
+<li><p>assign: 赋值，作用于工作变量，把一个从执行引擎接收的值赋给工作内存变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</p>
+</li>
+<li><p>store: 存储，把工作内存中一个变量的值传送到内存中，以便随后的write操作使用。</p>
+</li>
+</ul>
+<p>Java内存模型规定必须满足如下规则：</p>
+<blockquote>
+<p>1) 不允许read 和 load、store和write操作单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者工作内存发起回写单主内存不接受<br>2）不允许一个线程丢弃它最近的assign操作，即变量在工作内存中改变了之后必须把该变化同步回主内存。<br>3）不允许一个线程在没有发生assign操作就把数据从线程的工作内存同步回主内存中。<br>4) 一个新的变量只能在主内存中“诞生”，不允许在工作内存中直接使用一个未被初始化（load\assign）的变量,即对一个变量进行use之前必须使用load， 使用store之前必须使用assign。。<br>5）一个变量在同一个时刻内只允许一个线程对其进行lock操作， 但lock操作可以被同一个线程重复执行多次， 多次执行lock后， 只有执行相同次数的unlock操作，变量才会被解锁。<br>6)对一个变量执行unlock之前， 必须先把此变量同步回主内存中（执行store、write操作）</p>
+</blockquote>
+<h3 id="volatile型变量的特殊规则"><a href="#volatile型变量的特殊规则" class="headerlink" title="volatile型变量的特殊规则"></a>volatile型变量的特殊规则</h3><p>volatile是Java虚拟机最轻量级的同步机制。它有两个特性：<br>1）保证此变量对于所有线程的可见性（一个线程修改了这个变量的值，其他线程立即可见，也就是每个线程在使用被volatile修饰的变量时，都会强制从主内存中同步该变量的值到工作内存中）<br> 在不符合以下两条规则的场景中，仍然需要通过加锁来保证原子性（synchronized、java.util.concurrent中的锁或者原子类）：</p>
+<ul>
+<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值；</li>
+<li>变量不需要与其他状态变量共同参与不变约束；</li>
+</ul>
+<p>2） 禁止指令重排序优化</p>
+<p>volatile变量读操作的性能与普通变量几乎没有差别，但是写操作会慢些， 因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
+<h4 id="Singleton-DoubleCheck"><a href="#Singleton-DoubleCheck" class="headerlink" title="Singleton DoubleCheck"></a>Singleton DoubleCheck</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private Singleton() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    private volatile static Singleton instance &#x3D; null;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">                    instance &#x3D; new Singleton(); &#x2F;&#x2F;warning</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，instance = new Singleton()最终会被编译成多条汇编指令。<br>（1）为Singleton的实例分配内存。<br>（2）调用Singleton的构造函数，初始化成员变量<br>（3）将instance对象指向分配的内存空间。</p>
+<p>或者可能被重排序为(1)、(3)、（2）， 也就是当分配内存后，如果没有对instance 加volatile，将instance对象指向分配的内存空间后，另外一个线程可以读到未被初始化的对象。</p>
+<h3 id="针对long和double类型变量的特殊规则"><a href="#针对long和double类型变量的特殊规则" class="headerlink" title="针对long和double类型变量的特殊规则"></a>针对long和double类型变量的特殊规则</h3><p>Java内存模型要求lock、unlock、read、write、 load、assign、use、store这8种操作都具有原子性，但是对于64位数据类型的long 和double, 在模型中定义了一条宽松的规定， 允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为2次32为的操作来执行，也就是虚拟机自己选择是否要保证64位数据类型的load、store、read、write这四个操作的原子性。</p>
+<p>经过实际的测试，在目前的主流平台下商用的64位Java虚拟机中并不会出现非原子性访问行为，但是对于32位的Java虚拟机（如32位的X86Hotspot）存在非原子性访问的风险。</p>
+<p>因此，在实际开发中，除非该数据有明确可知的线程竞争，否则我们在编写代码的时候一般不需要因为这个原因刻意把用到的long和double变量专门声明位volatile。</p>
+<h3 id="原子性、可见性与有序性"><a href="#原子性、可见性与有序性" class="headerlink" title="原子性、可见性与有序性"></a>原子性、可见性与有序性</h3><h5 id="原子性（Atomicity）"><a href="#原子性（Atomicity）" class="headerlink" title="原子性（Atomicity）"></a>原子性（Atomicity）</h5><p>有Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store、write。因此基本数据类型的访问都是具备原子性的。</p>
+<p>如果应用场景需要一个更大范围的保证，需要使用锁、或者synchronized关键字来保证原子性。<br>（lock、unlock并没有直接开放给用户使用）。</p>
+<h5 id="可见性（visibility）"><a href="#可见性（visibility）" class="headerlink" title="可见性（visibility）"></a>可见性（visibility）</h5><p>可见性就是当一个线程修改了共享变量的值时，其他线程能够立即得知这个修改。</p>
+<h6 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h6><p>volatile的特殊规则保证了新值立即能同步到主内存，以及每次使用前都立即从主内存刷新。而普通变量则不能保证“立即”。</p>
+<h6 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h6><p>同步块的可见性时由“对一个变量执行unlock操作之前，必须先把此变量同步回主内存中”这条规则获得。</p>
+<h6 id="final"><a href="#final" class="headerlink" title="final"></a>final</h6><p>被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把this的引用传递出去，那么在其他线程中就能看见final字段的值。</p>
+<blockquote>
+<p>this引用逃逸，其他线程有可能通过这个引用访问到“初始化了一般”的对象。</p>
+</blockquote>
+<h5 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h5><p>如果在本线程中观察，所有的操作都是有序的（线程内似表现为串行的语义）；<br>如果在一个线程中观察另一个线程，所有的操作都是无序的（指令重排序和工作内存与主内存同步延迟现象）；</p>
+<p>Java语言提供了volatile和sychronized两个关键字来保证线程之间的有序性。<br>volatile：本身包含了禁用指令重排序的语义；<br>synchronized：一个变量在同一时刻只允许一个线程对其进行lock操作；</p>
+<h3 id="先行发生原则"><a href="#先行发生原则" class="headerlink" title="先行发生原则"></a>先行发生原则</h3><p>先行发生原则：判断数据是否存在竞争，线程是否安全的重要手段。</p>
+<p>程序次序规则：在一个线程内，按照控制流顺序（分支、循环等），书写在前面的操作先行发生在书写在后面的操作；</p>
+<p>管程锁定规则：一个unlock的操作先行发生在后面对同一个锁的操作。</p>
+<p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作；</p>
+<p>线程启动规则：Thread对象的start（）方法先行发生于此线程的每一个动作；</p>
+<p>线程的中止规则：线程中所有的操作都先行发生于此线程的终止检测，可以通过thread.join()方法是否结束、thread.isAlive()返回值来检测线程是否已经停止；</p>
+<p>线程的终端规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过thread.interrupted()检测是否有中断发生；</p>
+<p>对象终结规则：一个对象初始化完成（构造函数执行结束）先行发生于他的finalize()方法的开始；</p>
+<p>传递性：如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出，操作A先行发生于操作C。</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+
+              
+            </div>
+          
+        </div>
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-06-08T18:41:45+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年6月8日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/JVM/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>JVM</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/JMM/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>JMM</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+              <a class='prev' href='/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>JVM运行时数据区域</p>
+                <p class='content'>当一个类加载到内存后，JVM运行时数据区域都需要存储什么东西呢？
+1）类的格式信息、主次版本号、 常量池、字段、方法、属性信息需要存储，这部分数据需要每个线程共享；   当类加载器将静态的二进制...</p>
+              </a>
+            
+            
+              <a class='next' href='/2020/06/01/ClassLoader/'>
+                <p class='title'>类加载器和类加载机制<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>Java代码要在JVM中正常运行，首先要先编译成.class文件，由类加载器将其加载到内存中。之后由类编译器来编译执行。在加载的过程中需要注意什么呢？1）什么时候需要加载一个类呢？2）随便任何一...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'JVM内存模型',
+      tools: true
+    }
+  </script>
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+
+  <section class="widget toc-wrapper shadow desktop mobile">
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java内存模型"><span class="toc-text">Java内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主内存与工作内存"><span class="toc-text">主内存与工作内存</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存间交互操作"><span class="toc-text">内存间交互操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#volatile型变量的特殊规则"><span class="toc-text">volatile型变量的特殊规则</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Singleton-DoubleCheck"><span class="toc-text">Singleton DoubleCheck</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#针对long和double类型变量的特殊规则"><span class="toc-text">针对long和double类型变量的特殊规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原子性、可见性与有序性"><span class="toc-text">原子性、可见性与有序性</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#原子性（Atomicity）"><span class="toc-text">原子性（Atomicity）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#可见性（visibility）"><span class="toc-text">可见性（visibility）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#有序性"><span class="toc-text">有序性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#先行发生原则"><span class="toc-text">先行发生原则</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+  
+  <footer class="clearfix">
+    <br><br>
+    
+  </footer>
+
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4/dist/jquery.min.js"></script>
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '8px',
+        duration: '800',
+        interval: '100',
+        scale: '1'
+      });
+    });
+  </script>
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script defer src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/xaoxuu/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2.6.5/js/search.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/comment_typing.js"></script>
+
+
+
+
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-check-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-check-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-times-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-times-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 标准 markdown 描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
