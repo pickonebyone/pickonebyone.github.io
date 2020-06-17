@@ -353,8 +353,16 @@
           
         
           
-            <div class='post-wrapper'>
-              <article class="post white-box shadow reveal ">
+        
+          
+        
+      
+    
+    
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
   
 
 
@@ -366,8 +374,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/">
-      JVM运行时数据区域
+    <a href="/2020/06/17/%E5%B8%B8%E7%94%A8JVM%E5%8F%82%E6%95%B0/">
+      常用JVM参数
     </a>
   </h2>
 
@@ -405,7 +413,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月2日</p>
+    <p>发布于：2020年6月17日</p>
   </a>
 </div>
 
@@ -418,13 +426,6 @@
           
             
               
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>4</p>
-    </a>
-  </div>
-
 
             
           
@@ -440,64 +441,111 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>当一个类加载到内存后，JVM运行时数据区域都需要存储什么东西呢？</p>
-<p>1）类的格式信息、主次版本号、 常量池、字段、方法、属性信息需要存储，这部分数据需要每个线程共享；<br>   当类加载器将静态的二进制字节码从类文件加载到内存后，对内容进行验证、解析转换为符合JVM存储的数据格式。</p>
-<p>2）生成的Class类对象和代码运行时动态创建的对象和数组需要存储；<br>   通过loading、linking、initializing后生成的Class对象，做为程序访问这个类的入口，<br>   以及程序运行时产生的对象和数组，都有可能会被不同的线程引用和访问，因此这部分区域的数据也需要线程共享。<br>3）每个线程的线程数据需要存储和每个线程下方法的方法数据需要存储；<br>   当线程创建的时候需要有一个线程栈来存放线程信息，以及PC计数器记录当前线程正在执行的代码行号。<br>   还有JVM本地线程执行时需要的本地线程栈存放本地线程的执行情况。</p>
-<p>《Java虚拟机规范》规定了如下内存区域来存储数据</p>
-<blockquote>
-<ul>
-<li>共享区域</li>
-</ul>
-</blockquote>
-<ul>
-<li>堆区</li>
-<li>方法区<ul>
-<li>运行时常量池</li>
-<li>线程私有区域</li>
-</ul>
-</li>
-<li>JVM线程栈</li>
-<li>本地方法栈</li>
-<li>PC计数器</li>
-</ul>
-<p><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/runtime_dataarea.webp" alt="Runtime DataArea"></p>
-<h3 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h3><p>  几乎所有的对象以及数组都存放在堆区。</p>
-<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>  用于存储已经被虚拟机加载的类型信息、常量、静态变量、及时编译器变异后的代码缓存等数据。</p>
-<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>  运行时常量池是方法区的一部分，用于存放编译期或者运行期生成的各种字面量和符号引用。</p>
-<h3 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h3><p>   每个线程会生成一个线程栈，每个方法被执行的时候，Java虚拟机都会同步创建一个栈帧，用于存储局部变量表、操作数栈、动态链接、方法出口信息。</p>
-<h5 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h5><p>局部变量表存放了编译期可知的各种Java虚拟机基本数据类型（boolean、byte、char、short、int、long 、float、double）、引用类型、returnAddress类型。<br>      这些数据类型在局部变量表中的存储空间以局部变量槽来表示（64位的long和double占用2个变量槽，其余数据类型占用1个变量槽）。局部变量表所需的内存空间在编译期完成分配，因此当进入一个方法时，这个方法需要在栈帧中分配多大的局部变量空间是确定的。在运行期间是不会改变局部变量表的大小（槽的多少）。</p>
-<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>与虚拟机栈作用类似，为虚拟机使用到的本地方法服务。</p>
-<h3 id="PC计数器"><a href="#PC计数器" class="headerlink" title="PC计数器"></a>PC计数器</h3><p>   当前线程所执行的字节码的行号指示器。在Java虚拟机的概念模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。</p>
-<p>对于JDK1.8以后HotSpot虚拟机改用与Jrokit、J9一样与本地内存中实现的元空间（Meta-space）来实现方法区。无论是原空间还是永久代，他们只是方法区的实现，字符串常量池和静态变量的存储逻辑上仍然属于方法区。元空间使用的是物理内存、永久代使用的是JVM内存。因此元空间的大小只受限于物理内存。</p>
-<p><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/hotspot_runtimearea.png" alt="HotSpot 虚拟机实现"></p>
-<h2 id="HotSpot-虚拟机对象的创建与引用"><a href="#HotSpot-虚拟机对象的创建与引用" class="headerlink" title="HotSpot 虚拟机对象的创建与引用"></a>HotSpot 虚拟机对象的创建与引用</h2><h4 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h4><p>1） 在new一个对象的时候，先需要通过类加载检查，然后虚拟机为新生对象分配内存。</p>
-<p>对象所需要的内存大小在类加载完成后便可以完全确定，为对象分配空间的任务实际上便等同于把一块确定大小的内存块从Java堆中划分出来。</p>
-<ul>
-<li>指针碰撞<br>假设内存规整，将使用过的在一边，空闲的在一边，中间放一个指针作为分界点的指示器，所分配内存就是把指针向空闲空间方向挪动一段与对象相等的距离。<br>使用Serial、ParNew带压缩整理过程的GC收集器时，采用指针碰撞，简单高效；</li>
-<li>空闲列表<br>假设内存不规整，是一块块不连续的，那么就需要维护一个列表记录哪块内存可用，哪块内存不可用，在分配的时候在列表中找一块足够大的空间划分给对象实例，并更新列表上的记录。<br>使用CMS基于清除算法的收集器时，理论上只能采用复杂的空闲列表来分配内存。</li>
-</ul>
-<h5 id="Thread-Local-Allocation-Buffer"><a href="#Thread-Local-Allocation-Buffer" class="headerlink" title="Thread Local Allocation Buffer"></a>Thread Local Allocation Buffer</h5><p>在堆中创建对象是特别频繁的事情，并且涉及到多线程的访问。如何保证高效且安全的申请空间？</p>
-<ul>
-<li>同步或者CAS+失败重试的方式保证更新操作的原子性；</li>
-<li>为每个线程在堆中预先分配一小块内存，通过-XX:+/-UseTLAB 设定；</li>
-</ul>
-<p>2）分配完内存后，为内存空间初始化零值以及必要的设置。<br>初始化零值可以保证对象实例字段在Java对象中可以不赋初始值就可以直接使用，程序能访问到这些字段的数据类型所对应的零值。<br>之后设置这个对象的类型、关联类的元数据信息、GC分代年龄信息等。</p>
-<p>3）执行 &lt;init&gt;() 方法，将对象进行初始化。</p>
-<h4 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><p>在Hotspot虚拟机中，对象在内存中的存储布局划分为三个部分</p>
-<ul>
-<li>对象头（Header）<ul>
-<li>一部分是对象自身运行时数据，HashCode, GC分代年龄，锁状态标志，线程持有锁，偏向线程ID,偏向时间戳（数组长度）。</li>
-<li>一部分是类型指针，指向它的类型元数据的指针，用来确定是哪个类的实例。</li>
-</ul>
-</li>
-<li>实例数据（Instance Data）<br>字段的存储顺序受到虚拟机分配策略（-XX:FieldsAllocationStyle）和字段在源码中的顺序影响。<br>默认相同宽度的字段被分配到一起存放，父类中定义的变量会出现在子类之前。<br>使用+XX:CompactFields=true字类中较窄的变量也会插入到父类变量的空隙之中。</li>
-<li>填充（Padding）<br>为了满足硬件的性能需求和提高垃圾回收时指针扫描的方便性。HotSpot虚拟机的自动内存管理系统要求对象的起始地址必须是8个字节的整数倍（任何对象的大小必须是8个字节的整数倍）。</li>
-</ul>
-<h3 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h3><p>对象在堆中创建好了，Java程序会通过栈上局部变量表中的reference字段来引用堆上的对象。</p>
-<ul>
-<li>句柄访问<br>Java堆中划分出一块内存作为句柄池，reference中存储的就是对象的句柄地址，句柄中包含了对象实例数据与类型数据各自具体的地址信息。<br>好处：reference中存储的事稳定的句柄地址，对象被移动时只会改变句柄中的实例数据指针。<br><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/jubing.jpeg" alt="句柄访问"></li>
-<li>直接指针<br>reference中存储的是对象的地址。好处是速度快，节约了指针定位的时间开销。<br><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/direct.jpeg" alt="直接指针"></li>
-</ul>
+        <p>HotSpot 虚拟机常用配置</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-Xms1g</td>
+<td>最小堆内存</td>
+</tr>
+<tr>
+<td>-Xmx4g</td>
+<td>最大堆内存</td>
+</tr>
+<tr>
+<td>-XX:+UseG1GC</td>
+<td>使用G1垃圾回收器</td>
+</tr>
+<tr>
+<td>-Xss256k</td>
+<td>每个线程栈大小256k</td>
+</tr>
+<tr>
+<td>-XX:MetaspaceSize=256m</td>
+<td>元数据区大小256M</td>
+</tr>
+<tr>
+<td>-XX:MaxMetaspaceSize=256m</td>
+<td>元数据区最大256M</td>
+</tr>
+<tr>
+<td>-XX:MaxGCPauseMillis=500</td>
+<td>GC最大停顿毫秒数</td>
+</tr>
+<tr>
+<td>-XX:+DisableExplicitGC</td>
+<td>禁用代码中显式调用GC，System.gc()将会失效</td>
+</tr>
+<tr>
+<td>-XX:+UnlockExperimentalVMOptions</td>
+<td>解锁实验参数</td>
+</tr>
+<tr>
+<td>-XX:+UseStringDeduplication</td>
+<td>GC的同时做重复字符串消除，只用于G1</td>
+</tr>
+<tr>
+<td>-XX:InitiatingHeapOccupancyPercent=60</td>
+<td>启动并发GC周期时的堆内存占用百分比. G1之类的垃圾收集器用它来触发并发GC周期,基于整个堆的使用率,而不只是某一代内存的使用比. 值为 0 则表示”一直执行GC循环”. 默认值为 45.</td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=8</td>
+<td>设置垃圾收集器在并行阶段使用的线程数,默认值随JVM运行的平台不同而不同.</td>
+</tr>
+<tr>
+<td>-XX:G1MixedGCCountTarget=4</td>
+<td>设置在标记周期完成之后混合收集的数量，以维持old region（也就是老年代）中，最多有G1MixedGCLiveThresholdPercent的存活对象。默认值为8，混合收集的数量将维持在这个值之内。（JVM build &gt; 23）</td>
+</tr>
+<tr>
+<td>-XX:MaxTenuringThreshold=7</td>
+<td>年老代的最大临界值(tenuring threshold). 默认值为 15.</td>
+</tr>
+<tr>
+<td>-XX:+UseGCLogFileRotation</td>
+<td>滚动记录GC日志文件</td>
+</tr>
+<tr>
+<td>-XX:NumberOfGCLogFiles=5</td>
+<td>GC日志文件数量为5个</td>
+</tr>
+<tr>
+<td>-XX:GCLogFileSize=64M</td>
+<td>单个GC日志文件大小64M</td>
+</tr>
+<tr>
+<td>-Xloggc:/app/data/logs/gc-<code>date +%Y%m%d-%H-%M</code>.log</td>
+<td>GC日志文件存储目录和名称</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDetails</td>
+<td>打印GC详情</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDateStamps</td>
+<td>打印GC时时间戳</td>
+</tr>
+<tr>
+<td>-XX:+PrintHeapAtGC</td>
+<td>GC时打印堆信息</td>
+</tr>
+<tr>
+<td>-XX:+PrintAdaptiveSizePolicy</td>
+<td>自适应大小策略，每次 GC 后会重新计算 Eden、From 和 To 区的大小，计算依据是 GC 过程中统计的 GC 时间、吞吐量、内存占用量。</td>
+</tr>
+<tr>
+<td>-XX:+UseFastAccessorMethods</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:SoftRefLRUPolicyMSPerMB=0</td>
+<td>softly reachable objects will remain alive for some amount of time after the last time they were referenced. The default value is one second of lifetime per free megabyte in the heap</td>
+</tr>
+</tbody></table>
 
       
     </div>
@@ -507,12 +555,12 @@
   </section>
 </article>
 
-            </div>
-          
+          </div>
         
-          
-            <div class='post-wrapper'>
-              <article class="post white-box shadow reveal ">
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
   
 
 
@@ -524,8 +572,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
-      JVM内存模型
+    <a href="/2020/06/16/%E5%B8%B8%E7%94%A8%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7/">
+      常用监控与故障处理工具
     </a>
   </h2>
 
@@ -563,7 +611,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月2日</p>
+    <p>发布于：2020年6月16日</p>
   </a>
 </div>
 
@@ -576,13 +624,6 @@
           
             
               
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>5</p>
-    </a>
-  </div>
-
 
             
           
@@ -598,71 +639,176 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>计算机为了提升效率，增加了多内核，并且为每个内核增加了自己的高速缓存，而他们又共享同一个主内存。</p>
-<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm01.jpeg" alt="计算机处理器、高速缓存、主内存之间的交互关系"></p>
-<p>除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，但保证结果与顺序执行的结果一致。</p>
-<p>与处理器的乱序执行优化类似，Java虚拟机的即时编译器也有指令重排序优化。</p>
-<h2 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h2><p>《Java虚拟机规范》中曾试图定义一种Java内存模型来屏蔽各种硬件和操作系统的内存访问差异。</p>
-<h4 id="主内存与工作内存"><a href="#主内存与工作内存" class="headerlink" title="主内存与工作内存"></a>主内存与工作内存</h4><p>Java内存模型的主要目的是定义程序中各种变量的访问规则（关注虚拟机中把变量存储到内存和从内存中取出变量的底层细节。）<br>Java内存模型规定了所有的变量都存储在主内存（除线程私有的以外）。<br>线程的工作内存保存了被该线程使用的变量的主内存副本，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存的数据。不同的线程之间也无法直接访问对方工作内存的变量，线程之间变量值的传递均需要通过主内存来完成。</p>
-<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm02.jpeg" alt></p>
-<h3 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h3><p>关于主内存与工作内存之间的交互协议，Java内存模型中定义了8种的操作。</p>
-<p>Java虚拟机实现时必须保证每种操作都是原子的，不可再分的（对于double和long来讲，load、store、、read、write允许有例外）。</p>
-<ul>
-<li><p>lock ： 锁定，作用于主内存的变量，把一个变量标识为一条线程独占的状态。</p>
-</li>
-<li><p>unlock: 解锁，作用于主内存的变量，把一个处于锁定状体的变量释放出来，释放后的变量才可以被其他线程锁定。</p>
-</li>
-<li><p>read: 读取，作用于主内存的变量，把一个变量的值从主内存传输到工作内存，以便随后的load动作使用。</p>
-</li>
-<li><p>write: 写入，作用于主内存的变量，把store操作从工作内存中得到的变量值存放到主内存变量中。</p>
-</li>
-<li><p>load: 载入，作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。</p>
-</li>
-<li><p>use：使用，作用于工作内存的变量，把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。</p>
-</li>
-<li><p>assign: 赋值，作用于工作变量，把一个从执行引擎接收的值赋给工作内存变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</p>
-</li>
-<li><p>store: 存储，把工作内存中一个变量的值传送到内存中，以便随后的write操作使用。</p>
-</li>
-</ul>
-<p>Java内存模型规定必须满足如下规则：</p>
+        <h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>列出正在运行的虚拟机进程，并显示虚拟机执行主类名称以及这些进程的本地虚拟唯一ID（与操作系统进程ID一致）。</p>
 <blockquote>
-<p>1) 不允许read 和 load、store和write操作单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者工作内存发起回写单主内存不接受<br>2）不允许一个线程丢弃它最近的assign操作，即变量在工作内存中改变了之后必须把该变化同步回主内存。<br>3）不允许一个线程在没有发生assign操作就把数据从线程的工作内存同步回主内存中。<br>4) 一个新的变量只能在主内存中“诞生”，不允许在工作内存中直接使用一个未被初始化（load\assign）的变量,即对一个变量进行use之前必须使用load， 使用store之前必须使用assign。。<br>5）一个变量在同一个时刻内只允许一个线程对其进行lock操作， 但lock操作可以被同一个线程重复执行多次， 多次执行lock后， 只有执行相同次数的unlock操作，变量才会被解锁。<br>6)对一个变量执行unlock之前， 必须先把此变量同步回主内存中（执行store、write操作）</p>
+<p>jps [option] [hostid]</p>
 </blockquote>
-<h3 id="volatile型变量的特殊规则"><a href="#volatile型变量的特殊规则" class="headerlink" title="volatile型变量的特殊规则"></a>volatile型变量的特殊规则</h3><p>volatile是Java虚拟机最轻量级的同步机制。它有两个特性：<br>1）保证此变量对于所有线程的可见性（一个线程修改了这个变量的值，其他线程立即可见，也就是每个线程在使用被volatile修饰的变量时，都会强制从主内存中同步该变量的值到工作内存中）<br> 在不符合以下两条规则的场景中，仍然需要通过加锁来保证原子性（synchronized、java.util.concurrent中的锁或者原子类）：</p>
-<ul>
-<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值；</li>
-<li>变量不需要与其他状态变量共同参与不变约束；</li>
-</ul>
-<p>2） 禁止指令重排序优化</p>
-<p>volatile变量读操作的性能与普通变量几乎没有差别，但是写操作会慢些， 因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
-<h4 id="Singleton-DoubleCheck"><a href="#Singleton-DoubleCheck" class="headerlink" title="Singleton DoubleCheck"></a>Singleton DoubleCheck</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private Singleton() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    private volatile static Singleton instance &#x3D; null;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">                    instance &#x3D; new Singleton(); &#x2F;&#x2F;warning</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-q</td>
+<td>只输出lvmid，省略主类的名称</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>输出虚拟机启动时传递给主类main（）的参数</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>输出主类的全名，如果是jar包，则输出jar路径</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>输出虚拟机启动时的jvm参数</td>
+</tr>
+</tbody></table>
+<h3 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h3><p>用于监视虚拟机各种运行状态信息的命令行工具。<br>显示本地或者远程虚拟机进程中的类加载、内存、垃圾收集、即时编译等运行时数据。</p>
+<blockquote>
+<p>jstat [option vimid [interval[s|ms] [count]]]<br>[protocal:][//]lvmid[@hostname[:port]/servername]</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-class</td>
+<td>监视类加载、卸载数量、总空间以及类装载耗费的时间</td>
+</tr>
+<tr>
+<td>-gc</td>
+<td>监视Java堆状况，包括Eden、Survivor、老年代、永久代的容量，已用空间，垃圾收集时间</td>
+</tr>
+<tr>
+<td>-gccapacity</td>
+<td>监视内容与-gc基本相同，但输出主要关注java堆各个区域使用到最大最小空间</td>
+</tr>
+<tr>
+<td>-gcutil</td>
+<td>监视内容与-gc基本相同，但输出主要关注已使用空间占总空间的百分比</td>
+</tr>
+<tr>
+<td>-gccause</td>
+<td>与-gcutil功能一样，会额外输出导致上一次垃圾收集产生的原因</td>
+</tr>
+<tr>
+<td>-gcnew</td>
+<td>监视新生代垃圾收集情况</td>
+</tr>
+<tr>
+<td>-gcnewcapacity</td>
+<td>监视内容与-gcnew基本相同，输出主要关注使用到的最大、最小空间</td>
+</tr>
+<tr>
+<td>-gcold</td>
+<td>监视老年代垃圾收集状况</td>
+</tr>
+<tr>
+<td>-gcoldcapacity</td>
+<td>与-gcold相同，输出主要关注使用到的最大、最小空间</td>
+</tr>
+<tr>
+<td>-gcpermcapacity</td>
+<td>输出永久代使用到的最大、最小空间</td>
+</tr>
+<tr>
+<td>-compiler</td>
+<td>输出即时编译器编译过的方法、耗时等信息</td>
+</tr>
+<tr>
+<td>-printcompilation</td>
+<td>输出已经被即时编译的方法</td>
+</tr>
+</tbody></table>
+<p>每隔1s查询一次2105的gc情况，查询10次。<br>jstat -gc 2105 1000 10</p>
+<p>jstat -gcutil 2105</p>
+<table>
+<thead>
+<tr>
+<th>S0</th>
+<th>S1</th>
+<th>E</th>
+<th>O</th>
+<th>P</th>
+<th>YGC</th>
+<th>YGCT</th>
+<th>FGC</th>
+<th>FGCT</th>
+<th>GCT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.00</td>
+<td>0.00</td>
+<td>6.20</td>
+<td>41.42</td>
+<td>47.20</td>
+<td>16</td>
+<td>0.105</td>
+<td>3</td>
+<td>0.472</td>
+<td>0.577</td>
+</tr>
+</tbody></table>
+<h3 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h3><p>实时查看和调整虚拟机各项参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Usage:</span><br><span class="line">    jinfo [option] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jinfo [option] &lt;executable &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jinfo [option] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to remote debug server)</span><br><span class="line"></span><br><span class="line">where &lt;option&gt; is one of:</span><br><span class="line">    -flag &lt;name&gt;         to print the value of the named VM flag</span><br><span class="line">    -flag [+|-]&lt;name&gt;    to enable or disable the named VM flag</span><br><span class="line">    -flag &lt;name&gt;&#x3D;&lt;value&gt; to set the named VM flag to the given value</span><br><span class="line">    -flags               to print VM flags</span><br><span class="line">    -sysprops            to print Java system properties</span><br><span class="line">    &lt;no option&gt;          to print both of the above</span><br><span class="line">    -h | -help           to print this help message</span><br></pre></td></tr></table></figure>
 
-<p>在上面的代码中，instance = new Singleton()最终会被编译成多条汇编指令。<br>（1）为Singleton的实例分配内存。<br>（2）调用Singleton的构造函数，初始化成员变量<br>（3）将instance对象指向分配的内存空间。</p>
-<p>或者可能被重排序为(1)、(3)、（2）， 也就是当分配内存后，如果没有对instance 加volatile，将instance对象指向分配的内存空间后，另外一个线程可以读到未被初始化的对象。</p>
-<h3 id="针对long和double类型变量的特殊规则"><a href="#针对long和double类型变量的特殊规则" class="headerlink" title="针对long和double类型变量的特殊规则"></a>针对long和double类型变量的特殊规则</h3><p>Java内存模型要求lock、unlock、read、write、 load、assign、use、store这8种操作都具有原子性，但是对于64位数据类型的long 和double, 在模型中定义了一条宽松的规定， 允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为2次32为的操作来执行，也就是虚拟机自己选择是否要保证64位数据类型的load、store、read、write这四个操作的原子性。</p>
-<p>经过实际的测试，在目前的主流平台下商用的64位Java虚拟机中并不会出现非原子性访问行为，但是对于32位的Java虚拟机（如32位的X86Hotspot）存在非原子性访问的风险。</p>
-<p>因此，在实际开发中，除非该数据有明确可知的线程竞争，否则我们在编写代码的时候一般不需要因为这个原因刻意把用到的long和double变量专门声明位volatile。</p>
-<h3 id="原子性、可见性与有序性"><a href="#原子性、可见性与有序性" class="headerlink" title="原子性、可见性与有序性"></a>原子性、可见性与有序性</h3><h5 id="原子性（Atomicity）"><a href="#原子性（Atomicity）" class="headerlink" title="原子性（Atomicity）"></a>原子性（Atomicity）</h5><p>有Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store、write。因此基本数据类型的访问都是具备原子性的。</p>
-<p>如果应用场景需要一个更大范围的保证，需要使用锁、或者synchronized关键字来保证原子性。<br>（lock、unlock并没有直接开放给用户使用）。</p>
-<h5 id="可见性（visibility）"><a href="#可见性（visibility）" class="headerlink" title="可见性（visibility）"></a>可见性（visibility）</h5><p>可见性就是当一个线程修改了共享变量的值时，其他线程能够立即得知这个修改。</p>
-<h6 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h6><p>volatile的特殊规则保证了新值立即能同步到主内存，以及每次使用前都立即从主内存刷新。而普通变量则不能保证“立即”。</p>
-<h6 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h6><p>同步块的可见性时由“对一个变量执行unlock操作之前，必须先把此变量同步回主内存中”这条规则获得。</p>
-<h6 id="final"><a href="#final" class="headerlink" title="final"></a>final</h6><p>被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把this的引用传递出去，那么在其他线程中就能看见final字段的值。</p>
+<h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>用于生成堆转储快照，查询finalize执行队列、Java堆和方法区的详细信息（空间使用率、当前使用收集器类型）</p>
+<p>生成堆转储文件的方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-XX:+HeapDumpOnOutOfMemoryError 在虚拟机内存溢出异常出现后自动生成堆转储快照文件。</span><br><span class="line">-XX:HeapDumpOnCtrlBreak 使用ctrl+Break 生成堆转储快照文件</span><br><span class="line">kill -3 pid  生成堆转储快照文件</span><br><span class="line">jmap -dump:format&#x3D;b,file&#x3D;heap.dump 3120</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-dump</td>
+<td>生成java堆转储快照，格式为-dump:[live,]format=b,file=<filename>,live子参数说明是否只dump出存活对象</filename></td>
+</tr>
+<tr>
+<td>-finalizerinfo</td>
+<td>显示再F-Queue中等待Finalizer线程执行finalize方法的对象。只有在Linux平台有效</td>
+</tr>
+<tr>
+<td>-heap</td>
+<td>显示Java堆详细信息，使用回收器类型、参数配置、分代状况，只在Linux平台下有效</td>
+</tr>
+<tr>
+<td>-histo</td>
+<td>显示堆中对象统计信息，包括类、实例数量、合计容量</td>
+</tr>
+<tr>
+<td>-permstat</td>
+<td>在以ClassLoader为统计口径显示永久代内存状态。只在Linux下有效</td>
+</tr>
+<tr>
+<td>-F</td>
+<td>当虚拟机进程对-dump选项没有响应时，可以使用-F强制生成dump快照，只在Linux下有效</td>
+</tr>
+</tbody></table>
+<h3 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h3><p>用于分析jmap生成的堆转储快照。 </p>
 <blockquote>
-<p>this引用逃逸，其他线程有可能通过这个引用访问到“初始化了一般”的对象。</p>
+<p>jhat heap.dump</p>
 </blockquote>
-<h5 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h5><p>如果在本线程中观察，所有的操作都是有序的（线程内似表现为串行的语义）；<br>如果在一个线程中观察另一个线程，所有的操作都是无序的（指令重排序和工作内存与主内存同步延迟现象）；</p>
-<p>Java语言提供了volatile和sychronized两个关键字来保证线程之间的有序性。<br>volatile：本身包含了禁用指令重排序的语义；<br>synchronized：一个变量在同一时刻只允许一个线程对其进行lock操作；</p>
-<h3 id="先行发生原则"><a href="#先行发生原则" class="headerlink" title="先行发生原则"></a>先行发生原则</h3><p>先行发生原则：判断数据是否存在竞争，线程是否安全的重要手段。</p>
-<p>程序次序规则：在一个线程内，按照控制流顺序（分支、循环等），书写在前面的操作先行发生在书写在后面的操作；</p>
-<p>管程锁定规则：一个unlock的操作先行发生在后面对同一个锁的操作。</p>
-<p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作；</p>
-<p>线程启动规则：Thread对象的start（）方法先行发生于此线程的每一个动作；</p>
-<p>线程的中止规则：线程中所有的操作都先行发生于此线程的终止检测，可以通过thread.join()方法是否结束、thread.isAlive()返回值来检测线程是否已经停止；</p>
-<p>线程的终端规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过thread.interrupted()检测是否有中断发生；</p>
-<p>对象终结规则：一个对象初始化完成（构造函数执行结束）先行发生于他的finalize()方法的开始；</p>
-<p>传递性：如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出，操作A先行发生于操作C。</p>
+<p>jhat功能相对简陋，分析工作耗时且耗费硬件资源，一般不在本机使用。<br>替代方案：VisualVM、Eclipse Memory Analyzer、IBM HeapAnalyzer。</p>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>生成虚拟机当前时刻的线程快照。目的是定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间挂起等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Usage:</span><br><span class="line">    jstack [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jstack -F [-m] [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to a hung process)</span><br><span class="line">    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to a remote debug server)</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -F  to force a thread dump. Use when jstack &lt;pid&gt; does not respond (process is hung)</span><br><span class="line">    -m  to print both java and native frames (mixed mode)</span><br><span class="line">    -l  long listing. Prints additional information about locks</span><br><span class="line">    -h or -help to print this help message</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级工具"><a href="#高级工具" class="headerlink" title="高级工具"></a>高级工具</h2><h3 id="JConsole"><a href="#JConsole" class="headerlink" title="JConsole"></a>JConsole</h3><p>基于JMX的可视化监视、管理工具。</p>
+<h3 id="JHSDB"><a href="#JHSDB" class="headerlink" title="JHSDB"></a>JHSDB</h3><p>基于服务性代理实现的进程外调试工具。服务性代理是HotSpot虚拟机中一组用于映射Java虚拟机运行信息的、主要基于Java语言实现的API集合。<br><img src="/2020/06/16/%E5%B8%B8%E7%94%A8%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7/jhsdb.jpeg" alt="JCMD 和JHSDB工具对比"></p>
+<h3 id="VisualVM"><a href="#VisualVM" class="headerlink" title="VisualVM"></a>VisualVM</h3><p>多合一故障处理工具，不需要被监视的程序基于特殊Agent执行，通用性强，对应用程序的实际性能影响较小，可以直接在生产环境使用。</p>
+<h3 id="Java-Mission-Control"><a href="#Java-Mission-Control" class="headerlink" title="Java Mission Control"></a>Java Mission Control</h3><p>可持续在线监控工具。</p>
+<h3 id="arthas"><a href="#arthas" class="headerlink" title="arthas"></a>arthas</h3><p>阿里巴巴提供的性能分析工具<br><a href="https://alibaba.github.io/arthas/" target="_blank" rel="noopener">https://alibaba.github.io/arthas/</a></p>
 
       
     </div>
@@ -672,12 +818,8 @@
   </section>
 </article>
 
-            </div>
-          
+          </div>
         
-      
-    
-    
       
         
           <div class='post-wrapper'>
@@ -1859,10 +2001,6 @@
           </div>
         
       
-        
-      
-        
-      
     
   </section>
   
@@ -1935,7 +2073,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(13)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
@@ -1945,7 +2083,7 @@
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/"
             id="categoriesJavaE68A80E69CAFE6A088JavaE8999AE68B9FE69CBA"
-            ><div class='name'>Java虚拟机</div><div class='badge'>(9)</div></a></li>
+            ><div class='name'>Java虚拟机</div><div class='badge'>(11)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/Linux/" href="/categories/Linux/"
@@ -1994,7 +2132,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 24px; color: #555">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 24px; color: #555">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a>
     </div>
   </section>
 
@@ -2008,6 +2146,7 @@
   
   <footer class="clearfix">
     <br><br>
+
     
   </footer>
 
