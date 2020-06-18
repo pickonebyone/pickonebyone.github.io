@@ -336,131 +336,6 @@
       
         
           
-            
-              <div class='post-wrapper'>
-                <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/05/28/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/">
-      Java虚拟机
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年5月28日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>置顶</p>
-    </a>
-  </div>
-
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>注：本系列为《深入理解Java虚拟机》的读书笔记。<br>少量来源于网络，视频教材。</p>
-</blockquote>
-<h3 id="如何设计一个虚拟机"><a href="#如何设计一个虚拟机" class="headerlink" title="如何设计一个虚拟机"></a>如何设计一个虚拟机</h3><p>假设自己要写一个虚拟机，应该考虑什么？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">虚拟机要运行什么？</span><br><span class="line">如何把规范的文件内容读取到内存中？</span><br><span class="line">读取到内存中的数据如何存储？</span><br><span class="line">如何执行这些规范文件中的数据翻译成操作系统认识的指令？</span><br><span class="line">执行完成后如何清理？</span><br></pre></td></tr></table></figure>
-
-<h3 id="虚拟机的主要功能以及组成"><a href="#虚拟机的主要功能以及组成" class="headerlink" title="虚拟机的主要功能以及组成"></a>虚拟机的主要功能以及组成</h3><p>虚拟机要运行代码，这些代码要定制一个规范，这样虚拟机才可以根据制定好的规范去解析和执行。对于Java虚拟机来讲，它要读取的文件就是Class类文件。<br>我们需要一段代码把Class类文件内容读取到内存中，同时要注意判断，读取的文件内容是否符合Class类文件的规范，同时文件内容是否会危害到虚拟机。<br>把文件内容读取到内存中后，如何存放、方便管理和使用，同时要保证性能、安全性。<br>把这些文件内容“翻译”为操作系统认识的指令，并且操控这些指令按照预定的“规则”运行，达到可预期的结果。为了提升效率需要考虑多线程和并发。<br>执行完成后，清理不需要的内存空间，以便其他程序使用(JVM规范中并没有规定垃圾回收部分)。</p>
-<blockquote>
-<p>JVM虚拟机不包含ClassLoader部分</p>
-</blockquote>
-<p><img src="/2020/05/28/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/jvm.jpg" alt="jvm"></p>
-<h3 id="虚拟机相关知识传送门"><a href="#虚拟机相关知识传送门" class="headerlink" title="虚拟机相关知识传送门"></a>虚拟机相关知识传送门</h3><ul>
-<li><input checked disabled type="checkbox"> <a href="/2020/05/29/类文件结构">类文件结构</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/01/ClassLoader">类加载器和类加载机制</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/02/JVM运行时数据区域">JVM运行时数据区域</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/05/字节码执行引擎">字节码执行引擎</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/02/JVM内存模型">JVM 内存模型</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/08/线程和并发">线程和并发</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/10/内存分配与回收">内存分配与回收</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/11/编译与优化">编译与编译优化技术</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/16/常用监控与故障处理工具">常用监控与故障处理工具</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/17/常用JVM参数">常用的JVM参数</a></li>
-</ul>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-              </div>
-            
-          
-        
-          
         
           
         
@@ -640,6 +515,133 @@
         
           
         
+          
+        
+          
+        
+          
+            
+              <div class='post-wrapper'>
+                <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/05/28/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+      Java虚拟机
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>Picker</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年5月28日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item top-post">
+    <a class='notlink'>
+      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
+      <p>置顶</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>注：本系列为《深入理解Java虚拟机》的读书笔记。<br>少量来源于网络，视频教材。</p>
+</blockquote>
+<h3 id="如何设计一个虚拟机"><a href="#如何设计一个虚拟机" class="headerlink" title="如何设计一个虚拟机"></a>如何设计一个虚拟机</h3><p>假设自己要写一个虚拟机，应该考虑什么？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">虚拟机要运行什么？</span><br><span class="line">如何把规范的文件内容读取到内存中？</span><br><span class="line">读取到内存中的数据如何存储？</span><br><span class="line">如何执行这些规范文件中的数据翻译成操作系统认识的指令？</span><br><span class="line">执行完成后如何清理？</span><br></pre></td></tr></table></figure>
+
+<h3 id="虚拟机的主要功能以及组成"><a href="#虚拟机的主要功能以及组成" class="headerlink" title="虚拟机的主要功能以及组成"></a>虚拟机的主要功能以及组成</h3><p>虚拟机要运行代码，这些代码要定制一个规范，这样虚拟机才可以根据制定好的规范去解析和执行。对于Java虚拟机来讲，它要读取的文件就是Class类文件。<br>我们需要一段代码把Class类文件内容读取到内存中，同时要注意判断，读取的文件内容是否符合Class类文件的规范，同时文件内容是否会危害到虚拟机。<br>把文件内容读取到内存中后，如何存放、方便管理和使用，同时要保证性能、安全性。<br>把这些文件内容“翻译”为操作系统认识的指令，并且操控这些指令按照预定的“规则”运行，达到可预期的结果。为了提升效率需要考虑多线程和并发。<br>执行完成后，清理不需要的内存空间，以便其他程序使用(JVM规范中并没有规定垃圾回收部分)。</p>
+<blockquote>
+<p>JVM虚拟机不包含ClassLoader部分</p>
+</blockquote>
+<p><img src="/2020/05/28/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/jvm.jpg" alt="jvm"></p>
+<h3 id="虚拟机相关知识传送门"><a href="#虚拟机相关知识传送门" class="headerlink" title="虚拟机相关知识传送门"></a>虚拟机相关知识传送门</h3><ul>
+<li><input checked disabled type="checkbox"> <a href="/2020/05/29/类文件结构">类文件结构</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/01/ClassLoader">类加载器和类加载机制</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/02/JVM运行时数据区域">JVM运行时数据区域</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/05/字节码执行引擎">字节码执行引擎</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/02/JVM内存模型">JVM 内存模型</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/08/线程和并发">线程和并发</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/10/内存分配与回收">内存分配与回收</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/11/编译与优化">编译与编译优化技术</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/16/常用监控与故障处理工具">常用监控与故障处理工具</a></li>
+<li><input checked disabled type="checkbox"> <a href="/2020/06/17/常用JVM参数">常用的JVM参数</a></li>
+</ul>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+              </div>
+            
           
         
           
@@ -1637,6 +1639,119 @@
         
           
   <h2 class="title">
+    <a href="/2020/06/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8E%9F%E5%88%99/">
+      设计模式和原则
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>Picker</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/设计原则</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月18日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>创建软件应用程序时为了满足不断变化和发展的需求，一个成功的应用程序应该提供一种简单的方法来扩展它以满足不断变化的期望。</p>
+<h2 id="SOLID设计原则"><a href="#SOLID设计原则" class="headerlink" title="SOLID设计原则"></a>SOLID设计原则</h2><h3 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h3><p>有且仅有一个原因引起类的变更。</p>
+<p>问题：<br>Class IUser 负责两个不同的职责,职责1维护User的属性(id, name, age)，职责2维护DB操作（save/update/delete/find）.<br>当由于职责1需求发生改变要增加一个sex的时候，有可能会导致原本运行正常的职责2功能发生故障。</p>
+<p>解决方法：<br>将IUser拆分为 UserInfo和UserDao。</p>
+<p>优点：<br>降低类的复杂性，一个类只负责一项职责；<br>提高类的可读性，提高系统的可维护性；<br>降低变更引起的风险，当修改一个接口的功能时，可以降低对其他功能的影响。</p>
+<h3 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h3><p>一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。<br>也就是说通过扩展来实现变化，而不是通过修改已有的代码来实现变化。</p>
+<p>可以通过抽象约束、封装变化来实现开闭原则。<br>通过接口或者抽象类为软件实体定义一个相对稳定的抽象层，而将相同的可变因素封装在相同的具体实现类中。</p>
+<h3 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h3><p>派生类型必须完全可替代其基类型。在设计模块和类时，必须确保派生类型从行为的角度来看是可替代的。当派生类型被其父类替换时，其余代码就像它是自类型那样使用它。</p>
+<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><p>客户端不应该依赖于它所不需要的接口。接口隔离原则减少了代码耦合，使软件更强壮，更易于维护和扩展。接口隔离原则要求接口的定义和设计尽量的细化。</p>
+<ul>
+<li>接口尽量小，但是要有限度。<br>对接口进行细化可以提高程序设计的灵活性，但是如果过小，会造成接口数量过多，使设计复杂化。</li>
+<li>为依赖接口的类定制服务，只暴露给调用的类它需要的方法，不需要的方法隐藏起来，只有专注地为一个模块提供定制服务，才能建立最小依赖关系。</li>
+<li>提高内聚，减少对外交互。使接口用最少的方法完成最多的事情。</li>
+</ul>
+<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><p>高级模块不应该依赖第几模块，两者都应该依赖抽象。<br>抽象不应该依赖于细节，细节应该依赖于抽象。</p>
+<ul>
+<li>模块间的依赖通过抽象发生，实现类之间不发生直接的依赖关系，器依赖关系是通过接口或者抽象类产生。</li>
+<li>接口或者抽象类不依赖实现类</li>
+<li>实现类依赖接口或者抽象类</li>
+</ul>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/06/17/%E5%B8%B8%E7%94%A8JVM%E5%8F%82%E6%95%B0/">
       常用JVM参数
     </a>
@@ -1821,1360 +1936,6 @@
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/16/%E5%B8%B8%E7%94%A8%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7/">
-      常用监控与故障处理工具
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月16日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>列出正在运行的虚拟机进程，并显示虚拟机执行主类名称以及这些进程的本地虚拟唯一ID（与操作系统进程ID一致）。</p>
-<blockquote>
-<p>jps [option] [hostid]</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-q</td>
-<td>只输出lvmid，省略主类的名称</td>
-</tr>
-<tr>
-<td>-m</td>
-<td>输出虚拟机启动时传递给主类main（）的参数</td>
-</tr>
-<tr>
-<td>-l</td>
-<td>输出主类的全名，如果是jar包，则输出jar路径</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>输出虚拟机启动时的jvm参数</td>
-</tr>
-</tbody></table>
-<h3 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h3><p>用于监视虚拟机各种运行状态信息的命令行工具。<br>显示本地或者远程虚拟机进程中的类加载、内存、垃圾收集、即时编译等运行时数据。</p>
-<blockquote>
-<p>jstat [option vimid [interval[s|ms] [count]]]<br>[protocal:][//]lvmid[@hostname[:port]/servername]</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-class</td>
-<td>监视类加载、卸载数量、总空间以及类装载耗费的时间</td>
-</tr>
-<tr>
-<td>-gc</td>
-<td>监视Java堆状况，包括Eden、Survivor、老年代、永久代的容量，已用空间，垃圾收集时间</td>
-</tr>
-<tr>
-<td>-gccapacity</td>
-<td>监视内容与-gc基本相同，但输出主要关注java堆各个区域使用到最大最小空间</td>
-</tr>
-<tr>
-<td>-gcutil</td>
-<td>监视内容与-gc基本相同，但输出主要关注已使用空间占总空间的百分比</td>
-</tr>
-<tr>
-<td>-gccause</td>
-<td>与-gcutil功能一样，会额外输出导致上一次垃圾收集产生的原因</td>
-</tr>
-<tr>
-<td>-gcnew</td>
-<td>监视新生代垃圾收集情况</td>
-</tr>
-<tr>
-<td>-gcnewcapacity</td>
-<td>监视内容与-gcnew基本相同，输出主要关注使用到的最大、最小空间</td>
-</tr>
-<tr>
-<td>-gcold</td>
-<td>监视老年代垃圾收集状况</td>
-</tr>
-<tr>
-<td>-gcoldcapacity</td>
-<td>与-gcold相同，输出主要关注使用到的最大、最小空间</td>
-</tr>
-<tr>
-<td>-gcpermcapacity</td>
-<td>输出永久代使用到的最大、最小空间</td>
-</tr>
-<tr>
-<td>-compiler</td>
-<td>输出即时编译器编译过的方法、耗时等信息</td>
-</tr>
-<tr>
-<td>-printcompilation</td>
-<td>输出已经被即时编译的方法</td>
-</tr>
-</tbody></table>
-<p>每隔1s查询一次2105的gc情况，查询10次。<br>jstat -gc 2105 1000 10</p>
-<p>jstat -gcutil 2105</p>
-<table>
-<thead>
-<tr>
-<th>S0</th>
-<th>S1</th>
-<th>E</th>
-<th>O</th>
-<th>P</th>
-<th>YGC</th>
-<th>YGCT</th>
-<th>FGC</th>
-<th>FGCT</th>
-<th>GCT</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0.00</td>
-<td>0.00</td>
-<td>6.20</td>
-<td>41.42</td>
-<td>47.20</td>
-<td>16</td>
-<td>0.105</td>
-<td>3</td>
-<td>0.472</td>
-<td>0.577</td>
-</tr>
-</tbody></table>
-<h3 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h3><p>实时查看和调整虚拟机各项参数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Usage:</span><br><span class="line">    jinfo [option] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jinfo [option] &lt;executable &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jinfo [option] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to remote debug server)</span><br><span class="line"></span><br><span class="line">where &lt;option&gt; is one of:</span><br><span class="line">    -flag &lt;name&gt;         to print the value of the named VM flag</span><br><span class="line">    -flag [+|-]&lt;name&gt;    to enable or disable the named VM flag</span><br><span class="line">    -flag &lt;name&gt;&#x3D;&lt;value&gt; to set the named VM flag to the given value</span><br><span class="line">    -flags               to print VM flags</span><br><span class="line">    -sysprops            to print Java system properties</span><br><span class="line">    &lt;no option&gt;          to print both of the above</span><br><span class="line">    -h | -help           to print this help message</span><br></pre></td></tr></table></figure>
-
-<h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>用于生成堆转储快照，查询finalize执行队列、Java堆和方法区的详细信息（空间使用率、当前使用收集器类型）</p>
-<p>生成堆转储文件的方式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-XX:+HeapDumpOnOutOfMemoryError 在虚拟机内存溢出异常出现后自动生成堆转储快照文件。</span><br><span class="line">-XX:HeapDumpOnCtrlBreak 使用ctrl+Break 生成堆转储快照文件</span><br><span class="line">kill -3 pid  生成堆转储快照文件</span><br><span class="line">jmap -dump:format&#x3D;b,file&#x3D;heap.dump 3120</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-dump</td>
-<td>生成java堆转储快照，格式为-dump:[live,]format=b,file=<filename>,live子参数说明是否只dump出存活对象</filename></td>
-</tr>
-<tr>
-<td>-finalizerinfo</td>
-<td>显示再F-Queue中等待Finalizer线程执行finalize方法的对象。只有在Linux平台有效</td>
-</tr>
-<tr>
-<td>-heap</td>
-<td>显示Java堆详细信息，使用回收器类型、参数配置、分代状况，只在Linux平台下有效</td>
-</tr>
-<tr>
-<td>-histo</td>
-<td>显示堆中对象统计信息，包括类、实例数量、合计容量</td>
-</tr>
-<tr>
-<td>-permstat</td>
-<td>在以ClassLoader为统计口径显示永久代内存状态。只在Linux下有效</td>
-</tr>
-<tr>
-<td>-F</td>
-<td>当虚拟机进程对-dump选项没有响应时，可以使用-F强制生成dump快照，只在Linux下有效</td>
-</tr>
-</tbody></table>
-<h3 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h3><p>用于分析jmap生成的堆转储快照。 </p>
-<blockquote>
-<p>jhat heap.dump</p>
-</blockquote>
-<p>jhat功能相对简陋，分析工作耗时且耗费硬件资源，一般不在本机使用。<br>替代方案：VisualVM、Eclipse Memory Analyzer、IBM HeapAnalyzer。</p>
-<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>生成虚拟机当前时刻的线程快照。目的是定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间挂起等。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Usage:</span><br><span class="line">    jstack [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jstack -F [-m] [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to a hung process)</span><br><span class="line">    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to a remote debug server)</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -F  to force a thread dump. Use when jstack &lt;pid&gt; does not respond (process is hung)</span><br><span class="line">    -m  to print both java and native frames (mixed mode)</span><br><span class="line">    -l  long listing. Prints additional information about locks</span><br><span class="line">    -h or -help to print this help message</span><br></pre></td></tr></table></figure>
-
-<h2 id="高级工具"><a href="#高级工具" class="headerlink" title="高级工具"></a>高级工具</h2><h3 id="JConsole"><a href="#JConsole" class="headerlink" title="JConsole"></a>JConsole</h3><p>基于JMX的可视化监视、管理工具。</p>
-<h3 id="JHSDB"><a href="#JHSDB" class="headerlink" title="JHSDB"></a>JHSDB</h3><p>基于服务性代理实现的进程外调试工具。服务性代理是HotSpot虚拟机中一组用于映射Java虚拟机运行信息的、主要基于Java语言实现的API集合。<br><img src="/2020/06/16/%E5%B8%B8%E7%94%A8%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7/jhsdb.jpeg" alt="JCMD 和JHSDB工具对比"></p>
-<h3 id="VisualVM"><a href="#VisualVM" class="headerlink" title="VisualVM"></a>VisualVM</h3><p>多合一故障处理工具，不需要被监视的程序基于特殊Agent执行，通用性强，对应用程序的实际性能影响较小，可以直接在生产环境使用。</p>
-<h3 id="Java-Mission-Control"><a href="#Java-Mission-Control" class="headerlink" title="Java Mission Control"></a>Java Mission Control</h3><p>可持续在线监控工具。</p>
-<h3 id="arthas"><a href="#arthas" class="headerlink" title="arthas"></a>arthas</h3><p>阿里巴巴提供的性能分析工具<br><a href="https://alibaba.github.io/arthas/" target="_blank" rel="noopener">https://alibaba.github.io/arthas/</a></p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/12/Linux%E6%9F%A5%E7%9C%8BSwap/">
-      Linux查看Swap
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Linux/VIM/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Linux/VIM</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月12日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"># Get current swap usage for all running processes</span><br><span class="line"># Erik Ljungstrom 27&#x2F;05&#x2F;2011</span><br><span class="line">SUM&#x3D;0</span><br><span class="line">OVERALL&#x3D;0</span><br><span class="line">for DIR in &#96;find &#x2F;proc&#x2F; -maxdepth 1 -type d | egrep &quot;^&#x2F;proc&#x2F;[0-9]&quot;&#96; ;</span><br><span class="line">do</span><br><span class="line">    PID&#x3D;&#96;echo $DIR | cut -d &#x2F; -f 3&#96;</span><br><span class="line">    PROGNAME&#x3D;&#96;ps -p $PID -o comm --no-headers&#96;</span><br><span class="line">    for SWAP in &#96;grep Swap $DIR&#x2F;smaps 2&gt;&#x2F;dev&#x2F;null| awk &#39;&#123; print $2 &#125;&#39;&#96;</span><br><span class="line">        do</span><br><span class="line">            let SUM&#x3D;$SUM+$SWAP</span><br><span class="line">        done</span><br><span class="line">    echo &quot;PID&#x3D;$PID - Swap used: $SUM - ($PROGNAME )&quot;</span><br><span class="line">    let OVERALL&#x3D;$OVERALL+$SUM</span><br><span class="line">        SUM&#x3D;0</span><br><span class="line">done</span><br><span class="line">echo &quot;Overall swap used: $OVERALL&quot;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/11/%E5%88%86%E5%B8%83%E5%BC%8FID/">
-      分布式ID生成器
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月11日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="Centos-简单优化"><a href="#Centos-简单优化" class="headerlink" title="Centos 简单优化"></a>Centos 简单优化</h3><h5 id="安装基本工具"><a href="#安装基本工具" class="headerlink" title="安装基本工具"></a>安装基本工具</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget vim net-tools lrzsz</span><br></pre></td></tr></table></figure>
-
-<h2 id="删除UUID"><a href="#删除UUID" class="headerlink" title="删除UUID"></a>删除UUID</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim ifcfg-ens33</span><br><span class="line">vim ifcfg-eth0</span><br><span class="line">vim em1</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="配置静态IP"><a href="#配置静态IP" class="headerlink" title="配置静态IP"></a>配置静态IP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">IPADDR&#x3D;10.0.0.130</span><br><span class="line">GATEWAY&#x3D;10.0.0.2</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">DNS1&#x3D;10.0.0.2</span><br><span class="line">DNS2&#x3D;1.2.4.8</span><br></pre></td></tr></table></figure>
-
-<h4 id="关闭防火墙以及NetworkManager和SELINX"><a href="#关闭防火墙以及NetworkManager和SELINX" class="headerlink" title="关闭防火墙以及NetworkManager和SELINX"></a>关闭防火墙以及NetworkManager和SELINX</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line">systemctl stop NetworkManager</span><br><span class="line">systemctl disable NetworkManager</span><br></pre></td></tr></table></figure>
-
-<h4 id="替换YUM源"><a href="#替换YUM源" class="headerlink" title="替换YUM源"></a>替换YUM源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum clean all &amp;&amp; yum makecache</span><br><span class="line">cd &#x2F;etc&#x2F;yum.repos.d&#x2F;</span><br><span class="line">mv CentOS-Base.repo CentOS-Base.repo.bak</span><br><span class="line">vim CentOS-Base.repo</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/11/%E7%BC%96%E8%AF%91%E4%B8%8E%E4%BC%98%E5%8C%96/">
-      编译与优化
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月11日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><ul>
-<li>前端编译器： JDK的Javac 、EclipseJDT中的增量式编译器（ECJ）</li>
-<li>即时编译器：HotSpot虚拟机的C1\c2编译器、Graal编译器</li>
-<li>提前编译器：JDK的Jaotc、GNU Compiler for Java, Excelsisor JET.</li>
-</ul>
-<h3 id="前端编译器"><a href="#前端编译器" class="headerlink" title="前端编译器"></a>前端编译器</h3><p>编译过程分为1个准备过程和3个处理过程：<br>1）初始化插入式注解处理器<br>2）解析与填充符号表</p>
-<ul>
-<li><p>语法、词法分析<br>词法分析是将源代码的字符流转变为标记集合的过程，单个字符是程序编写的最小元素，但标记才是编译时的最小元素。关键字、变量名、字面量、运算符都可以作为标记。</p>
-<p>语法分析时根据标记序列构造抽象语法树的过程，抽象语法树是用来描述程序代码语法结构的树形表示方式，抽象语法树的每一个节点都代表程序代码中的一个语法结构。例如包、类型、修饰符、运算符、接口、返回值、代码注释等。</p>
-<p>经过词法和语法分析生成语法树以后，编译器后续的操作都建立在抽象语法树之上。</p>
-</li>
-<li><p>填充符号表<br>符号表是一组符号地址和符号信息构成的数据结构，符号表中所登记的信息在编译的不同阶段都要被用到。如，在语义分析过程中，符号表所登记的内容将用于语义检查和产生中间代码，在目标代码生成阶段，对符号名进行地址分配时，符号表是地址解析分配的直接依据。</p>
-</li>
-</ul>
-<p>3）注解处理器<br>  插入式注解处理器可以提前至编译期对代码中的特定注解进行处理，从而影响到前端编译器（javac）的工作过程。</p>
-<p>  如果在处理注解期间对语法树进行过修改，编译器将回到解析以及填充符号表的过程重新处理，知道所有插入式注解处理器都没有再对语法树进行修改位置，每次循环称为一个轮次。</p>
-<p>4）语义分析与字节码生成</p>
-<p>语义分析过程分为标注检查和数据以及控制流分析两个步骤。</p>
-<p>在经过语法分析后，编译器获得了程序代码的抽象语法树表示，抽象语法树能够表示一个结构正确的源程序，但无法保证源程序的语义是符合逻辑的。而语义分析的主要任务则是对结构上正确的源程序进行上下文相关性质的检查，譬如进行类型检查、控制流检查、数据流检查等等。</p>
-<ul>
-<li><p>标注检查<br>检查的内容包括变量是用钱是否已经被声明、变量与赋值之间的数据类型是否能够匹配等等。<br>常量折叠：int a = 1 + 1 ; ==&gt;  int a = 2;</p>
-</li>
-<li><p>数据流以及控制流分析<br>数据流分析以及控制流分析是对程序上下文逻辑更进一步的验证，它可以检查出诸如程序局部变量在使用前是否有赋值、方法的每条路径是否都有返回值、是否所有的受检查异常都被正确处理了等问题。<br>编译器的数据以及控制流分析与类加载时的数据以及控制流分析的目的基本哈桑一致，但是校验范围有所区别。</p>
-</li>
-<li><p>解语法糖<br>Java语言的语法糖包含泛型、变长参数、自动装箱拆箱等，Java虚拟机在运行时并不知节支持这些语法，它们在编译阶段被还原回原始的基础语法结构，这个过程称为解语法糖。</p>
-</li>
-<li><p>字节码生成</p>
-<p>字节码生成阶段需要把前面哥哥步骤生成的信息转化成字节码指令写到磁盘中外，还要进行少量的代码添加和转换工作。<br>如实例构造器&lt;init&gt;()方法和&lt;cinit&gt;()方法的添加。<br>如果用户代码中没有提供任何构造函数，那么编译器将会添加一个没有参数的、可访问性与当前类型一致的默认构造函数，这个工作在填充符号表阶段已经完成。</p>
-<p>编译器会把语句块、变量变量初始化、调用父类的实例构造器方等操作收敛到&lt;init&gt;()和&lt;cinit&gt;()方法中，并且保证无论源码中出现的顺序如何，都一定是按先执行父类的实例构造器，然后初始化变量，最后执行语句块的顺序执行，</p>
-</li>
-</ul>
-<p><img src="/2020/06/11/%E7%BC%96%E8%AF%91%E4%B8%8E%E4%BC%98%E5%8C%96/javac.jpeg" alt></p>
-<h3 id="语法糖"><a href="#语法糖" class="headerlink" title="语法糖"></a>语法糖</h3><p>泛型、自动装箱、拆箱、遍历循环、变长参数和条件编译、内部类、枚举类、断言、数值直面量、枚举和字符串的switch、try with resource， lambda等。</p>
-<h4 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h4><p>类型擦除</p>
-<h4 id="自动装箱、拆箱和循环遍历"><a href="#自动装箱、拆箱和循环遍历" class="headerlink" title="自动装箱、拆箱和循环遍历"></a>自动装箱、拆箱和循环遍历</h4><p>1）大于127的值不会自动拆箱<br>2）没有遇到运算符的情况下不会自动拆箱<br>3）equals方法不处理数据转型</p>
-<h4 id="变长参数"><a href="#变长参数" class="headerlink" title="变长参数"></a>变长参数</h4><h3 id="条件编译"><a href="#条件编译" class="headerlink" title="条件编译"></a>条件编译</h3><p>Java编译器将所有编译但愿的语法树顶级节点输入到待处理列表后再进行编译，因此各个文件之间可以互相提供符号信息。</p>
-<p>根据条件中布尔值常量值的真假，编译器将把分支中不成立的代码块消除掉。</p>
-<h2 id="后端编译"><a href="#后端编译" class="headerlink" title="后端编译"></a>后端编译</h2><p>当程序需要迅速启动和执行的时候，解释器可以首先发挥作用，省去编译的时间，立即运行。<br>当程序运行环境中内存资源限制较大，可以使用解释执行节约内存。<br>当程序启动以后，编译器逐渐发挥作用，把越来越多的代码编译成本地代码，减少解释器的中间损耗，获得更高的效率。</p>
-<h3 id="即时编译器"><a href="#即时编译器" class="headerlink" title="即时编译器"></a>即时编译器</h3><p>即时编译器将运行比较频繁的代码块或者方法编译成本地机器吗，并且对这段代码进行优化。</p>
-<p>在Hotspot中内置了2个即时编译器 Client Compiler、 Server Compiler。 虚拟机会根据自身版本与宿主机的硬件性能自动选择运行模式，也可以使用-client 或者 -Server 来强制指定虚拟机运行在客户端模式或者服务端模式。</p>
-<p>解释模式(Interperted Mode)：-Xint<br>编译模式(Compiled Mode): -Xcomp<br>混合模式(Mixed Mode): -Xmixed (默认)</p>
-<p>编译器编译本地代码需要占用程序运行时间，位了打到响应速度与运行效率之间打到最佳平衡，HotSpot在编译子系统中加入了分层编译的功能。分层编译根据编译器编译、优化的规模与耗时，划分出不同的编译层次：<br>第0层，程序春解释执行，并且解释器不开启性能监控。<br>第一层：使用客户端编译器将字节码编译为本地代码，进行简单可靠的稳定优化，不开启性能监控功能。<br>第二层：使用客户端编译器执行，仅开启方法以及回边次数统计等优先的性能监控功能。<br>第三层：使用客户端编译器执行，开启全部性能监控，除了第2层的痛就之外，还会收集如分支跳转、虚方法调用版本等全部的统计信息。<br>第四层：使用服务端编译器将字节码编译为本地代码，服务端编译器会启用更多编译耗时更长的优化，还会根据性能监控信息进行一些不可靠的激进优化。</p>
-<p>实施分层编译后， 解释器、客户端编译器和服务端编译器就会同时工作，热点代码都可能会被多次编译，用客户端编译器获得更高的编译速度，用服务端编译器来获取更好的编译质量，在解释执行的时候也无需额外承担手机性能监控信息的任务，而在服务端编译器采用高复杂度的优化算法时， 客户端编译器可先采用简单优化来为它争取更多的编译时间。</p>
-<h4 id="编译对象与触发条件"><a href="#编译对象与触发条件" class="headerlink" title="编译对象与触发条件"></a>编译对象与触发条件</h4><p>被编译的热点代码有：被多次调用的方法和被多次执行的循环体。这两种情况编译的目标对象都是整个方法体，而不是单独的循环体。</p>
-<h4 id="基于采样的热点探测"><a href="#基于采样的热点探测" class="headerlink" title="基于采样的热点探测"></a>基于采样的热点探测</h4><p>周期性的检查线程的调用栈顶，如果发现某个方法经常出现在栈顶，那么这个方法就是热点方法。<br>优点：简单高效，容易获取方法的调用关系<br>缺点：不能精确确认方法的忍睹，容易受到线程阻塞或者外界因素影响扰乱热点探测。</p>
-<h4 id="基于计数器的热点探测"><a href="#基于计数器的热点探测" class="headerlink" title="基于计数器的热点探测"></a>基于计数器的热点探测</h4><p>为每个方法建立计数器，统计方法的执行次数，如果超过一定的阈值就认为它是热点方法。<br>优点：结果精确严谨<br>缺点：每个方法建立并维护计数器，不能直接获取到方法的调用关系。<br>HotSpot为每个方法准备了两类计数器：方法调用计数器和回边计数器（在循环边界往回跳）,当调用次数超过设定的阈值，就会触发即时编译。<br>-XX:CompileThreshold 来设定触发即时编译的阈值。<br>默认设置下，方法调用计数器统计的是相对执行瓶绿，当一个时间段内调用次数不足以提交即时编时，这个方法的调用计数器就会被减半（衰减），可以使用-XX:-UseCounterDecay关闭热度衰减。可以设置-XX:CounterHalfLifeTime设置半衰周期的时间，单位是秒。</p>
-<p>当方法被调用时，首先检查该方法是否被即使编译器编译过，是则优先使用编译后的版本执行，否则将方法调用的计数器加一，然后判断方法调用计数器与回边计数器值之和是否超过阈值，超过则像即时编译器提交该方法的代码编译请求。<br>如果没有做过任何设置，执行引擎默认不会同步等待编译请求完成，而是继续进入解释器按照解释方式执行字节码，直到提交的请求被即时编译器编译完成。当编译工作完成后，这个方法的调用入口地址会被系统自动改写成新值，下次调用该方法时就会使用已编译版本。</p>
-<p><img src="/2020/06/11/%E7%BC%96%E8%AF%91%E4%B8%8E%E4%BC%98%E5%8C%96/comp.jpeg" alt="方法调用计数器 触发即时编译"></p>
-<p>回边计数器：统计一个方法中循环体代码执行的次数，在字节码中遇到控制流向后跳转的指令称为“回边”,回边计数器的目的是为了触发栈上的替换编译。回边计数器没有热度衰减过程。</p>
-<h3 id="编译过程"><a href="#编译过程" class="headerlink" title="编译过程"></a>编译过程</h3><p>一般情况下，方法调用产生的标准编译请求和栈上替换编译请求，在虚拟机编译器未完成编译之前，都将按照解释方式执行代码，编译动作在后台的编译线程完成。<br>设置-XX:-BackgroundCompilation禁止后台编译，禁止后触发即时编译条件时，执行线程向虚拟机提交编译请求后一致阻塞等待，直到编译过程完成后再开始执行编译器输出的本地代码。</p>
-<p>服务端编译器效率较低，但是编译速度远超传统的静态优化编译器，相对于客户端编译器编译输出的代码质量有很大的提交，可以大幅降低本地代码的执行时间，从而抵消掉额外的编译水间开销。</p>
-<h3 id="即时编译的缺点"><a href="#即时编译的缺点" class="headerlink" title="即时编译的缺点"></a>即时编译的缺点</h3><p>1）占用程序运行时间<br>2）占用程序运算资源</p>
-<h2 id="提前编译器"><a href="#提前编译器" class="headerlink" title="提前编译器"></a>提前编译器</h2><p>提前编译器的分支：<br>与传统C、C++编译器类似，在程序运行之前把程序代码编译成机器码的静态翻译工作；<br>把原本即时编译器在运行时要做的编译工作提前做好并保存下来，下次运行到这些代码时直接加载进来使用。</p>
-<h2 id="编译器优化技术"><a href="#编译器优化技术" class="headerlink" title="编译器优化技术"></a>编译器优化技术</h2><h3 id="方法内联"><a href="#方法内联" class="headerlink" title="方法内联"></a>方法内联</h3><p>最重要的优化技术之一。</p>
-<h3 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h3><p>最前沿的优化技术之一。</p>
-<ul>
-<li><p>栈上分配<br>支持方法逃逸，但不支持线程逃逸</p>
-</li>
-<li><p>标量替换<br>如果一个数据已经无法在分解为更小的数据表示时（原始数据类型），这些数据就可以称为标量。<br>标量替换就是将用到的成员变量恢复为原始类型来访问的过程。<br>加入逃逸分析可以证明一个对象不会被方法外部访问，并且这个对象可以被拆散，那么程序真正执行的时候可能不去创建这个对象，而改为直接创建它的若干个被这个的方法使用的成员变量来替代，成员变量存储在栈上。</p>
-<p>同步消除：如果逃逸分析能够确定一个变量不会逃逸出线程，无法被其他线程访问，那么这个变量的读写肯定不会有竞争，对这个变量的同步措施也可以安全地消除掉。</p>
-</li>
-</ul>
-<h3 id="公共子表达式消除"><a href="#公共子表达式消除" class="headerlink" title="公共子表达式消除"></a>公共子表达式消除</h3><p>语言无关的经典优化技术。如果一个表达式E之前已经被计算过，并且从先前的计算到现在E中所有变量的值都没有发生变化，那么E的这次出现就称为公共子表达式。</p>
-<h3 id="数组边界检查消除"><a href="#数组边界检查消除" class="headerlink" title="数组边界检查消除"></a>数组边界检查消除</h3><p>语言相关的经典优化技术。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/">
-      内存分配与回收
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月10日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Java技术体系的自动内存管理最根本目标是自动化地给对象分配内存以及自动回收分配给对象的内存。<br>《Java虚拟机规范》并未规定新对象的创建和存储细节，这取决于虚拟机当前使用的是哪种垃圾收集器，以及虚拟机中与内存相关的参数设定。</p>
-<h2 id="HotSpot虚拟机中对象的分配原则"><a href="#HotSpot虚拟机中对象的分配原则" class="headerlink" title="HotSpot虚拟机中对象的分配原则"></a>HotSpot虚拟机中对象的分配原则</h2><h4 id="对象优先在Eden分配"><a href="#对象优先在Eden分配" class="headerlink" title="对象优先在Eden分配"></a>对象优先在Eden分配</h4><p>在大多数情况下，对象在新生代Eden区中分配。 当Eden区没有足够空间进行分配时，虚拟机将发起一次minorGC。<br>当survivor区的空间无法存放Eden区的对象时，就会通过担保机制提前转移到老年代去。</p>
-<p>-Xms:20M 堆内存初始值20M<br>-Xmx:20M 堆内存最大20M<br>-Xmn10M  新生代占用10M（剩下的10M留给老年代）<br>-XX:SurvivorRatio=8 决定了新生代Eden区与一个Survivor区的空间比例是8:1:1</p>
-<h4 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a>大对象直接进入老年代</h4><p>大对象是需要大量连续内存空间的Java对象，如很长的字符串或者元素数量很多的数组。</p>
-<p>在分配空间时，如果对象比较大，就会提前触发垃圾收集，以获取足够的连续空间才能存放该对象， 当复制对象时大对象意味着高额的内存复制开销。</p>
-<p>-XX:PretenureSizeThreshold=3145728 （大于3M的对象会直接分配到老年代中）<br>该参数只对Serial和ParNew两款收集器有效。</p>
-<h4 id="长期存活的对象将进入老年代"><a href="#长期存活的对象将进入老年代" class="headerlink" title="长期存活的对象将进入老年代"></a>长期存活的对象将进入老年代</h4><p>内存回收时必须决策那些存活对象应该存放在新生代，哪些存活对象存放在老年代。<br>虚拟机为每个对象定义了一个对象年龄（Age）存储在对象头重。</p>
-<p>对象通常在Eden区诞生，如果经过一次MinorGC后仍然存活，并且能被Survivor容纳的话，会被移动到Survivor空间，并且将对象的年龄设置为1岁。对象在Survivor中每经过一次MinorGC，Age增加1， 当年龄增加到一定程度的时候，该对象会被移动到老年代中。<br>可以通过-XX:MaxTenuringThreshold设置（默认为15次）。</p>
-<h4 id="动态对象年龄判定"><a href="#动态对象年龄判定" class="headerlink" title="动态对象年龄判定"></a>动态对象年龄判定</h4><p>如果在Survivor空间中相同年龄所有对象大小的总和大于Survivor空间的一半，年龄大于或者等于该年龄的对象就可以直接进入老年代，无需等到-XX:MaxTenuringThreshold中要求的年龄。</p>
-<p>也就是当前Survivor空间大小为1M，有两个Age=1且大小为256k的对象时，这两个对象就会直接进入老年代。</p>
-<h4 id="空间分配担保"><a href="#空间分配担保" class="headerlink" title="空间分配担保"></a>空间分配担保</h4><p>在发生MinorGC之前，虚拟机必须先检查老年代最大可用的连续空间是否大于新生代所有对象总空间。<br>如果条件成立，那么这次MinorGC时安全的；；<br>如果不成立，虚拟机会先查看-XX:HandlerPromotionFailure参数的设置值是否允许担保失败<br>   如果允许担保失败，继续检查老年代最大可用的连续空间是否大于历次今生到老年代对象的平均大小<br>      大于，尝试进行一次MinorGC；<br>      小于，或者-XX:HandlePromotionFailure不允许冒险，则变更为FullGC。</p>
-<p>在JDK6 Update24之后的规则变为只要老年代的连续空间大于新生代总大小或者历次晋升的平均大小，就会进行MinorGC，否则就进行FullGc。-XX:HandlePromotionFailure参数不在生效。</p>
-<h2 id="垃圾的回收"><a href="#垃圾的回收" class="headerlink" title="垃圾的回收"></a>垃圾的回收</h2><ul>
-<li>哪些内存需要回收</li>
-<li>什么时候回收</li>
-<li>如何回收</li>
-</ul>
-<h4 id="如何判断对象已死"><a href="#如何判断对象已死" class="headerlink" title="如何判断对象已死"></a>如何判断对象已死</h4><ul>
-<li>引用计数器</li>
-<li>可达性分析算法（固定可作为GCRoot的对象有）<ul>
-<li>在虚拟机栈（栈帧中的本地变量表）中引用的对象，譬如每个线程背调用的方法堆栈中使用的参数、局部变量、临时变量</li>
-<li>在方法区中类静态属性引用的对象，如Java类的引用类型静态变量</li>
-<li>在方法区中常量引用的对象，如字符串常量池中的引用</li>
-<li>在本地方法栈中JNI引用的对象</li>
-<li>Java虚拟机内部的引用，如基本数据类型对应的Class对象，一些常驻的异常对象，系统类加载器</li>
-<li>所有背同步锁持有的对象</li>
-<li>反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等。</li>
-</ul>
-</li>
-</ul>
-<h4 id="对象的引用"><a href="#对象的引用" class="headerlink" title="对象的引用"></a>对象的引用</h4><ul>
-<li>强引用，如Object obj = new Object(); 无论任何情况下，只要强引用关系存在，垃圾收集器就永远不会回收掉背引用的对象。</li>
-<li>软引用，描述有用但非必须的对象，被软引用关联的对象在系统将要发生内存溢出前会把这些对象例如回收范围内进行二次回收。（SoftReference）</li>
-<li>弱引用，描述非必须对象，被弱引用的对象只能生存到下一次垃圾收集发生位置。无论内存是否足够，都会回收掉只被弱引用关联的对象。</li>
-<li>虚引用，一个对象是否有虚引用存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的时为了能在这个对象被收集器回收时受到一个系统通知（NIO用的RdirectMemory）</li>
-</ul>
-<h2 id="垃圾收集器算法"><a href="#垃圾收集器算法" class="headerlink" title="垃圾收集器算法"></a>垃圾收集器算法</h2><h4 id="分代收集理论"><a href="#分代收集理论" class="headerlink" title="分代收集理论"></a>分代收集理论</h4><p>建立在两个分代假说上：<br>1）弱分代假说，绝大数对象都是朝生夕灭的。<br>2）强分代假说，经过越多次收集过程的对象月难消亡。<br>3）（推理假说）跨代引用假说，跨代引用相对于同代来说仅占极少数。</p>
-<h5 id="分代收集区域"><a href="#分代收集区域" class="headerlink" title="分代收集区域"></a>分代收集区域</h5><ul>
-<li>部分收集（Partial GC）<ul>
-<li>新生代收集（Minor GC/ Yong GC）</li>
-<li>老年代收集（Major GC / Old GC）（只有CMS会单独回收老年代）</li>
-<li>混合收集(Mixed GC)，目前只有GC存在混合回收行为。</li>
-</ul>
-</li>
-<li>整堆收集(Full GC)</li>
-</ul>
-<h4 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h4><p>标记需要被回收的对象后，回收掉所有被标记的对象；<br>或者标记不需要被回收的对象，同一回收未被标记的对象。</p>
-<p>缺点：<br>不稳定，标记清除的性能随着对象的增多而降低；<br>空间碎片化问题，肯能会导致在分配较大对象时无法找到足够的连续空间内存不得不提前触发另一次垃圾收集动作。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ms.jpeg" alt="mark-sweep"></p>
-<h4 id="标记复制算法"><a href="#标记复制算法" class="headerlink" title="标记复制算法"></a>标记复制算法</h4><p>为了解决标记清除算法面对大量可回收对象时执行效率低的问题。</p>
-<p>优点：只需要复制少数存活对象，简单高效<br>缺点：浪费内存空间。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mc.jpeg" alt="mark-copy"></p>
-<p>根据弱分代假说，以及实际情况，大部分的对象在第一次垃圾回收时就会被回收，因此并不需要按照1:1的比例来划分新生代的内存空间。<br>内存被分为较大的Eden区和较小的两个Survivor区域，HotSpot默认比例是8:1:1。<br>打给你Survivor空间不足容纳一次MinorGC后存活的对戏那个时，就需要依赖其他内存区域进行分配担保。</p>
-<h4 id="标记整理算法"><a href="#标记整理算法" class="headerlink" title="标记整理算法"></a>标记整理算法</h4><p>根据老年代对象的存亡特征以及强分代假说提出的算法。<br>将所有存活的对象向内存空间的一端移动，然后直接清理掉边界以外的内存。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/mark-compact.jpeg" alt="mark-compact"></p>
-<p>吞吐量：赋值器和收集器的效率总和。<br>如果在清理时移动，必然会影响到对象回收的效率。<br>如果清理时不移动，必然会影响到对象分配的效率。</p>
-<h2 id="常见的垃圾收集器"><a href="#常见的垃圾收集器" class="headerlink" title="常见的垃圾收集器"></a>常见的垃圾收集器</h2><h4 id="Serial-SerialOld"><a href="#Serial-SerialOld" class="headerlink" title="Serial / SerialOld"></a>Serial / SerialOld</h4><p>Serial收集器是最古老的收集器，使用标记拷贝算法，在进行垃圾收集时，必须暂停其他所有工作线程，直到它收集结束。<br>优点：在内存较小的桌面应用或者Client模式下，额外内存消耗最小，简单高效。</p>
-<p>SerialOld同样是单线程收集起，使用标记整理算法。当CMS收集起发生失败时会转为SerialOld工作。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/serialGC.jpeg" alt="Serial GC"></p>
-<h4 id="PS-PO"><a href="#PS-PO" class="headerlink" title="PS / PO"></a>PS / PO</h4><p>Paralle Scavenge/ Paralle Old 的目标是达到一个可控的吞吐量。</p>
-<p>ParalleScavenge 同样是基于标记-复制算法，支持多线程并发收集，<br>吞吐量 = （运行用户代码时间）/(运行用户代码时间+运行垃圾收集时间)<br>-XX:MaxGCPauseMillis 控制最大垃圾收集停顿时间<br>-XX:GCTimeRatio 控制垃圾收集时间占总时间的比率<br>-XX:+UseAdaptiveSizePolicy 就不需要人工指定新生代的大小，Eden于Survivor的比例，以及晋升老年代的大小，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量。</p>
-<p>ParalleOld 收集老年代，基于标记整理算法。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/pspo.jpeg" alt="Paralle Scavenge / Paralle Old"></p>
-<h4 id="ParNew-CMS"><a href="#ParNew-CMS" class="headerlink" title="ParNew / CMS"></a>ParNew / CMS</h4><p>ParNew是Serial收集器的多线程并行版本，除了使用多条线程进行垃圾收集之外，其余行为与Serial收集起完全一致。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ParNewSerialOld.jpeg" alt="ParNew / SerialOld"></p>
-<p>CMD是一种以获取最短回收停顿时间为目的的收集器。符合希望系统停顿时间尽可能短，以给用户带来良好交互体验的需求。他是一种标记-清除算法实现的。<br>包含四个步骤：<br>1）初始标记<br>2）并发标记<br>3）重新标记<br>4）并发清除</p>
-<p>其中初始标记和重新标记这两个步骤仍需要STW。<br>初始标记仅仅只是标记一下GC Roots能直接关联到的对象、速度很快；<br>并发标记阶段就是从GC Roots的直接关联对象开始遍历整个对象图的过程，这个过程耗时长，但不需要停顿用户线程，可以与垃圾收集线程一起并发运行；<br>重新标记为了修正并发标记期间因为用户程序继续运行导致标记产生变动的部分，这个阶段比初始标记耗时稍长；<br>并发清除，清理删除掉标记阶段判断已经死亡的对象，不需要移动哦存活对象，因此这个阶段也是与用户线程同时并发。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/cms.jpeg" alt="CMS"></p>
-<p>CMS缺点：<br>1） 耗CPU资源<br>2） 无法处理浮动垃圾，由于预留的内存无法分配新对象时，有可能出现回收失败而导致退化到Serial Old的模式收集。<br>3）分配占用大空间的对象时，会出现老年代还有很多剩余空间，但是无法找到足够大的连续空间分配对象，不得不提前触发FullGC。<br>提供了两个参数优化，但是JDK1.9之后已经废弃：<br>-XX:UseCMS-CompactAtFullCollection 不得不进行FullGC时开启内存碎片的合并整理。<br>-XX:CMSFullGCsBefore-Compaction，要求CMS收集器在执行过若干次不整理空间的FullGC之后，下一次进入FullGC前进行碎片整理。</p>
-<h4 id="Garbage-First"><a href="#Garbage-First" class="headerlink" title="Garbage First"></a>Garbage First</h4><p>G1时一款主要面向服务端应用的垃圾收集器。</p>
-<p>在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间大概率不超过N毫秒这样的目标。</p>
-<p>G1面向堆内存任何部分来组成回收集（CollectionSet）进行回收，衡量标准不再是它属于哪个分代，而是哪块内存中存放的垃圾数量最多，回收收益最大，这就是G1收集器的MixedGC模式。</p>
-<p>G1把连续的Java堆内存划分为多个大小相等的独立区域（Region），每个Region都可以根据需要扮演 新生代的Eden空间Survivor空间，或者老年代空间。收集器能够对不同角色的Region采用不同的=策略取处理，这样无论是新创建的对象还是存活了一段时间、经过多次收集的旧对象都能获得很好的收集再熬过。</p>
-<p>Region中有一类Humongous区域专门存放大对象。 G1认为只要大小超过了一个Region容量的一般的对象就可以判定为大对象。每个Region的大小可以通过参数-XX:G1HeapRegionSize设定，取值范围1MB～32MB，且应为2的N次幂。那些超过了整个Region容量的超级大对象，会被存放在N个连续的HumongousRegion之中，G1的大多数行为都把HumongousRegion作为老年代的一部分进行看待。</p>
-<p>G因为将Region作为单词回收的最小单元，所以可以建立可预测的停顿时间模型。<br>每次根据用户设置的停顿时间-XX:MaxGCPauseMillis， 优先处理回收价值收益最大的那些Region。<br>这种使用Region划分内存空间，以及具有优先级的区域回收方式，保证了G1收集器在悠闲的时间内获取尽可能高的收集效率。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/G1Region.jpeg" alt="G1 Region"></p>
-<h5 id="需要解决的问题"><a href="#需要解决的问题" class="headerlink" title="需要解决的问题"></a>需要解决的问题</h5><p>1）跨Region引用的对象： 每个Region都维护自己的记忆集避免全堆作为GCRoots扫描， 这些记忆集会记录下别的Region指向自己的指针，并标记这些指针分别在哪些卡页的范围之内。<br>G1的记忆集是一种Hash表，Key时别的Region的起始地址，Value时一个集合，里面存储的元素时卡表的索引号。这种双向的卡表结构记录了我指向谁和谁指向了我，因此G1只少需要耗费大约10%～20%的额外内存来维持收集工作。</p>
-<p>2）在并发阶段如何保证收集线程与用户线程互不干扰地运行？<br>用户线程在改变对象引用关系的时候，必须保证不能打破原本的对象图结构，导致比阿吉结果出现错误，<br>CMS使用增量更新算法，G1使用原始快照算法来实现。</p>
-<p>垃圾收集对用户线程的影响还体现在回收过程中心窗卷对象的内存分配上，程序要继续运行就肯定会持续有新对象呗创建，G1位每个Region设计了两个名为TAMS（TOp at Mark Start）的指针，把Region中的一部分空间划分出来用于并发回收过程中的新对象分配，并发回收时心分配的对象地址都必须要在这两个指针位置以上。G1收集器默认在这个地址以上的对象时被隐式标记过的，不纳入回收范围。如果内存回收的速度赶不上内存分配的速度，G1收集器也要被迫冻结用户线程执行，导致FullGC而产生长时间的STW。</p>
-<p>3）如何建立可靠的停顿模型<br>G1的停顿预测模型时以衰减均值为理论基础实现的，在垃圾收集过程中，G1收集器会记录每个Region的回收耗时、每个Region记忆集里的脏卡数量等各个可以测量的步骤话费的成本，并分析得出平均值，标准偏差、可行度等统计信息，衰减平均值时比普通的平均值更容易受到新数据的影响，平均值更容易受到新数据的影响，平均值代表整体平均状态，衰减均值代表最近的平均状态。 Region的统计状态越新越能决定器回收的价值。通过这些信息预测现在开始回收的话，哪些region组成回收集采可以在不超过期望停顿时间的约束下获得最高的收益。</p>
-<h4 id="G1的回收步骤"><a href="#G1的回收步骤" class="headerlink" title="G1的回收步骤"></a>G1的回收步骤</h4><h5 id="初始标记"><a href="#初始标记" class="headerlink" title="初始标记"></a>初始标记</h5><p> 只标记一下GCRoots能直接关联到的对象，并且修改TAMS指针的值，让下一个阶段的用户线程并发运行时，能正确滴在可用的Region中分配新对象。这个阶段需要停顿线程，但是耗时短，而且是借用进行MinorGC的时候同步完成，所以G1收集器在这个阶段实际并没有额外的停顿。</p>
-<h5 id="并发标记"><a href="#并发标记" class="headerlink" title="并发标记"></a>并发标记</h5><p>从GCRoots开始对对子红对象进行可达性分析，递归扫描整个堆里的对象图，找出要回收的对象，这个阶段耗时较长，但是可以和用户程序并发执行，当对象图扫描完成以后，还要重新处理SATB记录下的在并发时有引用变动的对象。</p>
-<h5 id="最终标记"><a href="#最终标记" class="headerlink" title="最终标记"></a>最终标记</h5><p>对用户线程做另外一个短暂的暂停，用于处理并发阶段结束后仍遗留下来的最后那少量的SATB记录。</p>
-<h5 id="筛选回收"><a href="#筛选回收" class="headerlink" title="筛选回收"></a>筛选回收</h5><p>负责更新Region的统计数据，对哥哥Region的回收价值和成本进行排序，根据用户所期望的停顿时间来制定回收计划，可以自由选择任意多个Region构成回收集，然后把决定回收的那一部分Region的存活对象复制到空的Region中，再清理掉整个旧的Region的全部空间，对存活对象移动时必须暂停用户线程，但是由多条线程完成的。</p>
-<p><img src="/2020/06/10/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/g1.jpeg" alt="G1"></p>
-<p>G1从整体上来看是基于标记整理算法，但从局部来看时基于标记复制算法。无论如何，这两种算法意味着G1再与性期间不会产生内存空间碎片，垃圾收集完成之后能提供规整的可用内存。这种特性有利于程序长时间运行，在程序为大对象分配内存时不容易因无法找到连续内存空间而提前触发限一次收集。</p>
-<p>G1位了垃圾收集产生的内存占用以及额外的执行副在都比CMS搞。<br>内存占用是由于双向卡表占用空间大。CMs只记录了老年代到新生代的卡表记录。</p>
-<p>负载：CMS用写后屏障维护更新卡表；<br>G1除了使用写后屏障维护卡表外，位了实现原始快照搜索（SATB）算法，还需要使用写前屏障来跟踪并发前的指针变化。 原始快照搜索能够减少并发标记和重新标记阶段的消耗，避免CMS那样在最终标记阶段停顿时间过长的缺点。</p>
-<p>CMS的写屏障是同步操作，G1使用的是消息队列，把写前屏障和写后屏障中要做的事情都放在队列里，再异步处理。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/">
-      线程和并发
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月8日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>目前线程是java中进行处理器资源调度的最基本单位。（Loom项目正在尝试改变线程这一重量级的实现）</p>
-<p>实现线程的方式主要有三种：</p>
-<ol>
-<li>使用内核线程1:1实现；<br>内核系统就是由操作系统内核支持的线程，这种线程由内核来完成线程切换，内核通过操纵调度器对线程进行调度，并负责将线程的任务映射到各个处理器上。</li>
-</ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/1.1.jpeg" alt="内核线程"></p>
-<ol start="2">
-<li>使用用户线程1:n实现；</li>
-</ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/1.n.jpeg" alt="用户线程"></p>
-<ol start="3">
-<li>使用用户线程价轻量级进程混合实现（n：M实现）</li>
-</ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/m.n.jpeg" alt="混合实现"></p>
-<h2 id="Java线程的实现"><a href="#Java线程的实现" class="headerlink" title="Java线程的实现"></a>Java线程的实现</h2><p>《Java虚拟机规范》中没有限定使用哪种线程模型来实现，主流平台上的主流商用Java虚拟机线程模型普遍都给予操作系统原生线程模型来实现（1:1的线程模型）</p>
-<h2 id="Java线程调度"><a href="#Java线程调度" class="headerlink" title="Java线程调度"></a>Java线程调度</h2><p>线程调度是指系统为线程分配处理器使用权的过程，调度方式分为两种：</p>
-<ul>
-<li>协同式线程调度<br>线程的执行时间由线程本身来控制，线程把自己的工作执行完之后，同志系统切换到另外一个线程。</li>
-<li>抢占式线程调度<br>每个线程由系统来分配执行时间，线程的切换不由线程本身来决定。<br>Java可以使用thread.yield()方法主动让出执行时间，但是并不能主动获取执行时间。</li>
-</ul>
-<h2 id="线程的优先级"><a href="#线程的优先级" class="headerlink" title="线程的优先级"></a>线程的优先级</h2><p>我们并不能在程序中通过优先级来完全准确判断一组状态都为Ready的线程先执行哪一个？</p>
-<h2 id="状态转换"><a href="#状态转换" class="headerlink" title="状态转换"></a>状态转换</h2><p>Java语言定义了6中线程状态，在任意一个时间点中， 一个线程只能有且只有一种状态，并且可以通过特定的方法在不同状态之间转换。</p>
-<ul>
-<li>新建：new，创建后尚未启动的线程处于新建状态；</li>
-<li>运行：runnable，包括操作系统线程状态中的Running和Ready，</li>
-<li>等待：Waiting，处于这种状态的线程不会被分配处理器执行时间，它们需要被其他线程显示唤醒。<br>以下方法可以让线程无限期等待：<ul>
-<li>没有设置timeout参数的Object.wait()方法；</li>
-<li>没有设置timeout参数的Thread.join()方法；</li>
-<li>LockSupport.part()方法；</li>
-</ul>
-</li>
-<li>限期等待：处于这种状态的线程也不会被分配处理器执行时间，在一定时间后会有系统自动唤醒。<ul>
-<li>Thread.sleep()</li>
-<li>设置了Timeout的Object.wait()</li>
-<li>设置了Timeout的Thread.join()</li>
-<li>LockSupport.parkNanos();</li>
-<li>LockSupport.parkUntil();</li>
-</ul>
-</li>
-<li>阻塞：Blocked，在程序等待进入同步区域的时候，线程将进入阻塞状态。</li>
-<li>结束: Terminated，已终止线程的线程状态，线程已经结束执行。</li>
-</ul>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/ThreadState.jpeg" alt="线程状态图"></p>
-<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>当多个线程同时访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要执行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果，那就称这个对象是线程安全的。</p>
-<p>也就是代码本身封装了所有必要的正确性保障手段，令调用者无序关心多线程下的调用问题，更无需自己实现任何措施来保证多线程环境下的正确调用。</p>
-<h4 id="不可变"><a href="#不可变" class="headerlink" title="不可变"></a>不可变</h4><p>在Java语言中，不可变对象一定是线程安全的，无论是对象的方法实现还是方法的调用者，都不需要再进行任何线程安全保障措施。</p>
-<p>只要一个不可变的对象被正确的构建出来，那其外部的可见状态永远都不会改变，永远都不会看到他在多个线程之中处于不一致的状态。</p>
-<h4 id="绝对线程安全"><a href="#绝对线程安全" class="headerlink" title="绝对线程安全"></a>绝对线程安全</h4><p>绝对的线程安全除了对象本身外， 还需要在调用端做相应的同步措施。</p>
-<h4 id="相对线程安全"><a href="#相对线程安全" class="headerlink" title="相对线程安全"></a>相对线程安全</h4><p>保证这个对象在单次的操作是线程安全的，我们在调用的时候不需要进行额外的保障措施，但是对于一些特定顺序的连续调用，就可能需要在调用端使用额外的同步手段来保证调用的正确性。在Java中，相对线程安全的类型有Vector、HashTable、Collections.synchronizedCollection();</p>
-<h4 id="线程兼容"><a href="#线程兼容" class="headerlink" title="线程兼容"></a>线程兼容</h4><p>对象本身并不是线程安全的， 但是可以通过在调用端正确的使用同步手段来保证对象在并发环境中可以安全使用。<br>Vector、HashTable、ArrayList、HashMap等都是线程兼容的。</p>
-<h4 id="线程对立"><a href="#线程对立" class="headerlink" title="线程对立"></a>线程对立</h4><p>如果两个线程同时持有一个线程对象，一个尝试去中断线程、一个尝试去恢复线程，在并发进行的情况下，无论调用时是否进行了同步，目标线程都存在思索的风险。（Thread类的suspend和resume方法），常见的对立操作还有System.in() System.out()和System.runFinalizersOnExit();</p>
-<h3 id="线程安全的实现方法"><a href="#线程安全的实现方法" class="headerlink" title="线程安全的实现方法"></a>线程安全的实现方法</h3><h4 id="互斥同步"><a href="#互斥同步" class="headerlink" title="互斥同步"></a>互斥同步</h4><p>用互斥来实现同步。<br>同步是指在多个线程并发访问共享数据时，保证共享数据在同一个时刻只被一条线程使用。<br>互斥是实现同步的一种手段，临界区（Critical Section）、互斥量（Mutex）和信号量（Semaphore）都是常见的互斥实现方式。<br>因此它面临的问题是进行线程阻塞和唤醒所带来的性能开销，因此也叫阻塞同步。<br>属于一种悲观的并发策略。</p>
-<h5 id="synchronized（非公平锁）"><a href="#synchronized（非公平锁）" class="headerlink" title="synchronized（非公平锁）"></a>synchronized（非公平锁）</h5><h5 id="java-util-concurrent-locks-Lock"><a href="#java-util-concurrent-locks-Lock" class="headerlink" title="java.util.concurrent.locks.Lock"></a>java.util.concurrent.locks.Lock</h5><h5 id="ReentrantLock（非公平锁）"><a href="#ReentrantLock（非公平锁）" class="headerlink" title="ReentrantLock（非公平锁）"></a>ReentrantLock（非公平锁）</h5><p>  可重入锁比synchronized增加了一些高级功能：</p>
-<ul>
-<li>等待可中断<br>当持有锁的线程长期不释放所得时候，正在等待的线程可以选择放弃等待，改为处理其他事情。</li>
-<li>公平锁<br>多个线程在等待同一个锁的时候，必须按照申请锁的时间顺序依次获得锁。</li>
-<li>锁绑定多个条件<br>一个ReentrantLock对象可以同时绑定多个Condition对象， 多次调用newCondition()即可。</li>
-</ul>
-<h4 id="非阻塞同步"><a href="#非阻塞同步" class="headerlink" title="非阻塞同步"></a>非阻塞同步</h4><p>基于硬件冲突检测的乐观并发策略，也就是说先进性操作，如果没有其他线程争用共享数据，操作成功；<br>如果共享数据被争用，产生冲突，那么再进行其他的补偿措施，最常用的补偿措施就是不断重试，直到成功。<br>这种方式不需要阻塞线程，因此也叫无锁编程。<br>常用的具有原子性的硬件操作和冲突检测指令有：</p>
-<ul>
-<li>测试并设置（Test-And-Set）</li>
-<li>获取并增加（Fetch-And-Increment）</li>
-<li>交换（Swap）</li>
-<li>比较并交换（Compare And Swap）</li>
-<li>加载链接/条件存储（Load-Linked/ Store-Conditional）</li>
-</ul>
-<p>Java中暴露出来的是CAS指令，当CAS指令执行时，当且仅当内存地址V的值符合预期值A时，处理器才会用新的值B更新内存地址V的值，该过程是一个原子操作，执行期间不会被其他线程中断。</p>
-<p>CAS存在的ABA问题，大部分情况下不会影响程序并发的正确性，如果需要解决该问题，传统的互斥同步可能会比原子类更为高效。</p>
-<h4 id="无同步方案"><a href="#无同步方案" class="headerlink" title="无同步方案"></a>无同步方案</h4><p>如果可以让一个方法本来就不涉及共享数据，那它自然就不需要任何同步措施去保证其正确性，因此会有一些代码天生就是线程安全的。</p>
-<ul>
-<li>可重入代码<br>如果一个方法的返回结果是可预测的，只要输入了相同的数据，就就能返回相同的结果，那么它就满足可重入性的要求，当然他就是线程安全的。<br>可重入代码不依赖于全局变量、存储在队上的数据和公用的系统资源，用到的状态量都由参数重传入，比调用非可重入的方法等。</li>
-<li>线程本地存储<br>如果一段代码中使用的数据必须与其他代码共享，那就看看这些共享数据的代码是否能保证在同一个线程中执行。这样就可以把共享数据的可见范围限制在一个线程之内。<br>常见的有生产者消费者模式（Web交互模型）。<br>ThreadLocal的使用。</li>
-</ul>
-<h2 id="锁优化"><a href="#锁优化" class="headerlink" title="锁优化"></a>锁优化</h2><h4 id="自旋锁和自适应自旋"><a href="#自旋锁和自适应自旋" class="headerlink" title="自旋锁和自适应自旋"></a>自旋锁和自适应自旋</h4><p>互斥同步的时候需要对线程进行挂起和恢复，但是挂起和恢复需要陷入内核态来完成。<br>因此当一个线程获取锁的时候，如果暂时没有获取到，那么让他稍微等一会儿，但不放弃处理器的执行时间，看看持有锁的线程是否很快会释放锁。</p>
-<p>如果锁被占用很长的时间，那么自旋的线程只会白白消耗处理器资源。因此自旋等待时间必须有一定的限度。<br>如果自旋超过了限定的次数，仍然没有成功获得锁，就应当使用传统方式去挂起线程。</p>
-<h5 id="自旋锁的实现"><a href="#自旋锁的实现" class="headerlink" title="自旋锁的实现"></a>自旋锁的实现</h5><p><a href="https://www.jianshu.com/p/824b2e4f1eed" target="_blank" rel="noopener">几种自旋锁的java实现</a><br><a href="https://www.jianshu.com/p/9d3660ad4358?utm_source=oschina-app" target="_blank" rel="noopener">认真的讲一讲：自旋锁到底是什么</a><br><a href="https://www.cnblogs.com/cxuanBlog/p/11679883.html" target="_blank" rel="noopener">看完你就明白的锁系列之自旋锁</a></p>
-<h4 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h4><p>虚拟机即使编译器在运行时，判断到一段代码中，在堆上的所有数据都不会逃逸出去被其他线程访问到，那就可以把他们当作栈上的数据对待，认为他们是线程私有的，消除同步锁的过程。</p>
-<h4 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h4><p>如果一系列的连续操作都对同一个对象反复加锁和解锁，甚至加锁操作是出现在循环体中的， 可以把加锁同步的范围扩展到整个操作序列的外部。 </p>
-<h4 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h4><p>在没有多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗。</p>
-<p>Hotspot对象头分为两部分：<br>1）用于存储对象自身运行的数据，如哈希吗，GC分代年龄。这部分数据的长度在32位和64位的Java虚拟机中分别占用32个或者64比特。这部分是实现轻量级锁和偏向锁的关键。<br>2）用于存储指向方法区对象类型数据的指针，如果是数组对象，还会有一个额外的部分存储数组长度。</p>
-<p>由于对象头信息是与对象自身定义的数据无关的额外存储成本，考虑到Java虚拟机的空间使用效率，MarkWord被设计成一个非固定的动态数据结构，以便在极小的空间内存储尽量多的信息。<br>它会根据对象的状态服用自己的存储空间。<br>在32位的Hotspot虚拟机中，对象未被锁定的状态下，MarkWord的32个比特空间有25个比特用于存储对象的哈希码，4个比特用于存储对象分代年龄，2个比特用于存储锁标志位，还有1个比特股定位0（表示未进入偏向模式）。对象除了违背锁定的正常状态外，还有轻量级锁定、重量级锁定、GC标记、可偏向等几种状态。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/light_.jpeg" alt></p>
-<p>如果代码即将进入同步块的时候，如果此同步对象没有被锁定（标志位位01），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（LockRecord）的空间,用于存储锁对象目前的MarkWord的拷贝。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/markword.jpeg" alt></p>
-<p>然后虚拟机将使用CAS操作尝试把对象的markword更新为指向LockRecord的指针。如果这个更新成功，那么代表该线程拥有了这个对象的锁，并且对像MarkWord的锁标志位将转变为00，表示此对象处于轻量级锁定状态。</p>
-<p>如果更新操作失败，意味着至少存在一个线程与当前线程竞争获取该对象的锁。虚拟机首先检查对象的MarkWord是否只想当前线程的栈帧，如果是，说明线程已经拥有了这个对象的锁，那么直接进入同步块继续执行，否则说明这个对象已经被其他线程抢占了。<br>如果出现两条以上的线程争用同一个锁的情况，那么轻量级锁不再有效，必须要膨胀为重量级锁，锁标志的状态变为10， 此时Markword中存储的就是指向重量级锁的指针，后面等待锁的线程也必须进入阻塞状态。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/light_lock.jpeg" alt></p>
-<p>它的解锁过程也是通过CAS来进行的，如果对象的MarkWord仍然指向线程的锁记录，那就用CAS操作把对象当前的MarkWord和线程中复制的DisplacedMarkWord替换回来，如果替换成功，说明解锁成功。<br>替换失败，说明有其他线程尝试过获取该锁，需要在释放锁的同时唤醒被挂起的线程。</p>
-<p>如果没有竞争，轻量级锁能通过CAS操作成功避免使用互斥量的开销；<br>如果存在竞争，除了互斥量本身开销外，还额外发生了CAS操作的开销，因此性能更差。</p>
-<h4 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h4><p>用于消除数据在无竞争情况下的同步，连CAS都去掉了，进一步提高程序的运行性能。<br>偏向锁会偏向于第一个获得它的线程，如果在接下来的执行过程中，该锁一致没有被其他的线程获取，则持有偏向锁的线程永远不需要再同步。</p>
-<p>如果当前虚拟机启用了偏向锁，那么当锁对象第一次被线程获取的时候，虚拟机将会把对象头中的标志位设置为01，把偏向模式设置为1，表示进入偏向模式。<br>同时使用CAS操作把获取到这个锁的线程ID记录在对象的MarkWord中。<br>如果CAS成功，持有偏向锁的线程以后每次进入这个锁相关的同步块是，虚拟机都可以不再进行任何同步操作。</p>
-<p>一旦出现另外一个线程尝试获取这个锁的情况，偏向模式马上宣告结束。<br>根据锁对象目前是否处于被锁定的状态决定是否撤销偏向（把偏向模式设置为0），撤销后标志位恢复到为锁定或者轻量级锁定的轧辊台，后续的同步操作按照轻量级锁执行。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/pian.jpeg" alt="偏向锁"></p>
-<p>当进入偏向状态是，MarkWord大部分的空间都用于存储持有锁的线程ID，这部分空间占用了原有存储对象Hash码的位置。当一个对象已经计算过一次一致性哈希码后，它就再也无法进入偏向锁状态。<br>当一个对象正在处于偏向锁状态时，受到计算hash码的请求时，它的偏向状态会被立即撤销，并且锁会膨胀为重量级锁。</p>
-<p>在重量级锁的实现中，对象头指向了重量级锁的位置，代表重量级锁的ObjectMonitor类中有字段可以记录非加锁状态下的MarkWork，其中自然可以存储原来的哈希码。</p>
-<p>偏向锁可以提高带有同步但无竞争的程序性能，但如果程序中大多数的锁都总是被多个不同的线程访问，那偏向锁就是多余的。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/07/IO-2/">
-      IO-2
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月7日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>多路复用器：<br>select/poll/epoll</p>
-<p>man 2 select </p>
-<p>man 2 poll</p>
-<p>2.链路层，3网络层，4传输层<br>封存あ记忆</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/06/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
-      分布式锁
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月6日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1) 可重入锁<br>CAS<br>2）同步：<br>3）信号量<br>公平锁、非公平锁、读写锁、自旋锁<br>分布式锁， 悲观锁、乐观锁, 锁续租</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/">
-      字节码执行引擎
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月5日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>当代码被编译成二进制字节码，由Classloader加载到内存，经过加载、验证、准备、解释后将数据转化为JVM可以接受的格式存储到方法区，并在堆内存中创建一个Class对象，作为外部访问的入口。<br>接下来就由字节码执行引擎来解释执行代码。</p>
-<p>《Java》虚拟机规范中规定了Java虚拟机字节码执行引擎的概念模型，输入字节码二进制流，输出执行结果。</p>
-<p>在不同的虚拟机实现中，执行引擎在执行字节码的时候会有两种：</p>
-<ul>
-<li>解释执行（Sun Classic 虚拟机）</li>
-<li>编译执行（Jrockit）</li>
-<li>两种兼备 (HotSpot)</li>
-</ul>
-<h2 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h2><p>栈帧是用于支持虚拟机方法进行调用和执行的数据结构，每个方法从调用开始到执行结束的过程，都对应一个栈帧从虚拟机栈中入栈到出栈的过程。</p>
-<p>栈帧存储了方法的局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</p>
-<p><img src="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/stackframe.jpeg" alt="栈帧"></p>
-<p>栈帧中需要多大的局部变量表、多深的操作数栈在编译Java的时候就已经计算出来存放在方法表的Code属性中。</p>
-<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><p>用于存放方法参数和方法内部定义的局部变量。</p>
-<p>在代码被编译成Class文件时，在方法的Code属性中max_locals数据项中确定了该方法所需要分配的局部变量表的最大容量。局部变量表的容量以变量槽（Variable Slot）为最小单位，每个变量槽应该可以存放一个boolean、byte、char、short、int、float、reference、returnAddress这8种不超过32位数据类型（对于超过32位的long和double，则使用两个32位的变量槽）。</p>
-<p>引用类型：</p>
-<ul>
-<li>通过引用可以找到这个对象在堆中的数据存放的起始地址或者索引；</li>
-<li>找到对象所属类型在方法区中的存储类型；</li>
-</ul>
-<p>returnAddress是为字节码指令jsr、jsr_w 和ret服务，指向了一条字节码指令的地址，一些jvm使用这几条指令来实现异常处理时的跳转。<br>现在全部改为采用异常表来代替。</p>
-<p>当一个方法被调用的时候，Java虚拟机会使用局部变量表来完成参数值到参数变量列表的传递过程，如果是实例方法局部变量表第0位索引的变量槽存放的是this。</p>
-<blockquote>
-<p>以恰当的变量作用域来控制变量的回收时间才是最优雅的解决方法，而不是使用完后就将其引用赋予null， 因为这仅仅是基于虚拟机的概念模型层面作出的优化，虚拟机的具体实现不同，解释执行与编译执行结果都不同。</p>
-</blockquote>
-<h4 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h4><p>一个后入先出的栈，同局部变量表一样，操作数栈的最大深度也在编译的时候就被写入到Code属性的max_stacks数据项中。32位数据类型所占用的栈容量是1， 64位数据类型所占的栈容量是2.</p>
-<p>通过将操作数入栈出栈来进行算术运算；<br>通过操作数栈将方法的参数进行传递；</p>
-<h4 id="动态连接"><a href="#动态连接" class="headerlink" title="动态连接"></a>动态连接</h4><p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用时为了支持方法调用过程中的动态连接。</p>
-<p>Class文件的常量池中存有大量的符号引用，字节码中的方法调用指令以常量池指向方法的符号引用作为参数。</p>
-<p>这些符号引用一部分在类加载阶段或者第一次使用会被转化为直接引用；<br>另一部分在每次运行期间都转化为直接引用，这部分称为动态连接；</p>
-<h4 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h4><p>当一个方法退出以后，必须返回到最初方法被调用时的位置，程序才能继续执行，方法返回时可能需要在栈帧中保存一些信息，来帮助恢复主调方法的执行状态。</p>
-<p>一个方法的退出有两种方式：<br>第一种是执行引擎遇到方法返回的字节码指令；主调方法的PC计数器的值就可以作为返回地址。<br>另一种是遇到了异常，并且在本方法的异常表中没有搜索到匹配的异常处理器导致方法退出；</p>
-<h2 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h2><p>方法调用阶段的任务是确认被调用方法的版本。<br>Class文件的编译过程不包含传统程序语言的连接步骤，一切方法调用在Class文件里面存储的都是符号引用，而不是方法在实际运行时内存布局中的入口地址。因此一些调用需要在加载期间，甚至到运行期间才能确定目标方法的直接引用。</p>
-<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>在类加载的解析阶段，将静态方法和私有方法对应的符号引用转化为直接引用。因为静态方法与类关联，私有方法不可能被继承或者重写，在编译阶段即可确定。</p>
-<p>字节码指令集设计了不同的指令调用不同类型的方法：</p>
-<ul>
-<li>invokestatic, 调用静态方法</li>
-<li>invokespecial, 调用实例构造器方法，私有方法，父类中的方法。</li>
-<li>invokevirtual, 用于调用所有的虚方法（被final修饰的方法）</li>
-<li>invokeinterface,用于调用接口方法，会在运行时再确定一个实现接口的对象</li>
-<li>invokedynamic, 在运行时动态解析出调用点限定符引用的方法。</li>
-</ul>
-<p>前四条指令，分派逻辑都固化在Java虚拟机内部，invokedynamic指令的分派逻辑是由用户设定的引导方法来决定的。</p>
-<p>只要能被invokestatic 和 invokespecial指令调用的方法，都可以在解析阶段确定唯一的调用版本。Java语言中符合这个条件的方法有静态方法、构造方法、私有方法、父类方法和被final修饰的方法,这五种方法被称为非虚方法，其他的被称为虚方法。</p>
-<p>解析调用是一个静态的过程， 在类加载的解析阶段就把涉及的符号引用转换为明确的直接引用，不必延迟到运行期再去完成。</p>
-<h4 id="分派"><a href="#分派" class="headerlink" title="分派"></a>分派</h4><ul>
-<li><p>静态分派<br>所有依赖静态类型来决定方法执行版本的分派叫做静态分派。静态分派的典型应用表现是方法重载。<br>方法重载发生在同一个类中，方法名称相同，参数列表不同。</p>
-</li>
-<li><p>动态分派与实现<br>在运行期根据时机类型确定方法执行版本的分派过程叫动态分派，它就是Java语言中方法重写的本质。多态的根源在于虚方法调用指令invokevirtual的执行逻辑，因此多态只对方法有效，对字段无效（字段永远不参与多态）。</p>
-<p>动态分派是执行非常频繁的动作，而且动态分派的方法版本选择过程需要运行时在接受着类型方法元数据中搜索合适的目标方法，</p>
-</li>
-<li><p>单分派和多分派<br>方法的接收者（要被执行的方法的所有者叫接收者）与参数统称为方法的宗量。<br>单分派是根据一个宗量对目标方法进行选择；<br>多分派是根据多个宗量对目标方法进行选择；</p>
-</li>
-</ul>
-<h4 id="Java中的解释执行与编译执行"><a href="#Java中的解释执行与编译执行" class="headerlink" title="Java中的解释执行与编译执行"></a>Java中的解释执行与编译执行</h4><p><img src="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E.jpeg" alt="编译过程"></p>
-<p>在执行前先对程序源码进行词法分析和语法分析处理，把源码转化为抽象语法树。</p>
-<p>对于C/C++来说，词法、语法分析以后到后面的优化器和目标代码生成器都可以选择独立于执行引擎，形成一个完整有意义的编译器去实现，这类就是编译执行。</p>
-<p>对于Java来说，javac编译器完成了程序代码经过词法分析、语法分析到抽象语法树，再便利语法树生成线性的字节码指令流的过程。</p>
-<h4 id="基于栈的指令集与给予寄存器的指令集"><a href="#基于栈的指令集与给予寄存器的指令集" class="headerlink" title="基于栈的指令集与给予寄存器的指令集"></a>基于栈的指令集与给予寄存器的指令集</h4><ul>
-<li>基于栈的指令集<br>零地址指令，依赖操作数栈进行工作，<br>优点是可移植性高，不与具体的硬件绑定。编译器实现简单。<br>缺点是速度慢。</li>
-<li>给予寄存器的指令集<br>而地址指令集，物理硬件直接支持的指令集架构，依赖寄存器工作。</li>
-</ul>
-<blockquote>
-<p>虚拟机最终会对执行过程作出一系列优化来提高性能， 实际的情况会和盖面模型差距非常大，差距产生的根本原因是虚拟机中解析起和即时编译起都会对输入的字节码进行优化，即使解释其中也不是按照字节码指令去逐条执行的。</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3183,7 +1944,7 @@
       <div class="prev-next">
         
         <p class="current">
-          1 / 2
+          1 / 10
         </p>
         
           <a class="next" rel="next" href="/page/2/">
@@ -3281,6 +2042,16 @@
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
         
+          <li><a class="flat-box"
+            title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
+            id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
+            ><div class='name'>设计模式</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"
+            id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE8AEBEE8AEA1E58E9FE58899"
+            ><div class='name'>设计原则</div><div class='badge'>(1)</div></a></li>
+        
       </ul>
     </div>
   </section>
@@ -3303,7 +2074,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 24px; color: #555">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 24px; color: #555">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a>
     </div>
   </section>
 
