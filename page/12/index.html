@@ -5,7 +5,9 @@
   <!-- SEO相关 -->
   
     
-      <meta name="robots" content="noindex,follow">
+      
+        <meta name="robots" content="noindex,follow">
+      
     
   
   <!-- 渲染优化 -->
@@ -18,7 +20,7 @@
 
   <!-- 页面元数据 -->
   
-    <title>标签：Etcd - 碎碎念</title>
+    <title>碎碎念</title>
   
   
 
@@ -327,18 +329,9 @@
     <div class='body-wrapper'>
       
 
-
 <div class='l_main'>
   
-    
-      
   <section class="post-list ">
-    
-      
-        
-          
-        
-      
     
     
       
@@ -356,8 +349,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/04/etcd/">
-      etcd
+    <a href="/2019/05/29/VIM%E5%91%BD%E4%BB%A4%E6%95%B4%E7%90%86/">
+      VIM命令整理
     </a>
   </h2>
 
@@ -382,9 +375,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/' rel="nofollow">
+    <a href='/categories/Linux/VIM/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Etcd</p>
+      <p>Linux/VIM</p>
     </a>
   </div>
 
@@ -395,7 +388,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月4日</p>
+    <p>发布于：2019年5月29日</p>
   </a>
 </div>
 
@@ -423,98 +416,23 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>培养良好的生活、学习、工作习惯。</p>
-<p>相关概念：</p>
-<ul>
-<li>Etcd</li>
-<li>coreOS</li>
-<li>RancherOS</li>
-</ul>
-<h3 id="主机规划："><a href="#主机规划：" class="headerlink" title="主机规划："></a>主机规划：</h3><blockquote>
-<p>要求：主机名称规范、IP段相邻、备注明确</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>主机序号</th>
-<th>名称</th>
-<th>内网IP</th>
-<th>外网IP</th>
-<th>CPU核数</th>
-<th>内存大小</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>01</td>
-<td>etcd-node-master-01</td>
-<td>10.0.0.1</td>
-<td>外网IP</td>
-<td>2</td>
-<td>4G</td>
-<td>备注</td>
-</tr>
-<tr>
-<td>02</td>
-<td>etcd-node-slave-02</td>
-<td>10.0.0.2</td>
-<td>外网IP</td>
-<td>2</td>
-<td>4G</td>
-<td>备注</td>
-</tr>
-<tr>
-<td>03</td>
-<td>etcd-node-slave-03</td>
-<td>10.0.0.3</td>
-<td>外网IP</td>
-<td>2</td>
-<td>4G</td>
-<td>备注</td>
-</tr>
-</tbody></table>
-<h3 id="设置主机名称"><a href="#设置主机名称" class="headerlink" title="设置主机名称"></a>设置主机名称</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl set-hostname etcd-node-master-01</span><br><span class="line">hostnamectl set-hostname etcd-node-slave-02</span><br><span class="line">hostnamectl set-hostname etcd-node-slave-03</span><br></pre></td></tr></table></figure>
+        <h4 id="Alive"><a href="#Alive" class="headerlink" title="Alive"></a>Alive</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">I: Insert Mode</span><br><span class="line">Esc: Nomal Mode</span><br><span class="line">Q : Quite With Out Save.</span><br><span class="line">WQ : Write And Quite</span><br><span class="line">HJKL: Left Down Up Right.</span><br><span class="line">X: Cut Character</span><br><span class="line">DD: Delete Line</span><br><span class="line">P: Pesta Character</span><br></pre></td></tr></table></figure>
 
-<h3 id="修改内网IP地址："><a href="#修改内网IP地址：" class="headerlink" title="修改内网IP地址："></a>修改内网IP地址：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33</span><br></pre></td></tr></table></figure>
-
-<h3 id="重启网关："><a href="#重启网关：" class="headerlink" title="重启网关："></a>重启网关：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network</span><br></pre></td></tr></table></figure>
-
-<h3 id="防火墙设置："><a href="#防火墙设置：" class="headerlink" title="防火墙设置："></a>防火墙设置：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;public --add-port&#x3D;2379&#x2F;tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-
-<h4 id="YUM安装："><a href="#YUM安装：" class="headerlink" title="YUM安装："></a>YUM安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y etcd</span><br></pre></td></tr></table></figure>
-
-<h4 id="验证-amp-查看版本"><a href="#验证-amp-查看版本" class="headerlink" title="验证&amp;查看版本"></a>验证&amp;查看版本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa etcd</span><br><span class="line">etcdctl -v</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改配置："><a href="#修改配置：" class="headerlink" title="修改配置："></a>修改配置：</h3><p>分别修改3个主机的配置文件/etc/etcd/etcd.conf</p>
-<blockquote>
-<p>注意！修改前一定要备份！<br>   cp /etc/etcd/etcd.conf /etc/etcd/etcd.conf.bak</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ETCD_LISTEN_PEER_URLS&#x3D;&quot;http:&#x2F;&#x2F;10.0.0.1:2380&quot;</span><br><span class="line">ETCD_LISTEN_CLIENT_URLS&#x3D;&quot;http:&#x2F;&#x2F;10.0.0.1:2379,http:&#x2F;&#x2F;127.0.0.1:2379&quot;</span><br><span class="line">ETCD_NAME&#x3D;Master</span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS&#x3D;&quot;http:&#x2F;&#x2F;10.0.0.1:2380&quot;</span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS&#x3D;&quot;http:&#x2F;&#x2F;10.0.0.1:2379&quot;</span><br><span class="line">ETCD_INITIAL_CLUSTER&#x3D;“Master&#x3D;http:&#x2F;&#x2F;10.0.0.1:2380,Node02&#x3D;http:&#x2F;&#x2F;10.0.0.2:2380,Node03&#x3D;http:&#x2F;&#x2F;10.0.0.3:2380&quot;</span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN&#x3D;&quot;etcd-cluster&quot;</span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE&#x3D;&quot;new&quot;</span><br></pre></td></tr></table></figure>
-
-<h4 id="重启etcd服务"><a href="#重启etcd服务" class="headerlink" title="重启etcd服务"></a>重启etcd服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart etcd</span><br></pre></td></tr></table></figure>
-
-<h4 id="查看Etcd集群"><a href="#查看Etcd集群" class="headerlink" title="查看Etcd集群"></a>查看Etcd集群</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl member list</span><br></pre></td></tr></table></figure>
-
-<h4 id="Etcd-测试"><a href="#Etcd-测试" class="headerlink" title="Etcd 测试"></a>Etcd 测试</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">etcdctl set name test</span><br><span class="line">etcdctl get name</span><br></pre></td></tr></table></figure>
+<h4 id="Felling-Better"><a href="#Felling-Better" class="headerlink" title="Felling Better"></a>Felling Better</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">a: 在光标后插入</span><br><span class="line">o: 在当前行后插入一个新行</span><br><span class="line">O: 在当前行前插入一个新行</span><br><span class="line">cw: 删除从光标所在位置后到一个单词结尾的字符 c2w, c3w.</span><br><span class="line">Moving</span><br><span class="line">0 &#x2F; ^ 光标移动到行首（不是blank的位置）</span><br><span class="line">$ &#x2F; g_ 光标移动到行尾（不是blank的位置）</span><br><span class="line">&#x2F;pattern 定位到pattern的区域</span><br><span class="line">Pesta</span><br><span class="line">p: pesta</span><br><span class="line">u : undo</span><br><span class="line">ctrl+r : redo</span><br></pre></td></tr></table></figure>
 
 
+<h4 id="Better-Faster-Stronger"><a href="#Better-Faster-Stronger" class="headerlink" title="Better,Faster,Stronger"></a>Better,Faster,Stronger</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">2d : delete two lines.</span><br><span class="line">100idesu[Esc]: insert 100 times desu.</span><br><span class="line">4p : pesta 4 times.</span><br><span class="line">% : swap &#123;&#125;</span><br><span class="line">#&#x2F;* : 向上／下搜索当前光标所在的单词</span><br><span class="line"></span><br><span class="line">0y$ ：移动到行首，开始copy，一直到本行最后一个字符。</span><br><span class="line">d: delete and copy</span><br><span class="line">v: select and copy</span><br><span class="line">gU: 变大写 and copy</span><br><span class="line">gu: 变小写 And copy</span><br></pre></td></tr></table></figure>
+
+<h4 id="块操作"><a href="#块操作" class="headerlink" title="块操作"></a>块操作</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">^ -&gt; 到开头</span><br><span class="line">Ctrl-v -&gt; 开始块操作</span><br><span class="line">Ctrl-d -&gt; 向下移动</span><br><span class="line">I– [Esc]-&gt; 插入–</span><br></pre></td></tr></table></figure>
 
 
+<h4 id="vim超能力"><a href="#vim超能力" class="headerlink" title="vim超能力"></a>vim超能力</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">在当前行移动光标：</span><br><span class="line">0: 到行首</span><br><span class="line">^: 到本行的第一个非blank字符</span><br><span class="line">$: 到行尾</span><br><span class="line">g_：到本行最后一个非blank字符</span><br><span class="line">fa：到下一个为a的字符处， fs到下一个为s的字符处</span><br><span class="line">t，；到逗号前的第一个字符，ta到a前的第一个字符</span><br><span class="line">3fa：当前行查找第三个出现的a</span><br><span class="line">dt，：删除多有的内容，一直到逗号出现。</span><br></pre></td></tr></table></figure>
 
-<h5 id="扩展概念"><a href="#扩展概念" class="headerlink" title="扩展概念"></a>扩展概念</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">负载均衡：</span><br><span class="line">区域负载均衡：DNS</span><br><span class="line">硬件负载均衡：F5&#x2F;A10</span><br><span class="line">软件负载均衡：Nginx&#x2F;LVS&#x2F;HAProxy</span><br><span class="line"></span><br><span class="line">磁盘阵列：raid</span><br><span class="line">防火墙技术：硬件&#x2F;软件</span><br><span class="line"></span><br><span class="line">NTP（Network Time Protocal）是用来使计算机时间同步化的一种协议，它可以使计算机对其服务器或时钟源（如石英钟，GPS等等)做同步化tongbuwang。</span><br><span class="line"></span><br><span class="line">Radis的分布式缓存;</span><br><span class="line">mysql主从、读写分离、高可用、分库分表；</span><br><span class="line"></span><br><span class="line">MHA</span><br><span class="line">备份</span><br><span class="line">elk </span><br><span class="line">ci&#x2F;cd</span><br><span class="line">centos8 &#x2F; podman</span><br></pre></td></tr></table></figure>
+<h4 id="区域选择"><a href="#区域选择" class="headerlink" title="区域选择"></a>区域选择</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a 和 i</span><br><span class="line">action 可以是任何命令，d：delete， y：copy， v：view mode</span><br><span class="line">object 可以是：w：word， s：statement， p：paragraph，也可以是特殊的字符。</span><br><span class="line">例如字符串：(map (+) (&quot;foo&quot;)),光标在o上。</span><br><span class="line">vi” : foo</span><br><span class="line">va” : “foo”</span><br><span class="line">vi) : “foo”</span><br><span class="line">va) : (“foo”)</span><br><span class="line">v2i): map (+) (“foo”)</span><br><span class="line">v2a): (map (+) (“foo”))</span><br></pre></td></tr></table></figure>
 
+<h4 id="可视化选择"><a href="#可视化选择" class="headerlink" title="可视化选择"></a>可视化选择</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">######缩进######</span><br><span class="line">使用v／V进入可视化模式</span><br><span class="line">J ： 把所有的行链接起来变成一行</span><br><span class="line">&lt;&#x2F;&gt;：左右缩进</span><br><span class="line">&#x3D; ：自动缩进</span><br></pre></td></tr></table></figure>
 
-
-
-
-
-
-
-
-
-
-
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">######行后追加######</span><br><span class="line">ctrl+v ： 进入可视化编辑模式</span><br><span class="line">选中相应的行（j或者ctrl+d 或者／pattern 或者%）</span><br><span class="line">$到行最后</span><br><span class="line">A(append,在行尾追加)， 输入字符串， 按ESC</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -530,6 +448,21 @@
   </section>
   
     
+      <br>
+      <div class="prev-next">
+        
+          <a class="prev" rel="prev" href="/page/11/">
+            <section class="post prev white-box shadow" >
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页&nbsp;
+            </section>
+          </a>
+        
+        <p class="current">
+          12 / 12
+        </p>
+        
+      </div>
+    
     <!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
     
     
@@ -537,8 +470,6 @@
   
 
 
-    
-  
 </div>
 <aside class='l_side'>
   
