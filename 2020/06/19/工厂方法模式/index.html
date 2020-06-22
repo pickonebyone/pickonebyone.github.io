@@ -480,10 +480,21 @@
         
           <div class="prev-next">
             
+              <a class='prev' href='/2020/06/20/%E5%88%86%E5%B8%83%E5%BC%8FID%E7%94%9F%E6%88%90%E5%99%A8/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>分布式ID生成器</p>
+                <p class='content'>1)资源锁细粒度化  将100个资源拆分成10份。  这10份分别上锁，应用场景如秒杀。
+2）业务使用锁细粒度化   只对需要的资源加锁，避免大范围加锁。
+3）无锁化（真无锁，假无锁）    T...</p>
+              </a>
+            
             
               <a class='next' href='/2020/06/18/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/'>
                 <p class='title'>单例模式<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>提前加载12345678910public class Singleton&#123;    private static Singleton instance = new Singleton(...</p>
+                <p class='content'>单例模式在一个系统中，要求一个类有且仅有一个对象，如果出现多个对象就会出现“混乱”。
+
+要求生成唯一序号的场景
+整个项目中需要一个共享数据，如计数器
+创建对象要消耗过多资源（IO访问或者数据库资...</p>
               </a>
             
           </div>
