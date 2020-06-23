@@ -349,8 +349,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/12/Linux%E6%9F%A5%E7%9C%8BSwap/">
-      Linux查看Swap
+    <a href="/2020/06/17/%E5%B8%B8%E7%94%A8JVM%E5%8F%82%E6%95%B0/">
+      常用JVM参数
     </a>
   </h2>
 
@@ -375,9 +375,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Linux/VIM/' rel="nofollow">
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Linux/VIM</p>
+      <p>Java技术栈/Java虚拟机</p>
     </a>
   </div>
 
@@ -388,7 +388,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月12日</p>
+    <p>发布于：2020年6月17日</p>
   </a>
 </div>
 
@@ -416,8 +416,111 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"># Get current swap usage for all running processes</span><br><span class="line"># Erik Ljungstrom 27&#x2F;05&#x2F;2011</span><br><span class="line">SUM&#x3D;0</span><br><span class="line">OVERALL&#x3D;0</span><br><span class="line">for DIR in &#96;find &#x2F;proc&#x2F; -maxdepth 1 -type d | egrep &quot;^&#x2F;proc&#x2F;[0-9]&quot;&#96; ;</span><br><span class="line">do</span><br><span class="line">    PID&#x3D;&#96;echo $DIR | cut -d &#x2F; -f 3&#96;</span><br><span class="line">    PROGNAME&#x3D;&#96;ps -p $PID -o comm --no-headers&#96;</span><br><span class="line">    for SWAP in &#96;grep Swap $DIR&#x2F;smaps 2&gt;&#x2F;dev&#x2F;null| awk &#39;&#123; print $2 &#125;&#39;&#96;</span><br><span class="line">        do</span><br><span class="line">            let SUM&#x3D;$SUM+$SWAP</span><br><span class="line">        done</span><br><span class="line">    echo &quot;PID&#x3D;$PID - Swap used: $SUM - ($PROGNAME )&quot;</span><br><span class="line">    let OVERALL&#x3D;$OVERALL+$SUM</span><br><span class="line">        SUM&#x3D;0</span><br><span class="line">done</span><br><span class="line">echo &quot;Overall swap used: $OVERALL&quot;</span><br></pre></td></tr></table></figure>
-
+        <p>HotSpot 虚拟机常用配置</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-Xms1g</td>
+<td>最小堆内存</td>
+</tr>
+<tr>
+<td>-Xmx4g</td>
+<td>最大堆内存</td>
+</tr>
+<tr>
+<td>-XX:+UseG1GC</td>
+<td>使用G1垃圾回收器</td>
+</tr>
+<tr>
+<td>-Xss256k</td>
+<td>每个线程栈大小256k</td>
+</tr>
+<tr>
+<td>-XX:MetaspaceSize=256m</td>
+<td>元数据区大小256M</td>
+</tr>
+<tr>
+<td>-XX:MaxMetaspaceSize=256m</td>
+<td>元数据区最大256M</td>
+</tr>
+<tr>
+<td>-XX:MaxGCPauseMillis=500</td>
+<td>GC最大停顿毫秒数</td>
+</tr>
+<tr>
+<td>-XX:+DisableExplicitGC</td>
+<td>禁用代码中显式调用GC，System.gc()将会失效</td>
+</tr>
+<tr>
+<td>-XX:+UnlockExperimentalVMOptions</td>
+<td>解锁实验参数</td>
+</tr>
+<tr>
+<td>-XX:+UseStringDeduplication</td>
+<td>GC的同时做重复字符串消除，只用于G1</td>
+</tr>
+<tr>
+<td>-XX:InitiatingHeapOccupancyPercent=60</td>
+<td>启动并发GC周期时的堆内存占用百分比. G1之类的垃圾收集器用它来触发并发GC周期,基于整个堆的使用率,而不只是某一代内存的使用比. 值为 0 则表示”一直执行GC循环”. 默认值为 45.</td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=8</td>
+<td>设置垃圾收集器在并行阶段使用的线程数,默认值随JVM运行的平台不同而不同.</td>
+</tr>
+<tr>
+<td>-XX:G1MixedGCCountTarget=4</td>
+<td>设置在标记周期完成之后混合收集的数量，以维持old region（也就是老年代）中，最多有G1MixedGCLiveThresholdPercent的存活对象。默认值为8，混合收集的数量将维持在这个值之内。（JVM build &gt; 23）</td>
+</tr>
+<tr>
+<td>-XX:MaxTenuringThreshold=7</td>
+<td>年老代的最大临界值(tenuring threshold). 默认值为 15.</td>
+</tr>
+<tr>
+<td>-XX:+UseGCLogFileRotation</td>
+<td>滚动记录GC日志文件</td>
+</tr>
+<tr>
+<td>-XX:NumberOfGCLogFiles=5</td>
+<td>GC日志文件数量为5个</td>
+</tr>
+<tr>
+<td>-XX:GCLogFileSize=64M</td>
+<td>单个GC日志文件大小64M</td>
+</tr>
+<tr>
+<td>-Xloggc:/app/data/logs/gc-<code>date +%Y%m%d-%H-%M</code>.log</td>
+<td>GC日志文件存储目录和名称</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDetails</td>
+<td>打印GC详情</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDateStamps</td>
+<td>打印GC时时间戳</td>
+</tr>
+<tr>
+<td>-XX:+PrintHeapAtGC</td>
+<td>GC时打印堆信息</td>
+</tr>
+<tr>
+<td>-XX:+PrintAdaptiveSizePolicy</td>
+<td>自适应大小策略，每次 GC 后会重新计算 Eden、From 和 To 区的大小，计算依据是 GC 过程中统计的 GC 时间、吞吐量、内存占用量。</td>
+</tr>
+<tr>
+<td>-XX:+UseFastAccessorMethods</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:SoftRefLRUPolicyMSPerMB=0</td>
+<td>softly reachable objects will remain alive for some amount of time after the last time they were referenced. The default value is one second of lifetime per free megabyte in the heap</td>
+</tr>
+</tbody></table>
 
       
     </div>
@@ -444,8 +547,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/11/%E5%88%86%E5%B8%83%E5%BC%8FID/">
-      分布式ID生成器
+    <a href="/2020/06/16/%E5%B8%B8%E7%94%A8%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7/">
+      常用监控与故障处理工具
     </a>
   </h2>
 
@@ -470,9 +573,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
+      <p>Java技术栈/Java虚拟机</p>
     </a>
   </div>
 
@@ -483,7 +586,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月11日</p>
+    <p>发布于：2020年6月16日</p>
   </a>
 </div>
 
@@ -511,33 +614,176 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="Centos-简单优化"><a href="#Centos-简单优化" class="headerlink" title="Centos 简单优化"></a>Centos 简单优化</h3><h5 id="安装基本工具"><a href="#安装基本工具" class="headerlink" title="安装基本工具"></a>安装基本工具</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget vim net-tools lrzsz</span><br></pre></td></tr></table></figure>
+        <h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>列出正在运行的虚拟机进程，并显示虚拟机执行主类名称以及这些进程的本地虚拟唯一ID（与操作系统进程ID一致）。</p>
+<blockquote>
+<p>jps [option] [hostid]</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-q</td>
+<td>只输出lvmid，省略主类的名称</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>输出虚拟机启动时传递给主类main（）的参数</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>输出主类的全名，如果是jar包，则输出jar路径</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>输出虚拟机启动时的jvm参数</td>
+</tr>
+</tbody></table>
+<h3 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h3><p>用于监视虚拟机各种运行状态信息的命令行工具。<br>显示本地或者远程虚拟机进程中的类加载、内存、垃圾收集、即时编译等运行时数据。</p>
+<blockquote>
+<p>jstat [option vimid [interval[s|ms] [count]]]<br>[protocal:][//]lvmid[@hostname[:port]/servername]</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-class</td>
+<td>监视类加载、卸载数量、总空间以及类装载耗费的时间</td>
+</tr>
+<tr>
+<td>-gc</td>
+<td>监视Java堆状况，包括Eden、Survivor、老年代、永久代的容量，已用空间，垃圾收集时间</td>
+</tr>
+<tr>
+<td>-gccapacity</td>
+<td>监视内容与-gc基本相同，但输出主要关注java堆各个区域使用到最大最小空间</td>
+</tr>
+<tr>
+<td>-gcutil</td>
+<td>监视内容与-gc基本相同，但输出主要关注已使用空间占总空间的百分比</td>
+</tr>
+<tr>
+<td>-gccause</td>
+<td>与-gcutil功能一样，会额外输出导致上一次垃圾收集产生的原因</td>
+</tr>
+<tr>
+<td>-gcnew</td>
+<td>监视新生代垃圾收集情况</td>
+</tr>
+<tr>
+<td>-gcnewcapacity</td>
+<td>监视内容与-gcnew基本相同，输出主要关注使用到的最大、最小空间</td>
+</tr>
+<tr>
+<td>-gcold</td>
+<td>监视老年代垃圾收集状况</td>
+</tr>
+<tr>
+<td>-gcoldcapacity</td>
+<td>与-gcold相同，输出主要关注使用到的最大、最小空间</td>
+</tr>
+<tr>
+<td>-gcpermcapacity</td>
+<td>输出永久代使用到的最大、最小空间</td>
+</tr>
+<tr>
+<td>-compiler</td>
+<td>输出即时编译器编译过的方法、耗时等信息</td>
+</tr>
+<tr>
+<td>-printcompilation</td>
+<td>输出已经被即时编译的方法</td>
+</tr>
+</tbody></table>
+<p>每隔1s查询一次2105的gc情况，查询10次。<br>jstat -gc 2105 1000 10</p>
+<p>jstat -gcutil 2105</p>
+<table>
+<thead>
+<tr>
+<th>S0</th>
+<th>S1</th>
+<th>E</th>
+<th>O</th>
+<th>P</th>
+<th>YGC</th>
+<th>YGCT</th>
+<th>FGC</th>
+<th>FGCT</th>
+<th>GCT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.00</td>
+<td>0.00</td>
+<td>6.20</td>
+<td>41.42</td>
+<td>47.20</td>
+<td>16</td>
+<td>0.105</td>
+<td>3</td>
+<td>0.472</td>
+<td>0.577</td>
+</tr>
+</tbody></table>
+<h3 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h3><p>实时查看和调整虚拟机各项参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Usage:</span><br><span class="line">    jinfo [option] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jinfo [option] &lt;executable &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jinfo [option] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to remote debug server)</span><br><span class="line"></span><br><span class="line">where &lt;option&gt; is one of:</span><br><span class="line">    -flag &lt;name&gt;         to print the value of the named VM flag</span><br><span class="line">    -flag [+|-]&lt;name&gt;    to enable or disable the named VM flag</span><br><span class="line">    -flag &lt;name&gt;&#x3D;&lt;value&gt; to set the named VM flag to the given value</span><br><span class="line">    -flags               to print VM flags</span><br><span class="line">    -sysprops            to print Java system properties</span><br><span class="line">    &lt;no option&gt;          to print both of the above</span><br><span class="line">    -h | -help           to print this help message</span><br></pre></td></tr></table></figure>
 
-<h2 id="删除UUID"><a href="#删除UUID" class="headerlink" title="删除UUID"></a>删除UUID</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim ifcfg-ens33</span><br><span class="line">vim ifcfg-eth0</span><br><span class="line">vim em1</span><br></pre></td></tr></table></figure>
+<h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>用于生成堆转储快照，查询finalize执行队列、Java堆和方法区的详细信息（空间使用率、当前使用收集器类型）</p>
+<p>生成堆转储文件的方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-XX:+HeapDumpOnOutOfMemoryError 在虚拟机内存溢出异常出现后自动生成堆转储快照文件。</span><br><span class="line">-XX:HeapDumpOnCtrlBreak 使用ctrl+Break 生成堆转储快照文件</span><br><span class="line">kill -3 pid  生成堆转储快照文件</span><br><span class="line">jmap -dump:format&#x3D;b,file&#x3D;heap.dump 3120</span><br></pre></td></tr></table></figure>
 
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-dump</td>
+<td>生成java堆转储快照，格式为-dump:[live,]format=b,file=<filename>,live子参数说明是否只dump出存活对象</filename></td>
+</tr>
+<tr>
+<td>-finalizerinfo</td>
+<td>显示再F-Queue中等待Finalizer线程执行finalize方法的对象。只有在Linux平台有效</td>
+</tr>
+<tr>
+<td>-heap</td>
+<td>显示Java堆详细信息，使用回收器类型、参数配置、分代状况，只在Linux平台下有效</td>
+</tr>
+<tr>
+<td>-histo</td>
+<td>显示堆中对象统计信息，包括类、实例数量、合计容量</td>
+</tr>
+<tr>
+<td>-permstat</td>
+<td>在以ClassLoader为统计口径显示永久代内存状态。只在Linux下有效</td>
+</tr>
+<tr>
+<td>-F</td>
+<td>当虚拟机进程对-dump选项没有响应时，可以使用-F强制生成dump快照，只在Linux下有效</td>
+</tr>
+</tbody></table>
+<h3 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h3><p>用于分析jmap生成的堆转储快照。 </p>
+<blockquote>
+<p>jhat heap.dump</p>
+</blockquote>
+<p>jhat功能相对简陋，分析工作耗时且耗费硬件资源，一般不在本机使用。<br>替代方案：VisualVM、Eclipse Memory Analyzer、IBM HeapAnalyzer。</p>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>生成虚拟机当前时刻的线程快照。目的是定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间挂起等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Usage:</span><br><span class="line">    jstack [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jstack -F [-m] [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to a hung process)</span><br><span class="line">    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to a remote debug server)</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -F  to force a thread dump. Use when jstack &lt;pid&gt; does not respond (process is hung)</span><br><span class="line">    -m  to print both java and native frames (mixed mode)</span><br><span class="line">    -l  long listing. Prints additional information about locks</span><br><span class="line">    -h or -help to print this help message</span><br></pre></td></tr></table></figure>
 
-<h4 id="配置静态IP"><a href="#配置静态IP" class="headerlink" title="配置静态IP"></a>配置静态IP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">IPADDR&#x3D;10.0.0.130</span><br><span class="line">GATEWAY&#x3D;10.0.0.2</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">DNS1&#x3D;10.0.0.2</span><br><span class="line">DNS2&#x3D;1.2.4.8</span><br></pre></td></tr></table></figure>
-
-<h4 id="关闭防火墙以及NetworkManager和SELINX"><a href="#关闭防火墙以及NetworkManager和SELINX" class="headerlink" title="关闭防火墙以及NetworkManager和SELINX"></a>关闭防火墙以及NetworkManager和SELINX</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line">systemctl stop NetworkManager</span><br><span class="line">systemctl disable NetworkManager</span><br></pre></td></tr></table></figure>
-
-<h4 id="替换YUM源"><a href="#替换YUM源" class="headerlink" title="替换YUM源"></a>替换YUM源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum clean all &amp;&amp; yum makecache</span><br><span class="line">cd &#x2F;etc&#x2F;yum.repos.d&#x2F;</span><br><span class="line">mv CentOS-Base.repo CentOS-Base.repo.bak</span><br><span class="line">vim CentOS-Base.repo</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<h2 id="高级工具"><a href="#高级工具" class="headerlink" title="高级工具"></a>高级工具</h2><h3 id="JConsole"><a href="#JConsole" class="headerlink" title="JConsole"></a>JConsole</h3><p>基于JMX的可视化监视、管理工具。</p>
+<h3 id="JHSDB"><a href="#JHSDB" class="headerlink" title="JHSDB"></a>JHSDB</h3><p>基于服务性代理实现的进程外调试工具。服务性代理是HotSpot虚拟机中一组用于映射Java虚拟机运行信息的、主要基于Java语言实现的API集合。<br><img src="/2020/06/16/%E5%B8%B8%E7%94%A8%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7/jhsdb.jpeg" alt="JCMD 和JHSDB工具对比"></p>
+<h3 id="VisualVM"><a href="#VisualVM" class="headerlink" title="VisualVM"></a>VisualVM</h3><p>多合一故障处理工具，不需要被监视的程序基于特殊Agent执行，通用性强，对应用程序的实际性能影响较小，可以直接在生产环境使用。</p>
+<h3 id="Java-Mission-Control"><a href="#Java-Mission-Control" class="headerlink" title="Java Mission Control"></a>Java Mission Control</h3><p>可持续在线监控工具。</p>
+<h3 id="arthas"><a href="#arthas" class="headerlink" title="arthas"></a>arthas</h3><p>阿里巴巴提供的性能分析工具<br><a href="https://alibaba.github.io/arthas/" target="_blank" rel="noopener">https://alibaba.github.io/arthas/</a></p>
 
       
     </div>
@@ -564,7 +810,7 @@
           </a>
         
         <p class="current">
-          5 / 13
+          5 / 14
         </p>
         
           <a class="next" rel="next" href="/page/6/">
@@ -685,12 +931,12 @@
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
-            ><div class='name'>设计模式</div><div class='badge'>(3)</div></a></li>
+            ><div class='name'>设计模式</div><div class='badge'>(5)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE5889BE5BBBAE59E8BE6A8A1E5BC8F"
-            ><div class='name'>创建型模式</div><div class='badge'>(2)</div></a></li>
+            ><div class='name'>创建型模式</div><div class='badge'>(4)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"
@@ -719,7 +965,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 24px; color: #555">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">设计模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 24px; color: #555">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 17.33px; color: #828282">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 20.67px; color: #6c6c6c">设计模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a>
     </div>
   </section>
 

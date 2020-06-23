@@ -18,6 +18,8 @@
   
     <title>抽象工厂模式 - 碎碎念</title>
   
+    <meta name="keywords" content="设计模式,创建型模式,抽象工厂模式">
+  
   
 
   <!-- feed -->
@@ -367,9 +369,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
+      <p>设计模式/创建型模式</p>
     </a>
   </div>
 
@@ -403,7 +405,25 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          
+          <h2 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h2><p>抽象工厂模式时工厂方法模式的升级版本，工厂方法模式只生产一个等级的产品，抽象工厂模式可以生产多个等级的产品。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>产品等级：不同产品的种类就是不同的产品等级（电视机和洗衣机就是不同的产品等级）<br>产品族：一个具体工厂生产的不同等级的产品（工厂生产的电视机和洗衣机属于一个产品族）</p>
+<p><img src="/2020/06/22/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/product_level.gif" alt="产品等级和产品族"></p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>一种为访问类提供一个创建一组相关或者相互依赖对象的接口，且访问类无需指定所需要产品的具体类就能得到同族的不同等级的产品。</p>
+<p><img src="/2020/06/22/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/abstract_factory.jpeg" alt="抽象工厂模式类图"></p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>1） 客户端不依赖于产品类实例如何被创建、实现<br>2） 强调一系列相关的产品（同一产品族）一起使用创建对象需要大量的代码<br>3） 提供一个产品类的库，所有的产品以同样的接口出现，从而使客户端不依赖于具体实现。<br>一个对象族都有相同的约束，则可以使用抽象工厂模式。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="产品角色实现"><a href="#产品角色实现" class="headerlink" title="产品角色实现"></a>产品角色实现</h3><p>抽象产品：Product，定义产品的规范，描述产品的主要特性和功能，抽象工厂模式有多个抽象产品。<br>具体产品：ConcreteProduct，实现抽象产品角色所定义的接口由具体工厂来创建，与具体工厂之间是一对多的关系。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> Product&#123;</span><br><span class="line">    <span class="comment">//all product base filds &amp; methods.</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">on</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">off</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> AbstractTvProduct extends Product&#123;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">switchChannel</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> AbstractFridgeProduct extends Product&#123;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">increaseTemp</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">decreaseTemp</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> HaierTVProduct extends AbstractTvProduct&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> HaierFridgeProduct extends AbstractFridgeProduct&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> TCLTVProduct extends AbstractTvProduct&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> TCLFridgeProduct extends AbstractFridgeProduct&#123;</span><br></pre></td></tr></table></figure>
+
+<h3 id="工厂角色实现"><a href="#工厂角色实现" class="headerlink" title="工厂角色实现"></a>工厂角色实现</h3><p>抽象工厂：Abstract Factory，提供了创建产品的接口，包含多个创建产品的方法,可以创建多个不同等级的产品。<br>具体工厂：实现抽象工厂中的多个抽象方法，完成具体产品的创建。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IFactory</span></span>&#123;</span><br><span class="line">    <span class="function">Product <span class="title">createTV</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Product <span class="title">createFridge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HaierFactory</span> <span class="keyword">implements</span> <span class="title">IFactory</span></span>&#123;</span><br><span class="line">    <span class="function">Product <span class="title">createTV</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> HaierTVProduct();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">Product <span class="title">createFridge</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HaierFridgeProduct();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TCLFactory</span> <span class="keyword">implements</span> <span class="title">IFactory</span></span>&#123;</span><br><span class="line">    <span class="function">Product <span class="title">createTV</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> TCLTVProduct();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">Product <span class="title">createFridge</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> TCLFridgeProduct();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>隔离了具体类的生成，使得客户并不需要知道什么被创建，具有良好的封装性。</li>
+<li>如果要扩展产品族（有新的工厂要生产电视和冰箱时）的时候，只需要增加具体的产品类和实现工厂方法即可，原有的代码不需要变动，符合开闭原则。</li>
+<li>如果要扩展产品等级时，从抽象产品到工厂类，原有的代码都需要变动，违背了开闭原则。</li>
+</ul>
+<p>参阅：<br><a href="http://c.biancheng.net/view/1351.html" target="_blank" rel="noopener">抽象工厂模式（详解版）</a></p>
+
           
             <div class='article_footer'>
               
@@ -430,7 +450,7 @@
           
         </div>
         相关推荐：
-  
+  <ul class="popular-posts"><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/18/单例模式/" title="单例模式" rel="bookmark">单例模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/19/工厂方法模式/" title="工厂方法模式" rel="bookmark">工厂方法模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/23/建造者模式/" title="建造者模式" rel="bookmark">建造者模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/18/设计模式和原则/" title="设计模式和原则" rel="bookmark">设计模式和原则</a></h3></div></li></ul>
         
           
 
@@ -439,10 +459,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-06-22T07:51:26+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-06-23T22:10:53+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年6月22日</p>
+    <p>更新于：2020年6月23日</p>
   </a>
 </div>
 
@@ -450,6 +470,9 @@
       
         
           
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>设计模式</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>创建型模式</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>抽象工厂模式</p></a></div>
+
 
         
       
@@ -465,6 +488,12 @@
         
         
           <div class="prev-next">
+            
+              <a class='prev' href='/2020/06/22/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>前后端分离</p>
+                <p class='content'>动静分离技术：CDN、负载均衡：     实现手段：     1） lvs / lb / 四层数据包， 速度快，不解包。
+2）   反向代理（nginx 、 Node.js 七层  URI/lo...</p>
+              </a>
             
             
               <a class='next' href='/2020/06/20/%E5%88%86%E5%B8%83%E5%BC%8FID%E7%94%9F%E6%88%90%E5%99%A8/'>
@@ -503,6 +532,20 @@
     
     
 
+
+  <section class="widget toc-wrapper shadow desktop mobile">
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象工厂模式"><span class="toc-text">抽象工厂模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概念"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景"><span class="toc-text">使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#产品角色实现"><span class="toc-text">产品角色实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工厂角色实现"><span class="toc-text">工厂角色实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点"><span class="toc-text">优缺点</span></a></li></ol></li></ol>
+    </div>
+  </section>
 
 
   
