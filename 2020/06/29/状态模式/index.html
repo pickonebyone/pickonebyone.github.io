@@ -16,9 +16,9 @@
 
   <!-- 页面元数据 -->
   
-    <title>策略模式 - 碎碎念</title>
+    <title>状态模式 - 碎碎念</title>
   
-    <meta name="keywords" content="设计模式,行为型模式,策略模式">
+    <meta name="keywords" content="设计模式,行为型模式,状态模式">
   
   
 
@@ -343,8 +343,8 @@
         
           
   <h1 class="title">
-    <a href="/2020/06/28/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
-      策略模式
+    <a href="/2020/06/29/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/">
+      状态模式
     </a>
   </h1>
 
@@ -382,7 +382,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月28日</p>
+    <p>发布于：2020年6月29日</p>
   </a>
 </div>
 
@@ -405,51 +405,35 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>策略模式使用的就是面向对象的继承和多态机制。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。</p>
-<p><img src="/2020/06/28/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/strategy_class.jpeg" alt="策略模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Strategy-抽象策略角色"><a href="#Strategy-抽象策略角色" class="headerlink" title="Strategy 抽象策略角色"></a>Strategy 抽象策略角色</h4><p>策略算法的抽象，通常是接口，定义每个策略或者算法必须具有的方法和属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Strategy</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><p>状态模式的核心是封装，状态的变更引起了行为的变更，从外部看起来几句好像这个对象对应的类发生了改变一样。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。</p>
+<p><img src="/2020/06/29/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/State_class.jpeg" alt="状态模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="抽象状态角色State"><a href="#抽象状态角色State" class="headerlink" title="抽象状态角色State"></a>抽象状态角色State</h4><p>接口或者抽象类，负责对象状态的定义，并且封装环境角色以实现状态切换。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> Context context;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContext</span><span class="params">(Context _context)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = _context;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">handle1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="ConcreteStrategy-具体策略角色"><a href="#ConcreteStrategy-具体策略角色" class="headerlink" title="ConcreteStrategy 具体策略角色"></a>ConcreteStrategy 具体策略角色</h4><p>实现抽象策略的具体算法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteStrategy1</span> <span class="keyword">implements</span> <span class="title">Strategy</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//Do Strategy1.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteStrategy2</span> <span class="keyword">implements</span> <span class="title">Strategy</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">do</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//Do Strategy2.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="具体状态角色ConcreteState"><a href="#具体状态角色ConcreteState" class="headerlink" title="具体状态角色ConcreteState"></a>具体状态角色ConcreteState</h4><p>每个具体状态必须完成两个职责：本状态下要做的事情以及本状态如何过渡到其他状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteState1</span> <span class="keyword">extends</span> <span class="title">State</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//本状态下必须要做的事情</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//设置本状态为state2</span></span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Context.STATE2);</span><br><span class="line">        <span class="keyword">super</span>.context.handle2(); <span class="comment">//过渡到state2.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteState2</span> <span class="keyword">extends</span> <span class="title">State</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Context.STATE1);</span><br><span class="line">        <span class="keyword">super</span>.context.handle1();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//本状态处理的事情</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="Context-封装角色"><a href="#Context-封装角色" class="headerlink" title="Context 封装角色"></a>Context 封装角色</h4><p>封装上下文，屏蔽高层模块对策略、算法的直接访问，封装可能存在的变化。<br>策略模式的重点就是封装角色，它借用了代理模式的思路。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Strategy strategy = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Context</span><span class="params">(Strategy strategy)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.strategy = strategy;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAny</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.strategy.<span class="keyword">do</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="环境角色Context"><a href="#环境角色Context" class="headerlink" title="环境角色Context"></a>环境角色Context</h4><p>定义客户端需要的接口，并且负责具体状态的切换。</p>
+<p>把状态对象声明为静态常量，有几个状态对象就声明几个静态常量。<br>环境角色具有状态抽象角色定义的所有行为，具体执行使用委托方式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> State STATE1 = <span class="keyword">new</span> ConcreteState1();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> State STATE2 = <span class="keyword">new</span> ConcreteState2();</span><br><span class="line">    <span class="keyword">private</span> State currentState;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> State <span class="title">getCurrentState</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> currentState;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCurrentState</span><span class="params">(State currentState)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState = currentState;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState.handle1();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState.handle2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Strategy strategy = <span class="keyword">new</span> ConcreteStrategy1();</span><br><span class="line">Context context = <span class="keyword">new</span> Context(strategy);</span><br><span class="line">context.doAny(strategy);</span><br></pre></td></tr></table></figure>
-
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>结合建造者模式将已有的状态按照一定的顺序再重新组装。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Context c = <span class="keyword">new</span> Context();</span><br><span class="line"></span><br><span class="line">c.setCurrentState(Context.STATE1);</span><br><span class="line">c.handle1(); <span class="comment">//处理STATE1必须要做的事情</span></span><br><span class="line"></span><br><span class="line">c.handle2(); <span class="comment">//切换到STATE2</span></span><br><span class="line">c.handle2(); <span class="comment">//处理STATE2 必须要做的事情</span></span><br><span class="line"></span><br><span class="line">c.handle1(); <span class="comment">//切换到STATE1</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>算法可以自由切换<br>只需要实现策略接口类，通过封装角色对其进行封装即可。</li>
-<li>避免使用多重条件判断<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (condition1)&#123;</span><br><span class="line">   strategy1.<span class="keyword">do</span>();</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(condition2)&#123;</span><br><span class="line">   strategy2.<span class="keyword">do</span>();</span><br><span class="line">&#125;</span><br><span class="line"> <span class="comment">// .....</span></span><br></pre></td></tr></table></figure></li>
-<li>扩展性好</li>
+<li>结构清晰<br>避免过多的switch case和if else，降低了程序的复杂性，提高系统的可维护性。</li>
+<li>遵循设计原则<br>遵循了开闭原则以及单一职责原则，每个状态都是一个子类，要增加状态就要增加子类，修改状态时只修改一个子类即可。</li>
+<li>封装性良好<br>状态变换防止到类的内部来实现，外部调用不需要知道类内部如何实现状态和行为的变换。</li>
 </ul>
 <h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>策略类数量多</li>
-<li>所有策略类都需要对外暴露<br>上层模块必须知道有哪些策略， 然后才能决定使用哪一个策略，与迪米特法则相违背。<br>(迪米特法则：一个类对于其他类知道的越少越好)</li>
+<li>状态过多时子类膨胀</li>
 </ul>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>当具体的策略数量超过一定个数时，考虑使用混合模式，解决策略类膨胀和对外暴露的问题，否则会带来很大的系统维护成本。</p>
-<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
-<li>多个类只有在算法或者行为上稍有不同的场景</li>
-<li>算法需要自由切换的场景</li>
-<li>需要屏蔽算法规则的场景</li>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>行为跟随状态改变而改变的场景</li>
+<li>条件、分支判断语句的替代</li>
 </ul>
-<h3 id="策略枚举"><a href="#策略枚举" class="headerlink" title="策略枚举"></a>策略枚举</h3><p>当策略枚举不经常发生变化时可以使用。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> StrategyEnum &#123;</span><br><span class="line"></span><br><span class="line">    ADD(<span class="string">"+"</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">exec</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> a + b;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    SUB(<span class="string">"-"</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">exec</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> a - b;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String opt;</span><br><span class="line">    StrategyEnum(String opt) &#123;</span><br><span class="line">        <span class="keyword">this</span>.opt = opt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">exec</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
 
           
             <div class='article_footer'>
@@ -477,7 +461,7 @@
           
         </div>
         相关推荐：
-  <ul class="popular-posts"><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/29/状态模式/" title="状态模式" rel="bookmark">状态模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/18/单例模式/" title="单例模式" rel="bookmark">单例模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/18/设计模式和原则/" title="设计模式和原则" rel="bookmark">设计模式和原则</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/19/工厂方法模式/" title="工厂方法模式" rel="bookmark">工厂方法模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/22/抽象工厂模式/" title="抽象工厂模式" rel="bookmark">抽象工厂模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/23/建造者模式/" title="建造者模式" rel="bookmark">建造者模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/24/原型模式/" title="原型模式" rel="bookmark">原型模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/28/代理模式/" title="代理模式" rel="bookmark">代理模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/24/对象池模式/" title="对象池模式" rel="bookmark">对象池模式</a></h3></div></li></ul>
+  <ul class="popular-posts"><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/28/策略模式/" title="策略模式" rel="bookmark">策略模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/18/单例模式/" title="单例模式" rel="bookmark">单例模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/18/设计模式和原则/" title="设计模式和原则" rel="bookmark">设计模式和原则</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/19/工厂方法模式/" title="工厂方法模式" rel="bookmark">工厂方法模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/22/抽象工厂模式/" title="抽象工厂模式" rel="bookmark">抽象工厂模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/23/建造者模式/" title="建造者模式" rel="bookmark">建造者模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/24/原型模式/" title="原型模式" rel="bookmark">原型模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/28/代理模式/" title="代理模式" rel="bookmark">代理模式</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/24/对象池模式/" title="对象池模式" rel="bookmark">对象池模式</a></h3></div></li></ul>
         
           
 
@@ -486,10 +470,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-06-28T20:14:55+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-06-29T21:22:27+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年6月28日</p>
+    <p>更新于：2020年6月29日</p>
   </a>
 </div>
 
@@ -498,7 +482,7 @@
         
           
   
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>设计模式</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>行为型模式</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>策略模式</p></a></div>
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>设计模式</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>行为型模式</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>状态模式</p></a></div>
 
 
         
@@ -516,17 +500,11 @@
         
           <div class="prev-next">
             
-              <a class='prev' href='/2020/06/28/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>代理模式</p>
+            
+              <a class='next' href='/2020/06/28/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/'>
+                <p class='title'>代理模式<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
                 <p class='content'>代理模式代理模式也叫委托模式，许多其他的模式如状态模式、策略模式、访问者模式本质上是在更特殊的场合采用了代理模式。在日常应用中，代理模式可以提供非常好的访问控制。
 定义为其他对象提供一种代理以控...</p>
-              </a>
-            
-            
-              <a class='next' href='/2020/06/24/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/'>
-                <p class='title'>对象池模式<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>对象池模式一种特殊的工厂对象，一个对象池包含一组已经初始化过且可以使用的对象。用户可以从池中取得对象，并对其进行操作，在不需要的时候将其归还给对象池。
-使用对象池的目的是为了提升性能，当需要创建...</p>
               </a>
             
           </div>
@@ -544,7 +522,7 @@
 
   <script>
     window.subData = {
-      title: '策略模式',
+      title: '状态模式',
       tools: true
     }
   </script>
@@ -569,7 +547,7 @@
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式"><span class="toc-text">策略模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Strategy-抽象策略角色"><span class="toc-text">Strategy 抽象策略角色</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ConcreteStrategy-具体策略角色"><span class="toc-text">ConcreteStrategy 具体策略角色</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Context-封装角色"><span class="toc-text">Context 封装角色</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Use"><span class="toc-text">Use</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用"><span class="toc-text">应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优点"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意事项"><span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景"><span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#策略枚举"><span class="toc-text">策略枚举</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#状态模式"><span class="toc-text">状态模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#抽象状态角色State"><span class="toc-text">抽象状态角色State</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#具体状态角色ConcreteState"><span class="toc-text">具体状态角色ConcreteState</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#环境角色Context"><span class="toc-text">环境角色Context</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用"><span class="toc-text">应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优点"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-text">使用场景</span></a></li></ol>
     </div>
   </section>
 
