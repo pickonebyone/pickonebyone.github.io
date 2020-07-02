@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head hexo-theme='https://volantis.js.org/#®️'>
+<head hexo-theme='https://volantis.js.org/#®️Jun'>
   <meta charset="utf-8">
   <!-- SEO相关 -->
   
@@ -91,7 +91,7 @@
           
           
           
-            碎碎念 <b><sup style='color:#3AA757'>®️</sup></b>
+            JUNE <b><sup style='color:#3AA757'>®️Jun</sup></b>
           
         </a>
       
@@ -350,6 +350,489 @@
         
           
   <h2 class="title">
+    <a href="/2020/06/23/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/">
+      建造者模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/创建型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月23日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h2><p>建造者模式与工厂模式关注点不同，建造者模式关注零件的组装过程，工厂模式注重零件的创建过程。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>建造者模式也叫生成器模式， 它将一个复杂对象的构建与它的表示分离，使得同样的建造构建过程可以创建不同的表示。</p>
+<p><img src="/2020/06/23/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/creator.jpeg" alt="建造者模式通用类图"></p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>封装性良好<br>使用建造者模式可以使得客户端不需要知道产品内部组成的细节。</li>
+<li>建造者独立，易扩展<br>不同的实现类Builder是相互独立的，对系统的扩展有利。</li>
+<li>便于控制细节风险<br>由于建造者独立，因此可以个性化，修改一个建造者不会对其他模块产生影响。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>产品的组成部分必须相同，限制了其使用范围</li>
+<li>产品内部变化复杂时，需要增加很多建造者类</li>
+</ul>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>相同的方法，不同的执行顺序，产生不同的事件结果时；</li>
+<li>多个部件或者零件都可以装配到一个对象中，但是产生的运行结果不同时；</li>
+<li>产品类非常复杂，或者产品类中的调用顺序不同产生了不同的效能；</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Product-产品类"><a href="#Product-产品类" class="headerlink" title="Product 产品类"></a>Product 产品类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Builder抽象建造者"><a href="#Builder抽象建造者" class="headerlink" title="Builder抽象建造者"></a>Builder抽象建造者</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setPart</span><span class="params">()</span></span>; <span class="comment">//设置个性部分</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> Product <span class="title">buildProduct</span><span class="params">()</span></span>;<span class="comment">//建造产品</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ConcreteBuilder-具体建造者"><a href="#ConcreteBuilder-具体建造者" class="headerlink" title="ConcreteBuilder 具体建造者"></a>ConcreteBuilder 具体建造者</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteBuilder</span> <span class="keyword">extends</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPart</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function">pbulic Product <span class="title">buildProduct</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Product();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Director-导演类"><a href="#Director-导演类" class="headerlink" title="Director 导演类"></a>Director 导演类</h3><p>导演类起到封装的作用，避免高层模块深入到建造者内部的实现类。当建造者模式比较庞大时，导演类可以有多个。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Director</span></span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> Product <span class="title">buildProductA</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Builder b = <span class="keyword">new</span> ConcreteBuilder();</span><br><span class="line">    b.setPart();</span><br><span class="line">    <span class="keyword">return</span> b.buildProduct();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/22/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
+      抽象工厂模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/创建型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月22日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h2><p>抽象工厂模式时工厂方法模式的升级版本，工厂方法模式只生产一个等级的产品，抽象工厂模式可以生产多个等级的产品。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>产品等级：不同产品的种类就是不同的产品等级（电视机和洗衣机就是不同的产品等级）<br>产品族：一个具体工厂生产的不同等级的产品（工厂生产的电视机和洗衣机属于一个产品族）</p>
+<p><img src="/2020/06/22/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/product_level.gif" alt="产品等级和产品族"></p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>一种为访问类提供一个创建一组相关或者相互依赖对象的接口，且访问类无需指定所需要产品的具体类就能得到同族的不同等级的产品。</p>
+<p><img src="/2020/06/22/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/abstract_factory.jpeg" alt="抽象工厂模式类图"></p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>1） 客户端不依赖于产品类实例如何被创建、实现<br>2） 强调一系列相关的产品（同一产品族）一起使用创建对象需要大量的代码<br>3） 提供一个产品类的库，所有的产品以同样的接口出现，从而使客户端不依赖于具体实现。<br>一个对象族都有相同的约束，则可以使用抽象工厂模式。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="产品角色实现"><a href="#产品角色实现" class="headerlink" title="产品角色实现"></a>产品角色实现</h3><p>抽象产品：Product，定义产品的规范，描述产品的主要特性和功能，抽象工厂模式有多个抽象产品。<br>具体产品：ConcreteProduct，实现抽象产品角色所定义的接口由具体工厂来创建，与具体工厂之间是一对多的关系。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> Product&#123;</span><br><span class="line">    <span class="comment">//all product base filds &amp; methods.</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">on</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">off</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> AbstractTvProduct extends Product&#123;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">switchChannel</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> AbstractFridgeProduct extends Product&#123;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">increaseTemp</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">decreaseTemp</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> HaierTVProduct extends AbstractTvProduct&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> HaierFridgeProduct extends AbstractFridgeProduct&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> TCLTVProduct extends AbstractTvProduct&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> TCLFridgeProduct extends AbstractFridgeProduct&#123;</span><br></pre></td></tr></table></figure>
+
+<h3 id="工厂角色实现"><a href="#工厂角色实现" class="headerlink" title="工厂角色实现"></a>工厂角色实现</h3><p>抽象工厂：Abstract Factory，提供了创建产品的接口，包含多个创建产品的方法,可以创建多个不同等级的产品。<br>具体工厂：实现抽象工厂中的多个抽象方法，完成具体产品的创建。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IFactory</span></span>&#123;</span><br><span class="line">    <span class="function">Product <span class="title">createTV</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Product <span class="title">createFridge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HaierFactory</span> <span class="keyword">implements</span> <span class="title">IFactory</span></span>&#123;</span><br><span class="line">    <span class="function">Product <span class="title">createTV</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> HaierTVProduct();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">Product <span class="title">createFridge</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HaierFridgeProduct();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TCLFactory</span> <span class="keyword">implements</span> <span class="title">IFactory</span></span>&#123;</span><br><span class="line">    <span class="function">Product <span class="title">createTV</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> TCLTVProduct();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">Product <span class="title">createFridge</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> TCLFridgeProduct();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>隔离了具体类的生成，使得客户并不需要知道什么被创建，具有良好的封装性。</li>
+<li>如果要扩展产品族（有新的工厂要生产电视和冰箱时）的时候，只需要增加具体的产品类和实现工厂方法即可，原有的代码不需要变动，符合开闭原则。</li>
+<li>如果要扩展产品等级时，从抽象产品到工厂类，原有的代码都需要变动，违背了开闭原则。</li>
+</ul>
+<p>参阅：<br><a href="http://c.biancheng.net/view/1351.html" target="_blank" rel="noopener">抽象工厂模式（详解版）</a></p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/19/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">
+      工厂方法模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/创建型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月19日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><ul>
+<li>new 对象的替代方案</li>
+<li>需要灵活、可扩展的框架时</li>
+<li>在异构项目中，从外部产生的对象</li>
+<li>测试驱动开发框架下使用。<a href="https://www.jianshu.com/p/097d32d09713" target="_blank" rel="noopener">测试驱动开发 -TDD
+</a></li>
+</ul>
+<h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。</p>
+<p><img src="/2020/06/19/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/factory_comm.jpeg" alt="工厂方法模式的通用类图"></p>
+<p>抽象产品类Product负责定义产品的共性，实现对事物最抽象的英译；<br>Creator为抽象的创建类，即抽象工厂，具体如何创建产品类是由具体的实现工厂ConcreteCreator完成的。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>良好的封装，代码结构清晰，降低模块间的耦合；</li>
+<li>良好的扩展性；</li>
+<li>屏蔽具体的产品类，只要接口不变，系统中上层模块就不需要发生变化。</li>
+</ul>
+<p>高层模块只需要知道产品的抽象类，不关心实现类，符合迪米特法则；<br>只依赖产品的抽象，符合倒置原则；<br>使用产品子类替换父类时也没有问题，符合历史替换原则；</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>对于不同类型的产品都要增加不同类型的工厂来管理，增加代码的复杂性</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="通用实现"><a href="#通用实现" class="headerlink" title="通用实现"></a>通用实现</h3><p>产品类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product1</span> <span class="keyword">extends</span> <span class="title">Product</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product2</span> <span class="keyword">extends</span> <span class="title">Product</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>工厂类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> &lt;T extends Product&gt; <span class="function">T <span class="title">create</span><span class="params">(Class&lt;T&gt; c)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteFactory</span> <span class="keyword">extends</span> <span class="title">Factory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T extends Product&gt; <span class="function">T <span class="title">create</span><span class="params">(Class&lt;T&gt; c)</span></span>&#123;</span><br><span class="line">        Product p = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            p = (Product)Class.forName(c.getName()).newInstance();</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (T)p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Factory factory &#x3D; new ConcreteFactory();</span><br><span class="line">Product p &#x3D; factory.createt(Product1.class);</span><br></pre></td></tr></table></figure>
+
+<h3 id="缩小为简单工厂"><a href="#缩小为简单工厂" class="headerlink" title="缩小为简单工厂"></a>缩小为简单工厂</h3><p>去掉抽象的Factory类，create()方法变为静态方法即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> Factory&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Product&gt; <span class="function">T <span class="title">create</span><span class="params">(Class&lt;T&gt; c)</span></span>&#123;</span><br><span class="line">        Product p = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            p = (Product)Class.forName(c.getName()).newInstance();</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (T)p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Product p = Factory.create(Product1<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="升级为多个工厂类"><a href="#升级为多个工厂类" class="headerlink" title="升级为多个工厂类"></a>升级为多个工厂类</h3><p>遇到复杂情况下，一个工厂类初始化需要耗费很多资源，这样可以将工厂类细化拆分。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory1</span> <span class="keyword">extends</span> <span class="title">Factory</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Product <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Product1();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory2</span> <span class="keyword">extends</span> <span class="title">Factory</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Product <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Product2();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的好处是职责清晰，结构简单，但是可扩展性和可维护性差了些。<br>一般情况下，再增加一个协调类，避免调用者直接与各个子工厂类交流，协调类的作用是封装子工厂类，对高层模块提供统一的访问接口。</p>
+<h3 id="替代单例模式"><a href="#替代单例模式" class="headerlink" title="替代单例模式"></a>替代单例模式</h3><p>通过反射的方式来创建唯一一个实例</p>
+<h3 id="延迟初始化"><a href="#延迟初始化" class="headerlink" title="延迟初始化"></a>延迟初始化</h3><p>一个对象被使用完毕后，并不立即释放，工厂类保持其初始状态，等待再次被使用。</p>
+<p>延迟加载框架可以被扩展为，限制某个产品类的最大实例化数量（如链接池的最大链接数量）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductFactory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String,Product&gt; pMap = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Product <span class="title">createProduct</span><span class="params">(String type)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        Product p = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(pMap.containsKey(type))&#123;</span><br><span class="line">            p = pMap.get(type);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(type.equals(<span class="string">"Product1"</span>))&#123;</span><br><span class="line">                p = <span class="keyword">new</span> Product1();</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                p = <span class="keyword">new</span> Product2();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> product;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。</p>
+</blockquote>
+<p><a href="https://www.zhihu.com/question/24843188" target="_blank" rel="noopener">https://www.zhihu.com/question/24843188</a></p>
+<p><a href="https://www.jianshu.com/p/83ef48ce635b" target="_blank" rel="noopener">https://www.jianshu.com/p/83ef48ce635b</a></p>
+<p><a href="https://blog.csdn.net/buyulian/article/details/79203880" target="_blank" rel="noopener">https://blog.csdn.net/buyulian/article/details/79203880</a></p>
+<p><a href="https://blog.csdn.net/qianhaifeng2012/article/details/52014773" target="_blank" rel="noopener">https://blog.csdn.net/qianhaifeng2012/article/details/52014773</a></p>
+<p><a href="https://www.cnblogs.com/aspirant/p/8980573.html" target="_blank" rel="noopener">https://www.cnblogs.com/aspirant/p/8980573.html</a></p>
+<p><a href="http://www.akathink.com/2016/08/01/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">http://www.akathink.com/2016/08/01/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</a></p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/18/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+      单例模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/创建型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月18日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><p>在一个系统中，要求一个类有且仅有一个对象，如果出现多个对象就会出现“混乱”。</p>
+<ul>
+<li>要求生成唯一序号的场景</li>
+<li>整个项目中需要一个共享数据，如计数器</li>
+<li>创建对象要消耗过多资源（IO访问或者数据库资源等）</li>
+<li>定义大量的静态常量和静态方法的工具类</li>
+</ul>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>确保一个类只有一个实例，而且自行实例化并且向整个系统提供这个实例。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>单例模式在内存中只有一个实例，减少了内存开支。<br>当一个对象需要频繁地创建、销毁时，而且创建或者销毁时的性能无法优化时，单例模式的优势非常明显。</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>没有接口，无法扩展，没有接口也不能使用Mock方式虚拟对象。<br>在并行开发环境中，单例模式没有完成无法进行测试。<br>与单一职责原则冲突，单例模式把业务逻辑和单例混合在一个类中。</p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>高并发情况下，单例模式的线程同步问题。</p>
+<h2 id="提前加载"><a href="#提前加载" class="headerlink" title="提前加载"></a>提前加载</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="延后加载"><a href="#延后加载" class="headerlink" title="延后加载"></a>延后加载</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">         <span class="keyword">synchronized</span>(Singleton<span class="class">.<span class="keyword">class</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">                instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Singleton&#123;</span><br><span class="line">    instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/06/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8E%9F%E5%88%99/">
       设计模式和原则
     </a>
@@ -366,7 +849,7 @@
 <div class='new-meta-item author'>
   <a href="https://pickonebyone.github.io" rel="nofollow">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
+    <p>June</p>
   </a>
 </div>
 
@@ -455,22 +938,22 @@
 <li><a href="/2020/06/28/策略模式/">策略模式</a></li>
 <li><a href="/2020/06/29/状态模式/">状态模式</a></li>
 <li><a href="/2020/06/30/访问者模式/">访问者模式</a> </li>
-<li>责任链模式</li>
+<li><a href="/2020/07/01/迭代器模式/">迭代器模式</a></li>
+<li><a href="/2020/07/02/责任链模式/">责任链模式</a></li>
+<li><a href="/2020/07/02/模版方法模式/">模版方法模式</a></li>
 <li>命令模式</li>
 <li>解释器模式</li>
-<li>迭代器模式</li>
 <li>观察者模式</li>
 <li>中介者模式</li>
 <li>备忘录模式</li>
-<li>模版方法模式</li>
 <li>空对象模式</li>
 </ul>
 <h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><ul>
-<li>适配器模式</li>
-<li><a href="/2020/06/28/代理模式">代理模式</a></li>
+<li><a href="/2020/06/28/代理模式/">代理模式</a></li>
+<li><a href="/2020/07/01/组合模式/">组合模式</a></li>
 <li>装饰器模式</li>
 <li>桥接模式</li>
-<li>组合模式</li>
+<li>适配器模式</li>
 <li>外观模式</li>
 <li>享元模式</li>
 </ul>
@@ -595,6 +1078,26 @@
             ><div class='name'>集群部署</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/" href="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/"
+            id="categoriesE4B8AAE4BABAE68F90E58D87"
+            ><div class='name'>个人提升</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/%E6%97%A9%E7%9D%A1%E6%97%A9%E8%B5%B7/" href="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/%E6%97%A9%E7%9D%A1%E6%97%A9%E8%B5%B7/"
+            id="categoriesE4B8AAE4BABAE68F90E58D87E697A9E79DA1E697A9E8B5B7"
+            ><div class='name'>早睡早起</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E5%84%BF%E5%AD%90/" href="/categories/%E5%84%BF%E5%AD%90/"
+            id="categoriesE584BFE5AD90"
+            ><div class='name'>儿子</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E5%84%BF%E5%AD%90/%E6%95%99%E8%82%B2/" href="/categories/%E5%84%BF%E5%AD%90/%E6%95%99%E8%82%B2/"
+            id="categoriesE584BFE5AD90E69599E882B2"
+            ><div class='name'>教育</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"
             id="categoriesE58886E5B883E5BC8F"
             ><div class='name'>分布式</div><div class='badge'>(1)</div></a></li>
@@ -603,6 +1106,31 @@
             title="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/ID%E7%94%9F%E6%88%90%E5%99%A8/" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/ID%E7%94%9F%E6%88%90%E5%99%A8/"
             id="categoriesE58886E5B883E5BC8FIDE7949FE68890E599A8"
             ><div class='name'>ID生成器</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E6%88%91%E7%9A%84%E6%97%A5%E8%AE%B0/" href="/categories/%E6%88%91%E7%9A%84%E6%97%A5%E8%AE%B0/"
+            id="categoriesE68891E79A84E697A5E8AEB0"
+            ><div class='name'>我的日记</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E6%8A%80%E6%9C%AF/" href="/categories/%E6%8A%80%E6%9C%AF/"
+            id="categoriesE68A80E69CAF"
+            ><div class='name'>技术</div><div class='badge'>(3)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E6%8A%80%E6%9C%AF/Docker/" href="/categories/%E6%8A%80%E6%9C%AF/Docker/"
+            id="categoriesE68A80E69CAFDocker"
+            ><div class='name'>Docker</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E6%8A%80%E6%9C%AF/Linux/" href="/categories/%E6%8A%80%E6%9C%AF/Linux/"
+            id="categoriesE68A80E69CAFLinux"
+            ><div class='name'>Linux</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
+            id="categoriesE68A80E69CAFE5A49AE7BABFE7A88B"
+            ><div class='name'>多线程</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/"
@@ -615,9 +1143,29 @@
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
+            id="categoriesE7A28EE7A28EE5BFB5"
+            ><div class='name'>碎碎念</div><div class='badge'>(137)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E4%B8%AA%E4%BA%BA%E7%9B%AE%E6%A0%87/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E4%B8%AA%E4%BA%BA%E7%9B%AE%E6%A0%87/"
+            id="categoriesE7A28EE7A28EE5BFB5E4B8AAE4BABAE79BAEE6A087"
+            ><div class='name'>个人目标</div><div class='badge'>(10)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%88%91%E7%9A%84%E6%97%A5%E5%B8%B8/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%88%91%E7%9A%84%E6%97%A5%E5%B8%B8/"
+            id="categoriesE7A28EE7A28EE5BFB5E68891E79A84E697A5E5B8B8"
+            ><div class='name'>我的日常</div><div class='badge'>(126)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93/"
+            id="categoriesE7A28EE7A28EE5BFB5E883A1E8AFB4E585ABE98193"
+            ><div class='name'>胡说八道</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
-            ><div class='name'>设计模式</div><div class='badge'>(11)</div></a></li>
+            ><div class='name'>设计模式</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
@@ -632,12 +1180,32 @@
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE8A18CE4B8BAE59E8BE6A8A1E5BC8F"
-            ><div class='name'>行为型模式</div><div class='badge'>(3)</div></a></li>
+            ><div class='name'>行为型模式</div><div class='badge'>(7)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE8AEBEE8AEA1E58E9FE58899"
             ><div class='name'>设计原则</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E8%B4%AD%E6%88%BF/" href="/categories/%E8%B4%AD%E6%88%BF/"
+            id="categoriesE8B4ADE688BF"
+            ><div class='name'>购房</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E8%B4%AD%E6%88%BF/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/" href="/categories/%E8%B4%AD%E6%88%BF/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/"
+            id="categoriesE8B4ADE688BFE585ACE7A7AFE98791E68F90E58F96"
+            ><div class='name'>公积金提取</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E9%87%91%E8%9E%8D/" href="/categories/%E9%87%91%E8%9E%8D/"
+            id="categoriesE98791E89E8D"
+            ><div class='name'>金融</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E9%87%91%E8%9E%8D/%E9%A6%99%E5%B8%85%E5%8C%97%E5%A4%A7%E9%87%91%E8%9E%8D%E8%AF%BE/" href="/categories/%E9%87%91%E8%9E%8D/%E9%A6%99%E5%B8%85%E5%8C%97%E5%A4%A7%E9%87%91%E8%9E%8D%E8%AF%BE/"
+            id="categoriesE98791E89E8DE9A699E5B885E58C97E5A4A7E98791E89E8DE8AFBE"
+            ><div class='name'>香帅北大金融课</div><div class='badge'>(1)</div></a></li>
         
       </ul>
     </div>
@@ -661,7 +1229,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 21.5px; color: #666">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a>
+      <a href="/tags/2019%E7%9B%AE%E6%A0%87/" style="font-size: 18px; color: #7e7e7e">2019目标</a> <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 22px; color: #636363">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Netty/" style="font-size: 14px; color: #999">Netty</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/" style="font-size: 14px; color: #999">公积金提取</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14px; color: #999">多线程</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 16px; color: #8b8b8b">技术</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%97%A5%E8%AE%B0/" style="font-size: 14px; color: #999">日记</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16px; color: #8b8b8b">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">责任链模式</a> <a href="/tags/%E8%B4%AD%E6%88%BF/" style="font-size: 16px; color: #8b8b8b">购房</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
     </div>
   </section>
 
@@ -696,6 +1264,9 @@
     var ROOT = "/" || "/";
     if (!ROOT.endsWith('/')) ROOT += '/';
   </script>
+
+
+
 
 
   <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
@@ -911,6 +1482,7 @@
     pjax_fancybox();
   });
 </script>
+
 
 
 

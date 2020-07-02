@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head hexo-theme='https://volantis.js.org/#®️'>
+<head hexo-theme='https://volantis.js.org/#®️Jun'>
   <meta charset="utf-8">
   <!-- SEO相关 -->
   
@@ -91,7 +91,7 @@
           
           
           
-            碎碎念 <b><sup style='color:#3AA757'>®️</sup></b>
+            JUNE <b><sup style='color:#3AA757'>®️Jun</sup></b>
           
         </a>
       
@@ -359,7 +359,7 @@
 <div class='new-meta-item author'>
   <a href="https://pickonebyone.github.io" rel="nofollow">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
+    <p>June</p>
   </a>
 </div>
 
@@ -405,6 +405,7 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
+          
           <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"># Get current swap usage for all running processes</span><br><span class="line"># Erik Ljungstrom 27&#x2F;05&#x2F;2011</span><br><span class="line">SUM&#x3D;0</span><br><span class="line">OVERALL&#x3D;0</span><br><span class="line">for DIR in &#96;find &#x2F;proc&#x2F; -maxdepth 1 -type d | egrep &quot;^&#x2F;proc&#x2F;[0-9]&quot;&#96; ;</span><br><span class="line">do</span><br><span class="line">    PID&#x3D;&#96;echo $DIR | cut -d &#x2F; -f 3&#96;</span><br><span class="line">    PROGNAME&#x3D;&#96;ps -p $PID -o comm --no-headers&#96;</span><br><span class="line">    for SWAP in &#96;grep Swap $DIR&#x2F;smaps 2&gt;&#x2F;dev&#x2F;null| awk &#39;&#123; print $2 &#125;&#39;&#96;</span><br><span class="line">        do</span><br><span class="line">            let SUM&#x3D;$SUM+$SWAP</span><br><span class="line">        done</span><br><span class="line">    echo &quot;PID&#x3D;$PID - Swap used: $SUM - ($PROGNAME )&quot;</span><br><span class="line">    let OVERALL&#x3D;$OVERALL+$SUM</span><br><span class="line">        SUM&#x3D;0</span><br><span class="line">done</span><br><span class="line">echo &quot;Overall swap used: $OVERALL&quot;</span><br></pre></td></tr></table></figure>
 
 
@@ -433,8 +434,7 @@
             </div>
           
         </div>
-        相关推荐：
-  
+
         
           
 
@@ -527,6 +527,7 @@ jps [option] [hostid]
 
 
 
+
   
 
 
@@ -557,6 +558,9 @@ jps [option] [hostid]
     var ROOT = "/" || "/";
     if (!ROOT.endsWith('/')) ROOT += '/';
   </script>
+
+
+
 
 
   <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
@@ -772,6 +776,7 @@ jps [option] [hostid]
     pjax_fancybox();
   });
 </script>
+
 
 
 

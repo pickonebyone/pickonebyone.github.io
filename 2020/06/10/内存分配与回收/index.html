@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head hexo-theme='https://volantis.js.org/#®️'>
+<head hexo-theme='https://volantis.js.org/#®️Jun'>
   <meta charset="utf-8">
   <!-- SEO相关 -->
   
@@ -91,7 +91,7 @@
           
           
           
-            碎碎念 <b><sup style='color:#3AA757'>®️</sup></b>
+            JUNE <b><sup style='color:#3AA757'>®️Jun</sup></b>
           
         </a>
       
@@ -359,7 +359,7 @@
 <div class='new-meta-item author'>
   <a href="https://pickonebyone.github.io" rel="nofollow">
     <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>Picker</p>
+    <p>June</p>
   </a>
 </div>
 
@@ -404,6 +404,7 @@
 
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
+          
           
           <p>Java技术体系的自动内存管理最根本目标是自动化地给对象分配内存以及自动回收分配给对象的内存。<br>《Java虚拟机规范》并未规定新对象的创建和存储细节，这取决于虚拟机当前使用的是哪种垃圾收集器，以及虚拟机中与内存相关的参数设定。</p>
 <h2 id="HotSpot虚拟机中对象的分配原则"><a href="#HotSpot虚拟机中对象的分配原则" class="headerlink" title="HotSpot虚拟机中对象的分配原则"></a>HotSpot虚拟机中对象的分配原则</h2><h4 id="对象优先在Eden分配"><a href="#对象优先在Eden分配" class="headerlink" title="对象优先在Eden分配"></a>对象优先在Eden分配</h4><p>在大多数情况下，对象在新生代Eden区中分配。 当Eden区没有足够空间进行分配时，虚拟机将发起一次minorGC。<br>当survivor区的空间无法存放Eden区的对象时，就会通过担保机制提前转移到老年代去。</p>
@@ -520,8 +521,7 @@
             </div>
           
         </div>
-        相关推荐：
-  <ul class="popular-posts"><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/05/28/Java虚拟机/" title="Java虚拟机" rel="bookmark">Java虚拟机</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/02/JVM运行时数据区域/" title="JVM运行时数据区域" rel="bookmark">JVM运行时数据区域</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/17/常用JVM参数/" title="常用JVM参数" rel="bookmark">常用JVM参数</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/16/常用监控与故障处理工具/" title="常用监控与故障处理工具" rel="bookmark">常用监控与故障处理工具</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/01/ClassLoader/" title="类加载器和类加载机制" rel="bookmark">类加载器和类加载机制</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/05/29/类文件结构/" title="类文件结构" rel="bookmark">类文件结构</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/02/JVM内存模型/" title="JVM内存模型" rel="bookmark">JVM内存模型</a></h3></div></li><li class="popular-posts-item"><div class="popular-posts-title"><h3><a href="/2020/06/11/编译与优化/" title="编译与优化" rel="bookmark">编译与优化</a></h3></div></li></ul>
+
         
           
 
@@ -607,7 +607,8 @@
     
 
 
-  <section class="widget toc-wrapper shadow desktop mobile">
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
     
   <header>
     
@@ -617,7 +618,7 @@
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HotSpot虚拟机中对象的分配原则"><span class="toc-text">HotSpot虚拟机中对象的分配原则</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对象优先在Eden分配"><span class="toc-text">对象优先在Eden分配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#大对象直接进入老年代"><span class="toc-text">大对象直接进入老年代</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#长期存活的对象将进入老年代"><span class="toc-text">长期存活的对象将进入老年代</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#动态对象年龄判定"><span class="toc-text">动态对象年龄判定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#空间分配担保"><span class="toc-text">空间分配担保</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾的回收"><span class="toc-text">垃圾的回收</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何判断对象已死"><span class="toc-text">如何判断对象已死</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对象的引用"><span class="toc-text">对象的引用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器算法"><span class="toc-text">垃圾收集器算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#分代收集理论"><span class="toc-text">分代收集理论</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#分代收集区域"><span class="toc-text">分代收集区域</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#标记清除算法"><span class="toc-text">标记清除算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#标记复制算法"><span class="toc-text">标记复制算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#标记整理算法"><span class="toc-text">标记整理算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的垃圾收集器"><span class="toc-text">常见的垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Serial-SerialOld"><span class="toc-text">Serial &#x2F; SerialOld</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PS-PO"><span class="toc-text">PS &#x2F; PO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ParNew-CMS"><span class="toc-text">ParNew &#x2F; CMS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Garbage-First"><span class="toc-text">Garbage First</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#需要解决的问题"><span class="toc-text">需要解决的问题</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#G1的回收步骤"><span class="toc-text">G1的回收步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#初始标记"><span class="toc-text">初始标记</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#并发标记"><span class="toc-text">并发标记</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#最终标记"><span class="toc-text">最终标记</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#筛选回收"><span class="toc-text">筛选回收</span></a></li></ol></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HotSpot虚拟机中对象的分配原则"><span class="toc-text">HotSpot虚拟机中对象的分配原则</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对象优先在Eden分配"><span class="toc-text">对象优先在Eden分配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#大对象直接进入老年代"><span class="toc-text">大对象直接进入老年代</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#长期存活的对象将进入老年代"><span class="toc-text">长期存活的对象将进入老年代</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#动态对象年龄判定"><span class="toc-text">动态对象年龄判定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#空间分配担保"><span class="toc-text">空间分配担保</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾的回收"><span class="toc-text">垃圾的回收</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何判断对象已死"><span class="toc-text">如何判断对象已死</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对象的引用"><span class="toc-text">对象的引用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器算法"><span class="toc-text">垃圾收集器算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#分代收集理论"><span class="toc-text">分代收集理论</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#分代收集区域"><span class="toc-text">分代收集区域</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#标记清除算法"><span class="toc-text">标记清除算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#标记复制算法"><span class="toc-text">标记复制算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#标记整理算法"><span class="toc-text">标记整理算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的垃圾收集器"><span class="toc-text">常见的垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Serial-SerialOld"><span class="toc-text">Serial &#x2F; SerialOld</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PS-PO"><span class="toc-text">PS &#x2F; PO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ParNew-CMS"><span class="toc-text">ParNew &#x2F; CMS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Garbage-First"><span class="toc-text">Garbage First</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#需要解决的问题"><span class="toc-text">需要解决的问题</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#G1的回收步骤"><span class="toc-text">G1的回收步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#初始标记"><span class="toc-text">初始标记</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#并发标记"><span class="toc-text">并发标记</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#最终标记"><span class="toc-text">最终标记</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#筛选回收"><span class="toc-text">筛选回收</span></a></li></ol></li></ol></li></ol></li></ol>
     </div>
   </section>
 
@@ -652,6 +653,9 @@
     var ROOT = "/" || "/";
     if (!ROOT.endsWith('/')) ROOT += '/';
   </script>
+
+
+
 
 
   <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
@@ -867,6 +871,7 @@
     pjax_fancybox();
   });
 </script>
+
 
 
 
