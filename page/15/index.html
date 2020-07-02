@@ -349,8 +349,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/06/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
-      分布式锁
+    <a href="/2020/06/04/etcd/">
+      etcd
     </a>
   </h2>
 
@@ -375,9 +375,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
+      <p>Java技术栈/Etcd</p>
     </a>
   </div>
 
@@ -388,7 +388,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月6日</p>
+    <p>发布于：2020年6月4日</p>
   </a>
 </div>
 
@@ -416,7 +416,97 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1) 可重入锁<br>CAS<br>2）同步：<br>3）信号量<br>公平锁、非公平锁、读写锁、自旋锁<br>分布式锁， 悲观锁、乐观锁, 锁续租</p>
+        <p>培养良好的生活、学习、工作习惯。</p>
+<p>相关概念：</p>
+<ul>
+<li>Etcd</li>
+<li>coreOS</li>
+<li>RancherOS</li>
+</ul>
+<h3 id="主机规划："><a href="#主机规划：" class="headerlink" title="主机规划："></a>主机规划：</h3><blockquote>
+<p>要求：主机名称规范、IP段相邻、备注明确</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>主机序号</th>
+<th>名称</th>
+<th>内网IP</th>
+<th>外网IP</th>
+<th>CPU核数</th>
+<th>内存大小</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td>etcd-node-master-01</td>
+<td>10.0.0.1</td>
+<td>外网IP</td>
+<td>2</td>
+<td>4G</td>
+<td>备注</td>
+</tr>
+<tr>
+<td>02</td>
+<td>etcd-node-slave-02</td>
+<td>10.0.0.2</td>
+<td>外网IP</td>
+<td>2</td>
+<td>4G</td>
+<td>备注</td>
+</tr>
+<tr>
+<td>03</td>
+<td>etcd-node-slave-03</td>
+<td>10.0.0.3</td>
+<td>外网IP</td>
+<td>2</td>
+<td>4G</td>
+<td>备注</td>
+</tr>
+</tbody></table>
+<h3 id="设置主机名称"><a href="#设置主机名称" class="headerlink" title="设置主机名称"></a>设置主机名称</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl set-hostname etcd-node-master-01</span><br><span class="line">hostnamectl set-hostname etcd-node-slave-02</span><br><span class="line">hostnamectl set-hostname etcd-node-slave-03</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改内网IP地址："><a href="#修改内网IP地址：" class="headerlink" title="修改内网IP地址："></a>修改内网IP地址：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启网关："><a href="#重启网关：" class="headerlink" title="重启网关："></a>重启网关：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network</span><br></pre></td></tr></table></figure>
+
+<h3 id="防火墙设置："><a href="#防火墙设置：" class="headerlink" title="防火墙设置："></a>防火墙设置：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;public --add-port&#x3D;2379&#x2F;tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h4 id="YUM安装："><a href="#YUM安装：" class="headerlink" title="YUM安装："></a>YUM安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y etcd</span><br></pre></td></tr></table></figure>
+
+<h4 id="验证-amp-查看版本"><a href="#验证-amp-查看版本" class="headerlink" title="验证&amp;查看版本"></a>验证&amp;查看版本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa etcd</span><br><span class="line">etcdctl -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改配置："><a href="#修改配置：" class="headerlink" title="修改配置："></a>修改配置：</h3><p>分别修改3个主机的配置文件/etc/etcd/etcd.conf</p>
+<blockquote>
+<p>注意！修改前一定要备份！<br>   cp /etc/etcd/etcd.conf /etc/etcd/etcd.conf.bak</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ETCD_LISTEN_PEER_URLS&#x3D;&quot;http:&#x2F;&#x2F;10.0.0.1:2380&quot;</span><br><span class="line">ETCD_LISTEN_CLIENT_URLS&#x3D;&quot;http:&#x2F;&#x2F;10.0.0.1:2379,http:&#x2F;&#x2F;127.0.0.1:2379&quot;</span><br><span class="line">ETCD_NAME&#x3D;Master</span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS&#x3D;&quot;http:&#x2F;&#x2F;10.0.0.1:2380&quot;</span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS&#x3D;&quot;http:&#x2F;&#x2F;10.0.0.1:2379&quot;</span><br><span class="line">ETCD_INITIAL_CLUSTER&#x3D;“Master&#x3D;http:&#x2F;&#x2F;10.0.0.1:2380,Node02&#x3D;http:&#x2F;&#x2F;10.0.0.2:2380,Node03&#x3D;http:&#x2F;&#x2F;10.0.0.3:2380&quot;</span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN&#x3D;&quot;etcd-cluster&quot;</span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE&#x3D;&quot;new&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="重启etcd服务"><a href="#重启etcd服务" class="headerlink" title="重启etcd服务"></a>重启etcd服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart etcd</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看Etcd集群"><a href="#查看Etcd集群" class="headerlink" title="查看Etcd集群"></a>查看Etcd集群</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl member list</span><br></pre></td></tr></table></figure>
+
+<h4 id="Etcd-测试"><a href="#Etcd-测试" class="headerlink" title="Etcd 测试"></a>Etcd 测试</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">etcdctl set name test</span><br><span class="line">etcdctl get name</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h5 id="扩展概念"><a href="#扩展概念" class="headerlink" title="扩展概念"></a>扩展概念</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">负载均衡：</span><br><span class="line">区域负载均衡：DNS</span><br><span class="line">硬件负载均衡：F5&#x2F;A10</span><br><span class="line">软件负载均衡：Nginx&#x2F;LVS&#x2F;HAProxy</span><br><span class="line"></span><br><span class="line">磁盘阵列：raid</span><br><span class="line">防火墙技术：硬件&#x2F;软件</span><br><span class="line"></span><br><span class="line">NTP（Network Time Protocal）是用来使计算机时间同步化的一种协议，它可以使计算机对其服务器或时钟源（如石英钟，GPS等等)做同步化tongbuwang。</span><br><span class="line"></span><br><span class="line">Radis的分布式缓存;</span><br><span class="line">mysql主从、读写分离、高可用、分库分表；</span><br><span class="line"></span><br><span class="line">MHA</span><br><span class="line">备份</span><br><span class="line">elk </span><br><span class="line">ci&#x2F;cd</span><br><span class="line">centos8 &#x2F; podman</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
 
       
     </div>
@@ -429,161 +519,6 @@
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/">
-      字节码执行引擎
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月5日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>当代码被编译成二进制字节码，由Classloader加载到内存，经过加载、验证、准备、解释后将数据转化为JVM可以接受的格式存储到方法区，并在堆内存中创建一个Class对象，作为外部访问的入口。<br>接下来就由字节码执行引擎来解释执行代码。</p>
-<p>《Java》虚拟机规范中规定了Java虚拟机字节码执行引擎的概念模型，输入字节码二进制流，输出执行结果。</p>
-<p>在不同的虚拟机实现中，执行引擎在执行字节码的时候会有两种：</p>
-<ul>
-<li>解释执行（Sun Classic 虚拟机）</li>
-<li>编译执行（Jrockit）</li>
-<li>两种兼备 (HotSpot)</li>
-</ul>
-<h2 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h2><p>栈帧是用于支持虚拟机方法进行调用和执行的数据结构，每个方法从调用开始到执行结束的过程，都对应一个栈帧从虚拟机栈中入栈到出栈的过程。</p>
-<p>栈帧存储了方法的局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</p>
-<p><img src="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/stackframe.jpeg" alt="栈帧"></p>
-<p>栈帧中需要多大的局部变量表、多深的操作数栈在编译Java的时候就已经计算出来存放在方法表的Code属性中。</p>
-<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><p>用于存放方法参数和方法内部定义的局部变量。</p>
-<p>在代码被编译成Class文件时，在方法的Code属性中max_locals数据项中确定了该方法所需要分配的局部变量表的最大容量。局部变量表的容量以变量槽（Variable Slot）为最小单位，每个变量槽应该可以存放一个boolean、byte、char、short、int、float、reference、returnAddress这8种不超过32位数据类型（对于超过32位的long和double，则使用两个32位的变量槽）。</p>
-<p>引用类型：</p>
-<ul>
-<li>通过引用可以找到这个对象在堆中的数据存放的起始地址或者索引；</li>
-<li>找到对象所属类型在方法区中的存储类型；</li>
-</ul>
-<p>returnAddress是为字节码指令jsr、jsr_w 和ret服务，指向了一条字节码指令的地址，一些jvm使用这几条指令来实现异常处理时的跳转。<br>现在全部改为采用异常表来代替。</p>
-<p>当一个方法被调用的时候，Java虚拟机会使用局部变量表来完成参数值到参数变量列表的传递过程，如果是实例方法局部变量表第0位索引的变量槽存放的是this。</p>
-<blockquote>
-<p>以恰当的变量作用域来控制变量的回收时间才是最优雅的解决方法，而不是使用完后就将其引用赋予null， 因为这仅仅是基于虚拟机的概念模型层面作出的优化，虚拟机的具体实现不同，解释执行与编译执行结果都不同。</p>
-</blockquote>
-<h4 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h4><p>一个后入先出的栈，同局部变量表一样，操作数栈的最大深度也在编译的时候就被写入到Code属性的max_stacks数据项中。32位数据类型所占用的栈容量是1， 64位数据类型所占的栈容量是2.</p>
-<p>通过将操作数入栈出栈来进行算术运算；<br>通过操作数栈将方法的参数进行传递；</p>
-<h4 id="动态连接"><a href="#动态连接" class="headerlink" title="动态连接"></a>动态连接</h4><p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用时为了支持方法调用过程中的动态连接。</p>
-<p>Class文件的常量池中存有大量的符号引用，字节码中的方法调用指令以常量池指向方法的符号引用作为参数。</p>
-<p>这些符号引用一部分在类加载阶段或者第一次使用会被转化为直接引用；<br>另一部分在每次运行期间都转化为直接引用，这部分称为动态连接；</p>
-<h4 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h4><p>当一个方法退出以后，必须返回到最初方法被调用时的位置，程序才能继续执行，方法返回时可能需要在栈帧中保存一些信息，来帮助恢复主调方法的执行状态。</p>
-<p>一个方法的退出有两种方式：<br>第一种是执行引擎遇到方法返回的字节码指令；主调方法的PC计数器的值就可以作为返回地址。<br>另一种是遇到了异常，并且在本方法的异常表中没有搜索到匹配的异常处理器导致方法退出；</p>
-<h2 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h2><p>方法调用阶段的任务是确认被调用方法的版本。<br>Class文件的编译过程不包含传统程序语言的连接步骤，一切方法调用在Class文件里面存储的都是符号引用，而不是方法在实际运行时内存布局中的入口地址。因此一些调用需要在加载期间，甚至到运行期间才能确定目标方法的直接引用。</p>
-<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>在类加载的解析阶段，将静态方法和私有方法对应的符号引用转化为直接引用。因为静态方法与类关联，私有方法不可能被继承或者重写，在编译阶段即可确定。</p>
-<p>字节码指令集设计了不同的指令调用不同类型的方法：</p>
-<ul>
-<li>invokestatic, 调用静态方法</li>
-<li>invokespecial, 调用实例构造器方法，私有方法，父类中的方法。</li>
-<li>invokevirtual, 用于调用所有的虚方法（被final修饰的方法）</li>
-<li>invokeinterface,用于调用接口方法，会在运行时再确定一个实现接口的对象</li>
-<li>invokedynamic, 在运行时动态解析出调用点限定符引用的方法。</li>
-</ul>
-<p>前四条指令，分派逻辑都固化在Java虚拟机内部，invokedynamic指令的分派逻辑是由用户设定的引导方法来决定的。</p>
-<p>只要能被invokestatic 和 invokespecial指令调用的方法，都可以在解析阶段确定唯一的调用版本。Java语言中符合这个条件的方法有静态方法、构造方法、私有方法、父类方法和被final修饰的方法,这五种方法被称为非虚方法，其他的被称为虚方法。</p>
-<p>解析调用是一个静态的过程， 在类加载的解析阶段就把涉及的符号引用转换为明确的直接引用，不必延迟到运行期再去完成。</p>
-<h4 id="分派"><a href="#分派" class="headerlink" title="分派"></a>分派</h4><ul>
-<li><p>静态分派<br>所有依赖静态类型来决定方法执行版本的分派叫做静态分派。静态分派的典型应用表现是方法重载。<br>方法重载发生在同一个类中，方法名称相同，参数列表不同。</p>
-</li>
-<li><p>动态分派与实现<br>在运行期根据时机类型确定方法执行版本的分派过程叫动态分派，它就是Java语言中方法重写的本质。多态的根源在于虚方法调用指令invokevirtual的执行逻辑，因此多态只对方法有效，对字段无效（字段永远不参与多态）。</p>
-<p>动态分派是执行非常频繁的动作，而且动态分派的方法版本选择过程需要运行时在接受着类型方法元数据中搜索合适的目标方法，</p>
-</li>
-<li><p>单分派和多分派<br>方法的接收者（要被执行的方法的所有者叫接收者）与参数统称为方法的宗量。<br>单分派是根据一个宗量对目标方法进行选择；<br>多分派是根据多个宗量对目标方法进行选择；</p>
-</li>
-</ul>
-<h4 id="Java中的解释执行与编译执行"><a href="#Java中的解释执行与编译执行" class="headerlink" title="Java中的解释执行与编译执行"></a>Java中的解释执行与编译执行</h4><p><img src="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E.jpeg" alt="编译过程"></p>
-<p>在执行前先对程序源码进行词法分析和语法分析处理，把源码转化为抽象语法树。</p>
-<p>对于C/C++来说，词法、语法分析以后到后面的优化器和目标代码生成器都可以选择独立于执行引擎，形成一个完整有意义的编译器去实现，这类就是编译执行。</p>
-<p>对于Java来说，javac编译器完成了程序代码经过词法分析、语法分析到抽象语法树，再便利语法树生成线性的字节码指令流的过程。</p>
-<h4 id="基于栈的指令集与给予寄存器的指令集"><a href="#基于栈的指令集与给予寄存器的指令集" class="headerlink" title="基于栈的指令集与给予寄存器的指令集"></a>基于栈的指令集与给予寄存器的指令集</h4><ul>
-<li>基于栈的指令集<br>零地址指令，依赖操作数栈进行工作，<br>优点是可移植性高，不与具体的硬件绑定。编译器实现简单。<br>缺点是速度慢。</li>
-<li>给予寄存器的指令集<br>而地址指令集，物理硬件直接支持的指令集架构，依赖寄存器工作。</li>
-</ul>
-<blockquote>
-<p>虚拟机最终会对执行过程作出一系列优化来提高性能， 实际的情况会和盖面模型差距非常大，差距产生的根本原因是虚拟机中解析起和即时编译起都会对输入的字节码进行优化，即使解释其中也不是按照字节码指令去逐条执行的。</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
         
       
     
@@ -600,7 +535,7 @@
           </a>
         
         <p class="current">
-          15 / 93
+          15 / 19
         </p>
         
           <a class="next" rel="next" href="/page/16/">
@@ -699,26 +634,6 @@
             ><div class='name'>集群部署</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
-            title="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/" href="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/"
-            id="categoriesE4B8AAE4BABAE68F90E58D87"
-            ><div class='name'>个人提升</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/%E6%97%A9%E7%9D%A1%E6%97%A9%E8%B5%B7/" href="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/%E6%97%A9%E7%9D%A1%E6%97%A9%E8%B5%B7/"
-            id="categoriesE4B8AAE4BABAE68F90E58D87E697A9E79DA1E697A9E8B5B7"
-            ><div class='name'>早睡早起</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%84%BF%E5%AD%90/" href="/categories/%E5%84%BF%E5%AD%90/"
-            id="categoriesE584BFE5AD90"
-            ><div class='name'>儿子</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E5%84%BF%E5%AD%90/%E6%95%99%E8%82%B2/" href="/categories/%E5%84%BF%E5%AD%90/%E6%95%99%E8%82%B2/"
-            id="categoriesE584BFE5AD90E69599E882B2"
-            ><div class='name'>教育</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
             title="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"
             id="categoriesE58886E5B883E5BC8F"
             ><div class='name'>分布式</div><div class='badge'>(1)</div></a></li>
@@ -729,31 +644,6 @@
             ><div class='name'>ID生成器</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
-            title="/categories/%E6%88%91%E7%9A%84%E6%97%A5%E8%AE%B0/" href="/categories/%E6%88%91%E7%9A%84%E6%97%A5%E8%AE%B0/"
-            id="categoriesE68891E79A84E697A5E8AEB0"
-            ><div class='name'>我的日记</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%8A%80%E6%9C%AF/" href="/categories/%E6%8A%80%E6%9C%AF/"
-            id="categoriesE68A80E69CAF"
-            ><div class='name'>技术</div><div class='badge'>(3)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/Docker/" href="/categories/%E6%8A%80%E6%9C%AF/Docker/"
-            id="categoriesE68A80E69CAFDocker"
-            ><div class='name'>Docker</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/Linux/" href="/categories/%E6%8A%80%E6%9C%AF/Linux/"
-            id="categoriesE68A80E69CAFLinux"
-            ><div class='name'>Linux</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
-            id="categoriesE68A80E69CAFE5A49AE7BABFE7A88B"
-            ><div class='name'>多线程</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/"
             id="categoriesE7949FE4BAA7E58A9B"
             ><div class='name'>生产力</div><div class='badge'>(1)</div></a></li>
@@ -762,26 +652,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(137)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E4%B8%AA%E4%BA%BA%E7%9B%AE%E6%A0%87/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E4%B8%AA%E4%BA%BA%E7%9B%AE%E6%A0%87/"
-            id="categoriesE7A28EE7A28EE5BFB5E4B8AAE4BABAE79BAEE6A087"
-            ><div class='name'>个人目标</div><div class='badge'>(10)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%88%91%E7%9A%84%E6%97%A5%E5%B8%B8/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%88%91%E7%9A%84%E6%97%A5%E5%B8%B8/"
-            id="categoriesE7A28EE7A28EE5BFB5E68891E79A84E697A5E5B8B8"
-            ><div class='name'>我的日常</div><div class='badge'>(126)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93/"
-            id="categoriesE7A28EE7A28EE5BFB5E883A1E8AFB4E585ABE98193"
-            ><div class='name'>胡说八道</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
@@ -808,26 +678,6 @@
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE8AEBEE8AEA1E58E9FE58899"
             ><div class='name'>设计原则</div><div class='badge'>(1)</div></a></li>
         
-          <li><a class="flat-box"
-            title="/categories/%E8%B4%AD%E6%88%BF/" href="/categories/%E8%B4%AD%E6%88%BF/"
-            id="categoriesE8B4ADE688BF"
-            ><div class='name'>购房</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E8%B4%AD%E6%88%BF/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/" href="/categories/%E8%B4%AD%E6%88%BF/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/"
-            id="categoriesE8B4ADE688BFE585ACE7A7AFE98791E68F90E58F96"
-            ><div class='name'>公积金提取</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%87%91%E8%9E%8D/" href="/categories/%E9%87%91%E8%9E%8D/"
-            id="categoriesE98791E89E8D"
-            ><div class='name'>金融</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E9%87%91%E8%9E%8D/%E9%A6%99%E5%B8%85%E5%8C%97%E5%A4%A7%E9%87%91%E8%9E%8D%E8%AF%BE/" href="/categories/%E9%87%91%E8%9E%8D/%E9%A6%99%E5%B8%85%E5%8C%97%E5%A4%A7%E9%87%91%E8%9E%8D%E8%AF%BE/"
-            id="categoriesE98791E89E8DE9A699E5B885E58C97E5A4A7E98791E89E8DE8AFBE"
-            ><div class='name'>香帅北大金融课</div><div class='badge'>(1)</div></a></li>
-        
       </ul>
     </div>
   </section>
@@ -850,7 +700,7 @@
 
 
     <div class='content'>
-      <a href="/tags/2019%E7%9B%AE%E6%A0%87/" style="font-size: 18px; color: #7e7e7e">2019目标</a> <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 22px; color: #636363">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Netty/" style="font-size: 14px; color: #999">Netty</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/" style="font-size: 14px; color: #999">公积金提取</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14px; color: #999">多线程</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 16px; color: #8b8b8b">技术</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%97%A5%E8%AE%B0/" style="font-size: 14px; color: #999">日记</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16px; color: #8b8b8b">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">责任链模式</a> <a href="/tags/%E8%B4%AD%E6%88%BF/" style="font-size: 16px; color: #8b8b8b">购房</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 21.5px; color: #666">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
     </div>
   </section>
 

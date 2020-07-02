@@ -349,197 +349,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/">
-      线程和并发
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月8日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>目前线程是java中进行处理器资源调度的最基本单位。（Loom项目正在尝试改变线程这一重量级的实现）</p>
-<p>实现线程的方式主要有三种：</p>
-<ol>
-<li>使用内核线程1:1实现；<br>内核系统就是由操作系统内核支持的线程，这种线程由内核来完成线程切换，内核通过操纵调度器对线程进行调度，并负责将线程的任务映射到各个处理器上。</li>
-</ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/1.1.jpeg" alt="内核线程"></p>
-<ol start="2">
-<li>使用用户线程1:n实现；</li>
-</ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/1.n.jpeg" alt="用户线程"></p>
-<ol start="3">
-<li>使用用户线程价轻量级进程混合实现（n：M实现）</li>
-</ol>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/m.n.jpeg" alt="混合实现"></p>
-<h2 id="Java线程的实现"><a href="#Java线程的实现" class="headerlink" title="Java线程的实现"></a>Java线程的实现</h2><p>《Java虚拟机规范》中没有限定使用哪种线程模型来实现，主流平台上的主流商用Java虚拟机线程模型普遍都给予操作系统原生线程模型来实现（1:1的线程模型）</p>
-<h2 id="Java线程调度"><a href="#Java线程调度" class="headerlink" title="Java线程调度"></a>Java线程调度</h2><p>线程调度是指系统为线程分配处理器使用权的过程，调度方式分为两种：</p>
-<ul>
-<li>协同式线程调度<br>线程的执行时间由线程本身来控制，线程把自己的工作执行完之后，同志系统切换到另外一个线程。</li>
-<li>抢占式线程调度<br>每个线程由系统来分配执行时间，线程的切换不由线程本身来决定。<br>Java可以使用thread.yield()方法主动让出执行时间，但是并不能主动获取执行时间。</li>
-</ul>
-<h2 id="线程的优先级"><a href="#线程的优先级" class="headerlink" title="线程的优先级"></a>线程的优先级</h2><p>我们并不能在程序中通过优先级来完全准确判断一组状态都为Ready的线程先执行哪一个？</p>
-<h2 id="状态转换"><a href="#状态转换" class="headerlink" title="状态转换"></a>状态转换</h2><p>Java语言定义了6中线程状态，在任意一个时间点中， 一个线程只能有且只有一种状态，并且可以通过特定的方法在不同状态之间转换。</p>
-<ul>
-<li>新建：new，创建后尚未启动的线程处于新建状态；</li>
-<li>运行：runnable，包括操作系统线程状态中的Running和Ready，</li>
-<li>等待：Waiting，处于这种状态的线程不会被分配处理器执行时间，它们需要被其他线程显示唤醒。<br>以下方法可以让线程无限期等待：<ul>
-<li>没有设置timeout参数的Object.wait()方法；</li>
-<li>没有设置timeout参数的Thread.join()方法；</li>
-<li>LockSupport.part()方法；</li>
-</ul>
-</li>
-<li>限期等待：处于这种状态的线程也不会被分配处理器执行时间，在一定时间后会有系统自动唤醒。<ul>
-<li>Thread.sleep()</li>
-<li>设置了Timeout的Object.wait()</li>
-<li>设置了Timeout的Thread.join()</li>
-<li>LockSupport.parkNanos();</li>
-<li>LockSupport.parkUntil();</li>
-</ul>
-</li>
-<li>阻塞：Blocked，在程序等待进入同步区域的时候，线程将进入阻塞状态。</li>
-<li>结束: Terminated，已终止线程的线程状态，线程已经结束执行。</li>
-</ul>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/ThreadState.jpeg" alt="线程状态图"></p>
-<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>当多个线程同时访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要执行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果，那就称这个对象是线程安全的。</p>
-<p>也就是代码本身封装了所有必要的正确性保障手段，令调用者无序关心多线程下的调用问题，更无需自己实现任何措施来保证多线程环境下的正确调用。</p>
-<h4 id="不可变"><a href="#不可变" class="headerlink" title="不可变"></a>不可变</h4><p>在Java语言中，不可变对象一定是线程安全的，无论是对象的方法实现还是方法的调用者，都不需要再进行任何线程安全保障措施。</p>
-<p>只要一个不可变的对象被正确的构建出来，那其外部的可见状态永远都不会改变，永远都不会看到他在多个线程之中处于不一致的状态。</p>
-<h4 id="绝对线程安全"><a href="#绝对线程安全" class="headerlink" title="绝对线程安全"></a>绝对线程安全</h4><p>绝对的线程安全除了对象本身外， 还需要在调用端做相应的同步措施。</p>
-<h4 id="相对线程安全"><a href="#相对线程安全" class="headerlink" title="相对线程安全"></a>相对线程安全</h4><p>保证这个对象在单次的操作是线程安全的，我们在调用的时候不需要进行额外的保障措施，但是对于一些特定顺序的连续调用，就可能需要在调用端使用额外的同步手段来保证调用的正确性。在Java中，相对线程安全的类型有Vector、HashTable、Collections.synchronizedCollection();</p>
-<h4 id="线程兼容"><a href="#线程兼容" class="headerlink" title="线程兼容"></a>线程兼容</h4><p>对象本身并不是线程安全的， 但是可以通过在调用端正确的使用同步手段来保证对象在并发环境中可以安全使用。<br>Vector、HashTable、ArrayList、HashMap等都是线程兼容的。</p>
-<h4 id="线程对立"><a href="#线程对立" class="headerlink" title="线程对立"></a>线程对立</h4><p>如果两个线程同时持有一个线程对象，一个尝试去中断线程、一个尝试去恢复线程，在并发进行的情况下，无论调用时是否进行了同步，目标线程都存在思索的风险。（Thread类的suspend和resume方法），常见的对立操作还有System.in() System.out()和System.runFinalizersOnExit();</p>
-<h3 id="线程安全的实现方法"><a href="#线程安全的实现方法" class="headerlink" title="线程安全的实现方法"></a>线程安全的实现方法</h3><h4 id="互斥同步"><a href="#互斥同步" class="headerlink" title="互斥同步"></a>互斥同步</h4><p>用互斥来实现同步。<br>同步是指在多个线程并发访问共享数据时，保证共享数据在同一个时刻只被一条线程使用。<br>互斥是实现同步的一种手段，临界区（Critical Section）、互斥量（Mutex）和信号量（Semaphore）都是常见的互斥实现方式。<br>因此它面临的问题是进行线程阻塞和唤醒所带来的性能开销，因此也叫阻塞同步。<br>属于一种悲观的并发策略。</p>
-<h5 id="synchronized（非公平锁）"><a href="#synchronized（非公平锁）" class="headerlink" title="synchronized（非公平锁）"></a>synchronized（非公平锁）</h5><h5 id="java-util-concurrent-locks-Lock"><a href="#java-util-concurrent-locks-Lock" class="headerlink" title="java.util.concurrent.locks.Lock"></a>java.util.concurrent.locks.Lock</h5><h5 id="ReentrantLock（非公平锁）"><a href="#ReentrantLock（非公平锁）" class="headerlink" title="ReentrantLock（非公平锁）"></a>ReentrantLock（非公平锁）</h5><p>  可重入锁比synchronized增加了一些高级功能：</p>
-<ul>
-<li>等待可中断<br>当持有锁的线程长期不释放所得时候，正在等待的线程可以选择放弃等待，改为处理其他事情。</li>
-<li>公平锁<br>多个线程在等待同一个锁的时候，必须按照申请锁的时间顺序依次获得锁。</li>
-<li>锁绑定多个条件<br>一个ReentrantLock对象可以同时绑定多个Condition对象， 多次调用newCondition()即可。</li>
-</ul>
-<h4 id="非阻塞同步"><a href="#非阻塞同步" class="headerlink" title="非阻塞同步"></a>非阻塞同步</h4><p>基于硬件冲突检测的乐观并发策略，也就是说先进性操作，如果没有其他线程争用共享数据，操作成功；<br>如果共享数据被争用，产生冲突，那么再进行其他的补偿措施，最常用的补偿措施就是不断重试，直到成功。<br>这种方式不需要阻塞线程，因此也叫无锁编程。<br>常用的具有原子性的硬件操作和冲突检测指令有：</p>
-<ul>
-<li>测试并设置（Test-And-Set）</li>
-<li>获取并增加（Fetch-And-Increment）</li>
-<li>交换（Swap）</li>
-<li>比较并交换（Compare And Swap）</li>
-<li>加载链接/条件存储（Load-Linked/ Store-Conditional）</li>
-</ul>
-<p>Java中暴露出来的是CAS指令，当CAS指令执行时，当且仅当内存地址V的值符合预期值A时，处理器才会用新的值B更新内存地址V的值，该过程是一个原子操作，执行期间不会被其他线程中断。</p>
-<p>CAS存在的ABA问题，大部分情况下不会影响程序并发的正确性，如果需要解决该问题，传统的互斥同步可能会比原子类更为高效。</p>
-<h4 id="无同步方案"><a href="#无同步方案" class="headerlink" title="无同步方案"></a>无同步方案</h4><p>如果可以让一个方法本来就不涉及共享数据，那它自然就不需要任何同步措施去保证其正确性，因此会有一些代码天生就是线程安全的。</p>
-<ul>
-<li>可重入代码<br>如果一个方法的返回结果是可预测的，只要输入了相同的数据，就就能返回相同的结果，那么它就满足可重入性的要求，当然他就是线程安全的。<br>可重入代码不依赖于全局变量、存储在队上的数据和公用的系统资源，用到的状态量都由参数重传入，比调用非可重入的方法等。</li>
-<li>线程本地存储<br>如果一段代码中使用的数据必须与其他代码共享，那就看看这些共享数据的代码是否能保证在同一个线程中执行。这样就可以把共享数据的可见范围限制在一个线程之内。<br>常见的有生产者消费者模式（Web交互模型）。<br>ThreadLocal的使用。</li>
-</ul>
-<h2 id="锁优化"><a href="#锁优化" class="headerlink" title="锁优化"></a>锁优化</h2><h4 id="自旋锁和自适应自旋"><a href="#自旋锁和自适应自旋" class="headerlink" title="自旋锁和自适应自旋"></a>自旋锁和自适应自旋</h4><p>互斥同步的时候需要对线程进行挂起和恢复，但是挂起和恢复需要陷入内核态来完成。<br>因此当一个线程获取锁的时候，如果暂时没有获取到，那么让他稍微等一会儿，但不放弃处理器的执行时间，看看持有锁的线程是否很快会释放锁。</p>
-<p>如果锁被占用很长的时间，那么自旋的线程只会白白消耗处理器资源。因此自旋等待时间必须有一定的限度。<br>如果自旋超过了限定的次数，仍然没有成功获得锁，就应当使用传统方式去挂起线程。</p>
-<h5 id="自旋锁的实现"><a href="#自旋锁的实现" class="headerlink" title="自旋锁的实现"></a>自旋锁的实现</h5><p><a href="https://www.jianshu.com/p/824b2e4f1eed" target="_blank" rel="noopener">几种自旋锁的java实现</a><br><a href="https://www.jianshu.com/p/9d3660ad4358?utm_source=oschina-app" target="_blank" rel="noopener">认真的讲一讲：自旋锁到底是什么</a><br><a href="https://www.cnblogs.com/cxuanBlog/p/11679883.html" target="_blank" rel="noopener">看完你就明白的锁系列之自旋锁</a></p>
-<h4 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h4><p>虚拟机即使编译器在运行时，判断到一段代码中，在堆上的所有数据都不会逃逸出去被其他线程访问到，那就可以把他们当作栈上的数据对待，认为他们是线程私有的，消除同步锁的过程。</p>
-<h4 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h4><p>如果一系列的连续操作都对同一个对象反复加锁和解锁，甚至加锁操作是出现在循环体中的， 可以把加锁同步的范围扩展到整个操作序列的外部。 </p>
-<h4 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h4><p>在没有多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗。</p>
-<p>Hotspot对象头分为两部分：<br>1）用于存储对象自身运行的数据，如哈希吗，GC分代年龄。这部分数据的长度在32位和64位的Java虚拟机中分别占用32个或者64比特。这部分是实现轻量级锁和偏向锁的关键。<br>2）用于存储指向方法区对象类型数据的指针，如果是数组对象，还会有一个额外的部分存储数组长度。</p>
-<p>由于对象头信息是与对象自身定义的数据无关的额外存储成本，考虑到Java虚拟机的空间使用效率，MarkWord被设计成一个非固定的动态数据结构，以便在极小的空间内存储尽量多的信息。<br>它会根据对象的状态服用自己的存储空间。<br>在32位的Hotspot虚拟机中，对象未被锁定的状态下，MarkWord的32个比特空间有25个比特用于存储对象的哈希码，4个比特用于存储对象分代年龄，2个比特用于存储锁标志位，还有1个比特股定位0（表示未进入偏向模式）。对象除了违背锁定的正常状态外，还有轻量级锁定、重量级锁定、GC标记、可偏向等几种状态。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/light_.jpeg" alt></p>
-<p>如果代码即将进入同步块的时候，如果此同步对象没有被锁定（标志位位01），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（LockRecord）的空间,用于存储锁对象目前的MarkWord的拷贝。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/markword.jpeg" alt></p>
-<p>然后虚拟机将使用CAS操作尝试把对象的markword更新为指向LockRecord的指针。如果这个更新成功，那么代表该线程拥有了这个对象的锁，并且对像MarkWord的锁标志位将转变为00，表示此对象处于轻量级锁定状态。</p>
-<p>如果更新操作失败，意味着至少存在一个线程与当前线程竞争获取该对象的锁。虚拟机首先检查对象的MarkWord是否只想当前线程的栈帧，如果是，说明线程已经拥有了这个对象的锁，那么直接进入同步块继续执行，否则说明这个对象已经被其他线程抢占了。<br>如果出现两条以上的线程争用同一个锁的情况，那么轻量级锁不再有效，必须要膨胀为重量级锁，锁标志的状态变为10， 此时Markword中存储的就是指向重量级锁的指针，后面等待锁的线程也必须进入阻塞状态。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/light_lock.jpeg" alt></p>
-<p>它的解锁过程也是通过CAS来进行的，如果对象的MarkWord仍然指向线程的锁记录，那就用CAS操作把对象当前的MarkWord和线程中复制的DisplacedMarkWord替换回来，如果替换成功，说明解锁成功。<br>替换失败，说明有其他线程尝试过获取该锁，需要在释放锁的同时唤醒被挂起的线程。</p>
-<p>如果没有竞争，轻量级锁能通过CAS操作成功避免使用互斥量的开销；<br>如果存在竞争，除了互斥量本身开销外，还额外发生了CAS操作的开销，因此性能更差。</p>
-<h4 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h4><p>用于消除数据在无竞争情况下的同步，连CAS都去掉了，进一步提高程序的运行性能。<br>偏向锁会偏向于第一个获得它的线程，如果在接下来的执行过程中，该锁一致没有被其他的线程获取，则持有偏向锁的线程永远不需要再同步。</p>
-<p>如果当前虚拟机启用了偏向锁，那么当锁对象第一次被线程获取的时候，虚拟机将会把对象头中的标志位设置为01，把偏向模式设置为1，表示进入偏向模式。<br>同时使用CAS操作把获取到这个锁的线程ID记录在对象的MarkWord中。<br>如果CAS成功，持有偏向锁的线程以后每次进入这个锁相关的同步块是，虚拟机都可以不再进行任何同步操作。</p>
-<p>一旦出现另外一个线程尝试获取这个锁的情况，偏向模式马上宣告结束。<br>根据锁对象目前是否处于被锁定的状态决定是否撤销偏向（把偏向模式设置为0），撤销后标志位恢复到为锁定或者轻量级锁定的轧辊台，后续的同步操作按照轻量级锁执行。</p>
-<p><img src="/2020/06/08/%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%B9%B6%E5%8F%91/pian.jpeg" alt="偏向锁"></p>
-<p>当进入偏向状态是，MarkWord大部分的空间都用于存储持有锁的线程ID，这部分空间占用了原有存储对象Hash码的位置。当一个对象已经计算过一次一致性哈希码后，它就再也无法进入偏向锁状态。<br>当一个对象正在处于偏向锁状态时，受到计算hash码的请求时，它的偏向状态会被立即撤销，并且锁会膨胀为重量级锁。</p>
-<p>在重量级锁的实现中，对象头指向了重量级锁的位置，代表重量级锁的ObjectMonitor类中有字段可以记录非加锁状态下的MarkWork，其中自然可以存储原来的哈希码。</p>
-<p>偏向锁可以提高带有同步但无竞争的程序性能，但如果程序中大多数的锁都总是被多个不同的线程访问，那偏向锁就是多余的。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/07/IO-2/">
-      IO-2
+    <a href="/2020/06/06/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+      分布式锁
     </a>
   </h2>
 
@@ -577,7 +388,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月7日</p>
+    <p>发布于：2020年6月6日</p>
   </a>
 </div>
 
@@ -605,10 +416,164 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>多路复用器：<br>select/poll/epoll</p>
-<p>man 2 select </p>
-<p>man 2 poll</p>
-<p>2.链路层，3网络层，4传输层<br>封存あ记忆</p>
+        <p>1) 可重入锁<br>CAS<br>2）同步：<br>3）信号量<br>公平锁、非公平锁、读写锁、自旋锁<br>分布式锁， 悲观锁、乐观锁, 锁续租</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/">
+      字节码执行引擎
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月5日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当代码被编译成二进制字节码，由Classloader加载到内存，经过加载、验证、准备、解释后将数据转化为JVM可以接受的格式存储到方法区，并在堆内存中创建一个Class对象，作为外部访问的入口。<br>接下来就由字节码执行引擎来解释执行代码。</p>
+<p>《Java》虚拟机规范中规定了Java虚拟机字节码执行引擎的概念模型，输入字节码二进制流，输出执行结果。</p>
+<p>在不同的虚拟机实现中，执行引擎在执行字节码的时候会有两种：</p>
+<ul>
+<li>解释执行（Sun Classic 虚拟机）</li>
+<li>编译执行（Jrockit）</li>
+<li>两种兼备 (HotSpot)</li>
+</ul>
+<h2 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h2><p>栈帧是用于支持虚拟机方法进行调用和执行的数据结构，每个方法从调用开始到执行结束的过程，都对应一个栈帧从虚拟机栈中入栈到出栈的过程。</p>
+<p>栈帧存储了方法的局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</p>
+<p><img src="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/stackframe.jpeg" alt="栈帧"></p>
+<p>栈帧中需要多大的局部变量表、多深的操作数栈在编译Java的时候就已经计算出来存放在方法表的Code属性中。</p>
+<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><p>用于存放方法参数和方法内部定义的局部变量。</p>
+<p>在代码被编译成Class文件时，在方法的Code属性中max_locals数据项中确定了该方法所需要分配的局部变量表的最大容量。局部变量表的容量以变量槽（Variable Slot）为最小单位，每个变量槽应该可以存放一个boolean、byte、char、short、int、float、reference、returnAddress这8种不超过32位数据类型（对于超过32位的long和double，则使用两个32位的变量槽）。</p>
+<p>引用类型：</p>
+<ul>
+<li>通过引用可以找到这个对象在堆中的数据存放的起始地址或者索引；</li>
+<li>找到对象所属类型在方法区中的存储类型；</li>
+</ul>
+<p>returnAddress是为字节码指令jsr、jsr_w 和ret服务，指向了一条字节码指令的地址，一些jvm使用这几条指令来实现异常处理时的跳转。<br>现在全部改为采用异常表来代替。</p>
+<p>当一个方法被调用的时候，Java虚拟机会使用局部变量表来完成参数值到参数变量列表的传递过程，如果是实例方法局部变量表第0位索引的变量槽存放的是this。</p>
+<blockquote>
+<p>以恰当的变量作用域来控制变量的回收时间才是最优雅的解决方法，而不是使用完后就将其引用赋予null， 因为这仅仅是基于虚拟机的概念模型层面作出的优化，虚拟机的具体实现不同，解释执行与编译执行结果都不同。</p>
+</blockquote>
+<h4 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h4><p>一个后入先出的栈，同局部变量表一样，操作数栈的最大深度也在编译的时候就被写入到Code属性的max_stacks数据项中。32位数据类型所占用的栈容量是1， 64位数据类型所占的栈容量是2.</p>
+<p>通过将操作数入栈出栈来进行算术运算；<br>通过操作数栈将方法的参数进行传递；</p>
+<h4 id="动态连接"><a href="#动态连接" class="headerlink" title="动态连接"></a>动态连接</h4><p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用时为了支持方法调用过程中的动态连接。</p>
+<p>Class文件的常量池中存有大量的符号引用，字节码中的方法调用指令以常量池指向方法的符号引用作为参数。</p>
+<p>这些符号引用一部分在类加载阶段或者第一次使用会被转化为直接引用；<br>另一部分在每次运行期间都转化为直接引用，这部分称为动态连接；</p>
+<h4 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h4><p>当一个方法退出以后，必须返回到最初方法被调用时的位置，程序才能继续执行，方法返回时可能需要在栈帧中保存一些信息，来帮助恢复主调方法的执行状态。</p>
+<p>一个方法的退出有两种方式：<br>第一种是执行引擎遇到方法返回的字节码指令；主调方法的PC计数器的值就可以作为返回地址。<br>另一种是遇到了异常，并且在本方法的异常表中没有搜索到匹配的异常处理器导致方法退出；</p>
+<h2 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h2><p>方法调用阶段的任务是确认被调用方法的版本。<br>Class文件的编译过程不包含传统程序语言的连接步骤，一切方法调用在Class文件里面存储的都是符号引用，而不是方法在实际运行时内存布局中的入口地址。因此一些调用需要在加载期间，甚至到运行期间才能确定目标方法的直接引用。</p>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>在类加载的解析阶段，将静态方法和私有方法对应的符号引用转化为直接引用。因为静态方法与类关联，私有方法不可能被继承或者重写，在编译阶段即可确定。</p>
+<p>字节码指令集设计了不同的指令调用不同类型的方法：</p>
+<ul>
+<li>invokestatic, 调用静态方法</li>
+<li>invokespecial, 调用实例构造器方法，私有方法，父类中的方法。</li>
+<li>invokevirtual, 用于调用所有的虚方法（被final修饰的方法）</li>
+<li>invokeinterface,用于调用接口方法，会在运行时再确定一个实现接口的对象</li>
+<li>invokedynamic, 在运行时动态解析出调用点限定符引用的方法。</li>
+</ul>
+<p>前四条指令，分派逻辑都固化在Java虚拟机内部，invokedynamic指令的分派逻辑是由用户设定的引导方法来决定的。</p>
+<p>只要能被invokestatic 和 invokespecial指令调用的方法，都可以在解析阶段确定唯一的调用版本。Java语言中符合这个条件的方法有静态方法、构造方法、私有方法、父类方法和被final修饰的方法,这五种方法被称为非虚方法，其他的被称为虚方法。</p>
+<p>解析调用是一个静态的过程， 在类加载的解析阶段就把涉及的符号引用转换为明确的直接引用，不必延迟到运行期再去完成。</p>
+<h4 id="分派"><a href="#分派" class="headerlink" title="分派"></a>分派</h4><ul>
+<li><p>静态分派<br>所有依赖静态类型来决定方法执行版本的分派叫做静态分派。静态分派的典型应用表现是方法重载。<br>方法重载发生在同一个类中，方法名称相同，参数列表不同。</p>
+</li>
+<li><p>动态分派与实现<br>在运行期根据时机类型确定方法执行版本的分派过程叫动态分派，它就是Java语言中方法重写的本质。多态的根源在于虚方法调用指令invokevirtual的执行逻辑，因此多态只对方法有效，对字段无效（字段永远不参与多态）。</p>
+<p>动态分派是执行非常频繁的动作，而且动态分派的方法版本选择过程需要运行时在接受着类型方法元数据中搜索合适的目标方法，</p>
+</li>
+<li><p>单分派和多分派<br>方法的接收者（要被执行的方法的所有者叫接收者）与参数统称为方法的宗量。<br>单分派是根据一个宗量对目标方法进行选择；<br>多分派是根据多个宗量对目标方法进行选择；</p>
+</li>
+</ul>
+<h4 id="Java中的解释执行与编译执行"><a href="#Java中的解释执行与编译执行" class="headerlink" title="Java中的解释执行与编译执行"></a>Java中的解释执行与编译执行</h4><p><img src="/2020/06/05/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E.jpeg" alt="编译过程"></p>
+<p>在执行前先对程序源码进行词法分析和语法分析处理，把源码转化为抽象语法树。</p>
+<p>对于C/C++来说，词法、语法分析以后到后面的优化器和目标代码生成器都可以选择独立于执行引擎，形成一个完整有意义的编译器去实现，这类就是编译执行。</p>
+<p>对于Java来说，javac编译器完成了程序代码经过词法分析、语法分析到抽象语法树，再便利语法树生成线性的字节码指令流的过程。</p>
+<h4 id="基于栈的指令集与给予寄存器的指令集"><a href="#基于栈的指令集与给予寄存器的指令集" class="headerlink" title="基于栈的指令集与给予寄存器的指令集"></a>基于栈的指令集与给予寄存器的指令集</h4><ul>
+<li>基于栈的指令集<br>零地址指令，依赖操作数栈进行工作，<br>优点是可移植性高，不与具体的硬件绑定。编译器实现简单。<br>缺点是速度慢。</li>
+<li>给予寄存器的指令集<br>而地址指令集，物理硬件直接支持的指令集架构，依赖寄存器工作。</li>
+</ul>
+<blockquote>
+<p>虚拟机最终会对执行过程作出一系列优化来提高性能， 实际的情况会和盖面模型差距非常大，差距产生的根本原因是虚拟机中解析起和即时编译起都会对输入的字节码进行优化，即使解释其中也不是按照字节码指令去逐条执行的。</p>
+</blockquote>
 
       
     </div>
@@ -635,7 +600,7 @@
           </a>
         
         <p class="current">
-          14 / 93
+          14 / 19
         </p>
         
           <a class="next" rel="next" href="/page/15/">
@@ -734,26 +699,6 @@
             ><div class='name'>集群部署</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
-            title="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/" href="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/"
-            id="categoriesE4B8AAE4BABAE68F90E58D87"
-            ><div class='name'>个人提升</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/%E6%97%A9%E7%9D%A1%E6%97%A9%E8%B5%B7/" href="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/%E6%97%A9%E7%9D%A1%E6%97%A9%E8%B5%B7/"
-            id="categoriesE4B8AAE4BABAE68F90E58D87E697A9E79DA1E697A9E8B5B7"
-            ><div class='name'>早睡早起</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%84%BF%E5%AD%90/" href="/categories/%E5%84%BF%E5%AD%90/"
-            id="categoriesE584BFE5AD90"
-            ><div class='name'>儿子</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E5%84%BF%E5%AD%90/%E6%95%99%E8%82%B2/" href="/categories/%E5%84%BF%E5%AD%90/%E6%95%99%E8%82%B2/"
-            id="categoriesE584BFE5AD90E69599E882B2"
-            ><div class='name'>教育</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
             title="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"
             id="categoriesE58886E5B883E5BC8F"
             ><div class='name'>分布式</div><div class='badge'>(1)</div></a></li>
@@ -764,31 +709,6 @@
             ><div class='name'>ID生成器</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
-            title="/categories/%E6%88%91%E7%9A%84%E6%97%A5%E8%AE%B0/" href="/categories/%E6%88%91%E7%9A%84%E6%97%A5%E8%AE%B0/"
-            id="categoriesE68891E79A84E697A5E8AEB0"
-            ><div class='name'>我的日记</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%8A%80%E6%9C%AF/" href="/categories/%E6%8A%80%E6%9C%AF/"
-            id="categoriesE68A80E69CAF"
-            ><div class='name'>技术</div><div class='badge'>(3)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/Docker/" href="/categories/%E6%8A%80%E6%9C%AF/Docker/"
-            id="categoriesE68A80E69CAFDocker"
-            ><div class='name'>Docker</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/Linux/" href="/categories/%E6%8A%80%E6%9C%AF/Linux/"
-            id="categoriesE68A80E69CAFLinux"
-            ><div class='name'>Linux</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
-            id="categoriesE68A80E69CAFE5A49AE7BABFE7A88B"
-            ><div class='name'>多线程</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/"
             id="categoriesE7949FE4BAA7E58A9B"
             ><div class='name'>生产力</div><div class='badge'>(1)</div></a></li>
@@ -797,26 +717,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(137)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E4%B8%AA%E4%BA%BA%E7%9B%AE%E6%A0%87/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E4%B8%AA%E4%BA%BA%E7%9B%AE%E6%A0%87/"
-            id="categoriesE7A28EE7A28EE5BFB5E4B8AAE4BABAE79BAEE6A087"
-            ><div class='name'>个人目标</div><div class='badge'>(10)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%88%91%E7%9A%84%E6%97%A5%E5%B8%B8/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%88%91%E7%9A%84%E6%97%A5%E5%B8%B8/"
-            id="categoriesE7A28EE7A28EE5BFB5E68891E79A84E697A5E5B8B8"
-            ><div class='name'>我的日常</div><div class='badge'>(126)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93/"
-            id="categoriesE7A28EE7A28EE5BFB5E883A1E8AFB4E585ABE98193"
-            ><div class='name'>胡说八道</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
@@ -843,26 +743,6 @@
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE8AEBEE8AEA1E58E9FE58899"
             ><div class='name'>设计原则</div><div class='badge'>(1)</div></a></li>
         
-          <li><a class="flat-box"
-            title="/categories/%E8%B4%AD%E6%88%BF/" href="/categories/%E8%B4%AD%E6%88%BF/"
-            id="categoriesE8B4ADE688BF"
-            ><div class='name'>购房</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E8%B4%AD%E6%88%BF/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/" href="/categories/%E8%B4%AD%E6%88%BF/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/"
-            id="categoriesE8B4ADE688BFE585ACE7A7AFE98791E68F90E58F96"
-            ><div class='name'>公积金提取</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%87%91%E8%9E%8D/" href="/categories/%E9%87%91%E8%9E%8D/"
-            id="categoriesE98791E89E8D"
-            ><div class='name'>金融</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E9%87%91%E8%9E%8D/%E9%A6%99%E5%B8%85%E5%8C%97%E5%A4%A7%E9%87%91%E8%9E%8D%E8%AF%BE/" href="/categories/%E9%87%91%E8%9E%8D/%E9%A6%99%E5%B8%85%E5%8C%97%E5%A4%A7%E9%87%91%E8%9E%8D%E8%AF%BE/"
-            id="categoriesE98791E89E8DE9A699E5B885E58C97E5A4A7E98791E89E8DE8AFBE"
-            ><div class='name'>香帅北大金融课</div><div class='badge'>(1)</div></a></li>
-        
       </ul>
     </div>
   </section>
@@ -885,7 +765,7 @@
 
 
     <div class='content'>
-      <a href="/tags/2019%E7%9B%AE%E6%A0%87/" style="font-size: 18px; color: #7e7e7e">2019目标</a> <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 22px; color: #636363">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Netty/" style="font-size: 14px; color: #999">Netty</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/" style="font-size: 14px; color: #999">公积金提取</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14px; color: #999">多线程</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 16px; color: #8b8b8b">技术</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%97%A5%E8%AE%B0/" style="font-size: 14px; color: #999">日记</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16px; color: #8b8b8b">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">责任链模式</a> <a href="/tags/%E8%B4%AD%E6%88%BF/" style="font-size: 16px; color: #8b8b8b">购房</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 21.5px; color: #666">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
     </div>
   </section>
 

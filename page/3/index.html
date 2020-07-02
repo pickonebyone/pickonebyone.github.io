@@ -349,128 +349,6 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/01/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/">
-      组合模式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/行为型模式</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月1日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h2><p>也叫合成模式或者部分整体模式，主要用来描述部分与整体的关系。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将对象组合成树形结构以表示部分整体的层次结构，使得用于对单个对象和组合对象的使用具有一致性。</p>
-<p><img src="/2020/07/01/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/combination_class.jpeg" alt="组合模式的通用类图"></p>
-<h4 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h4><p>定义参加组合对象的共有方法和属性，可以定义一些默认的行为或者属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Component parent = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Component&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">         c.parent = <span class="keyword">this</span>;</span><br><span class="line">         <span class="keyword">this</span>.list.add(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list.remove(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Component&gt; <span class="title">getChildren</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Component <span class="title">getParent</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.parent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Composite"><a href="#Composite" class="headerlink" title="Composite"></a>Composite</h4><p>树枝对象，作用是组合树枝节点和叶子结点形成一个树形结构。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Composite</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Leaf"><a href="#Leaf" class="headerlink" title="Leaf"></a>Leaf</h4><p>叶子对象，下面没有分支，最小的遍历单位。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaf</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
-<li>高层模块调用简单<br>一颗属性结构中的所有节点都是Component，局部和整体对调用者来说没有任何区别，也就是说高层模块不必关心自己处理的是单个对象还是整个组合结构，简化了高层模块的代码。</li>
-<li>节点自由度增加<br>使用组合模式后，如果想增加一个树枝节点、树叶节点都非常容易。<br>如何开闭原则，利于维护。</li>
-</ul>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>（安全模式）直接使用了实现类(可以扩展)。与依赖倒置原则冲突，限制了接口的影响范围。</p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="透明的组合模式"><a href="#透明的组合模式" class="headerlink" title="透明的组合模式"></a>透明的组合模式</h4><p>以上的例子就是透明的组合模式，吧用来组合使用的方法放到抽象类中，无论叶子对象还是树枝对象都有相同的结构，通过getChildren();判断当前节点是否为叶子节点还是根节点。</p>
-<p>透明模式的好处是遵循了依赖倒置原则</p>
-<h4 id="安全的组合模式"><a href="#安全的组合模式" class="headerlink" title="安全的组合模式"></a>安全的组合模式</h4><p>安全模式是将叶子节点和树枝节点彻底分开，树枝节点单独拥有用来组合的方法。</p>
-<h5 id="Component-1"><a href="#Component-1" class="headerlink" title="Component"></a>Component</h5><p>定义参加组合对象的共有方法和属性，可以定义一些默认的行为或者属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Component parent = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Component <span class="title">getParent</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.parent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="Composite-1"><a href="#Composite-1" class="headerlink" title="Composite"></a>Composite</h5><p>树枝对象，作用是组合树枝节点和叶子结点形成一个树形结构。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Composite</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Component&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">         c.parent = <span class="keyword">this</span>;</span><br><span class="line">         <span class="keyword">this</span>.list.add(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list.remove(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Component&gt; <span class="title">getChildren</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="Leaf-1"><a href="#Leaf-1" class="headerlink" title="Leaf"></a>Leaf</h5><p>叶子对象，下面没有分支，最小的遍历单位。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaf</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
     <a href="/2020/06/30/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/">
       访问者模式
     </a>
@@ -605,6 +483,128 @@
           </div>
         
       
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/29/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/">
+      状态模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/行为型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月29日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><p>状态模式的核心是封装，状态的变更引起了行为的变更，从外部看起来几句好像这个对象对应的类发生了改变一样。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。</p>
+<p><img src="/2020/06/29/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/State_class.jpeg" alt="状态模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="抽象状态角色State"><a href="#抽象状态角色State" class="headerlink" title="抽象状态角色State"></a>抽象状态角色State</h4><p>接口或者抽象类，负责对象状态的定义，并且封装环境角色以实现状态切换。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> Context context;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContext</span><span class="params">(Context _context)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = _context;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">handle1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="具体状态角色ConcreteState"><a href="#具体状态角色ConcreteState" class="headerlink" title="具体状态角色ConcreteState"></a>具体状态角色ConcreteState</h4><p>每个具体状态必须完成两个职责：本状态下要做的事情以及本状态如何过渡到其他状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteState1</span> <span class="keyword">extends</span> <span class="title">State</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//本状态下必须要做的事情</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//设置本状态为state2</span></span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Context.STATE2);</span><br><span class="line">        <span class="keyword">super</span>.context.handle2(); <span class="comment">//过渡到state2.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteState2</span> <span class="keyword">extends</span> <span class="title">State</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Context.STATE1);</span><br><span class="line">        <span class="keyword">super</span>.context.handle1();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//本状态处理的事情</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="环境角色Context"><a href="#环境角色Context" class="headerlink" title="环境角色Context"></a>环境角色Context</h4><p>定义客户端需要的接口，并且负责具体状态的切换。</p>
+<p>把状态对象声明为静态常量，有几个状态对象就声明几个静态常量。<br>环境角色具有状态抽象角色定义的所有行为，具体执行使用委托方式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> State STATE1 = <span class="keyword">new</span> ConcreteState1();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> State STATE2 = <span class="keyword">new</span> ConcreteState2();</span><br><span class="line">    <span class="keyword">private</span> State currentState;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> State <span class="title">getCurrentState</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> currentState;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCurrentState</span><span class="params">(State currentState)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState = currentState;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState.handle1();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState.handle2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>结合建造者模式将已有的状态按照一定的顺序再重新组装。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Context c = <span class="keyword">new</span> Context();</span><br><span class="line"></span><br><span class="line">c.setCurrentState(Context.STATE1);</span><br><span class="line">c.handle1(); <span class="comment">//处理STATE1必须要做的事情</span></span><br><span class="line"></span><br><span class="line">c.handle2(); <span class="comment">//切换到STATE2</span></span><br><span class="line">c.handle2(); <span class="comment">//处理STATE2 必须要做的事情</span></span><br><span class="line"></span><br><span class="line">c.handle1(); <span class="comment">//切换到STATE1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>结构清晰<br>避免过多的switch case和if else，降低了程序的复杂性，提高系统的可维护性。</li>
+<li>遵循设计原则<br>遵循了开闭原则以及单一职责原则，每个状态都是一个子类，要增加状态就要增加子类，修改状态时只修改一个子类即可。</li>
+<li>封装性良好<br>状态变换防止到类的内部来实现，外部调用不需要知道类内部如何实现状态和行为的变换。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>状态过多时子类膨胀</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>行为跟随状态改变而改变的场景</li>
+<li>条件、分支判断语句的替代</li>
+</ul>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
     
   </section>
   
@@ -619,7 +619,7 @@
           </a>
         
         <p class="current">
-          3 / 93
+          3 / 19
         </p>
         
           <a class="next" rel="next" href="/page/4/">
@@ -718,26 +718,6 @@
             ><div class='name'>集群部署</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
-            title="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/" href="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/"
-            id="categoriesE4B8AAE4BABAE68F90E58D87"
-            ><div class='name'>个人提升</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/%E6%97%A9%E7%9D%A1%E6%97%A9%E8%B5%B7/" href="/categories/%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%8D%87/%E6%97%A9%E7%9D%A1%E6%97%A9%E8%B5%B7/"
-            id="categoriesE4B8AAE4BABAE68F90E58D87E697A9E79DA1E697A9E8B5B7"
-            ><div class='name'>早睡早起</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%84%BF%E5%AD%90/" href="/categories/%E5%84%BF%E5%AD%90/"
-            id="categoriesE584BFE5AD90"
-            ><div class='name'>儿子</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E5%84%BF%E5%AD%90/%E6%95%99%E8%82%B2/" href="/categories/%E5%84%BF%E5%AD%90/%E6%95%99%E8%82%B2/"
-            id="categoriesE584BFE5AD90E69599E882B2"
-            ><div class='name'>教育</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
             title="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"
             id="categoriesE58886E5B883E5BC8F"
             ><div class='name'>分布式</div><div class='badge'>(1)</div></a></li>
@@ -748,31 +728,6 @@
             ><div class='name'>ID生成器</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
-            title="/categories/%E6%88%91%E7%9A%84%E6%97%A5%E8%AE%B0/" href="/categories/%E6%88%91%E7%9A%84%E6%97%A5%E8%AE%B0/"
-            id="categoriesE68891E79A84E697A5E8AEB0"
-            ><div class='name'>我的日记</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%8A%80%E6%9C%AF/" href="/categories/%E6%8A%80%E6%9C%AF/"
-            id="categoriesE68A80E69CAF"
-            ><div class='name'>技术</div><div class='badge'>(3)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/Docker/" href="/categories/%E6%8A%80%E6%9C%AF/Docker/"
-            id="categoriesE68A80E69CAFDocker"
-            ><div class='name'>Docker</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/Linux/" href="/categories/%E6%8A%80%E6%9C%AF/Linux/"
-            id="categoriesE68A80E69CAFLinux"
-            ><div class='name'>Linux</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/%E6%8A%80%E6%9C%AF/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
-            id="categoriesE68A80E69CAFE5A49AE7BABFE7A88B"
-            ><div class='name'>多线程</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/"
             id="categoriesE7949FE4BAA7E58A9B"
             ><div class='name'>生产力</div><div class='badge'>(1)</div></a></li>
@@ -781,26 +736,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(137)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E4%B8%AA%E4%BA%BA%E7%9B%AE%E6%A0%87/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E4%B8%AA%E4%BA%BA%E7%9B%AE%E6%A0%87/"
-            id="categoriesE7A28EE7A28EE5BFB5E4B8AAE4BABAE79BAEE6A087"
-            ><div class='name'>个人目标</div><div class='badge'>(10)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%88%91%E7%9A%84%E6%97%A5%E5%B8%B8/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%88%91%E7%9A%84%E6%97%A5%E5%B8%B8/"
-            id="categoriesE7A28EE7A28EE5BFB5E68891E79A84E697A5E5B8B8"
-            ><div class='name'>我的日常</div><div class='badge'>(126)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93/"
-            id="categoriesE7A28EE7A28EE5BFB5E883A1E8AFB4E585ABE98193"
-            ><div class='name'>胡说八道</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
@@ -827,26 +762,6 @@
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE8AEBEE8AEA1E58E9FE58899"
             ><div class='name'>设计原则</div><div class='badge'>(1)</div></a></li>
         
-          <li><a class="flat-box"
-            title="/categories/%E8%B4%AD%E6%88%BF/" href="/categories/%E8%B4%AD%E6%88%BF/"
-            id="categoriesE8B4ADE688BF"
-            ><div class='name'>购房</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E8%B4%AD%E6%88%BF/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/" href="/categories/%E8%B4%AD%E6%88%BF/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/"
-            id="categoriesE8B4ADE688BFE585ACE7A7AFE98791E68F90E58F96"
-            ><div class='name'>公积金提取</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%87%91%E8%9E%8D/" href="/categories/%E9%87%91%E8%9E%8D/"
-            id="categoriesE98791E89E8D"
-            ><div class='name'>金融</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E9%87%91%E8%9E%8D/%E9%A6%99%E5%B8%85%E5%8C%97%E5%A4%A7%E9%87%91%E8%9E%8D%E8%AF%BE/" href="/categories/%E9%87%91%E8%9E%8D/%E9%A6%99%E5%B8%85%E5%8C%97%E5%A4%A7%E9%87%91%E8%9E%8D%E8%AF%BE/"
-            id="categoriesE98791E89E8DE9A699E5B885E58C97E5A4A7E98791E89E8DE8AFBE"
-            ><div class='name'>香帅北大金融课</div><div class='badge'>(1)</div></a></li>
-        
       </ul>
     </div>
   </section>
@@ -869,7 +784,7 @@
 
 
     <div class='content'>
-      <a href="/tags/2019%E7%9B%AE%E6%A0%87/" style="font-size: 18px; color: #7e7e7e">2019目标</a> <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 22px; color: #636363">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Netty/" style="font-size: 14px; color: #999">Netty</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/java/" style="font-size: 14px; color: #999">java</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%85%AC%E7%A7%AF%E9%87%91%E6%8F%90%E5%8F%96/" style="font-size: 14px; color: #999">公积金提取</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14px; color: #999">多线程</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 16px; color: #8b8b8b">技术</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%97%A5%E8%AE%B0/" style="font-size: 14px; color: #999">日记</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16px; color: #8b8b8b">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">责任链模式</a> <a href="/tags/%E8%B4%AD%E6%88%BF/" style="font-size: 16px; color: #8b8b8b">购房</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 21.5px; color: #666">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
     </div>
   </section>
 
