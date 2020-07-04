@@ -449,7 +449,7 @@
 </ul>
 <h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>Command的子类会随着命令的增多逐步膨胀。</p>
 <h3 id="命令的撤销"><a href="#命令的撤销" class="headerlink" title="命令的撤销"></a>命令的撤销</h3><h4 id="反命令"><a href="#反命令" class="headerlink" title="反命令"></a>反命令</h4><p>通过相反的命令来实现命令的撤销。</p>
-<h4 id="结合备忘录模式"><a href="#结合备忘录模式" class="headerlink" title="结合备忘录模式"></a>结合备忘录模式</h4><p>结合备忘录模式还原最后轧辊台，折中发昂发适合接收者为状态的变更情况，而不适合事件处理。</p>
+<h4 id="结合备忘录模式"><a href="#结合备忘录模式" class="headerlink" title="结合备忘录模式"></a>结合备忘录模式</h4><p>结合备忘录模式还原最后状态，折中发昂发适合接收者为状态的变更情况，而不适合事件处理。</p>
 <h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><p>假设有个录音机，录音机面板有三个按钮， play， rewind， stop。</p>
 <p>需要根据三个按钮作出相应的反馈。</p>
 <h3 id="Receiver-1"><a href="#Receiver-1" class="headerlink" title="Receiver"></a>Receiver</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AudioPlayer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paly</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Play"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rewind</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Rewind"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Stop"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -539,10 +539,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-03T18:03:54+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-04T06:54:03+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年7月3日</p>
+    <p>更新于：2020年7月4日</p>
   </a>
 </div>
 
@@ -568,6 +568,16 @@
         
         
           <div class="prev-next">
+            
+              <a class='prev' href='/2020/07/03/Spring-%E6%80%BB%E8%A7%88/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Spring 总览</p>
+                <p class='content'>
+Ioc/DI
+AOP
+事务管理
+
+</p>
+              </a>
             
             
               <a class='next' href='/2020/07/02/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/'>

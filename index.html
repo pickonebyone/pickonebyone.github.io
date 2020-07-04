@@ -352,8 +352,6 @@
       
         
           
-        
-          
             
               <div class='post-wrapper'>
                 <article class="post white-box shadow reveal ">
@@ -479,6 +477,8 @@
 
               </div>
             
+          
+        
           
         
           
@@ -696,350 +696,7 @@
           
         
           
-            
-              <div class='post-wrapper'>
-                <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
         
-          
-  <h2 class="title">
-    <a href="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
-      JVM内存模型
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月2日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>5</p>
-    </a>
-  </div>
-
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>计算机为了提升效率，增加了多内核，并且为每个内核增加了自己的高速缓存，而他们又共享同一个主内存。</p>
-<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm01.jpeg" alt="计算机处理器、高速缓存、主内存之间的交互关系"></p>
-<p>除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，但保证结果与顺序执行的结果一致。</p>
-<p>与处理器的乱序执行优化类似，Java虚拟机的即时编译器也有指令重排序优化。</p>
-<h2 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h2><p>《Java虚拟机规范》中曾试图定义一种Java内存模型来屏蔽各种硬件和操作系统的内存访问差异。</p>
-<h4 id="主内存与工作内存"><a href="#主内存与工作内存" class="headerlink" title="主内存与工作内存"></a>主内存与工作内存</h4><p>Java内存模型的主要目的是定义程序中各种变量的访问规则（关注虚拟机中把变量存储到内存和从内存中取出变量的底层细节。）<br>Java内存模型规定了所有的变量都存储在主内存（除线程私有的以外）。<br>线程的工作内存保存了被该线程使用的变量的主内存副本，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存的数据。不同的线程之间也无法直接访问对方工作内存的变量，线程之间变量值的传递均需要通过主内存来完成。</p>
-<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm02.jpeg" alt></p>
-<h3 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h3><p>关于主内存与工作内存之间的交互协议，Java内存模型中定义了8种的操作。</p>
-<p>Java虚拟机实现时必须保证每种操作都是原子的，不可再分的（对于double和long来讲，load、store、、read、write允许有例外）。</p>
-<ul>
-<li><p>lock ： 锁定，作用于主内存的变量，把一个变量标识为一条线程独占的状态。</p>
-</li>
-<li><p>unlock: 解锁，作用于主内存的变量，把一个处于锁定状体的变量释放出来，释放后的变量才可以被其他线程锁定。</p>
-</li>
-<li><p>read: 读取，作用于主内存的变量，把一个变量的值从主内存传输到工作内存，以便随后的load动作使用。</p>
-</li>
-<li><p>write: 写入，作用于主内存的变量，把store操作从工作内存中得到的变量值存放到主内存变量中。</p>
-</li>
-<li><p>load: 载入，作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。</p>
-</li>
-<li><p>use：使用，作用于工作内存的变量，把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。</p>
-</li>
-<li><p>assign: 赋值，作用于工作变量，把一个从执行引擎接收的值赋给工作内存变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</p>
-</li>
-<li><p>store: 存储，把工作内存中一个变量的值传送到内存中，以便随后的write操作使用。</p>
-</li>
-</ul>
-<p>Java内存模型规定必须满足如下规则：</p>
-<blockquote>
-<p>1) 不允许read 和 load、store和write操作单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者工作内存发起回写单主内存不接受<br>2）不允许一个线程丢弃它最近的assign操作，即变量在工作内存中改变了之后必须把该变化同步回主内存。<br>3）不允许一个线程在没有发生assign操作就把数据从线程的工作内存同步回主内存中。<br>4) 一个新的变量只能在主内存中“诞生”，不允许在工作内存中直接使用一个未被初始化（load\assign）的变量,即对一个变量进行use之前必须使用load， 使用store之前必须使用assign。。<br>5）一个变量在同一个时刻内只允许一个线程对其进行lock操作， 但lock操作可以被同一个线程重复执行多次， 多次执行lock后， 只有执行相同次数的unlock操作，变量才会被解锁。<br>6)对一个变量执行unlock之前， 必须先把此变量同步回主内存中（执行store、write操作）</p>
-</blockquote>
-<h3 id="volatile型变量的特殊规则"><a href="#volatile型变量的特殊规则" class="headerlink" title="volatile型变量的特殊规则"></a>volatile型变量的特殊规则</h3><p>volatile是Java虚拟机最轻量级的同步机制。它有两个特性：<br>1）保证此变量对于所有线程的可见性（一个线程修改了这个变量的值，其他线程立即可见，也就是每个线程在使用被volatile修饰的变量时，都会强制从主内存中同步该变量的值到工作内存中）<br> 在不符合以下两条规则的场景中，仍然需要通过加锁来保证原子性（synchronized、java.util.concurrent中的锁或者原子类）：</p>
-<ul>
-<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值；</li>
-<li>变量不需要与其他状态变量共同参与不变约束；</li>
-</ul>
-<p>2） 禁止指令重排序优化</p>
-<p>volatile变量读操作的性能与普通变量几乎没有差别，但是写操作会慢些， 因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
-<h4 id="Singleton-DoubleCheck"><a href="#Singleton-DoubleCheck" class="headerlink" title="Singleton DoubleCheck"></a>Singleton DoubleCheck</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private Singleton() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    private volatile static Singleton instance &#x3D; null;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">                    instance &#x3D; new Singleton(); &#x2F;&#x2F;warning</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上面的代码中，instance = new Singleton()最终会被编译成多条汇编指令。<br>（1）为Singleton的实例分配内存。<br>（2）调用Singleton的构造函数，初始化成员变量<br>（3）将instance对象指向分配的内存空间。</p>
-<p>或者可能被重排序为(1)、(3)、（2）， 也就是当分配内存后，如果没有对instance 加volatile，将instance对象指向分配的内存空间后，另外一个线程可以读到未被初始化的对象。</p>
-<h3 id="针对long和double类型变量的特殊规则"><a href="#针对long和double类型变量的特殊规则" class="headerlink" title="针对long和double类型变量的特殊规则"></a>针对long和double类型变量的特殊规则</h3><p>Java内存模型要求lock、unlock、read、write、 load、assign、use、store这8种操作都具有原子性，但是对于64位数据类型的long 和double, 在模型中定义了一条宽松的规定， 允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为2次32为的操作来执行，也就是虚拟机自己选择是否要保证64位数据类型的load、store、read、write这四个操作的原子性。</p>
-<p>经过实际的测试，在目前的主流平台下商用的64位Java虚拟机中并不会出现非原子性访问行为，但是对于32位的Java虚拟机（如32位的X86Hotspot）存在非原子性访问的风险。</p>
-<p>因此，在实际开发中，除非该数据有明确可知的线程竞争，否则我们在编写代码的时候一般不需要因为这个原因刻意把用到的long和double变量专门声明位volatile。</p>
-<h3 id="原子性、可见性与有序性"><a href="#原子性、可见性与有序性" class="headerlink" title="原子性、可见性与有序性"></a>原子性、可见性与有序性</h3><h5 id="原子性（Atomicity）"><a href="#原子性（Atomicity）" class="headerlink" title="原子性（Atomicity）"></a>原子性（Atomicity）</h5><p>有Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store、write。因此基本数据类型的访问都是具备原子性的。</p>
-<p>如果应用场景需要一个更大范围的保证，需要使用锁、或者synchronized关键字来保证原子性。<br>（lock、unlock并没有直接开放给用户使用）。</p>
-<h5 id="可见性（visibility）"><a href="#可见性（visibility）" class="headerlink" title="可见性（visibility）"></a>可见性（visibility）</h5><p>可见性就是当一个线程修改了共享变量的值时，其他线程能够立即得知这个修改。</p>
-<h6 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h6><p>volatile的特殊规则保证了新值立即能同步到主内存，以及每次使用前都立即从主内存刷新。而普通变量则不能保证“立即”。</p>
-<h6 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h6><p>同步块的可见性时由“对一个变量执行unlock操作之前，必须先把此变量同步回主内存中”这条规则获得。</p>
-<h6 id="final"><a href="#final" class="headerlink" title="final"></a>final</h6><p>被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把this的引用传递出去，那么在其他线程中就能看见final字段的值。</p>
-<blockquote>
-<p>this引用逃逸，其他线程有可能通过这个引用访问到“初始化了一般”的对象。</p>
-</blockquote>
-<h5 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h5><p>如果在本线程中观察，所有的操作都是有序的（线程内似表现为串行的语义）；<br>如果在一个线程中观察另一个线程，所有的操作都是无序的（指令重排序和工作内存与主内存同步延迟现象）；</p>
-<p>Java语言提供了volatile和sychronized两个关键字来保证线程之间的有序性。<br>volatile：本身包含了禁用指令重排序的语义；<br>synchronized：一个变量在同一时刻只允许一个线程对其进行lock操作；</p>
-<h3 id="先行发生原则"><a href="#先行发生原则" class="headerlink" title="先行发生原则"></a>先行发生原则</h3><p>先行发生原则：判断数据是否存在竞争，线程是否安全的重要手段。</p>
-<p>程序次序规则：在一个线程内，按照控制流顺序（分支、循环等），书写在前面的操作先行发生在书写在后面的操作；</p>
-<p>管程锁定规则：一个unlock的操作先行发生在后面对同一个锁的操作。</p>
-<p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作；</p>
-<p>线程启动规则：Thread对象的start（）方法先行发生于此线程的每一个动作；</p>
-<p>线程的中止规则：线程中所有的操作都先行发生于此线程的终止检测，可以通过thread.join()方法是否结束、thread.isAlive()返回值来检测线程是否已经停止；</p>
-<p>线程的终端规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过thread.interrupted()检测是否有中断发生；</p>
-<p>对象终结规则：一个对象初始化完成（构造函数执行结束）先行发生于他的finalize()方法的开始；</p>
-<p>传递性：如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出，操作A先行发生于操作C。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-              </div>
-            
-          
-        
-          
-            
-              <div class='post-wrapper'>
-                <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/01/ClassLoader/">
-      类加载器和类加载机制
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月1日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>3</p>
-    </a>
-  </div>
-
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Java代码要在JVM中正常运行，首先要先编译成.class文件，由类加载器将其加载到内存中。之后由类编译器来编译执行。<br>在加载的过程中需要注意什么呢？<br>1）什么时候需要加载一个类呢？<br>2）随便任何一个文件都是否可以被加载呢，它的加载过程是什么样的？<br>3）类加载器需要对内存中的内容做什么工作才可以被JVM直接使用？</p>
-<blockquote>
-<p>虚拟机把描述类的数据从 Class 文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Class类型，这就是虚拟机的类加载机制。—《深入理解Java虚拟机》</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">类型的加载、链接和初始化过程都是在程序运行期间完成的。</span><br><span class="line">Java可以动态扩展的语言特性就是依赖运行期动态加载和动态连接这个特点实现的。</span><br></pre></td></tr></table></figure>
-
-<h1 id="类的加载时机"><a href="#类的加载时机" class="headerlink" title="类的加载时机"></a>类的加载时机</h1><p>  Java虚拟机规范并没有规定什么时候加载类，但是规定了什么时候初始化一个类。</p>
-<p>  虚拟机规范严格规定了有且只有5中情况必须立即对类进行“初始化”。<br>  1）遇到new、getstatic、putstatic、invokestatic；<br>  2）初始化类的时候，对父类进行初始化；<br>  3）JVM执行的时候，对主类进行初始化；<br>  4）使用java.lang.reflect包的方法对类进行反射调用时；<br>  5）使用jdk1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandler实例最后解析结果是REF_getstatic, REF_putstatic, REF_invokestatic时，对该类进行初始化；<br>  6) jdk1.8中子类实现的接口中定义了default方法时；</p>
-<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p>类的加载过程总共分为：Loading（加载）、Linking（连接）、Initializing（初始化）、Using（使用）、Unloading（卸载）。<br>其中 Linking阶段 分为 Verification（验证）、Preparation（准备）、Resolution（解析）。</p>
-<p><img src="/2020/06/01/ClassLoader/ClassLoader.jpeg" alt="ClassLoader"></p>
-<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>加载阶段的成果是生成Class类对象，并将该对象存储在堆中。Class对象作为访问该对象数据的访问入口。<br>加载的步骤：<br>1） 根据类的全限定名读取类的二进制字节流；<br>2） 对二进制字节流进行解析转换，并将类信息存储在方法区中；<br>3） 堆中生成Class类对象，作为程序访问方法区中的类型数据的外部接口；</p>
-<blockquote>
-<p>注意：<br>数组类不通过类加载器创建，由java虚拟机直接在内存中动态构造出来的。<br>数组的元素类型（去掉所有维度）要靠类加载器加载完成。<br>数组的组件类型（去掉一个维度）是引用类型，数组将被标识在加载该组建类型的类加载器的类名称空间上。<br>如果数组的组件类型不是引用类型，Java虚拟机会把数组标记为与引导类加载器关联。</p>
-</blockquote>
-<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证加载的类信息是否符合Java虚拟机规范，类的实现和继承、方法的执行、对象和方法的可访问性等等，主要分为四个阶段：</p>
-<p>1）文件格式的验证<br>   主要对Class文件中内容进行验证，是否符合Java虚拟机规范。<br>   比如魔数、常量池的类型、指向常量的索引值是否存在或者类型是否正确等等；</p>
-<blockquote>
-<p>这个阶段的验证是基于二进制字节流进行的，只有通过了验证才会被允许进入Java虚拟机的内存方法区存储。</p>
-</blockquote>
-<p>2）元数据验证<br>   对字节码描述信息进行语义分析，保证描述信息符合《Java语言规范》比如:</p>
-<ul>
-<li>这个类是否有父类、父类是否允许继承（被final修饰）；</li>
-<li>这个类是否实现了父类所要求实现的所有方法；</li>
-<li>类中的字段、方法是否与父类产生矛盾；</li>
-</ul>
-<p>3）字节码验证<br>   对类的方法体进行验证，保证任何跳转指令都不会跳转到方法体以外的字节码指令上；<br>   保证类型转化都是有效的.</p>
-<p>4）符号引用验证</p>
-<blockquote>
-<p>虚拟机在解析阶段将符号引用转化为直接引用的时候，对符号引用进行验证；</p>
-</blockquote>
-<ul>
-<li>符号引用中通过字符串描述的全限定名能否找到对应的类；</li>
-<li>在指定类中是否存在符合方法的字段描述以及简单名称所描述的方法和字段；</li>
-<li>符号引用中的类、字段、方法的可访问性是否可以被当前类访问；</li>
-</ul>
-<p>符号引用阶段抛出的异常有：IllegalAccessError、NoSuchFieldError、NoSuchMethodError；</p>
-<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是正式为类中定义的变量分配内存并设置类变量初始值的阶段；</p>
-<p>对于类变量（静态属性），设置的是“零值”，真正赋值是在初始化阶段；<br>对于常量（final static），会被设置为ConstantValue属性所指定的初始值。</p>
-<blockquote>
-<p>对于常量，Javac时会为value生成ConstantValue属性。</p>
-</blockquote>
-<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是Java虚拟机将常量池的符号引用替换为直接引用的过程。《Java虚拟机规范》并没有规定何时进行解析。</p>
-<ul>
-<li>符号引用：可以无歧义的定位到目标即可；与虚拟机的内存布局无关；引用的目标不一定已经加载到虚拟机中；必须遵循《Java虚拟机规范》；</li>
-<li>直接引用：直接可以指向目标的指针、偏移量，或者可以间接定位到目标的句柄；与虚拟机的内存布局直接相关；直接引用的目标一定已经加载到虚拟机内存中；</li>
-</ul>
-<p>解析动作主要针对类或者接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符号引用进行。</p>
-<h5 id="类、接口解析："><a href="#类、接口解析：" class="headerlink" title="类、接口解析："></a>类、接口解析：</h5><p>虚拟机的完整解析过程：<br>1）如果不是一个数组类型，虚拟机将会把全限定名传给当前类的加载器去加载，在加载的过程中，由于元数据验证、字节码验证的需要，又可能出发其他相关类的加载动作。<br>2）如果是一个数组类型，并且数组的元素类型为对象，那么会按照第一点的规则加载数组元素类型。如果是基础数据类型包装类，那么由虚拟机生成一个代表该数组唯独和元素的数组对象；<br>3）前面两部解析OK后进行符号引用验证，确定当前类是否有加载类的访问权限。</p>
-<p>如果一个类拥有另外一个类的访问权限，那么至少有一条是成立的：<br>1）被访问类是public的，并且与访问类处于同一个模块；<br>2）被访问类是public的，不与访问类处于同一个模块，但是被访问类的模块允许访问类访问；<br>3）被访问类不是public的，但是与访问类处于同一个包中</p>
-<h5 id="字段解析"><a href="#字段解析" class="headerlink" title="字段解析"></a>字段解析</h5><p>对字段表内class_index项中索引的CONSTANT_Class_Info符号引用进行解析（即字段所属类）</p>
-<p>1）先查找当前类是否包含了简单名称与描述符与目标相匹配<br>2）从下往上的顺序查找实现的接口类<br>3）从下往上的顺序查找父类<br>4）都无法查找到，抛出java.lang.NoSuchFieldError.</p>
-<p>如果查找成果返回了引用，将会对这个字段进行权限验证，对于不具备权限的访问会抛出IllegalAccessError；</p>
-<h5 id="方法解析"><a href="#方法解析" class="headerlink" title="方法解析"></a>方法解析</h5><p>解析出方法表class_index项中索引的方法所属的类或者接口的符号引用。<br>具体的解析过程与字段解析类似。</p>
-<h5 id="接口方法解析"><a href="#接口方法解析" class="headerlink" title="接口方法解析"></a>接口方法解析</h5><p>与方法解析类似。</p>
-<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>这个阶段Java虚拟机才真正开始执行类中编写的程序代码。程序在这个阶段初始化类变量和其他资源。</p>
-<p>初始化阶段也是执行&lt;clinit&gt;()的过程。<br>&lt;clinit&gt;()方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块中的语句合并产生的；<br>编译器收集顺序是由语句在源文件中出现的顺序决定的；<br>静态语句块中智能访问到定义在静态语句块之前的变量；<br>定义在静态语句块后的变量，静态语句块可以赋值，但是不能访问；<br>Java虚拟机保证父类的&lt;clinit&gt;() 总是优先于子类的&lt;clinit&gt;()执行；</p>
-<blockquote>
-<p>如果一个类中没有静态语句块，也没有对变量的赋值操作，编译器可以不为这个类生成clinit()方法。</p>
-</blockquote>
-<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><p>类加载器主要通过一个类的全限定名来获取描述该类的二进制字节流，它处于Java虚拟机的外部，方便让应用程序自己决定如何获取所需的类。</p>
-<p>对于任意一个类，必须由加载它的类加载器与类本身来确定在Java虚拟机中的唯一性。<br>每个类加载器都拥有一个独立的类名称空间。</p>
-<h3 id="类加载器的双亲委派模型"><a href="#类加载器的双亲委派模型" class="headerlink" title="类加载器的双亲委派模型"></a>类加载器的双亲委派模型</h3><p><img src="/2020/06/01/ClassLoader/ClassLoader02.webp" alt="双亲委派模型"></p>
-<p>双亲委派模型要求除了顶层的启动类加载器之外，其余的类加载器都应有自己的父“类加载器”。<br>当类加载器需要加载一个类的时候，首先看该类是否已经被加载，如果没有被加载则尝试着让父“类加载器”去加载，如果没有父“类加载器”则让bootstrapClassLoader作为父“类加载器”，如果父“类加载器”加载失败，则使用自己的find_class方法去加载。</p>
-<ul>
-<li>启动类加载器（Bootstrap Class Loader）<br>启动类加载器负责加载&lt;JAVA_HOME&gt;\lib 目录下的jar包（按名字识别，名字不符合的类库存放在lib目录下也不会被加载），也可以指定 -Xbootclasspath参数指定加载目录。启动类加载器无法被java程序直接引用。</li>
-<li>扩展类加载器（Extension Class Loader）<br>扩展类加载器负责加载&lt;JAVA_HOME&gt;\lib\ext目录下的jar包，或者被java.ext.dirs指定的路径这种的所有类库。这个类加载器是在类sun.misc.Launcher$ExtClassLoader中以Java代码实现的。</li>
-<li>应用程序类加载器（Application Class Loader）<br>负责加载用户类路径上的所有类库。这个类加载器是在sun.misc.Launcher$AppClassLoader实现。</li>
-</ul>
-<h5 id="定制自己的类加载器"><a href="#定制自己的类加载器" class="headerlink" title="定制自己的类加载器"></a>定制自己的类加载器</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomClassLoader</span><span class="params">(ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">        String path = <span class="string">"/classes/"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream ins = <span class="keyword">new</span> FileInputStream(path + name.replace(<span class="string">"."</span>, File.separator) + <span class="string">".class"</span>);</span><br><span class="line">            ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            <span class="keyword">int</span> bufferSize = <span class="number">4096</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[bufferSize];</span><br><span class="line">            <span class="keyword">int</span> bytesNumRead = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> ((bytesNumRead = ins.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                baos.write(buffer, <span class="number">0</span>, bytesNumRead);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">byte</span>[] classData = baos.toByteArray();</span><br><span class="line">            <span class="keyword">return</span> defineClass(name, classData, <span class="number">0</span>, classData.length);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CustomClassLoader classLoader = <span class="keyword">new</span> CustomClassLoader(<span class="keyword">null</span>);</span><br><span class="line">        Class clazz = classLoader.loadClass(<span class="string">"com.*.ClassLoader"</span>);</span><br><span class="line">        System.out.println(clazz.getClassLoader());</span><br><span class="line">        System.out.println(clazz.getClass());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-              </div>
-            
           
         
           
@@ -1667,6 +1324,353 @@
           
         
           
+            
+              <div class='post-wrapper'>
+                <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/01/ClassLoader/">
+      类加载器和类加载机制
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月1日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item top-post">
+    <a class='notlink'>
+      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
+      <p>3</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java代码要在JVM中正常运行，首先要先编译成.class文件，由类加载器将其加载到内存中。之后由类编译器来编译执行。<br>在加载的过程中需要注意什么呢？<br>1）什么时候需要加载一个类呢？<br>2）随便任何一个文件都是否可以被加载呢，它的加载过程是什么样的？<br>3）类加载器需要对内存中的内容做什么工作才可以被JVM直接使用？</p>
+<blockquote>
+<p>虚拟机把描述类的数据从 Class 文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Class类型，这就是虚拟机的类加载机制。—《深入理解Java虚拟机》</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">类型的加载、链接和初始化过程都是在程序运行期间完成的。</span><br><span class="line">Java可以动态扩展的语言特性就是依赖运行期动态加载和动态连接这个特点实现的。</span><br></pre></td></tr></table></figure>
+
+<h1 id="类的加载时机"><a href="#类的加载时机" class="headerlink" title="类的加载时机"></a>类的加载时机</h1><p>  Java虚拟机规范并没有规定什么时候加载类，但是规定了什么时候初始化一个类。</p>
+<p>  虚拟机规范严格规定了有且只有5中情况必须立即对类进行“初始化”。<br>  1）遇到new、getstatic、putstatic、invokestatic；<br>  2）初始化类的时候，对父类进行初始化；<br>  3）JVM执行的时候，对主类进行初始化；<br>  4）使用java.lang.reflect包的方法对类进行反射调用时；<br>  5）使用jdk1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandler实例最后解析结果是REF_getstatic, REF_putstatic, REF_invokestatic时，对该类进行初始化；<br>  6) jdk1.8中子类实现的接口中定义了default方法时；</p>
+<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p>类的加载过程总共分为：Loading（加载）、Linking（连接）、Initializing（初始化）、Using（使用）、Unloading（卸载）。<br>其中 Linking阶段 分为 Verification（验证）、Preparation（准备）、Resolution（解析）。</p>
+<p><img src="/2020/06/01/ClassLoader/ClassLoader.jpeg" alt="ClassLoader"></p>
+<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>加载阶段的成果是生成Class类对象，并将该对象存储在堆中。Class对象作为访问该对象数据的访问入口。<br>加载的步骤：<br>1） 根据类的全限定名读取类的二进制字节流；<br>2） 对二进制字节流进行解析转换，并将类信息存储在方法区中；<br>3） 堆中生成Class类对象，作为程序访问方法区中的类型数据的外部接口；</p>
+<blockquote>
+<p>注意：<br>数组类不通过类加载器创建，由java虚拟机直接在内存中动态构造出来的。<br>数组的元素类型（去掉所有维度）要靠类加载器加载完成。<br>数组的组件类型（去掉一个维度）是引用类型，数组将被标识在加载该组建类型的类加载器的类名称空间上。<br>如果数组的组件类型不是引用类型，Java虚拟机会把数组标记为与引导类加载器关联。</p>
+</blockquote>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证加载的类信息是否符合Java虚拟机规范，类的实现和继承、方法的执行、对象和方法的可访问性等等，主要分为四个阶段：</p>
+<p>1）文件格式的验证<br>   主要对Class文件中内容进行验证，是否符合Java虚拟机规范。<br>   比如魔数、常量池的类型、指向常量的索引值是否存在或者类型是否正确等等；</p>
+<blockquote>
+<p>这个阶段的验证是基于二进制字节流进行的，只有通过了验证才会被允许进入Java虚拟机的内存方法区存储。</p>
+</blockquote>
+<p>2）元数据验证<br>   对字节码描述信息进行语义分析，保证描述信息符合《Java语言规范》比如:</p>
+<ul>
+<li>这个类是否有父类、父类是否允许继承（被final修饰）；</li>
+<li>这个类是否实现了父类所要求实现的所有方法；</li>
+<li>类中的字段、方法是否与父类产生矛盾；</li>
+</ul>
+<p>3）字节码验证<br>   对类的方法体进行验证，保证任何跳转指令都不会跳转到方法体以外的字节码指令上；<br>   保证类型转化都是有效的.</p>
+<p>4）符号引用验证</p>
+<blockquote>
+<p>虚拟机在解析阶段将符号引用转化为直接引用的时候，对符号引用进行验证；</p>
+</blockquote>
+<ul>
+<li>符号引用中通过字符串描述的全限定名能否找到对应的类；</li>
+<li>在指定类中是否存在符合方法的字段描述以及简单名称所描述的方法和字段；</li>
+<li>符号引用中的类、字段、方法的可访问性是否可以被当前类访问；</li>
+</ul>
+<p>符号引用阶段抛出的异常有：IllegalAccessError、NoSuchFieldError、NoSuchMethodError；</p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是正式为类中定义的变量分配内存并设置类变量初始值的阶段；</p>
+<p>对于类变量（静态属性），设置的是“零值”，真正赋值是在初始化阶段；<br>对于常量（final static），会被设置为ConstantValue属性所指定的初始值。</p>
+<blockquote>
+<p>对于常量，Javac时会为value生成ConstantValue属性。</p>
+</blockquote>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是Java虚拟机将常量池的符号引用替换为直接引用的过程。《Java虚拟机规范》并没有规定何时进行解析。</p>
+<ul>
+<li>符号引用：可以无歧义的定位到目标即可；与虚拟机的内存布局无关；引用的目标不一定已经加载到虚拟机中；必须遵循《Java虚拟机规范》；</li>
+<li>直接引用：直接可以指向目标的指针、偏移量，或者可以间接定位到目标的句柄；与虚拟机的内存布局直接相关；直接引用的目标一定已经加载到虚拟机内存中；</li>
+</ul>
+<p>解析动作主要针对类或者接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符号引用进行。</p>
+<h5 id="类、接口解析："><a href="#类、接口解析：" class="headerlink" title="类、接口解析："></a>类、接口解析：</h5><p>虚拟机的完整解析过程：<br>1）如果不是一个数组类型，虚拟机将会把全限定名传给当前类的加载器去加载，在加载的过程中，由于元数据验证、字节码验证的需要，又可能出发其他相关类的加载动作。<br>2）如果是一个数组类型，并且数组的元素类型为对象，那么会按照第一点的规则加载数组元素类型。如果是基础数据类型包装类，那么由虚拟机生成一个代表该数组唯独和元素的数组对象；<br>3）前面两部解析OK后进行符号引用验证，确定当前类是否有加载类的访问权限。</p>
+<p>如果一个类拥有另外一个类的访问权限，那么至少有一条是成立的：<br>1）被访问类是public的，并且与访问类处于同一个模块；<br>2）被访问类是public的，不与访问类处于同一个模块，但是被访问类的模块允许访问类访问；<br>3）被访问类不是public的，但是与访问类处于同一个包中</p>
+<h5 id="字段解析"><a href="#字段解析" class="headerlink" title="字段解析"></a>字段解析</h5><p>对字段表内class_index项中索引的CONSTANT_Class_Info符号引用进行解析（即字段所属类）</p>
+<p>1）先查找当前类是否包含了简单名称与描述符与目标相匹配<br>2）从下往上的顺序查找实现的接口类<br>3）从下往上的顺序查找父类<br>4）都无法查找到，抛出java.lang.NoSuchFieldError.</p>
+<p>如果查找成果返回了引用，将会对这个字段进行权限验证，对于不具备权限的访问会抛出IllegalAccessError；</p>
+<h5 id="方法解析"><a href="#方法解析" class="headerlink" title="方法解析"></a>方法解析</h5><p>解析出方法表class_index项中索引的方法所属的类或者接口的符号引用。<br>具体的解析过程与字段解析类似。</p>
+<h5 id="接口方法解析"><a href="#接口方法解析" class="headerlink" title="接口方法解析"></a>接口方法解析</h5><p>与方法解析类似。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>这个阶段Java虚拟机才真正开始执行类中编写的程序代码。程序在这个阶段初始化类变量和其他资源。</p>
+<p>初始化阶段也是执行&lt;clinit&gt;()的过程。<br>&lt;clinit&gt;()方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块中的语句合并产生的；<br>编译器收集顺序是由语句在源文件中出现的顺序决定的；<br>静态语句块中智能访问到定义在静态语句块之前的变量；<br>定义在静态语句块后的变量，静态语句块可以赋值，但是不能访问；<br>Java虚拟机保证父类的&lt;clinit&gt;() 总是优先于子类的&lt;clinit&gt;()执行；</p>
+<blockquote>
+<p>如果一个类中没有静态语句块，也没有对变量的赋值操作，编译器可以不为这个类生成clinit()方法。</p>
+</blockquote>
+<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><p>类加载器主要通过一个类的全限定名来获取描述该类的二进制字节流，它处于Java虚拟机的外部，方便让应用程序自己决定如何获取所需的类。</p>
+<p>对于任意一个类，必须由加载它的类加载器与类本身来确定在Java虚拟机中的唯一性。<br>每个类加载器都拥有一个独立的类名称空间。</p>
+<h3 id="类加载器的双亲委派模型"><a href="#类加载器的双亲委派模型" class="headerlink" title="类加载器的双亲委派模型"></a>类加载器的双亲委派模型</h3><p><img src="/2020/06/01/ClassLoader/ClassLoader02.webp" alt="双亲委派模型"></p>
+<p>双亲委派模型要求除了顶层的启动类加载器之外，其余的类加载器都应有自己的父“类加载器”。<br>当类加载器需要加载一个类的时候，首先看该类是否已经被加载，如果没有被加载则尝试着让父“类加载器”去加载，如果没有父“类加载器”则让bootstrapClassLoader作为父“类加载器”，如果父“类加载器”加载失败，则使用自己的find_class方法去加载。</p>
+<ul>
+<li>启动类加载器（Bootstrap Class Loader）<br>启动类加载器负责加载&lt;JAVA_HOME&gt;\lib 目录下的jar包（按名字识别，名字不符合的类库存放在lib目录下也不会被加载），也可以指定 -Xbootclasspath参数指定加载目录。启动类加载器无法被java程序直接引用。</li>
+<li>扩展类加载器（Extension Class Loader）<br>扩展类加载器负责加载&lt;JAVA_HOME&gt;\lib\ext目录下的jar包，或者被java.ext.dirs指定的路径这种的所有类库。这个类加载器是在类sun.misc.Launcher$ExtClassLoader中以Java代码实现的。</li>
+<li>应用程序类加载器（Application Class Loader）<br>负责加载用户类路径上的所有类库。这个类加载器是在sun.misc.Launcher$AppClassLoader实现。</li>
+</ul>
+<h5 id="定制自己的类加载器"><a href="#定制自己的类加载器" class="headerlink" title="定制自己的类加载器"></a>定制自己的类加载器</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomClassLoader</span><span class="params">(ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">        String path = <span class="string">"/classes/"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream ins = <span class="keyword">new</span> FileInputStream(path + name.replace(<span class="string">"."</span>, File.separator) + <span class="string">".class"</span>);</span><br><span class="line">            ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            <span class="keyword">int</span> bufferSize = <span class="number">4096</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[bufferSize];</span><br><span class="line">            <span class="keyword">int</span> bytesNumRead = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> ((bytesNumRead = ins.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                baos.write(buffer, <span class="number">0</span>, bytesNumRead);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">byte</span>[] classData = baos.toByteArray();</span><br><span class="line">            <span class="keyword">return</span> defineClass(name, classData, <span class="number">0</span>, classData.length);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CustomClassLoader classLoader = <span class="keyword">new</span> CustomClassLoader(<span class="keyword">null</span>);</span><br><span class="line">        Class clazz = classLoader.loadClass(<span class="string">"com.*.ClassLoader"</span>);</span><br><span class="line">        System.out.println(clazz.getClassLoader());</span><br><span class="line">        System.out.println(clazz.getClass());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+              </div>
+            
+          
+        
+          
+            
+              <div class='post-wrapper'>
+                <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+      JVM内存模型
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月2日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item top-post">
+    <a class='notlink'>
+      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
+      <p>5</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>计算机为了提升效率，增加了多内核，并且为每个内核增加了自己的高速缓存，而他们又共享同一个主内存。</p>
+<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm01.jpeg" alt="计算机处理器、高速缓存、主内存之间的交互关系"></p>
+<p>除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，但保证结果与顺序执行的结果一致。</p>
+<p>与处理器的乱序执行优化类似，Java虚拟机的即时编译器也有指令重排序优化。</p>
+<h2 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h2><p>《Java虚拟机规范》中曾试图定义一种Java内存模型来屏蔽各种硬件和操作系统的内存访问差异。</p>
+<h4 id="主内存与工作内存"><a href="#主内存与工作内存" class="headerlink" title="主内存与工作内存"></a>主内存与工作内存</h4><p>Java内存模型的主要目的是定义程序中各种变量的访问规则（关注虚拟机中把变量存储到内存和从内存中取出变量的底层细节。）<br>Java内存模型规定了所有的变量都存储在主内存（除线程私有的以外）。<br>线程的工作内存保存了被该线程使用的变量的主内存副本，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存的数据。不同的线程之间也无法直接访问对方工作内存的变量，线程之间变量值的传递均需要通过主内存来完成。</p>
+<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm02.jpeg" alt></p>
+<h3 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h3><p>关于主内存与工作内存之间的交互协议，Java内存模型中定义了8种的操作。</p>
+<p>Java虚拟机实现时必须保证每种操作都是原子的，不可再分的（对于double和long来讲，load、store、、read、write允许有例外）。</p>
+<ul>
+<li><p>lock ： 锁定，作用于主内存的变量，把一个变量标识为一条线程独占的状态。</p>
+</li>
+<li><p>unlock: 解锁，作用于主内存的变量，把一个处于锁定状体的变量释放出来，释放后的变量才可以被其他线程锁定。</p>
+</li>
+<li><p>read: 读取，作用于主内存的变量，把一个变量的值从主内存传输到工作内存，以便随后的load动作使用。</p>
+</li>
+<li><p>write: 写入，作用于主内存的变量，把store操作从工作内存中得到的变量值存放到主内存变量中。</p>
+</li>
+<li><p>load: 载入，作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。</p>
+</li>
+<li><p>use：使用，作用于工作内存的变量，把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。</p>
+</li>
+<li><p>assign: 赋值，作用于工作变量，把一个从执行引擎接收的值赋给工作内存变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</p>
+</li>
+<li><p>store: 存储，把工作内存中一个变量的值传送到内存中，以便随后的write操作使用。</p>
+</li>
+</ul>
+<p>Java内存模型规定必须满足如下规则：</p>
+<blockquote>
+<p>1) 不允许read 和 load、store和write操作单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者工作内存发起回写单主内存不接受<br>2）不允许一个线程丢弃它最近的assign操作，即变量在工作内存中改变了之后必须把该变化同步回主内存。<br>3）不允许一个线程在没有发生assign操作就把数据从线程的工作内存同步回主内存中。<br>4) 一个新的变量只能在主内存中“诞生”，不允许在工作内存中直接使用一个未被初始化（load\assign）的变量,即对一个变量进行use之前必须使用load， 使用store之前必须使用assign。。<br>5）一个变量在同一个时刻内只允许一个线程对其进行lock操作， 但lock操作可以被同一个线程重复执行多次， 多次执行lock后， 只有执行相同次数的unlock操作，变量才会被解锁。<br>6)对一个变量执行unlock之前， 必须先把此变量同步回主内存中（执行store、write操作）</p>
+</blockquote>
+<h3 id="volatile型变量的特殊规则"><a href="#volatile型变量的特殊规则" class="headerlink" title="volatile型变量的特殊规则"></a>volatile型变量的特殊规则</h3><p>volatile是Java虚拟机最轻量级的同步机制。它有两个特性：<br>1）保证此变量对于所有线程的可见性（一个线程修改了这个变量的值，其他线程立即可见，也就是每个线程在使用被volatile修饰的变量时，都会强制从主内存中同步该变量的值到工作内存中）<br> 在不符合以下两条规则的场景中，仍然需要通过加锁来保证原子性（synchronized、java.util.concurrent中的锁或者原子类）：</p>
+<ul>
+<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值；</li>
+<li>变量不需要与其他状态变量共同参与不变约束；</li>
+</ul>
+<p>2） 禁止指令重排序优化</p>
+<p>volatile变量读操作的性能与普通变量几乎没有差别，但是写操作会慢些， 因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
+<h4 id="Singleton-DoubleCheck"><a href="#Singleton-DoubleCheck" class="headerlink" title="Singleton DoubleCheck"></a>Singleton DoubleCheck</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private Singleton() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    private volatile static Singleton instance &#x3D; null;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">                    instance &#x3D; new Singleton(); &#x2F;&#x2F;warning</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，instance = new Singleton()最终会被编译成多条汇编指令。<br>（1）为Singleton的实例分配内存。<br>（2）调用Singleton的构造函数，初始化成员变量<br>（3）将instance对象指向分配的内存空间。</p>
+<p>或者可能被重排序为(1)、(3)、（2）， 也就是当分配内存后，如果没有对instance 加volatile，将instance对象指向分配的内存空间后，另外一个线程可以读到未被初始化的对象。</p>
+<h3 id="针对long和double类型变量的特殊规则"><a href="#针对long和double类型变量的特殊规则" class="headerlink" title="针对long和double类型变量的特殊规则"></a>针对long和double类型变量的特殊规则</h3><p>Java内存模型要求lock、unlock、read、write、 load、assign、use、store这8种操作都具有原子性，但是对于64位数据类型的long 和double, 在模型中定义了一条宽松的规定， 允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为2次32为的操作来执行，也就是虚拟机自己选择是否要保证64位数据类型的load、store、read、write这四个操作的原子性。</p>
+<p>经过实际的测试，在目前的主流平台下商用的64位Java虚拟机中并不会出现非原子性访问行为，但是对于32位的Java虚拟机（如32位的X86Hotspot）存在非原子性访问的风险。</p>
+<p>因此，在实际开发中，除非该数据有明确可知的线程竞争，否则我们在编写代码的时候一般不需要因为这个原因刻意把用到的long和double变量专门声明位volatile。</p>
+<h3 id="原子性、可见性与有序性"><a href="#原子性、可见性与有序性" class="headerlink" title="原子性、可见性与有序性"></a>原子性、可见性与有序性</h3><h5 id="原子性（Atomicity）"><a href="#原子性（Atomicity）" class="headerlink" title="原子性（Atomicity）"></a>原子性（Atomicity）</h5><p>有Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store、write。因此基本数据类型的访问都是具备原子性的。</p>
+<p>如果应用场景需要一个更大范围的保证，需要使用锁、或者synchronized关键字来保证原子性。<br>（lock、unlock并没有直接开放给用户使用）。</p>
+<h5 id="可见性（visibility）"><a href="#可见性（visibility）" class="headerlink" title="可见性（visibility）"></a>可见性（visibility）</h5><p>可见性就是当一个线程修改了共享变量的值时，其他线程能够立即得知这个修改。</p>
+<h6 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h6><p>volatile的特殊规则保证了新值立即能同步到主内存，以及每次使用前都立即从主内存刷新。而普通变量则不能保证“立即”。</p>
+<h6 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h6><p>同步块的可见性时由“对一个变量执行unlock操作之前，必须先把此变量同步回主内存中”这条规则获得。</p>
+<h6 id="final"><a href="#final" class="headerlink" title="final"></a>final</h6><p>被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把this的引用传递出去，那么在其他线程中就能看见final字段的值。</p>
+<blockquote>
+<p>this引用逃逸，其他线程有可能通过这个引用访问到“初始化了一般”的对象。</p>
+</blockquote>
+<h5 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h5><p>如果在本线程中观察，所有的操作都是有序的（线程内似表现为串行的语义）；<br>如果在一个线程中观察另一个线程，所有的操作都是无序的（指令重排序和工作内存与主内存同步延迟现象）；</p>
+<p>Java语言提供了volatile和sychronized两个关键字来保证线程之间的有序性。<br>volatile：本身包含了禁用指令重排序的语义；<br>synchronized：一个变量在同一时刻只允许一个线程对其进行lock操作；</p>
+<h3 id="先行发生原则"><a href="#先行发生原则" class="headerlink" title="先行发生原则"></a>先行发生原则</h3><p>先行发生原则：判断数据是否存在竞争，线程是否安全的重要手段。</p>
+<p>程序次序规则：在一个线程内，按照控制流顺序（分支、循环等），书写在前面的操作先行发生在书写在后面的操作；</p>
+<p>管程锁定规则：一个unlock的操作先行发生在后面对同一个锁的操作。</p>
+<p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作；</p>
+<p>线程启动规则：Thread对象的start（）方法先行发生于此线程的每一个动作；</p>
+<p>线程的中止规则：线程中所有的操作都先行发生于此线程的终止检测，可以通过thread.join()方法是否结束、thread.isAlive()返回值来检测线程是否已经停止；</p>
+<p>线程的终端规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过thread.interrupted()检测是否有中断发生；</p>
+<p>对象终结规则：一个对象初始化完成（构造函数执行结束）先行发生于他的finalize()方法的开始；</p>
+<p>传递性：如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出，操作A先行发生于操作C。</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+              </div>
+            
+          
+        
+          
         
           
         
@@ -1694,8 +1698,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/03/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/">
-      命令模式
+    <a href="/2020/07/04/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/">
+      备忘录模式
     </a>
   </h2>
 
@@ -1723,6 +1727,140 @@
     <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
       <p>设计模式/行为型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月4日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>在不破坏封装性的前提下，捕获一个对象的内部状态，并在该状态之外保存这个状态。<br>这样以后就可以将该状态恢复到原来保存的状态。</p>
+<p><img src="/2020/07/04/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/memento.jpeg" alt="备忘录模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Originator"><a href="#Originator" class="headerlink" title="Originator"></a>Originator</h4><p>发起人角色，记录当前时刻的内部状态，负责定义哪些属性备份范围的状态，负责创建和恢复备忘录数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Boy</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String state = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">change</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = <span class="string">" I Am So Sad."</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(String state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 可以创建多个备份</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  Memento <span class="title">createMemento</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Memento(<span class="keyword">this</span>.state);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 可以选择任意的备份进行恢复</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> memento</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restore</span><span class="params">(Memento memento)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setState(memento.getState());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Memento"><a href="#Memento" class="headerlink" title="Memento"></a>Memento</h4><p>备忘录角色，负责存储Originator发起人对象的内部状态，在需要的时候提供发起人需要的内部状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Memento</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String state = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Memento</span><span class="params">(String state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(String state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Caretaker"><a href="#Caretaker" class="headerlink" title="Caretaker"></a>Caretaker</h4><p>备忘录管理员角色，对备忘录进行管理、保存和提供备忘录。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Caretaker</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Memento memento;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Memento <span class="title">getMemento</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> memento;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMemento</span><span class="params">(Memento memento)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.memento = memento;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Caretaker caretaker = <span class="keyword">new</span> Caretaker();</span><br><span class="line">caretaker.setMemento(boy.createMemento());</span><br><span class="line">System.out.println(<span class="string">"Now Boy Is : "</span> + boy.getState());</span><br><span class="line"></span><br><span class="line">boy.change();</span><br><span class="line">System.out.println(<span class="string">"Now Boy Is : "</span> + boy.getState());</span><br><span class="line"></span><br><span class="line">boy.restore(caretaker.getMemento());</span><br><span class="line">System.out.println(<span class="string">"Now Boy Is : "</span> + boy.getState());</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>需要保存和恢复数据的相关状态场景</li>
+<li>提供一个可回滚的操作 </li>
+<li>需要监控的副本场景中</li>
+<li>数据库连接的事务管理</li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>备忘录的生命周期<br>主动管理备忘录的生命周期，不实用就需要立即删除其引用。</li>
+<li>备忘录的性能<br>要控制备忘录的历史记录数量，以及大对象的备忘录。</li>
+</ul>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="Clone方式的备忘录"><a href="#Clone方式的备忘录" class="headerlink" title="Clone方式的备忘录"></a>Clone方式的备忘录</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Originator</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String state = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(String state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Originator <span class="title">createMemento</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreMemento</span><span class="params">(Originator originator)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setState(originator.getState());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Originator <span class="title">clone</span><span class="params">()</span>  </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> (Originator)<span class="keyword">super</span>.clone();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Caretaker</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Originator originator;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Originator <span class="title">getOriginator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> originator;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOriginator</span><span class="params">(Originator originator)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.originator = originator;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="多状态的备忘录模式"><a href="#多状态的备忘录模式" class="headerlink" title="多状态的备忘录模式"></a>多状态的备忘录模式</h4><p>把整个对象转换成Map，当然也可以序列化、或者直接复制整个对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Memento</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String,Object&gt; stateMap;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Memento</span><span class="params">(HashMap&lt;String, Object&gt; stateMap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stateMap = stateMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> HashMap&lt;String, Object&gt; <span class="title">getStateMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stateMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStateMap</span><span class="params">(HashMap&lt;String, Object&gt; stateMap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stateMap = stateMap;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.beans.BeanInfo;</span><br><span class="line"><span class="keyword">import</span> java.beans.Introspector;</span><br><span class="line"><span class="keyword">import</span> java.beans.PropertyDescriptor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HashMap&lt;String,Object&gt; <span class="title">backupProp</span><span class="params">(Object bean)</span></span>&#123;</span><br><span class="line">        HashMap&lt;String,Object&gt; result = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());</span><br><span class="line">            PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();</span><br><span class="line">            <span class="keyword">for</span> (PropertyDescriptor descriptor : descriptors) &#123;</span><br><span class="line">                String fieldName = descriptor.getName();</span><br><span class="line">                Method getter = descriptor.getReadMethod();</span><br><span class="line">                Object fieldValue = getter.invoke(bean, <span class="keyword">new</span> Object()&#123;&#125;);</span><br><span class="line">                <span class="keyword">if</span> (!fieldName.equalsIgnoreCase(<span class="string">"class"</span>))&#123;</span><br><span class="line">                    result.put(fieldName, fieldValue);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">restoreProp</span><span class="params">(Object bean, HashMap&lt;String,Object&gt; propMap)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());</span><br><span class="line">            PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();</span><br><span class="line">            <span class="keyword">for</span> (PropertyDescriptor descriptor : descriptors) &#123;</span><br><span class="line">                String fieldName = descriptor.getName();</span><br><span class="line">                <span class="keyword">if</span> (propMap.containsKey(fieldName))&#123;</span><br><span class="line">                    Method setter  = descriptor.getWriteMethod();</span><br><span class="line">                    setter.invoke(bean, <span class="keyword">new</span> Object[]&#123;propMap.get(fieldName)&#125;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Originator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String state1 = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> String state2 = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> String state3 = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState1</span><span class="params">(String state1)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state1 = state1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState2</span><span class="params">(String state2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state2 = state2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState3</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state3;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState3</span><span class="params">(String state3)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state3 = state3;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Memento <span class="title">createMemento</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Memento(BeanUtils.backupProp(<span class="keyword">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreMemento</span><span class="params">(Memento memento)</span></span>&#123;</span><br><span class="line">        BeanUtils.restoreProp(<span class="keyword">this</span>, memento.getStateMap());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="多备份的备忘录"><a href="#多备份的备忘录" class="headerlink" title="多备份的备忘录"></a>多备份的备忘录</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Caretaker</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    Map&lt;String, Memento&gt; map =  <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">backup</span><span class="params">(String version, Memento memento)</span></span>&#123;</span><br><span class="line">        map.put(version, memento);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Memento <span class="title">get</span><span class="params">(String version)</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> map.get(version);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,Memento&gt; <span class="title">getAll</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">this</span>.map;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="优雅的实现"><a href="#优雅的实现" class="headerlink" title="优雅的实现"></a>优雅的实现</h3><p>Bean 对象专注自己的业务，不需要关心备份和恢复业务。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Original</span> <span class="keyword">implements</span> <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String state;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String info;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(String state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> info;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setInfo</span><span class="params">(String info)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.info = info;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>备份管理员负责版本的备份与恢复工作，职责明晰。<br>同时要注意历史版本次数，防止版本过多。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Caretacker</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, Original&gt; histo = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">backup</span><span class="params">(String key, Original o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (histo.size() &gt;= <span class="number">10</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            histo.put(key,(Original) o.clone() );</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Original <span class="title">get</span><span class="params">(String k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> histo.get(k);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/07/03/Spring-%E6%80%BB%E8%A7%88/">
+      Spring 总览
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
     </a>
   </div>
 
@@ -1761,198 +1899,11 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><p>命令模式的封装性非常好，把请求方（Invoker）和执行方（Receiver）分开，扩展性也非常好。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将一个请求封装成一个对象，从而使得不同的请求把客户端参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。</p>
-<p><img src="/2020/07/03/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/command_diagram.jpeg" alt="命令模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Receiver"><a href="#Receiver" class="headerlink" title="Receiver"></a>Receiver</h4><p>抽象接收者，定义每个接收者都必须完成的业务。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Receiver</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>具体的Receiver</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Concrete1Reveiver</span> <span class="keyword">extends</span> <span class="title">Receiver</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Concrete2Reveiver</span> <span class="keyword">extends</span> <span class="title">Receiver</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="Command"><a href="#Command" class="headerlink" title="Command"></a>Command</h4><p>不同的命令实现都需要继承该类，实现自己的execute逻辑。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span>  <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>具体的命令实现类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteCommand1</span> <span class="keyword">extends</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Receiver receiver;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteCommand1</span><span class="params">(Receiver receiver)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.receiver = receiver;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.receiver.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteCommand2</span> <span class="keyword">extends</span> <span class="title">Command</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Receiver receiver;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteCommand2</span><span class="params">(Receiver receiver)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.receiver = receiver;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.receiver.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Invoker"><a href="#Invoker" class="headerlink" title="Invoker"></a>Invoker</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Invoker</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Command command;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCommand</span><span class="params">(Command command)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.command = command;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">action</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.command.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Invoker invoker = <span class="keyword">new</span> Invoker();</span><br><span class="line">invoker.setCommand(<span class="keyword">new</span> ConcreteCommand1(<span class="keyword">new</span> Concrete1Reveiver()));</span><br><span class="line">invoker.action();</span><br></pre></td></tr></table></figure>
-
-<h3 id="模式应用"><a href="#模式应用" class="headerlink" title="模式应用"></a>模式应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
-<li>解耦<br>调用者角色与接收者角色之间没有任何依赖关系，调用者实现功能时只需要调用Command抽象类的execute方法即可，不需要了解是哪个接收者执行。</li>
-<li>可扩展性好<br>Command子类可以非常容易的扩展，调用者Invoker和高层的模块Client不产生严重的代码耦合。</li>
-<li>与其他模式混合使用<br>与责任链模式结合，实现命令族解析任务<br>与模版方法结合，减少Command子类膨胀的问题。</li>
+        <ul>
+<li>Ioc/DI</li>
+<li>AOP</li>
+<li>事务管理</li>
 </ul>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>Command的子类会随着命令的增多逐步膨胀。</p>
-<h3 id="命令的撤销"><a href="#命令的撤销" class="headerlink" title="命令的撤销"></a>命令的撤销</h3><h4 id="反命令"><a href="#反命令" class="headerlink" title="反命令"></a>反命令</h4><p>通过相反的命令来实现命令的撤销。</p>
-<h4 id="结合备忘录模式"><a href="#结合备忘录模式" class="headerlink" title="结合备忘录模式"></a>结合备忘录模式</h4><p>结合备忘录模式还原最后轧辊台，折中发昂发适合接收者为状态的变更情况，而不适合事件处理。</p>
-<h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><p>假设有个录音机，录音机面板有三个按钮， play， rewind， stop。</p>
-<p>需要根据三个按钮作出相应的反馈。</p>
-<h3 id="Receiver-1"><a href="#Receiver-1" class="headerlink" title="Receiver"></a>Receiver</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AudioPlayer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paly</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Play"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rewind</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Rewind"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Stop"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Command-1"><a href="#Command-1" class="headerlink" title="Command"></a>Command</h3><p>不同的Command调用不同的Receiver命令。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> AudioPlayer audioPlayer = <span class="keyword">new</span> AudioPlayer();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlayCommand</span> <span class="keyword">extends</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.audioPlayer.paly();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RewindCommand</span> <span class="keyword">extends</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        audioPlayer.rewind();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StopCommand</span> <span class="keyword">extends</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        audioPlayer.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Invoker-1"><a href="#Invoker-1" class="headerlink" title="Invoker"></a>Invoker</h3><p>用于转发Command</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KeyPad</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Command command;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCommand</span><span class="params">(Command command)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.command = command;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">action</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.command.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Use-1"><a href="#Use-1" class="headerlink" title="Use"></a>Use</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">KeyPad keyPad = <span class="keyword">new</span> KeyPad();</span><br><span class="line"></span><br><span class="line">keyPad.setCommand(<span class="keyword">new</span> RewindCommand());</span><br><span class="line">keyPad.action();</span><br><span class="line"></span><br><span class="line">keyPad.setCommand(<span class="keyword">new</span> StopCommand());</span><br><span class="line">keyPad.action();</span><br></pre></td></tr></table></figure>
-
-<p>如果后期需要增加一个按钮，stopAndRewind()，直接增加一个Command子类即可，其他地方不需要动。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StopAndRewindCommand</span> <span class="keyword">extends</span>  <span class="title">Command</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        audioPlayer.stop();</span><br><span class="line">        audioPlayer.rewind();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/07/02/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">
-      模版方法模式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/行为型模式</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月2日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="模版方法模式"><a href="#模版方法模式" class="headerlink" title="模版方法模式"></a>模版方法模式</h2><p>抽象类定义一组方法的执行顺序，具体的功能由子类来实现。<br>它仅仅使用了Java的继承机制，但使用非常广泛。<br>一般多个子类有公有的方法，并且逻辑基本相同的时候使用。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>定义一个操作中的算法框架，再将一些步骤延迟到子类中。使得子类可以不改变算法的结构就可以定义该算法的某些特定步骤。</p>
-<p><img src="/2020/07/02/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/template_method_class.jpeg" alt="模版方法模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="基本方法"><a href="#基本方法" class="headerlink" title="基本方法"></a>基本方法</h4><p>一些基本的操作，由子类实现具体的逻辑，在模版方法中被调用。</p>
-<h4 id="模版方法"><a href="#模版方法" class="headerlink" title="模版方法"></a>模版方法</h4><p>模版方法可以有一个或者多个，一般是一个具体的方法，包含了基本方法的调用逻辑。</p>
-<p>抽象模版类中包含了一个模版方法goToSchool和三个基本方法toSchool, study, goHome.<br>这样，每个学生继承该抽象类实现自己逻辑即可。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentBehavor</span></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">toSchool</span><span class="params">()</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">study</span><span class="params">()</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">goHome</span><span class="params">()</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">goToSchool</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="comment">//do something.</span></span><br><span class="line">       toSchool();</span><br><span class="line">       <span class="comment">// do something.</span></span><br><span class="line">       study();</span><br><span class="line">       <span class="comment">// do something.</span></span><br><span class="line">       goHome();</span><br><span class="line">       <span class="comment">// do something.</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
-<li><p>封装不变部分，扩展可变部分<br>把认为不变的部分算法封装到父类实现，可变部分通过继承来扩展。</p>
-</li>
-<li><p>提取公共部分代码，便于维护</p>
-</li>
-<li><p>行为由父类控制，子类实现<br>基本方法由子类实现，子类可以扩展增加相应的功能，符合开闭原则。</p>
-</li>
-</ul>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>在复杂的项目中，增加代码的阅读难度。</p>
 
       
     </div>
@@ -1973,7 +1924,7 @@
       <div class="prev-next">
         
         <p class="current">
-          1 / 19
+          1 / 20
         </p>
         
           <a class="next" rel="next" href="/page/2/">
@@ -2034,7 +1985,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(16)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(17)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
@@ -2045,6 +1996,11 @@
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/"
             id="categoriesJavaE68A80E69CAFE6A088JavaE8999AE68B9FE69CBA"
             ><div class='name'>Java虚拟机</div><div class='badge'>(11)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/"
+            id="categoriesJavaE68A80E69CAFE6A088Spring"
+            ><div class='name'>Spring</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/Linux/" href="/categories/Linux/"
@@ -2094,7 +2050,7 @@
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
-            ><div class='name'>设计模式</div><div class='badge'>(16)</div></a></li>
+            ><div class='name'>设计模式</div><div class='badge'>(17)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
@@ -2109,7 +2065,7 @@
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE8A18CE4B8BAE59E8BE6A8A1E5BC8F"
-            ><div class='name'>行为型模式</div><div class='badge'>(8)</div></a></li>
+            ><div class='name'>行为型模式</div><div class='badge'>(9)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"
@@ -2138,7 +2094,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 22px; color: #636363">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18px; color: #7e7e7e">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16px; color: #8b8b8b">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16px; color: #8b8b8b">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 22.33px; color: #606060">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 15.67px; color: #8e8e8e">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20.67px; color: #6c6c6c">行为型模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 17.33px; color: #828282">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
     </div>
   </section>
 
