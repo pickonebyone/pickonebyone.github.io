@@ -365,8 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/18/Redis%E9%9B%86%E7%BE%A4/">
-      Redis集群
+    <a href="/2020/06/20/%E5%88%86%E5%B8%83%E5%BC%8FID%E7%94%9F%E6%88%90%E5%99%A8/">
+      分布式ID生成器
     </a>
   </h2>
 
@@ -391,9 +391,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Redis/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/' rel="nofollow">
+    <a href='/categories/%E5%88%86%E5%B8%83%E5%BC%8F/ID%E7%94%9F%E6%88%90%E5%99%A8/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Redis/集群部署</p>
+      <p>分布式/ID生成器</p>
     </a>
   </div>
 
@@ -404,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月18日</p>
+    <p>发布于：2020年6月20日</p>
   </a>
 </div>
 
@@ -432,120 +432,15 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>IDC机房硬件设备选购方案</p>
-<p>1.1 生产环境中选购依据</p>
-<ul>
-<li>价格</li>
-<li>性能</li>
-<li>冗余</li>
-</ul>
-<p>1.1.1 生产环境负载均衡系统架构设备选购方案</p>
-<p>   负载均衡：<br>   LVS1 DELL  R610 1U CPU E5<em>2 8G * 2/4  硬盘 SAS 146 * 2  RAID1<br>   LVS2 DELL  R610 1U CPU E5</em>2 8G * 2/4  硬盘 SAS 146 * 2  RAID1</p>
-<p>1.1.2 Web层硬件选择RAID</p>
-<p>   www主站1 业务<em>2 DELL R730 2U CPU E5 * 2 8G(16G/32G) SAS 300G * 2  RAID0<br>   www主站2 业务</em>2 DELL R730 2U CPU E5 * 2 8G(16G/32G) SAS 300G * 2  RAID0</p>
-<p>1.1.3 数据库层硬件以及RAID</p>
-<p>  Mysql主库1-1  DELL R730 2U CPU E5<em>2 8/16/32 SAS 300G * 6 RAID10(兼顾冗余/速度）<br>  Mysql主库1-2  DELL R730 2U CPU E5</em>2 8/16/32 SAS 300G * 6 RAID10(兼顾冗余/速度）<br>  Mysql从库1-1  DELL R730 2U CPU E5<em>2 8/16/32 SAS 300G * 6 RAID0/5<br>  Mysql从库1-2  DELL R730 2U CPU E5</em>2 8/16/32 SAS 300G * 6 RAID0/5<br>  Mysql从库2-1  DELL R730 2U CPU E5<em>2 8/16/32 SAS 300G * 6 RAID0/5<br>  Mysql从库2-2  DELL R730 2U CPU E5</em>2 8/16/32 SAS 300G * 6 RAID0/5</p>
-<p>1.1.4 存储层硬件以及RAID</p>
-<p>DELL R610 E5 * 2 16/32G SAS 10K 2T * 6 不做RAID交叉备份/ RAID5<br>DELL R730 E5 * 2 16/32G SAS 10K 2T * 6 RAID5折中方案</p>
-<p>备份服务器一般考虑容量和冗余，对性能要求不高。</p>
-<p>1.1.5 NFS硬件以及RAID</p>
-<p>NFS1 DELL R730 E5 8G * 2 SAS 15K  600G * 6  RAID10/RAID5/RAID0<br>NFS2 DELL R730 E5 8G * 2 SAS 15K  600G * 6  RAID10/RAID5/RAID0    </p>
-<p>1.1.6 GFS、MFS分布式存储</p>
-<p>NFS1 DELL R730 E5 8G * 2 SAS 15K  600G * 6  RAID10/RAID5/RAID0<br>NFS2 DELL R730 E5 8G * 2 SAS 15K  600G * 6  RAID10/RAID5/RAID0   </p>
-<p>1.1.7 监控管理/网关层硬件以及RAID</p>
-<p>DELL R610/R430 E5*1 8/16G 146 SAS * 2 RAID1</p>
-<p>1.1.8 网络设备</p>
-<p>全千兆设备/网线<br>华为 H3C  CISCO DLINK </p>
-<div class="note grey"><p>都需要带有远程管理卡 4+1</p></div>
-
-<h2 id="Redis搭建"><a href="#Redis搭建" class="headerlink" title="Redis搭建"></a>Redis搭建</h2><p>主机规划：</p>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>主机名称</th>
-<th>角色</th>
-<th>数量</th>
-<th>IP内网</th>
-<th>IP外网</th>
-<th>端口</th>
-<th>软件</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>Redis-Master-01</td>
-<td>Node01</td>
-<td>1</td>
-<td>10.0.0.1</td>
-<td></td>
-<td>6379</td>
-<td>Centos7.7</td>
-<td>–</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Redis-Master-02</td>
-<td>Node02</td>
-<td>1</td>
-<td>10.0.0.2</td>
-<td></td>
-<td>6379</td>
-<td>Centos7.7</td>
-<td>–</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Redis-Master-03</td>
-<td>Node03</td>
-<td>1</td>
-<td>10.0.0.3</td>
-<td></td>
-<td>6379</td>
-<td>Centos7.7</td>
-<td>–</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Redis-slave-01</td>
-<td>slave01</td>
-<td>1</td>
-<td>10.0.0.4</td>
-<td></td>
-<td>6389</td>
-<td>Centos7.7</td>
-<td>–</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Redis-slave-02</td>
-<td>slave02</td>
-<td>1</td>
-<td>10.0.0.5</td>
-<td></td>
-<td>6389</td>
-<td>Centos7.7</td>
-<td>–</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Redis-slave-03</td>
-<td>slave03</td>
-<td>1</td>
-<td>10.0.0.6</td>
-<td></td>
-<td>6389</td>
-<td>Centos7.7</td>
-<td>–</td>
-</tr>
-</tbody></table>
-<p><br><br></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bind 10.0.0.1</span><br><span class="line">port 6379</span><br><span class="line">pidfile &#x2F;var&#x2F;run&#x2F;redis_7000.pid</span><br><span class="line">cluster-enabled yes</span><br><span class="line">daemonize yes</span><br><span class="line">cluster-config-file  nodes-63679.conf </span><br><span class="line">appendonly yes</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="ES安装"><a href="#ES安装" class="headerlink" title="ES安装"></a>ES安装</h3><p>cd /etc/yum.repos.d/<br>vim elasticsearcg.repo<br>yum makecache &amp;&amp; yum install -y elasticsearch</p>
+        <p>1)资源锁细粒度化<br>  将100个资源拆分成10份。<br>  这10份分别上锁，应用场景如秒杀。</p>
+<p>2）业务使用锁细粒度化<br>   只对需要的资源加锁，避免大范围加锁。</p>
+<p>3）无锁化（真无锁，假无锁）<br>    ThreadLocal 真无锁<br>    CAS  假无锁<br>4）异步+线程池<br>   Completeable</p>
+<p> hystrix/sentinel 限流</p>
+<p> Leaf / </p>
+<p> Snowflake<br> 缺点：<br> 1）依赖于时间，需要ntp<br> 2）依赖于NodeId和AreaID的分发，用ZK解决<br>   通过zk的顺序性分配唯一的node和area</p>
+<p>基于Mysql的发布<br>基于Mysql的优化</p>
+<p>基于雪花算法</p>
+<p>基于ZK</p>
 
       
     </div>
@@ -572,8 +467,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8E%9F%E5%88%99/">
-      设计模式和原则
+    <a href="/2020/06/19/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">
+      工厂方法模式
     </a>
   </h2>
 
@@ -598,9 +493,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/' rel="nofollow">
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/设计原则</p>
+      <p>设计模式/创建型模式</p>
     </a>
   </div>
 
@@ -611,7 +506,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月18日</p>
+    <p>发布于：2020年6月19日</p>
   </a>
 </div>
 
@@ -639,63 +534,58 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>创建软件应用程序时为了满足不断变化和发展的需求，一个成功的应用程序应该提供一种简单的方法来扩展它以满足不断变化的期望。</p>
-<h2 id="SOLID设计原则"><a href="#SOLID设计原则" class="headerlink" title="SOLID设计原则"></a>SOLID设计原则</h2><h3 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h3><p>有且仅有一个原因引起类的变更。</p>
-<p>问题：<br>Class IUser 负责两个不同的职责,职责1维护User的属性(id, name, age)，职责2维护DB操作（save/update/delete/find）.<br>当由于职责1需求发生改变要增加一个sex的时候，有可能会导致原本运行正常的职责2功能发生故障。</p>
-<p>解决方法：<br>将IUser拆分为 UserInfo和UserDao。</p>
-<p>优点：<br>降低类的复杂性，一个类只负责一项职责；<br>提高类的可读性，提高系统的可维护性；<br>降低变更引起的风险，当修改一个接口的功能时，可以降低对其他功能的影响。</p>
-<h3 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h3><p>一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。<br>也就是说通过扩展来实现变化，而不是通过修改已有的代码来实现变化。</p>
-<p>可以通过抽象约束、封装变化来实现开闭原则。<br>通过接口或者抽象类为软件实体定义一个相对稳定的抽象层，而将相同的可变因素封装在相同的具体实现类中。</p>
-<h3 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h3><p>派生类型必须完全可替代其基类型。在设计模块和类时，必须确保派生类型从行为的角度来看是可替代的。当派生类型被其父类替换时，其余代码就像它是自类型那样使用它。</p>
-<ul>
-<li>子类必须完全实现父类的方法</li>
-<li>子类可以有自己的个性</li>
-<li>覆盖或者实现父类的方法时，输入参数可以被放大</li>
-<li>腹泻或者实现父类的方法时，输出结果可以被缩小</li>
+        <h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><ul>
+<li>new 对象的替代方案</li>
+<li>需要灵活、可扩展的框架时</li>
+<li>在异构项目中，从外部产生的对象</li>
+<li>测试驱动开发框架下使用。<a href="https://www.jianshu.com/p/097d32d09713" target="_blank" rel="noopener">测试驱动开发 -TDD
+</a></li>
 </ul>
-<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><p>客户端不应该依赖于它所不需要的接口。接口隔离原则减少了代码耦合，使软件更强壮，更易于维护和扩展。接口隔离原则要求接口的定义和设计尽量的细化。</p>
-<ul>
-<li>接口尽量小，但是要有限度。<br>对接口进行细化可以提高程序设计的灵活性，但是如果过小，会造成接口数量过多，使设计复杂化。</li>
-<li>为依赖接口的类定制服务，只暴露给调用的类它需要的方法，不需要的方法隐藏起来，只有专注地为一个模块提供定制服务，才能建立最小依赖关系。</li>
-<li>提高内聚，减少对外交互。使接口用最少的方法完成最多的事情。</li>
+<h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。</p>
+<p><img src="/2020/06/19/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/factory_comm.jpeg" alt="工厂方法模式的通用类图"></p>
+<p>抽象产品类Product负责定义产品的共性，实现对事物最抽象的英译；<br>Creator为抽象的创建类，即抽象工厂，具体如何创建产品类是由具体的实现工厂ConcreteCreator完成的。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>良好的封装，代码结构清晰，降低模块间的耦合；</li>
+<li>良好的扩展性；</li>
+<li>屏蔽具体的产品类，只要接口不变，系统中上层模块就不需要发生变化。</li>
 </ul>
-<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><p>高级模块不应该依赖低级模块，两者都应该依赖抽象。<br>抽象不应该依赖于细节，细节应该依赖于抽象。</p>
-<ul>
-<li>模块间的依赖通过抽象发生，实现类之间不发生直接的依赖关系，器依赖关系是通过接口或者抽象类产生。</li>
-<li>接口或者抽象类不依赖实现类</li>
-<li>实现类依赖接口或者抽象类</li>
-</ul>
-<h2 id="创建型模式-6-6"><a href="#创建型模式-6-6" class="headerlink" title="创建型模式(6/6)"></a>创建型模式(6/6)</h2><ul>
-<li><a href="/2020/06/18/单例模式">单例模式</a></li>
-<li><a href="/2020/06/19/工厂方法模式">工厂方法模式</a></li>
-<li><a href="/2020/06/22/抽象工厂模式">抽象工厂模式</a></li>
-<li><a href="/2020/06/23/建造者模式">建造者模式</a></li>
-<li><a href="/2020/06/24/原型模式">原型模式</a></li>
-<li><a href="/2020/06/24/对象池模式">对象池模式</a></li>
-</ul>
-<h2 id="行为型模式-9-12"><a href="#行为型模式-9-12" class="headerlink" title="行为型模式(9/12)"></a>行为型模式(9/12)</h2><ul>
-<li><a href="/2020/06/28/策略模式/">策略模式</a></li>
-<li><a href="/2020/06/29/状态模式/">状态模式</a></li>
-<li><a href="/2020/06/30/访问者模式/">访问者模式</a> </li>
-<li><a href="/2020/07/01/迭代器模式/">迭代器模式</a></li>
-<li><a href="/2020/07/02/责任链模式/">责任链模式</a></li>
-<li><a href="/2020/07/02/模版方法模式/">模版方法模式</a></li>
-<li><a href="/2020/07/03/命令模式/">命令模式</a></li>
-<li><a href="/2020/07/04/备忘录模式/">备忘录模式</a></li>
-<li><a href="/2020/07/05/解释器模式/">解释器模式</a></li>
-<li>观察者模式</li>
-<li>中介者模式</li>
-<li>空对象模式</li>
-</ul>
-<h2 id="结构型模式-2-7"><a href="#结构型模式-2-7" class="headerlink" title="结构型模式(2/7)"></a>结构型模式(2/7)</h2><ul>
-<li><a href="/2020/06/28/代理模式/">代理模式</a></li>
-<li><a href="/2020/07/01/组合模式/">组合模式</a></li>
-<li>装饰器模式</li>
-<li>桥接模式</li>
-<li>适配器模式</li>
-<li>外观模式</li>
-<li>享元模式</li>
-</ul>
+<p>高层模块只需要知道产品的抽象类，不关心实现类，符合迪米特法则；<br>只依赖产品的抽象，符合倒置原则；<br>使用产品子类替换父类时也没有问题，符合历史替换原则；</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>对于不同类型的产品都要增加不同类型的工厂来管理，增加代码的复杂性</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="通用实现"><a href="#通用实现" class="headerlink" title="通用实现"></a>通用实现</h3><p>产品类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product1</span> <span class="keyword">extends</span> <span class="title">Product</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product2</span> <span class="keyword">extends</span> <span class="title">Product</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>工厂类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> &lt;T extends Product&gt; <span class="function">T <span class="title">create</span><span class="params">(Class&lt;T&gt; c)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteFactory</span> <span class="keyword">extends</span> <span class="title">Factory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T extends Product&gt; <span class="function">T <span class="title">create</span><span class="params">(Class&lt;T&gt; c)</span></span>&#123;</span><br><span class="line">        Product p = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            p = (Product)Class.forName(c.getName()).newInstance();</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (T)p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Factory factory &#x3D; new ConcreteFactory();</span><br><span class="line">Product p &#x3D; factory.createt(Product1.class);</span><br></pre></td></tr></table></figure>
+
+<h3 id="缩小为简单工厂"><a href="#缩小为简单工厂" class="headerlink" title="缩小为简单工厂"></a>缩小为简单工厂</h3><p>去掉抽象的Factory类，create()方法变为静态方法即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> Factory&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Product&gt; <span class="function">T <span class="title">create</span><span class="params">(Class&lt;T&gt; c)</span></span>&#123;</span><br><span class="line">        Product p = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            p = (Product)Class.forName(c.getName()).newInstance();</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (T)p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Product p = Factory.create(Product1<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="升级为多个工厂类"><a href="#升级为多个工厂类" class="headerlink" title="升级为多个工厂类"></a>升级为多个工厂类</h3><p>遇到复杂情况下，一个工厂类初始化需要耗费很多资源，这样可以将工厂类细化拆分。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory1</span> <span class="keyword">extends</span> <span class="title">Factory</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Product <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Product1();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory2</span> <span class="keyword">extends</span> <span class="title">Factory</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Product <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Product2();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的好处是职责清晰，结构简单，但是可扩展性和可维护性差了些。<br>一般情况下，再增加一个协调类，避免调用者直接与各个子工厂类交流，协调类的作用是封装子工厂类，对高层模块提供统一的访问接口。</p>
+<h3 id="替代单例模式"><a href="#替代单例模式" class="headerlink" title="替代单例模式"></a>替代单例模式</h3><p>通过反射的方式来创建唯一一个实例</p>
+<h3 id="延迟初始化"><a href="#延迟初始化" class="headerlink" title="延迟初始化"></a>延迟初始化</h3><p>一个对象被使用完毕后，并不立即释放，工厂类保持其初始状态，等待再次被使用。</p>
+<p>延迟加载框架可以被扩展为，限制某个产品类的最大实例化数量（如链接池的最大链接数量）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductFactory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String,Product&gt; pMap = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Product <span class="title">createProduct</span><span class="params">(String type)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        Product p = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(pMap.containsKey(type))&#123;</span><br><span class="line">            p = pMap.get(type);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(type.equals(<span class="string">"Product1"</span>))&#123;</span><br><span class="line">                p = <span class="keyword">new</span> Product1();</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                p = <span class="keyword">new</span> Product2();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> product;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类。</p>
+</blockquote>
+<p><a href="https://www.zhihu.com/question/24843188" target="_blank" rel="noopener">https://www.zhihu.com/question/24843188</a></p>
+<p><a href="https://www.jianshu.com/p/83ef48ce635b" target="_blank" rel="noopener">https://www.jianshu.com/p/83ef48ce635b</a></p>
+<p><a href="https://blog.csdn.net/buyulian/article/details/79203880" target="_blank" rel="noopener">https://blog.csdn.net/buyulian/article/details/79203880</a></p>
+<p><a href="https://blog.csdn.net/qianhaifeng2012/article/details/52014773" target="_blank" rel="noopener">https://blog.csdn.net/qianhaifeng2012/article/details/52014773</a></p>
+<p><a href="https://www.cnblogs.com/aspirant/p/8980573.html" target="_blank" rel="noopener">https://www.cnblogs.com/aspirant/p/8980573.html</a></p>
+<p><a href="http://www.akathink.com/2016/08/01/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">http://www.akathink.com/2016/08/01/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</a></p>
 
       
     </div>
@@ -722,7 +612,7 @@
           </a>
         
         <p class="current">
-          11 / 21
+          11 / 22
         </p>
         
           <a class="next" rel="next" href="/page/12/">
@@ -783,7 +673,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(17)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(18)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
@@ -798,7 +688,7 @@
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/"
             id="categoriesJavaE68A80E69CAFE6A088Spring"
-            ><div class='name'>Spring</div><div class='badge'>(1)</div></a></li>
+            ><div class='name'>Spring</div><div class='badge'>(2)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/Linux/" href="/categories/Linux/"
@@ -848,7 +738,7 @@
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
-            ><div class='name'>设计模式</div><div class='badge'>(18)</div></a></li>
+            ><div class='name'>设计模式</div><div class='badge'>(20)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
@@ -863,7 +753,7 @@
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE8A18CE4B8BAE59E8BE6A8A1E5BC8F"
-            ><div class='name'>行为型模式</div><div class='badge'>(10)</div></a></li>
+            ><div class='name'>行为型模式</div><div class='badge'>(12)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"
@@ -892,7 +782,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 22px; color: #636363">JVM</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 20px; color: #707070">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 16px; color: #8b8b8b">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22px; color: #636363">行为型模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 18px; color: #7e7e7e">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.67px; color: #6c6c6c">JVM</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Spring/" style="font-size: 14px; color: #999">Spring</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 15.67px; color: #8e8e8e">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.33px; color: #606060">行为型模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.67px; color: #8e8e8e">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 17.33px; color: #828282">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a>
     </div>
   </section>
 
