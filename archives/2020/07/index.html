@@ -455,7 +455,7 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p>桥梁模式的重点在解藕。</p>
+        <h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p>桥梁模式的重点在解耦。</p>
 <h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将抽象和实现解耦，使得两者可以独立的变化。<br>它使用了类间的聚合关系、继承、覆写等常用功能。解决了继承的缺点而提出的设计模式。</p>
 <p><img src="/2020/07/09/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/bridge_class.jpeg" alt="桥接模式通用类图"></p>
 <h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>抽象角色引用实现角色，或者说抽象角色的部分实现是由实现角色完成的。</p>
@@ -467,8 +467,7 @@
 
 
 
-<p>####Implementor</p>
-<p>实现化角色，接口或者抽象类，定义角色必须的行为和属性。</p>
+<h4 id="Implementor"><a href="#Implementor" class="headerlink" title="Implementor"></a>Implementor</h4><p>实现化角色，接口或者抽象类，定义角色必须的行为和属性。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="ConcreteImplementor"><a href="#ConcreteImplementor" class="headerlink" title="ConcreteImplementor"></a>ConcreteImplementor</h4><p>具体实现化角色，实现接口或者抽象类定义的方法和属性。</p>
