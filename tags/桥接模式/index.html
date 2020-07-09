@@ -18,7 +18,7 @@
 
   <!-- 页面元数据 -->
   
-    <title>归档：2020/5 - 碎碎念</title>
+    <title>标签：桥接模式 - 碎碎念</title>
   
   
 
@@ -343,16 +343,24 @@
     <div class='body-wrapper'>
       
 
+
 <div class='l_main'>
-	
-		
+  
+    
+      
   <section class="post-list ">
     
       
         
           
-            <div class='post-wrapper'>
-              <article class="post white-box shadow reveal ">
+        
+      
+    
+    
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
   
 
 
@@ -364,8 +372,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/05/29/%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">
-      类文件结构
+    <a href="/2020/07/09/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/">
+      桥接模式
     </a>
   </h2>
 
@@ -390,9 +398,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
+      <p>设计模式/结构型模式</p>
     </a>
   </div>
 
@@ -403,7 +411,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年5月29日</p>
+    <p>发布于：2020年7月9日</p>
   </a>
 </div>
 
@@ -416,13 +424,6 @@
           
             
               
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>2</p>
-    </a>
-  </div>
-
 
             
           
@@ -438,528 +439,44 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Java虚拟机规范规定Class文件格式统一采用一种类似于C语言结构体的伪结构体来存储数据，<br>这种伪结构体存储两种数据类型：无符号数和表。</p>
-<p>无符号数：属于基本的数据类型，以u1、u2、u4、u8分别代表1个字节、2个字节、4个字节、8个字节的无符号数，无符号数可以用来描述数字、索引引用、数量值或者按照UTF-8编码结构构成的字符串值。</p>
-<p>表：由多个无符号数或者其他表作为数据项构成的符合数据类型，所以表都习惯性地以_info结尾。<br>表用于描述有层次关系的符合结构的数据，整个Class文件就是一张表，由下表中数据项构成。</p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>名称</th>
-<th>个数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>u4</td>
-<td>Magic</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>minor_version</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>major_version</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>constant_pool_count</td>
-<td>1</td>
-</tr>
-<tr>
-<td>cp_info</td>
-<td>constant_pool</td>
-<td>constant_pool_count - 1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>access_flag</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>this_class</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>super_class</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>interface_count</td>
-<td>1</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>interfaces</td>
-<td>interface_count</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>fields_count</td>
-<td>1</td>
-</tr>
-<tr>
-<td>field_info</td>
-<td>fields</td>
-<td>fields_count</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>method_count</td>
-<td>1</td>
-</tr>
-<tr>
-<td>method_info</td>
-<td>methods</td>
-<td>methods_count</td>
-</tr>
-<tr>
-<td>u2</td>
-<td>attributes_count</td>
-<td>1</td>
-</tr>
-<tr>
-<td>attribute_info</td>
-<td>attributes</td>
-<td>attributes_count</td>
-</tr>
-</tbody></table>
-<h4 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a>魔数</h4><p>每个Class文件的头四个字节称为魔数，其值的16进制表示为0xCAFEBABE（换算为二进制为1100 1010 1111 1110 1011 1010 1011 1110），虚拟机在加载类时分析该文件是否为Class文件。</p>
-<h4 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h4><p>第5、6个字节表示次版本号。第7、8个字节表示主版本号。<br>高版本的JDK能够向下兼容低版本的Class文件，虚拟机会拒绝执行超过其版本的Class文件。</p>
-<h4 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h4><p>常量池中存放两大类常量：</p>
-<ul>
-<li>字面量常量：<br>比较接近Java语言层面的常量概念，比如字符串和被声明为final的常量值。对于范围在-127～128之间的包装类型也是常量。</li>
-<li>符号引用常量：属于编译原理方面的概念，包含<ol>
-<li>类和接口的全限定名</li>
-<li>字段的名称和描述符</li>
-<li>方法的名称和描述符</li>
-</ol>
+        <h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p>桥梁模式的重点在解藕。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将抽象和实现解耦，使得两者可以独立的变化。<br>它使用了类间的聚合关系、继承、覆写等常用功能。解决了继承的缺点而提出的设计模式。</p>
+<p><img src="/2020/07/09/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/bridge_class.jpeg" alt="桥接模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>抽象角色引用实现角色，或者说抽象角色的部分实现是由实现角色完成的。</p>
+<h4 id="Abstraction"><a href="#Abstraction" class="headerlink" title="Abstraction"></a>Abstraction</h4><p>抽象化角色，定义出该抽象角色的行为，同时保存一个对实现化角色的引用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Abstraction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Implementor imp;</span><br><span class="line">    <span class="comment">//必须指定实现者</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Abstraction</span><span class="params">(Implementor imp)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.imp = imp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.imp.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Implementor <span class="title">getImp</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> imp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="RefindAbstraction"><a href="#RefindAbstraction" class="headerlink" title="RefindAbstraction"></a>RefindAbstraction</h4><p>修正抽象化角色，引用实现化角色对抽象化角色进行修正。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RefindAbstraction</span> <span class="keyword">extends</span> <span class="title">Abstraction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RefindAbstraction</span><span class="params">(Implementor imp)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(imp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="comment">//....</span></span><br><span class="line">      <span class="keyword">super</span>.request();</span><br><span class="line">      <span class="keyword">super</span>.getImp().doAnyThing();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>####Implementor</p>
+<p>实现化角色，接口或者抽象类，定义角色必须的行为和属性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ConcreteImplementor"><a href="#ConcreteImplementor" class="headerlink" title="ConcreteImplementor"></a>ConcreteImplementor</h4><p>具体实现化角色，实现接口或者抽象类定义的方法和属性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteImplementor1</span> <span class="keyword">implements</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteImplementor2</span> <span class="keyword">implements</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Implementor imp = <span class="keyword">new</span> ConcreteImplementor1();</span><br><span class="line">Abstraction abs = <span class="keyword">new</span> RefindAbstraction(imp);</span><br><span class="line">abs.request();</span><br></pre></td></tr></table></figure>
+
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li><p>抽象和实现分离<br>为了解决继承的缺点而提出的设计模式，在该模式下，实现可以不受抽象的约束，不再绑定到固定的抽象层次上。</p>
+</li>
+<li><p>优秀的扩展能力</p>
 </li>
 </ul>
-<p>常量池的大小不固定，用两个字节表示，第零项空出来，为了满足某些指向常量池的索引值的数据“不引用任何一个常量池项目”。</p>
-<p>常量池的每一项常量都是一个表，这个表的第一位都是一个u1类型的标识位。</p>
-<p>下面是常量池中的14种项目类型：<br><img src="/2020/05/29/%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/14kindsofconstants.webp" alt="常量池中的14种项目类型"></p>
-<p>下面是常量池中的14种项目类型的结构表：</p>
-<p><img src="/2020/05/29/%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/14kindsofconstantsdetail1.webp" alt="常量池中的表类型"></p>
-<p><img src="/2020/05/29/%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/14kindsofconstantsdetail2.webp" alt="常量池中的表类型"></p>
-<table>
-<thead>
-<tr>
-<th>常量池中数据项类型</th>
-<th>类型标志</th>
-<th>类型描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CONSTANT_Utf8</td>
-<td>1</td>
-<td>UTF-8编码的Unicode字符串</td>
-</tr>
-<tr>
-<td>CONSTANT_Integer</td>
-<td>3</td>
-<td>int类型字面值</td>
-</tr>
-<tr>
-<td>CONSTANT_Float</td>
-<td>4</td>
-<td>float类型字面值</td>
-</tr>
-<tr>
-<td>CONSTANT_Long</td>
-<td>5</td>
-<td>long类型字面值</td>
-</tr>
-<tr>
-<td>CONSTANT_Double</td>
-<td>6</td>
-<td>double类型字面值</td>
-</tr>
-<tr>
-<td>CONSTANT_Class</td>
-<td>7</td>
-<td>对一个类或接口的符号引用</td>
-</tr>
-<tr>
-<td>CONSTANT_String</td>
-<td>8</td>
-<td>String类型字面值</td>
-</tr>
-<tr>
-<td>CONSTANT_Fieldref</td>
-<td>9</td>
-<td>对一个字段的符号引用</td>
-</tr>
-<tr>
-<td>CONSTANT_Methodref</td>
-<td>10</td>
-<td>对一个类中声明的方法的符号引用</td>
-</tr>
-<tr>
-<td>CONSTANT_InterfaceMethodref</td>
-<td>11</td>
-<td>对一个接口中声明的方法的符号引用</td>
-</tr>
-<tr>
-<td>CONSTANT_NameAndType</td>
-<td>12</td>
-<td>对一个字段或方法的部分符号引用</td>
-</tr>
-</tbody></table>
-<h4 id="访问标志"><a href="#访问标志" class="headerlink" title="访问标志"></a>访问标志</h4><p>访问标志标示了当前类的修饰符，比如 public / final / super / interface /  enum / abstract / annotation / synthetic</p>
-<table>
-<thead>
-<tr>
-<th>标志名称</th>
-<th>标志值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ACC_PUBLIC</td>
-<td>0x00 01</td>
-<td>是否为Public类型</td>
-</tr>
-<tr>
-<td>ACC_FINAL</td>
-<td>0x00 10</td>
-<td>是否被声明为final，只有类可以设置</td>
-</tr>
-<tr>
-<td>ACC_SUPER</td>
-<td>0x00 20</td>
-<td>是否允许使用invokespecial字节码指令的新语义．</td>
-</tr>
-<tr>
-<td>ACC_INTERFACE</td>
-<td>0x02 00</td>
-<td>标志这是一个接口</td>
-</tr>
-<tr>
-<td>ACC_ABSTRACT</td>
-<td>0x04 00</td>
-<td>是否为abstract类型，对于接口或者抽象类来说，次标志值为真，其他类型为假</td>
-</tr>
-<tr>
-<td>ACC_SYNTHETIC</td>
-<td>0x10 00</td>
-<td>标志这个类并非由用户代码产生</td>
-</tr>
-<tr>
-<td>ACC_ANNOTATION</td>
-<td>0x20 00</td>
-<td>标志这是一个注解</td>
-</tr>
-<tr>
-<td>ACC_ENUM</td>
-<td>０x40 00</td>
-<td>标志这是一个枚举</td>
-</tr>
-</tbody></table>
-<h4 id="类索引、父类索引、接口索引集合"><a href="#类索引、父类索引、接口索引集合" class="headerlink" title="类索引、父类索引、接口索引集合"></a>类索引、父类索引、接口索引集合</h4><ul>
-<li>类索引：this_class, 用于确定这个类的全限定名</li>
-<li>父类索引：super_class, 父类索引用于确定这个类的父类的全限定名</li>
-<li>接口索引集合：interfaces, 用于描述这个类实现了哪些接口</li>
+<p>可以随意增加抽象和实现。</p>
+<ul>
+<li>实现细节对客户透明</li>
 </ul>
-<h4 id="字段表集合"><a href="#字段表集合" class="headerlink" title="字段表集合"></a>字段表集合</h4><p>字段表集合（field_info）用于描述接口或者类中声明的变量，包含类变量和实例变量，但不包含方法内部声明的局部变量。</p>
-<p>|类型|名称|数量|<br>|—-|—-|—-|—-|<br>|u2 |access_flag|1|访问修饰符|<br>|u2 |name_index | 1| 字段的简单名称,如String str = “123”, str就是简单名称|<br>|u2 |descritpor_index|1| 字段或者方法的描述符|<br>|u2 |attributes_count |1 |  |<br>|attribute_info | attributes | attributes_count| |</p>
-<p>访问修饰符</p>
-<table>
-<thead>
-<tr>
-<th>标志名称</th>
-<th>标志值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ACC_PUBLIC</td>
-<td>0x0001</td>
-<td>字段是否为public</td>
-</tr>
-<tr>
-<td>ACC_PRIVATE</td>
-<td>0x0002</td>
-<td>字段是否为private</td>
-</tr>
-<tr>
-<td>ACC_PROTECTED</td>
-<td>0x0004</td>
-<td>字段是否为protected</td>
-</tr>
-<tr>
-<td>ACC_STATIC</td>
-<td>0x0008</td>
-<td>字段是否为static</td>
-</tr>
-<tr>
-<td>ACC_FINAL</td>
-<td>0x0010</td>
-<td>字段是否为final</td>
-</tr>
-<tr>
-<td>ACC_VOLATILE</td>
-<td>0x0040</td>
-<td>字段是否为volatile</td>
-</tr>
-<tr>
-<td>ACC_TRANSTENT</td>
-<td>0x0080</td>
-<td>字段是否为transient</td>
-</tr>
-<tr>
-<td>ACC_SYNCHETIC</td>
-<td>0x1000</td>
-<td>字段是否为由编译器自动产生</td>
-</tr>
-<tr>
-<td>ACC_ENUM</td>
-<td>0x4000</td>
-<td>字段是否为enum</td>
-</tr>
-</tbody></table>
-<p>描述符：<br>描述符的作用是用来描述字段的数据类型、方法的参数列表（数量、类型、顺序）和返回值。<br>根据描述符的规则：基本数据类型以及代表无返回值的void类型都用一个大写的字符来表示;<br>而对象类型则用字符L加对象的全限定名来描述;</p>
-<table>
-<thead>
-<tr>
-<th>标志符号</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>B</td>
-<td>byte</td>
-</tr>
-<tr>
-<td>C</td>
-<td>char</td>
-</tr>
-<tr>
-<td>D</td>
-<td>double</td>
-</tr>
-<tr>
-<td>F</td>
-<td>float</td>
-</tr>
-<tr>
-<td>I</td>
-<td>int</td>
-</tr>
-<tr>
-<td>J</td>
-<td>long</td>
-</tr>
-<tr>
-<td>S</td>
-<td>short</td>
-</tr>
-<tr>
-<td>Z</td>
-<td>boolean</td>
-</tr>
-<tr>
-<td>V</td>
-<td>void 按照先参数列表后返回值的顺序描述，参数列表按照顺序放在”()”内部，String toString()描述为V()java.lang.String</td>
-</tr>
-<tr>
-<td>L</td>
-<td>对象类型</td>
-</tr>
-<tr>
-<td>[</td>
-<td>数组类型 [I: 代表int[], [[I:代表int[][]</td>
-</tr>
-</tbody></table>
-<h3 id="方法表集合"><a href="#方法表集合" class="headerlink" title="方法表集合"></a>方法表集合</h3><p>Class 文件中对方法的描述和对字段的描述完全是一致的， 方法表中的结构和字段表中的接口一样。</p>
-<p>因为volatile关键字和transient关键字不能修饰方法，所以方法表的访问标志中没有ACC_VOLATILE和ACC_TRANSIENT。 但是增加了synchronized,native,abstract,strictfp(strict float point, 精确的浮点数)关键字的修饰符。<br>对于方法里的代码，经过编译器变异常字节码指令后，存放在方法属性表中一个名为code的属性里。</p>
-<table>
-<thead>
-<tr>
-<th>标志名称</th>
-<th>标志值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ACC_PUBLIC</td>
-<td>0x00 01</td>
-<td>方法是否为public</td>
-</tr>
-<tr>
-<td>ACC_PRIVATE</td>
-<td>0x00 02</td>
-<td>方法是否为private</td>
-</tr>
-<tr>
-<td>ACC_PROTECTED</td>
-<td>0x00 04</td>
-<td>方法是否为protected</td>
-</tr>
-<tr>
-<td>ACC_STATIC</td>
-<td>0x00 08</td>
-<td>方法是否为static</td>
-</tr>
-<tr>
-<td>ACC_FINAL</td>
-<td>0x00 10</td>
-<td>方法是否为final</td>
-</tr>
-<tr>
-<td>ACC_SYHCHRONRIZED</td>
-<td>0x00 20</td>
-<td>方法是否为synchronized</td>
-</tr>
-<tr>
-<td>ACC_BRIDGE</td>
-<td>0x00 40</td>
-<td>方法是否是有编译器产生的方法</td>
-</tr>
-<tr>
-<td>ACC_VARARGS</td>
-<td>0x00 80</td>
-<td>方法是否接受参数</td>
-</tr>
-<tr>
-<td>ACC_NATIVE</td>
-<td>0x01 00</td>
-<td>方法是否为native</td>
-</tr>
-<tr>
-<td>ACC_ABSTRACT</td>
-<td>0x04 00</td>
-<td>方法是否为abstract</td>
-</tr>
-<tr>
-<td>ACC_STRICTFP</td>
-<td>0x08 00</td>
-<td>方法是否为strictfp （strict-float-point,精准的浮点数）</td>
-</tr>
-<tr>
-<td>ACC_SYNTHETIC</td>
-<td>0x10 00</td>
-<td>方法是否是有编译器自动产生的</td>
-</tr>
-</tbody></table>
-<h4 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h4><p>在Class文件、字段表、方法表中都可以携带自己的属性表集合（attribute_info）,用于描述某些场景的专有信息。</p>
-<p>不强制要求各属性表的顺序，只要不与已有属性表重名即可。<br>任何人实现的编译器都可以向属性表中写入自己定义的属性信息，Java虚拟机在运行时会忽略不认识的属性。</p>
-<table>
-<thead>
-<tr>
-<th>属性名称</th>
-<th>使用位置</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Code</td>
-<td>方法表</td>
-<td>Java代码编译成的字节码指令</td>
-</tr>
-<tr>
-<td>ConstantValue</td>
-<td>字段表</td>
-<td>final关键字定义的常量池</td>
-</tr>
-<tr>
-<td>Deprecated</td>
-<td>类，方法，字段表</td>
-<td>被声明为deprecated的方法和字段</td>
-</tr>
-<tr>
-<td>Exceptions</td>
-<td>方法表</td>
-<td>方法抛出的异常</td>
-</tr>
-<tr>
-<td>EnclosingMethod</td>
-<td>类文件</td>
-<td>仅当一个类为局部类或者匿名类是才能拥有这个属性，这个属性用于标识这个类所在的外围方法</td>
-</tr>
-<tr>
-<td>InnerClass</td>
-<td>类文件</td>
-<td>内部类列表</td>
-</tr>
-<tr>
-<td>LineNumberTable</td>
-<td>Code属性</td>
-<td>Java源码的行号与字节码指令的对应关系</td>
-</tr>
-<tr>
-<td>LocalVariableTable</td>
-<td>Code属性</td>
-<td>方法的局部变量描述</td>
-</tr>
-<tr>
-<td>StackMapTable</td>
-<td>Code属性</td>
-<td>JDK1.6中新增的属性，供新的类型检查检验器检查和处理目标方法的局部变量和操作数有所需要的类是否匹配</td>
-</tr>
-<tr>
-<td>Signature</td>
-<td>类，方法表，字段表</td>
-<td>用于支持泛型情况下的方法签名</td>
-</tr>
-<tr>
-<td>SourceFile</td>
-<td>类文件</td>
-<td>记录源文件名称</td>
-</tr>
-<tr>
-<td>SourceDebugExtension</td>
-<td>类文件</td>
-<td>用于存储额外的调试信息</td>
-</tr>
-<tr>
-<td>Synthetic</td>
-<td>类，方法表，字段表</td>
-<td>标志方法或字段为编译器自动生成的</td>
-</tr>
-<tr>
-<td>LocalVariableTypeTable</td>
-<td>类</td>
-<td>使用特征签名代替描述符，是为了引入泛型语法之后能描述泛型参数化类型而添加</td>
-</tr>
-<tr>
-<td>RuntimeVisibleAnnotations</td>
-<td>类，方法表，字段表</td>
-<td>为动态注解提供支持</td>
-</tr>
-<tr>
-<td>RuntimeInvisibleAnnotations</td>
-<td>表，方法表，字段表</td>
-<td>用于指明哪些注解是运行时不可见的</td>
-</tr>
-<tr>
-<td>RuntimeVisibleParameterAnnotation</td>
-<td>方法表</td>
-<td>作用与RuntimeVisibleAnnotations属性类似，只不过作用对象为方法</td>
-</tr>
-<tr>
-<td>RuntimeInvisibleParameterAnnotation</td>
-<td>方法表</td>
-<td>作用与RuntimeInvisibleAnnotations属性类似，作用对象哪个为方法参数</td>
-</tr>
-<tr>
-<td>AnnotationDefault</td>
-<td>方法表</td>
-<td>用于记录注解类元素的默认值</td>
-</tr>
-<tr>
-<td>BootstrapMethods</td>
-<td>类文件</td>
-<td>用于保存invokeddynamic指令引用的引导方式限定符</td>
-</tr>
-</tbody></table>
-<p>对于看了文章还有点懵的同学，看这里的视频讲解，忽略广告。《<a href="https://www.bilibili.com/video/BV1xJ41167VH?p=1" target="_blank" rel="noopener">全网最牛JVM字节码结构分析、Class类文件核心结构</a>》。</p>
+<p>由抽象层通过聚合关系完成了封装。</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>不希望或者不适用使用继承的场景<br>继承层次太高，无法更细化设计颗粒等场景，需要考虑使用。</li>
+<li>接口或者抽象类不稳定的场景<br>接口或者抽象类不稳定，经常变更时，使用桥梁模式。</li>
+<li>重用型要求高的场景<br>设计的颗粒度粤西，被重用的可能性越大。<br>采用继承受到父类的限制，不可能出现太细的粒度。</li>
+</ul>
 
       
     </div>
@@ -969,141 +486,7 @@
   </section>
 </article>
 
-            </div>
-          
-        
-          
-            <div class='post-wrapper'>
-              <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/05/28/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/">
-      Java虚拟机
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年5月28日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>置顶</p>
-    </a>
-  </div>
-
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>注：本系列为《深入理解Java虚拟机》的读书笔记。<br>少量来源于网络，视频教材。</p>
-</blockquote>
-<h3 id="如何设计一个虚拟机"><a href="#如何设计一个虚拟机" class="headerlink" title="如何设计一个虚拟机"></a>如何设计一个虚拟机</h3><p>假设自己要写一个虚拟机，应该考虑什么？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">虚拟机要运行什么？</span><br><span class="line">如何把规范的文件内容读取到内存中？</span><br><span class="line">读取到内存中的数据如何存储？</span><br><span class="line">如何执行这些规范文件中的数据翻译成操作系统认识的指令？</span><br><span class="line">执行完成后如何清理？</span><br></pre></td></tr></table></figure>
-
-<h3 id="虚拟机的主要功能以及组成"><a href="#虚拟机的主要功能以及组成" class="headerlink" title="虚拟机的主要功能以及组成"></a>虚拟机的主要功能以及组成</h3><p>虚拟机要运行代码，这些代码要定制一个规范，这样虚拟机才可以根据制定好的规范去解析和执行。对于Java虚拟机来讲，它要读取的文件就是Class类文件。<br>我们需要一段代码把Class类文件内容读取到内存中，同时要注意判断，读取的文件内容是否符合Class类文件的规范，同时文件内容是否会危害到虚拟机。<br>把文件内容读取到内存中后，如何存放、方便管理和使用，同时要保证性能、安全性。<br>把这些文件内容“翻译”为操作系统认识的指令，并且操控这些指令按照预定的“规则”运行，达到可预期的结果。为了提升效率需要考虑多线程和并发。<br>执行完成后，清理不需要的内存空间，以便其他程序使用(JVM规范中并没有规定垃圾回收部分)。</p>
-<blockquote>
-<p>JVM虚拟机不包含ClassLoader部分</p>
-</blockquote>
-<p><img src="/2020/05/28/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/jvm.jpg" alt="jvm"></p>
-<h3 id="虚拟机相关知识传送门"><a href="#虚拟机相关知识传送门" class="headerlink" title="虚拟机相关知识传送门"></a>虚拟机相关知识传送门</h3><ul>
-<li><input checked disabled type="checkbox"> <a href="/2020/05/29/类文件结构">类文件结构</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/01/ClassLoader">类加载器和类加载机制</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/02/JVM运行时数据区域">JVM运行时数据区域</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/05/字节码执行引擎">字节码执行引擎</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/02/JVM内存模型">JVM 内存模型</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/08/线程和并发">线程和并发</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/10/内存分配与回收">内存分配与回收</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/11/编译与优化">编译与编译优化技术</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/16/常用监控与故障处理工具">常用监控与故障处理工具</a></li>
-<li><input checked disabled type="checkbox"> <a href="/2020/06/17/常用JVM参数">常用的JVM参数</a></li>
-</ul>
-<p>扩展阅读：<a href="https://blog.csdn.net/brave2211/article/details/20380971" target="_blank" rel="noopener">深入理解Java虚拟机到底是什么</a></p>
-<p>Java虚拟机是一种抽象的计算机，它模拟了一套自己的硬件体系结构（处理器、堆栈、指令集和寄存器）。<br>不同的平台有着不同的实现版本，屏蔽了平台的差异性。使得不同平台上的虚拟机可以运行被javac编译的同一份.class文件。</p>
-<p>关于JVM的面试题：<br><a href="https://juejin.im/post/5d22f4e8e51d455a68490bf4" target="_blank" rel="noopener">24个Jvm面试题总结及答案</a><br><a href="https://blog.csdn.net/qq_41701956/article/details/100074023" target="_blank" rel="noopener">常见JVM面试题及答案整理</a><br><a href="https://blog.csdn.net/HarderXin/article/details/104066411" target="_blank" rel="noopener">2020年JVM面试题吐血整理【过年必看】</a><br><a href="https://www.jianshu.com/p/54eb60cfa7bd" target="_blank" rel="noopener">总结的JVM面试题</a><br><a href="https://zhuanlan.zhihu.com/p/56903960" target="_blank" rel="noopener">面试必问的JVM应该怎么学（面试题含答案）</a><br><a href="http://www.spring4all.com/article/18645" target="_blank" rel="noopener">大厂面试经：高频率JVM面试问题整理！</a><br><a href="https://www.bilibili.com/read/cv4094201/" target="_blank" rel="noopener">2019年JVM面试都问了什么？快看看这22道面试题！（附答案解析）</a><br><a href="https://xie.infoq.cn/article/b783efac59c5817b886329321" target="_blank" rel="noopener">JVM 面试题 68 问，面试又可以多扯一个小时了！</a><br><a href="https://segmentfault.com/a/1190000021290506" target="_blank" rel="noopener">【搞定Jvm面试】 Java 内存区域揭秘附常见面试题解析</a></p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-            </div>
-          
-        
-      
-    
-    
-      
-        
-      
+          </div>
         
       
     
@@ -1117,7 +500,8 @@
   
 
 
-	
+    
+  
 </div>
 <aside class='l_side'>
   
@@ -1289,14 +673,6 @@
   </footer>
 
 <script>setLoadingBarProgress(80);</script>
-
-
-
-
-	<!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
-	
-
-	
 
 
       <script>setLoadingBarProgress(60);</script>
