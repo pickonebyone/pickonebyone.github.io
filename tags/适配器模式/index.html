@@ -18,7 +18,7 @@
 
   <!-- 页面元数据 -->
   
-    <title>分类：生产力 - 碎碎念</title>
+    <title>标签：适配器模式 - 碎碎念</title>
   
   
 
@@ -372,8 +372,8 @@
         
           
   <h2 class="title">
-    <a href="/2019/05/29/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/">
-      sublime快捷键
+    <a href="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+      适配器模式
     </a>
   </h2>
 
@@ -398,9 +398,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/' rel="nofollow">
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>生产力/sublime快捷键</p>
+      <p>设计模式/结构型模式</p>
     </a>
   </div>
 
@@ -411,7 +411,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年5月29日</p>
+    <p>发布于：2020年7月10日</p>
   </a>
 </div>
 
@@ -439,10 +439,29 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="Edit"><a href="#Edit" class="headerlink" title="Edit"></a>Edit</h4><p>cmd + [ | Left Indent<br>cmd + ] | Right Indent<br>cmd + ctrl + up | Swap line up<br>cmd + ctrl + down | swap line down<br>cmd + shift + d | Duplicate line<br>cmd + J | Jone Lines.<br>cmd + Left | Beginning Of Line<br>cmd + Right | End of Line<br>cmd + ctrl + / | Toggle comment block<br>ctrl + K | Delete To End.<br>ctrl + shift + K | Delete Line<br>ctrl + T | swap words.<br>cmd + shift + Enter | Insert line before<br>cmd + Enter | insert line after<br>cmd + option + T | Special characters<br>ctrl + D | delete word after</p>
-<h4 id="Selection"><a href="#Selection" class="headerlink" title="Selection"></a>Selection</h4><p>cmd + D | Expand selection to words.<br>ctrl + cmd + G | Expand all selection to words<br>cmd + L | expand selection to line<br>Esc | Single selection , cancle multiple selection.<br>ctrl + shift + up | add previous line<br>ctrl + shift + down | add next line.<br>cmd + shift + L | 将选中的区域分割成多行选中状态(多光标操作状态)|Split into lines<br>option + mouse | 多重光标选中<br>cmd + shift + J | 已缩进层级为依据，一层层向外选中|Expand selection to indentation.<br>ctrl + shift + M 将匹配括号中的内容选中|。</p>
-<h4 id="Find"><a href="#Find" class="headerlink" title="Find"></a>Find</h4><p>cmd + F | find<br>cmd + G | find next<br>cmd + shift + F | find in files<br>cmd + shift + E | 缓存用于替换的内容，方便之后的替换<br>cmd + E | 缓存用于查找的内容，方便之后的查找。<br>cmd + option + E | replace Next</p>
-<h4 id="Go-To"><a href="#Go-To" class="headerlink" title="Go To"></a>Go To</h4><p>cmd + P | go to Anything<br>cmd + R | go to Symbol<br>cmd + G | Go to line.<br>ctrl + M | jump to matching bracket()<br>cmd + F2 | Toggle bookmark<br>F2. | Jump to Next bookmark.<br>cmd + shift + F2 | clear all bookmarks.<br>cmd + option + right | Next File</p>
+        <h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p>当我们去国外旅行时，我们国内的插头不能直接插入到国外的插线板上，我们需要购买一个电源适配器来适配国外的插线板。</p>
+<p>或者最新版的macbook pro 用的是utypec，并不能直接插入usb3.0的u盘，我们需要购买一个适配器做转换。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将一个类的接口编程客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。</p>
+<p><img src="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/adaptor_class.jpeg" alt="适配器模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h4><p>目标角色是一个接口或者抽象类，是一个已经存在的角色，不可能去修改角色中的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ConcreteTarget"><a href="#ConcreteTarget" class="headerlink" title="ConcreteTarget"></a>ConcreteTarget</h4><p>具体的目标角色实现类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteTarget</span> <span class="keyword">implements</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Adaptee"><a href="#Adaptee" class="headerlink" title="Adaptee"></a>Adaptee</h4><p>源角色，已经使用中的角色。需要将Adaptee转换为Target。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adaptee</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Adaptor"><a href="#Adaptor" class="headerlink" title="Adaptor"></a>Adaptor</h4><p>适配器角色。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adaptor</span> <span class="keyword">extends</span> <span class="title">Adaptee</span> <span class="keyword">implements</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Target target = <span class="keyword">new</span> ConcreteTarget();</span><br><span class="line">target.request();</span><br><span class="line"></span><br><span class="line">Target target2 = <span class="keyword">new</span> Adaptor();</span><br><span class="line">target2.request();</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>当需要把多个Adaptee转换为Target的时候，就不能使用继承了，因为Java中不支持多继承。<br>这种方式叫做对象适配器。<br>我们可以使用聚合（关联）来完成适配。</p>
+<p><img src="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/adaptor_calss2.jpeg" alt="对象适配器类图"></p>
+<p>类适配器是由类的继承关系完成的。<br>对象适配器是由类的关联关系纪念性耦合。</p>
 
       
     </div>
@@ -468,7 +487,6 @@
 
     
   
-
 </div>
 <aside class='l_side'>
   
