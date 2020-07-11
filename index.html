@@ -352,12 +352,6 @@
       
         
           
-        
-          
-        
-          
-        
-          
             
               <div class='post-wrapper'>
                 <article class="post white-box shadow reveal ">
@@ -486,6 +480,8 @@
           
         
           
+        
+          
             
               <div class='post-wrapper'>
                 <article class="post white-box shadow reveal ">
@@ -500,8 +496,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/">
-      JVM运行时数据区域
+    <a href="/2020/06/01/ClassLoader/">
+      类加载器和类加载机制
     </a>
   </h2>
 
@@ -539,7 +535,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月2日</p>
+    <p>发布于：2020年6月1日</p>
   </a>
 </div>
 
@@ -555,7 +551,7 @@
   <div class="new-meta-item top-post">
     <a class='notlink'>
       <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>4</p>
+      <p>3</p>
     </a>
   </div>
 
@@ -574,64 +570,84 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>当一个类加载到内存后，JVM运行时数据区域都需要存储什么东西呢？</p>
-<p>1）类的格式信息、主次版本号、 常量池、字段、方法、属性信息需要存储，这部分数据需要每个线程共享；<br>   当类加载器将静态的二进制字节码从类文件加载到内存后，对内容进行验证、解析转换为符合JVM存储的数据格式。</p>
-<p>2）生成的Class类对象和代码运行时动态创建的对象和数组需要存储；<br>   通过loading、linking、initializing后生成的Class对象，做为程序访问这个类的入口，<br>   以及程序运行时产生的对象和数组，都有可能会被不同的线程引用和访问，因此这部分区域的数据也需要线程共享。<br>3）每个线程的线程数据需要存储和每个线程下方法的方法数据需要存储；<br>   当线程创建的时候需要有一个线程栈来存放线程信息，以及PC计数器记录当前线程正在执行的代码行号。<br>   还有JVM本地线程执行时需要的本地线程栈存放本地线程的执行情况。</p>
-<p>《Java虚拟机规范》规定了如下内存区域来存储数据</p>
+        <p>Java代码要在JVM中正常运行，首先要先编译成.class文件，由类加载器将其加载到内存中。之后由类编译器来编译执行。<br>在加载的过程中需要注意什么呢？<br>1）什么时候需要加载一个类呢？<br>2）随便任何一个文件都是否可以被加载呢，它的加载过程是什么样的？<br>3）类加载器需要对内存中的内容做什么工作才可以被JVM直接使用？</p>
 <blockquote>
+<p>虚拟机把描述类的数据从 Class 文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Class类型，这就是虚拟机的类加载机制。—《深入理解Java虚拟机》</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">类型的加载、链接和初始化过程都是在程序运行期间完成的。</span><br><span class="line">Java可以动态扩展的语言特性就是依赖运行期动态加载和动态连接这个特点实现的。</span><br></pre></td></tr></table></figure>
+
+<h1 id="类的加载时机"><a href="#类的加载时机" class="headerlink" title="类的加载时机"></a>类的加载时机</h1><p>  Java虚拟机规范并没有规定什么时候加载类，但是规定了什么时候初始化一个类。</p>
+<p>  虚拟机规范严格规定了有且只有5中情况必须立即对类进行“初始化”。<br>  1）遇到new、getstatic、putstatic、invokestatic；<br>  2）初始化类的时候，对父类进行初始化；<br>  3）JVM执行的时候，对主类进行初始化；<br>  4）使用java.lang.reflect包的方法对类进行反射调用时；<br>  5）使用jdk1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandler实例最后解析结果是REF_getstatic, REF_putstatic, REF_invokestatic时，对该类进行初始化；<br>  6) jdk1.8中子类实现的接口中定义了default方法时；</p>
+<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p>类的加载过程总共分为：Loading（加载）、Linking（连接）、Initializing（初始化）、Using（使用）、Unloading（卸载）。<br>其中 Linking阶段 分为 Verification（验证）、Preparation（准备）、Resolution（解析）。</p>
+<p><img src="/2020/06/01/ClassLoader/ClassLoader.jpeg" alt="ClassLoader"></p>
+<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>加载阶段的成果是生成Class类对象，并将该对象存储在堆中。Class对象作为访问该对象数据的访问入口。<br>加载的步骤：<br>1） 根据类的全限定名读取类的二进制字节流；<br>2） 对二进制字节流进行解析转换，并将类信息存储在方法区中；<br>3） 堆中生成Class类对象，作为程序访问方法区中的类型数据的外部接口；</p>
+<blockquote>
+<p>注意：<br>数组类不通过类加载器创建，由java虚拟机直接在内存中动态构造出来的。<br>数组的元素类型（去掉所有维度）要靠类加载器加载完成。<br>数组的组件类型（去掉一个维度）是引用类型，数组将被标识在加载该组建类型的类加载器的类名称空间上。<br>如果数组的组件类型不是引用类型，Java虚拟机会把数组标记为与引导类加载器关联。</p>
+</blockquote>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证加载的类信息是否符合Java虚拟机规范，类的实现和继承、方法的执行、对象和方法的可访问性等等，主要分为四个阶段：</p>
+<p>1）文件格式的验证<br>   主要对Class文件中内容进行验证，是否符合Java虚拟机规范。<br>   比如魔数、常量池的类型、指向常量的索引值是否存在或者类型是否正确等等；</p>
+<blockquote>
+<p>这个阶段的验证是基于二进制字节流进行的，只有通过了验证才会被允许进入Java虚拟机的内存方法区存储。</p>
+</blockquote>
+<p>2）元数据验证<br>   对字节码描述信息进行语义分析，保证描述信息符合《Java语言规范》比如:</p>
 <ul>
-<li>共享区域</li>
+<li>这个类是否有父类、父类是否允许继承（被final修饰）；</li>
+<li>这个类是否实现了父类所要求实现的所有方法；</li>
+<li>类中的字段、方法是否与父类产生矛盾；</li>
 </ul>
+<p>3）字节码验证<br>   对类的方法体进行验证，保证任何跳转指令都不会跳转到方法体以外的字节码指令上；<br>   保证类型转化都是有效的.</p>
+<p>4）符号引用验证</p>
+<blockquote>
+<p>虚拟机在解析阶段将符号引用转化为直接引用的时候，对符号引用进行验证；</p>
 </blockquote>
 <ul>
-<li>堆区</li>
-<li>方法区<ul>
-<li>运行时常量池</li>
-<li>线程私有区域</li>
+<li>符号引用中通过字符串描述的全限定名能否找到对应的类；</li>
+<li>在指定类中是否存在符合方法的字段描述以及简单名称所描述的方法和字段；</li>
+<li>符号引用中的类、字段、方法的可访问性是否可以被当前类访问；</li>
 </ul>
-</li>
-<li>JVM线程栈</li>
-<li>本地方法栈</li>
-<li>PC计数器</li>
-</ul>
-<p><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/runtime_dataarea.webp" alt="Runtime DataArea"></p>
-<h3 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h3><p>  几乎所有的对象以及数组都存放在堆区。</p>
-<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>  用于存储已经被虚拟机加载的类型信息、常量、静态变量、及时编译器变异后的代码缓存等数据。</p>
-<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>  运行时常量池是方法区的一部分，用于存放编译期或者运行期生成的各种字面量和符号引用。</p>
-<h3 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h3><p>   每个线程会生成一个线程栈，每个方法被执行的时候，Java虚拟机都会同步创建一个栈帧，用于存储局部变量表、操作数栈、动态链接、方法出口信息。</p>
-<h5 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h5><p>局部变量表存放了编译期可知的各种Java虚拟机基本数据类型（boolean、byte、char、short、int、long 、float、double）、引用类型、returnAddress类型。<br>      这些数据类型在局部变量表中的存储空间以局部变量槽来表示（64位的long和double占用2个变量槽，其余数据类型占用1个变量槽）。局部变量表所需的内存空间在编译期完成分配，因此当进入一个方法时，这个方法需要在栈帧中分配多大的局部变量空间是确定的。在运行期间是不会改变局部变量表的大小（槽的多少）。</p>
-<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>与虚拟机栈作用类似，为虚拟机使用到的本地方法服务。</p>
-<h3 id="PC计数器"><a href="#PC计数器" class="headerlink" title="PC计数器"></a>PC计数器</h3><p>   当前线程所执行的字节码的行号指示器。在Java虚拟机的概念模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。</p>
-<p>对于JDK1.8以后HotSpot虚拟机改用与Jrokit、J9一样与本地内存中实现的元空间（Meta-space）来实现方法区。无论是原空间还是永久代，他们只是方法区的实现，字符串常量池和静态变量的存储逻辑上仍然属于方法区。元空间使用的是物理内存、永久代使用的是JVM内存。因此元空间的大小只受限于物理内存。</p>
-<p><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/hotspot_runtimearea.png" alt="HotSpot 虚拟机实现"></p>
-<h2 id="HotSpot-虚拟机对象的创建与引用"><a href="#HotSpot-虚拟机对象的创建与引用" class="headerlink" title="HotSpot 虚拟机对象的创建与引用"></a>HotSpot 虚拟机对象的创建与引用</h2><h4 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h4><p>1） 在new一个对象的时候，先需要通过类加载检查，然后虚拟机为新生对象分配内存。</p>
-<p>对象所需要的内存大小在类加载完成后便可以完全确定，为对象分配空间的任务实际上便等同于把一块确定大小的内存块从Java堆中划分出来。</p>
+<p>符号引用阶段抛出的异常有：IllegalAccessError、NoSuchFieldError、NoSuchMethodError；</p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是正式为类中定义的变量分配内存并设置类变量初始值的阶段；</p>
+<p>对于类变量（静态属性），设置的是“零值”，真正赋值是在初始化阶段；<br>对于常量（final static），会被设置为ConstantValue属性所指定的初始值。</p>
+<blockquote>
+<p>对于常量，Javac时会为value生成ConstantValue属性。</p>
+</blockquote>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是Java虚拟机将常量池的符号引用替换为直接引用的过程。《Java虚拟机规范》并没有规定何时进行解析。</p>
 <ul>
-<li>指针碰撞<br>假设内存规整，将使用过的在一边，空闲的在一边，中间放一个指针作为分界点的指示器，所分配内存就是把指针向空闲空间方向挪动一段与对象相等的距离。<br>使用Serial、ParNew带压缩整理过程的GC收集器时，采用指针碰撞，简单高效；</li>
-<li>空闲列表<br>假设内存不规整，是一块块不连续的，那么就需要维护一个列表记录哪块内存可用，哪块内存不可用，在分配的时候在列表中找一块足够大的空间划分给对象实例，并更新列表上的记录。<br>使用CMS基于清除算法的收集器时，理论上只能采用复杂的空闲列表来分配内存。</li>
+<li>符号引用：可以无歧义的定位到目标即可；与虚拟机的内存布局无关；引用的目标不一定已经加载到虚拟机中；必须遵循《Java虚拟机规范》；</li>
+<li>直接引用：直接可以指向目标的指针、偏移量，或者可以间接定位到目标的句柄；与虚拟机的内存布局直接相关；直接引用的目标一定已经加载到虚拟机内存中；</li>
 </ul>
-<h5 id="Thread-Local-Allocation-Buffer"><a href="#Thread-Local-Allocation-Buffer" class="headerlink" title="Thread Local Allocation Buffer"></a>Thread Local Allocation Buffer</h5><p>在堆中创建对象是特别频繁的事情，并且涉及到多线程的访问。如何保证高效且安全的申请空间？</p>
+<p>解析动作主要针对类或者接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符号引用进行。</p>
+<h5 id="类、接口解析："><a href="#类、接口解析：" class="headerlink" title="类、接口解析："></a>类、接口解析：</h5><p>虚拟机的完整解析过程：<br>1）如果不是一个数组类型，虚拟机将会把全限定名传给当前类的加载器去加载，在加载的过程中，由于元数据验证、字节码验证的需要，又可能出发其他相关类的加载动作。<br>2）如果是一个数组类型，并且数组的元素类型为对象，那么会按照第一点的规则加载数组元素类型。如果是基础数据类型包装类，那么由虚拟机生成一个代表该数组唯独和元素的数组对象；<br>3）前面两部解析OK后进行符号引用验证，确定当前类是否有加载类的访问权限。</p>
+<p>如果一个类拥有另外一个类的访问权限，那么至少有一条是成立的：<br>1）被访问类是public的，并且与访问类处于同一个模块；<br>2）被访问类是public的，不与访问类处于同一个模块，但是被访问类的模块允许访问类访问；<br>3）被访问类不是public的，但是与访问类处于同一个包中</p>
+<h5 id="字段解析"><a href="#字段解析" class="headerlink" title="字段解析"></a>字段解析</h5><p>对字段表内class_index项中索引的CONSTANT_Class_Info符号引用进行解析（即字段所属类）</p>
+<p>1）先查找当前类是否包含了简单名称与描述符与目标相匹配<br>2）从下往上的顺序查找实现的接口类<br>3）从下往上的顺序查找父类<br>4）都无法查找到，抛出java.lang.NoSuchFieldError.</p>
+<p>如果查找成果返回了引用，将会对这个字段进行权限验证，对于不具备权限的访问会抛出IllegalAccessError；</p>
+<h5 id="方法解析"><a href="#方法解析" class="headerlink" title="方法解析"></a>方法解析</h5><p>解析出方法表class_index项中索引的方法所属的类或者接口的符号引用。<br>具体的解析过程与字段解析类似。</p>
+<h5 id="接口方法解析"><a href="#接口方法解析" class="headerlink" title="接口方法解析"></a>接口方法解析</h5><p>与方法解析类似。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>这个阶段Java虚拟机才真正开始执行类中编写的程序代码。程序在这个阶段初始化类变量和其他资源。</p>
+<p>初始化阶段也是执行&lt;clinit&gt;()的过程。<br>&lt;clinit&gt;()方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块中的语句合并产生的；<br>编译器收集顺序是由语句在源文件中出现的顺序决定的；<br>静态语句块中智能访问到定义在静态语句块之前的变量；<br>定义在静态语句块后的变量，静态语句块可以赋值，但是不能访问；<br>Java虚拟机保证父类的&lt;clinit&gt;() 总是优先于子类的&lt;clinit&gt;()执行；</p>
+<blockquote>
+<p>如果一个类中没有静态语句块，也没有对变量的赋值操作，编译器可以不为这个类生成clinit()方法。</p>
+</blockquote>
+<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><p>类加载器主要通过一个类的全限定名来获取描述该类的二进制字节流，它处于Java虚拟机的外部，方便让应用程序自己决定如何获取所需的类。</p>
+<p>对于任意一个类，必须由加载它的类加载器与类本身来确定在Java虚拟机中的唯一性。<br>每个类加载器都拥有一个独立的类名称空间。</p>
+<h3 id="类加载器的双亲委派模型"><a href="#类加载器的双亲委派模型" class="headerlink" title="类加载器的双亲委派模型"></a>类加载器的双亲委派模型</h3><p><img src="/2020/06/01/ClassLoader/ClassLoader02.webp" alt="双亲委派模型"></p>
+<p>双亲委派模型要求除了顶层的启动类加载器之外，其余的类加载器都应有自己的父“类加载器”。<br>当类加载器需要加载一个类的时候，首先看该类是否已经被加载，如果没有被加载则尝试着让父“类加载器”去加载，如果没有父“类加载器”则让bootstrapClassLoader作为父“类加载器”，如果父“类加载器”加载失败，则使用自己的find_class方法去加载。</p>
 <ul>
-<li>同步或者CAS+失败重试的方式保证更新操作的原子性；</li>
-<li>为每个线程在堆中预先分配一小块内存，通过-XX:+/-UseTLAB 设定；</li>
+<li>启动类加载器（Bootstrap Class Loader）<br>启动类加载器负责加载&lt;JAVA_HOME&gt;\lib 目录下的jar包（按名字识别，名字不符合的类库存放在lib目录下也不会被加载），也可以指定 -Xbootclasspath参数指定加载目录。启动类加载器无法被java程序直接引用。</li>
+<li>扩展类加载器（Extension Class Loader）<br>扩展类加载器负责加载&lt;JAVA_HOME&gt;\lib\ext目录下的jar包，或者被java.ext.dirs指定的路径这种的所有类库。这个类加载器是在类sun.misc.Launcher$ExtClassLoader中以Java代码实现的。</li>
+<li>应用程序类加载器（Application Class Loader）<br>负责加载用户类路径上的所有类库。这个类加载器是在sun.misc.Launcher$AppClassLoader实现。</li>
 </ul>
-<p>2）分配完内存后，为内存空间初始化零值以及必要的设置。<br>初始化零值可以保证对象实例字段在Java对象中可以不赋初始值就可以直接使用，程序能访问到这些字段的数据类型所对应的零值。<br>之后设置这个对象的类型、关联类的元数据信息、GC分代年龄信息等。</p>
-<p>3）执行 &lt;init&gt;() 方法，将对象进行初始化。</p>
-<h4 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><p>在Hotspot虚拟机中，对象在内存中的存储布局划分为三个部分</p>
-<ul>
-<li>对象头（Header）<ul>
-<li>一部分是对象自身运行时数据，HashCode, GC分代年龄，锁状态标志，线程持有锁，偏向线程ID,偏向时间戳（数组长度）。</li>
-<li>一部分是类型指针，指向它的类型元数据的指针，用来确定是哪个类的实例。</li>
-</ul>
-</li>
-<li>实例数据（Instance Data）<br>字段的存储顺序受到虚拟机分配策略（-XX:FieldsAllocationStyle）和字段在源码中的顺序影响。<br>默认相同宽度的字段被分配到一起存放，父类中定义的变量会出现在子类之前。<br>使用+XX:CompactFields=true字类中较窄的变量也会插入到父类变量的空隙之中。</li>
-<li>填充（Padding）<br>为了满足硬件的性能需求和提高垃圾回收时指针扫描的方便性。HotSpot虚拟机的自动内存管理系统要求对象的起始地址必须是8个字节的整数倍（任何对象的大小必须是8个字节的整数倍）。</li>
-</ul>
-<h3 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h3><p>对象在堆中创建好了，Java程序会通过栈上局部变量表中的reference字段来引用堆上的对象。</p>
-<ul>
-<li>句柄访问<br>Java堆中划分出一块内存作为句柄池，reference中存储的就是对象的句柄地址，句柄中包含了对象实例数据与类型数据各自具体的地址信息。<br>好处：reference中存储的事稳定的句柄地址，对象被移动时只会改变句柄中的实例数据指针。<br><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/jubing.jpeg" alt="句柄访问"></li>
-<li>直接指针<br>reference中存储的是对象的地址。好处是速度快，节约了指针定位的时间开销。<br><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/direct.jpeg" alt="直接指针"></li>
-</ul>
+<h5 id="定制自己的类加载器"><a href="#定制自己的类加载器" class="headerlink" title="定制自己的类加载器"></a>定制自己的类加载器</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomClassLoader</span><span class="params">(ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">        String path = <span class="string">"/classes/"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream ins = <span class="keyword">new</span> FileInputStream(path + name.replace(<span class="string">"."</span>, File.separator) + <span class="string">".class"</span>);</span><br><span class="line">            ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            <span class="keyword">int</span> bufferSize = <span class="number">4096</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[bufferSize];</span><br><span class="line">            <span class="keyword">int</span> bytesNumRead = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> ((bytesNumRead = ins.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                baos.write(buffer, <span class="number">0</span>, bytesNumRead);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">byte</span>[] classData = baos.toByteArray();</span><br><span class="line">            <span class="keyword">return</span> defineClass(name, classData, <span class="number">0</span>, classData.length);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CustomClassLoader classLoader = <span class="keyword">new</span> CustomClassLoader(<span class="keyword">null</span>);</span><br><span class="line">        Class clazz = classLoader.loadClass(<span class="string">"com.*.ClassLoader"</span>);</span><br><span class="line">        System.out.println(clazz.getClassLoader());</span><br><span class="line">        System.out.println(clazz.getClass());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
 
       
     </div>
@@ -643,76 +659,6 @@
 
               </div>
             
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
           
         
           
@@ -1354,6 +1300,242 @@
         
           
   <h2 class="title">
+    <a href="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/">
+      JVM运行时数据区域
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月2日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item top-post">
+    <a class='notlink'>
+      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
+      <p>4</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当一个类加载到内存后，JVM运行时数据区域都需要存储什么东西呢？</p>
+<p>1）类的格式信息、主次版本号、 常量池、字段、方法、属性信息需要存储，这部分数据需要每个线程共享；<br>   当类加载器将静态的二进制字节码从类文件加载到内存后，对内容进行验证、解析转换为符合JVM存储的数据格式。</p>
+<p>2）生成的Class类对象和代码运行时动态创建的对象和数组需要存储；<br>   通过loading、linking、initializing后生成的Class对象，做为程序访问这个类的入口，<br>   以及程序运行时产生的对象和数组，都有可能会被不同的线程引用和访问，因此这部分区域的数据也需要线程共享。<br>3）每个线程的线程数据需要存储和每个线程下方法的方法数据需要存储；<br>   当线程创建的时候需要有一个线程栈来存放线程信息，以及PC计数器记录当前线程正在执行的代码行号。<br>   还有JVM本地线程执行时需要的本地线程栈存放本地线程的执行情况。</p>
+<p>《Java虚拟机规范》规定了如下内存区域来存储数据</p>
+<blockquote>
+<ul>
+<li>共享区域</li>
+</ul>
+</blockquote>
+<ul>
+<li>堆区</li>
+<li>方法区<ul>
+<li>运行时常量池</li>
+<li>线程私有区域</li>
+</ul>
+</li>
+<li>JVM线程栈</li>
+<li>本地方法栈</li>
+<li>PC计数器</li>
+</ul>
+<p><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/runtime_dataarea.webp" alt="Runtime DataArea"></p>
+<h3 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h3><p>  几乎所有的对象以及数组都存放在堆区。</p>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>  用于存储已经被虚拟机加载的类型信息、常量、静态变量、及时编译器变异后的代码缓存等数据。</p>
+<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>  运行时常量池是方法区的一部分，用于存放编译期或者运行期生成的各种字面量和符号引用。</p>
+<h3 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h3><p>   每个线程会生成一个线程栈，每个方法被执行的时候，Java虚拟机都会同步创建一个栈帧，用于存储局部变量表、操作数栈、动态链接、方法出口信息。</p>
+<h5 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h5><p>局部变量表存放了编译期可知的各种Java虚拟机基本数据类型（boolean、byte、char、short、int、long 、float、double）、引用类型、returnAddress类型。<br>      这些数据类型在局部变量表中的存储空间以局部变量槽来表示（64位的long和double占用2个变量槽，其余数据类型占用1个变量槽）。局部变量表所需的内存空间在编译期完成分配，因此当进入一个方法时，这个方法需要在栈帧中分配多大的局部变量空间是确定的。在运行期间是不会改变局部变量表的大小（槽的多少）。</p>
+<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>与虚拟机栈作用类似，为虚拟机使用到的本地方法服务。</p>
+<h3 id="PC计数器"><a href="#PC计数器" class="headerlink" title="PC计数器"></a>PC计数器</h3><p>   当前线程所执行的字节码的行号指示器。在Java虚拟机的概念模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。</p>
+<p>对于JDK1.8以后HotSpot虚拟机改用与Jrokit、J9一样与本地内存中实现的元空间（Meta-space）来实现方法区。无论是原空间还是永久代，他们只是方法区的实现，字符串常量池和静态变量的存储逻辑上仍然属于方法区。元空间使用的是物理内存、永久代使用的是JVM内存。因此元空间的大小只受限于物理内存。</p>
+<p><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/hotspot_runtimearea.png" alt="HotSpot 虚拟机实现"></p>
+<h2 id="HotSpot-虚拟机对象的创建与引用"><a href="#HotSpot-虚拟机对象的创建与引用" class="headerlink" title="HotSpot 虚拟机对象的创建与引用"></a>HotSpot 虚拟机对象的创建与引用</h2><h4 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h4><p>1） 在new一个对象的时候，先需要通过类加载检查，然后虚拟机为新生对象分配内存。</p>
+<p>对象所需要的内存大小在类加载完成后便可以完全确定，为对象分配空间的任务实际上便等同于把一块确定大小的内存块从Java堆中划分出来。</p>
+<ul>
+<li>指针碰撞<br>假设内存规整，将使用过的在一边，空闲的在一边，中间放一个指针作为分界点的指示器，所分配内存就是把指针向空闲空间方向挪动一段与对象相等的距离。<br>使用Serial、ParNew带压缩整理过程的GC收集器时，采用指针碰撞，简单高效；</li>
+<li>空闲列表<br>假设内存不规整，是一块块不连续的，那么就需要维护一个列表记录哪块内存可用，哪块内存不可用，在分配的时候在列表中找一块足够大的空间划分给对象实例，并更新列表上的记录。<br>使用CMS基于清除算法的收集器时，理论上只能采用复杂的空闲列表来分配内存。</li>
+</ul>
+<h5 id="Thread-Local-Allocation-Buffer"><a href="#Thread-Local-Allocation-Buffer" class="headerlink" title="Thread Local Allocation Buffer"></a>Thread Local Allocation Buffer</h5><p>在堆中创建对象是特别频繁的事情，并且涉及到多线程的访问。如何保证高效且安全的申请空间？</p>
+<ul>
+<li>同步或者CAS+失败重试的方式保证更新操作的原子性；</li>
+<li>为每个线程在堆中预先分配一小块内存，通过-XX:+/-UseTLAB 设定；</li>
+</ul>
+<p>2）分配完内存后，为内存空间初始化零值以及必要的设置。<br>初始化零值可以保证对象实例字段在Java对象中可以不赋初始值就可以直接使用，程序能访问到这些字段的数据类型所对应的零值。<br>之后设置这个对象的类型、关联类的元数据信息、GC分代年龄信息等。</p>
+<p>3）执行 &lt;init&gt;() 方法，将对象进行初始化。</p>
+<h4 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><p>在Hotspot虚拟机中，对象在内存中的存储布局划分为三个部分</p>
+<ul>
+<li>对象头（Header）<ul>
+<li>一部分是对象自身运行时数据，HashCode, GC分代年龄，锁状态标志，线程持有锁，偏向线程ID,偏向时间戳（数组长度）。</li>
+<li>一部分是类型指针，指向它的类型元数据的指针，用来确定是哪个类的实例。</li>
+</ul>
+</li>
+<li>实例数据（Instance Data）<br>字段的存储顺序受到虚拟机分配策略（-XX:FieldsAllocationStyle）和字段在源码中的顺序影响。<br>默认相同宽度的字段被分配到一起存放，父类中定义的变量会出现在子类之前。<br>使用+XX:CompactFields=true字类中较窄的变量也会插入到父类变量的空隙之中。</li>
+<li>填充（Padding）<br>为了满足硬件的性能需求和提高垃圾回收时指针扫描的方便性。HotSpot虚拟机的自动内存管理系统要求对象的起始地址必须是8个字节的整数倍（任何对象的大小必须是8个字节的整数倍）。</li>
+</ul>
+<h3 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h3><p>对象在堆中创建好了，Java程序会通过栈上局部变量表中的reference字段来引用堆上的对象。</p>
+<ul>
+<li>句柄访问<br>Java堆中划分出一块内存作为句柄池，reference中存储的就是对象的句柄地址，句柄中包含了对象实例数据与类型数据各自具体的地址信息。<br>好处：reference中存储的事稳定的句柄地址，对象被移动时只会改变句柄中的实例数据指针。<br><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/jubing.jpeg" alt="句柄访问"></li>
+<li>直接指针<br>reference中存储的是对象的地址。好处是速度快，节约了指针定位的时间开销。<br><img src="/2020/06/02/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F/direct.jpeg" alt="直接指针"></li>
+</ul>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+              </div>
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            
+              <div class='post-wrapper'>
+                <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
       JVM内存模型
     </a>
@@ -1507,9 +1689,22 @@
           
         
           
-            
-              <div class='post-wrapper'>
-                <article class="post white-box shadow reveal ">
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+    
+    
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
   
 
 
@@ -1521,8 +1716,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/01/ClassLoader/">
-      类加载器和类加载机制
+    <a href="/2020/07/11/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/">
+      门面模式
     </a>
   </h2>
 
@@ -1547,9 +1742,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
+      <p>设计模式/结构型模式</p>
     </a>
   </div>
 
@@ -1560,7 +1755,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月1日</p>
+    <p>发布于：2020年7月11日</p>
   </a>
 </div>
 
@@ -1573,13 +1768,6 @@
           
             
               
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>3</p>
-    </a>
-  </div>
-
 
             
           
@@ -1595,84 +1783,30 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Java代码要在JVM中正常运行，首先要先编译成.class文件，由类加载器将其加载到内存中。之后由类编译器来编译执行。<br>在加载的过程中需要注意什么呢？<br>1）什么时候需要加载一个类呢？<br>2）随便任何一个文件都是否可以被加载呢，它的加载过程是什么样的？<br>3）类加载器需要对内存中的内容做什么工作才可以被JVM直接使用？</p>
-<blockquote>
-<p>虚拟机把描述类的数据从 Class 文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Class类型，这就是虚拟机的类加载机制。—《深入理解Java虚拟机》</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">类型的加载、链接和初始化过程都是在程序运行期间完成的。</span><br><span class="line">Java可以动态扩展的语言特性就是依赖运行期动态加载和动态连接这个特点实现的。</span><br></pre></td></tr></table></figure>
+        <h2 id="门面模式"><a href="#门面模式" class="headerlink" title="门面模式"></a>门面模式</h2><p>门面模式也叫外观模式。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>要求一个子系统的外部与其内部的通信必须通过一个统一的对象进行。</p>
+<p>外观模式提供一个高层次的接口，使得子系统更易于使用。</p>
+<p>门面模式注重要求“统一的对象”，提供一个访问子系统的接口，除了这个接口不允许任何访问子系统的行为发生。</p>
+<p><img src="/2020/07/11/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/facade_class.jpeg" alt="外观模式"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Subsystem"><a href="#Subsystem" class="headerlink" title="Subsystem"></a>Subsystem</h4><p>子系统角色，可以同时有一个或者多个子系统，每一个子系统都不是一个单独的类，而是一个类的集合。子系统并不知道门面的存在。对于子系统而言，门面知识一个客户端而已。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">classA</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomethingA</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//..logic a</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">classB</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomethingB</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//. logic b</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">classC</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomethingC</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//. logic c.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="类的加载时机"><a href="#类的加载时机" class="headerlink" title="类的加载时机"></a>类的加载时机</h1><p>  Java虚拟机规范并没有规定什么时候加载类，但是规定了什么时候初始化一个类。</p>
-<p>  虚拟机规范严格规定了有且只有5中情况必须立即对类进行“初始化”。<br>  1）遇到new、getstatic、putstatic、invokestatic；<br>  2）初始化类的时候，对父类进行初始化；<br>  3）JVM执行的时候，对主类进行初始化；<br>  4）使用java.lang.reflect包的方法对类进行反射调用时；<br>  5）使用jdk1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandler实例最后解析结果是REF_getstatic, REF_putstatic, REF_invokestatic时，对该类进行初始化；<br>  6) jdk1.8中子类实现的接口中定义了default方法时；</p>
-<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p>类的加载过程总共分为：Loading（加载）、Linking（连接）、Initializing（初始化）、Using（使用）、Unloading（卸载）。<br>其中 Linking阶段 分为 Verification（验证）、Preparation（准备）、Resolution（解析）。</p>
-<p><img src="/2020/06/01/ClassLoader/ClassLoader.jpeg" alt="ClassLoader"></p>
-<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>加载阶段的成果是生成Class类对象，并将该对象存储在堆中。Class对象作为访问该对象数据的访问入口。<br>加载的步骤：<br>1） 根据类的全限定名读取类的二进制字节流；<br>2） 对二进制字节流进行解析转换，并将类信息存储在方法区中；<br>3） 堆中生成Class类对象，作为程序访问方法区中的类型数据的外部接口；</p>
-<blockquote>
-<p>注意：<br>数组类不通过类加载器创建，由java虚拟机直接在内存中动态构造出来的。<br>数组的元素类型（去掉所有维度）要靠类加载器加载完成。<br>数组的组件类型（去掉一个维度）是引用类型，数组将被标识在加载该组建类型的类加载器的类名称空间上。<br>如果数组的组件类型不是引用类型，Java虚拟机会把数组标记为与引导类加载器关联。</p>
-</blockquote>
-<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证加载的类信息是否符合Java虚拟机规范，类的实现和继承、方法的执行、对象和方法的可访问性等等，主要分为四个阶段：</p>
-<p>1）文件格式的验证<br>   主要对Class文件中内容进行验证，是否符合Java虚拟机规范。<br>   比如魔数、常量池的类型、指向常量的索引值是否存在或者类型是否正确等等；</p>
-<blockquote>
-<p>这个阶段的验证是基于二进制字节流进行的，只有通过了验证才会被允许进入Java虚拟机的内存方法区存储。</p>
-</blockquote>
-<p>2）元数据验证<br>   对字节码描述信息进行语义分析，保证描述信息符合《Java语言规范》比如:</p>
-<ul>
-<li>这个类是否有父类、父类是否允许继承（被final修饰）；</li>
-<li>这个类是否实现了父类所要求实现的所有方法；</li>
-<li>类中的字段、方法是否与父类产生矛盾；</li>
+
+<h4 id="Facade"><a href="#Facade" class="headerlink" title="Facade"></a>Facade</h4><p>门面角色，客户端可以调用这个角色的方法。这个角色知道子系统的所有功能和责任。一般情况下，本角色会将所有从客户端发来的请求委派到相应的子系统，也就是说改角色没有实际的业务逻辑，只是一个委托类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Facade</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> classA a = <span class="keyword">new</span> classA();</span><br><span class="line">    <span class="keyword">private</span> classB b = <span class="keyword">new</span> classB();</span><br><span class="line">    <span class="keyword">private</span> classC c = <span class="keyword">new</span> classC();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodA</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.a.doSomethingA();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodB</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.b.doSomethingB();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodC</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.c.doSomethingC();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>减少系统的相互依赖</li>
+<li>提高了灵活性</li>
+<li>提高安全性</li>
 </ul>
-<p>3）字节码验证<br>   对类的方法体进行验证，保证任何跳转指令都不会跳转到方法体以外的字节码指令上；<br>   保证类型转化都是有效的.</p>
-<p>4）符号引用验证</p>
-<blockquote>
-<p>虚拟机在解析阶段将符号引用转化为直接引用的时候，对符号引用进行验证；</p>
-</blockquote>
-<ul>
-<li>符号引用中通过字符串描述的全限定名能否找到对应的类；</li>
-<li>在指定类中是否存在符合方法的字段描述以及简单名称所描述的方法和字段；</li>
-<li>符号引用中的类、字段、方法的可访问性是否可以被当前类访问；</li>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>为一个复杂的模块或者子系统提供一个供外界访问的接口</li>
+<li>子系统相对独立</li>
+<li>预防低水平人员带来的风险扩散</li>
+<li>一个子系统可以有多个门面</li>
+<li>门面不参与子系统内的业务逻辑</li>
 </ul>
-<p>符号引用阶段抛出的异常有：IllegalAccessError、NoSuchFieldError、NoSuchMethodError；</p>
-<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是正式为类中定义的变量分配内存并设置类变量初始值的阶段；</p>
-<p>对于类变量（静态属性），设置的是“零值”，真正赋值是在初始化阶段；<br>对于常量（final static），会被设置为ConstantValue属性所指定的初始值。</p>
-<blockquote>
-<p>对于常量，Javac时会为value生成ConstantValue属性。</p>
-</blockquote>
-<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是Java虚拟机将常量池的符号引用替换为直接引用的过程。《Java虚拟机规范》并没有规定何时进行解析。</p>
-<ul>
-<li>符号引用：可以无歧义的定位到目标即可；与虚拟机的内存布局无关；引用的目标不一定已经加载到虚拟机中；必须遵循《Java虚拟机规范》；</li>
-<li>直接引用：直接可以指向目标的指针、偏移量，或者可以间接定位到目标的句柄；与虚拟机的内存布局直接相关；直接引用的目标一定已经加载到虚拟机内存中；</li>
-</ul>
-<p>解析动作主要针对类或者接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符号引用进行。</p>
-<h5 id="类、接口解析："><a href="#类、接口解析：" class="headerlink" title="类、接口解析："></a>类、接口解析：</h5><p>虚拟机的完整解析过程：<br>1）如果不是一个数组类型，虚拟机将会把全限定名传给当前类的加载器去加载，在加载的过程中，由于元数据验证、字节码验证的需要，又可能出发其他相关类的加载动作。<br>2）如果是一个数组类型，并且数组的元素类型为对象，那么会按照第一点的规则加载数组元素类型。如果是基础数据类型包装类，那么由虚拟机生成一个代表该数组唯独和元素的数组对象；<br>3）前面两部解析OK后进行符号引用验证，确定当前类是否有加载类的访问权限。</p>
-<p>如果一个类拥有另外一个类的访问权限，那么至少有一条是成立的：<br>1）被访问类是public的，并且与访问类处于同一个模块；<br>2）被访问类是public的，不与访问类处于同一个模块，但是被访问类的模块允许访问类访问；<br>3）被访问类不是public的，但是与访问类处于同一个包中</p>
-<h5 id="字段解析"><a href="#字段解析" class="headerlink" title="字段解析"></a>字段解析</h5><p>对字段表内class_index项中索引的CONSTANT_Class_Info符号引用进行解析（即字段所属类）</p>
-<p>1）先查找当前类是否包含了简单名称与描述符与目标相匹配<br>2）从下往上的顺序查找实现的接口类<br>3）从下往上的顺序查找父类<br>4）都无法查找到，抛出java.lang.NoSuchFieldError.</p>
-<p>如果查找成果返回了引用，将会对这个字段进行权限验证，对于不具备权限的访问会抛出IllegalAccessError；</p>
-<h5 id="方法解析"><a href="#方法解析" class="headerlink" title="方法解析"></a>方法解析</h5><p>解析出方法表class_index项中索引的方法所属的类或者接口的符号引用。<br>具体的解析过程与字段解析类似。</p>
-<h5 id="接口方法解析"><a href="#接口方法解析" class="headerlink" title="接口方法解析"></a>接口方法解析</h5><p>与方法解析类似。</p>
-<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>这个阶段Java虚拟机才真正开始执行类中编写的程序代码。程序在这个阶段初始化类变量和其他资源。</p>
-<p>初始化阶段也是执行&lt;clinit&gt;()的过程。<br>&lt;clinit&gt;()方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块中的语句合并产生的；<br>编译器收集顺序是由语句在源文件中出现的顺序决定的；<br>静态语句块中智能访问到定义在静态语句块之前的变量；<br>定义在静态语句块后的变量，静态语句块可以赋值，但是不能访问；<br>Java虚拟机保证父类的&lt;clinit&gt;() 总是优先于子类的&lt;clinit&gt;()执行；</p>
-<blockquote>
-<p>如果一个类中没有静态语句块，也没有对变量的赋值操作，编译器可以不为这个类生成clinit()方法。</p>
-</blockquote>
-<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><p>类加载器主要通过一个类的全限定名来获取描述该类的二进制字节流，它处于Java虚拟机的外部，方便让应用程序自己决定如何获取所需的类。</p>
-<p>对于任意一个类，必须由加载它的类加载器与类本身来确定在Java虚拟机中的唯一性。<br>每个类加载器都拥有一个独立的类名称空间。</p>
-<h3 id="类加载器的双亲委派模型"><a href="#类加载器的双亲委派模型" class="headerlink" title="类加载器的双亲委派模型"></a>类加载器的双亲委派模型</h3><p><img src="/2020/06/01/ClassLoader/ClassLoader02.webp" alt="双亲委派模型"></p>
-<p>双亲委派模型要求除了顶层的启动类加载器之外，其余的类加载器都应有自己的父“类加载器”。<br>当类加载器需要加载一个类的时候，首先看该类是否已经被加载，如果没有被加载则尝试着让父“类加载器”去加载，如果没有父“类加载器”则让bootstrapClassLoader作为父“类加载器”，如果父“类加载器”加载失败，则使用自己的find_class方法去加载。</p>
-<ul>
-<li>启动类加载器（Bootstrap Class Loader）<br>启动类加载器负责加载&lt;JAVA_HOME&gt;\lib 目录下的jar包（按名字识别，名字不符合的类库存放在lib目录下也不会被加载），也可以指定 -Xbootclasspath参数指定加载目录。启动类加载器无法被java程序直接引用。</li>
-<li>扩展类加载器（Extension Class Loader）<br>扩展类加载器负责加载&lt;JAVA_HOME&gt;\lib\ext目录下的jar包，或者被java.ext.dirs指定的路径这种的所有类库。这个类加载器是在类sun.misc.Launcher$ExtClassLoader中以Java代码实现的。</li>
-<li>应用程序类加载器（Application Class Loader）<br>负责加载用户类路径上的所有类库。这个类加载器是在sun.misc.Launcher$AppClassLoader实现。</li>
-</ul>
-<h5 id="定制自己的类加载器"><a href="#定制自己的类加载器" class="headerlink" title="定制自己的类加载器"></a>定制自己的类加载器</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomClassLoader</span><span class="params">(ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">        String path = <span class="string">"/classes/"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream ins = <span class="keyword">new</span> FileInputStream(path + name.replace(<span class="string">"."</span>, File.separator) + <span class="string">".class"</span>);</span><br><span class="line">            ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            <span class="keyword">int</span> bufferSize = <span class="number">4096</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[bufferSize];</span><br><span class="line">            <span class="keyword">int</span> bytesNumRead = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> ((bytesNumRead = ins.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                baos.write(buffer, <span class="number">0</span>, bytesNumRead);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">byte</span>[] classData = baos.toByteArray();</span><br><span class="line">            <span class="keyword">return</span> defineClass(name, classData, <span class="number">0</span>, classData.length);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CustomClassLoader classLoader = <span class="keyword">new</span> CustomClassLoader(<span class="keyword">null</span>);</span><br><span class="line">        Class clazz = classLoader.loadClass(<span class="string">"com.*.ClassLoader"</span>);</span><br><span class="line">        System.out.println(clazz.getClassLoader());</span><br><span class="line">        System.out.println(clazz.getClass());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
 
       
     </div>
@@ -1682,23 +1816,8 @@
   </section>
 </article>
 
-              </div>
-            
-          
+          </div>
         
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-    
-    
       
         
           <div class='post-wrapper'>
@@ -1816,136 +1935,6 @@
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/07/09/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/">
-      桥接模式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/结构型模式</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月9日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p>桥梁模式的重点在解耦。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将抽象和实现解耦，使得两者可以独立的变化。<br>它使用了类间的聚合关系、继承、覆写等常用功能。解决了继承的缺点而提出的设计模式。</p>
-<p><img src="/2020/07/09/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/bridge_class.jpeg" alt="桥接模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>抽象角色引用实现角色，或者说抽象角色的部分实现是由实现角色完成的。</p>
-<h4 id="Abstraction"><a href="#Abstraction" class="headerlink" title="Abstraction"></a>Abstraction</h4><p>抽象化角色，定义出该抽象角色的行为，同时保存一个对实现化角色的引用。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Abstraction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Implementor imp;</span><br><span class="line">    <span class="comment">//必须指定实现者</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Abstraction</span><span class="params">(Implementor imp)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.imp = imp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.imp.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Implementor <span class="title">getImp</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> imp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="RefindAbstraction"><a href="#RefindAbstraction" class="headerlink" title="RefindAbstraction"></a>RefindAbstraction</h4><p>修正抽象化角色，引用实现化角色对抽象化角色进行修正。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RefindAbstraction</span> <span class="keyword">extends</span> <span class="title">Abstraction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RefindAbstraction</span><span class="params">(Implementor imp)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(imp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="comment">//....</span></span><br><span class="line">      <span class="keyword">super</span>.request();</span><br><span class="line">      <span class="keyword">super</span>.getImp().doAnyThing();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="Implementor"><a href="#Implementor" class="headerlink" title="Implementor"></a>Implementor</h4><p>实现化角色，接口或者抽象类，定义角色必须的行为和属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="ConcreteImplementor"><a href="#ConcreteImplementor" class="headerlink" title="ConcreteImplementor"></a>ConcreteImplementor</h4><p>具体实现化角色，实现接口或者抽象类定义的方法和属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteImplementor1</span> <span class="keyword">implements</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteImplementor2</span> <span class="keyword">implements</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Implementor imp = <span class="keyword">new</span> ConcreteImplementor1();</span><br><span class="line">Abstraction abs = <span class="keyword">new</span> RefindAbstraction(imp);</span><br><span class="line">abs.request();</span><br></pre></td></tr></table></figure>
-
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
-<li><p>抽象和实现分离<br>为了解决继承的缺点而提出的设计模式，在该模式下，实现可以不受抽象的约束，不再绑定到固定的抽象层次上。</p>
-</li>
-<li><p>优秀的扩展能力</p>
-</li>
-</ul>
-<p>可以随意增加抽象和实现。</p>
-<ul>
-<li>实现细节对客户透明</li>
-</ul>
-<p>由抽象层通过聚合关系完成了封装。</p>
-<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
-<li>不希望或者不适用使用继承的场景<br>继承层次太高，无法更细化设计颗粒等场景，需要考虑使用。</li>
-<li>接口或者抽象类不稳定的场景<br>接口或者抽象类不稳定，经常变更时，使用桥梁模式。</li>
-<li>重用型要求高的场景<br>设计的颗粒度粤西，被重用的可能性越大。<br>采用继承受到父类的限制，不可能出现太细的粒度。</li>
-</ul>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1954,7 +1943,7 @@
       <div class="prev-next">
         
         <p class="current">
-          1 / 24
+          1 / 25
         </p>
         
           <a class="next" rel="next" href="/page/2/">
@@ -2080,7 +2069,7 @@
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
-            ><div class='name'>设计模式</div><div class='badge'>(24)</div></a></li>
+            ><div class='name'>设计模式</div><div class='badge'>(25)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
@@ -2090,7 +2079,7 @@
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8FE7BB93E69E84E59E8BE6A8A1E5BC8F"
-            ><div class='name'>结构型模式</div><div class='badge'>(5)</div></a></li>
+            ><div class='name'>结构型模式</div><div class='badge'>(6)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"
@@ -2124,7 +2113,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 21.14px; color: #686868">JVM</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Spring/" style="font-size: 14px; color: #999">Spring</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.43px; color: #8f8f8f">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19.71px; color: #727272">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18.29px; color: #7c7c7c">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.57px; color: #5f5f5f">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.43px; color: #8f8f8f">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.86px; color: #868686">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.67px; color: #6c6c6c">JVM</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Spring/" style="font-size: 14px; color: #999">Spring</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.67px; color: #8e8e8e">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.33px; color: #606060">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.67px; color: #8e8e8e">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 17.33px; color: #828282">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
     </div>
   </section>
 
