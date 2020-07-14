@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#®️Jun'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+    <title>Spring-Bean - 碎碎念</title>
+  
+    <meta name="keywords" content="Spring,Spring-Bean">
+  
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+  <link rel="shortcut icon" type='image/x-icon' href="https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/favicon/favicon.ico">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+	  setTimeout(function() { 
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?0b970030787ceb090a4dc46259415a4c";
+		hm.defer=true;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+	  }, 5000);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+<header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h'>
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+          
+          
+          
+            JUNE <b><sup style='color:#3AA757'>®️Jun</sup></b>
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+<script>setLoadingBarProgress(40);</script>
+
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper'>
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/07/14/Spring-Bean/">
+      Spring-Bean
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月14日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <h2 id="BeanDefinition"><a href="#BeanDefinition" class="headerlink" title="BeanDefinition"></a>BeanDefinition</h2><blockquote>
+<p>A BeanDefinition describes a bean instance, which has property values,<br>Constructor arguments values, and further information supplied by concrete implementations.<br>This is just a minimal interface: The main intention is to allow a BeanFactoryPostProcessor to introspect and modify property values and other bean metadata.</p>
+</blockquote>
+<p><img src="/2020/07/14/Spring-Bean/beandefinition_class.jpg" alt="BeanDefinition 类图"></p>
+<p>BeanDefinition： 顶级父接口<br>AbstractBeanDefinition：是GenericBeanDefinition、RootBeanDefinition、ChildBeanDefinition 的通用属性的完整实现。<br>GenericBeanDefinition: 标准的bean定义目的的一站式服务类，</p>
+<p>BeanDefinition是SpringFramework中定义的配置元信息接口,包含了：</p>
+<ul>
+<li>Bean 的类名</li>
+<li>Bean 的行为配置元素，如作用域、自动绑定模式、生命周期回调等</li>
+<li>其他Bean引用，（Collaborators、Dependends)</li>
+<li>配置设置（Bean的Properties）</li>
+</ul>
+<h3 id="BeanDefinition-元信息"><a href="#BeanDefinition-元信息" class="headerlink" title="BeanDefinition 元信息"></a>BeanDefinition 元信息</h3><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Class</td>
+<td>Bean的全限类名，必须是具体类</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>Bean的名称或者🆔</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Bean的作用域，singleton、prototype</td>
+</tr>
+<tr>
+<td>Constructor arguments</td>
+<td>Bean的构造器参数 for DI</td>
+</tr>
+<tr>
+<td>Properties</td>
+<td>Bean的属性设置 for DI</td>
+</tr>
+<tr>
+<td>Autowiring Mode</td>
+<td>Bean的自动绑定模式：ByName 、 byType</td>
+</tr>
+<tr>
+<td>Lazy Initialization Mode</td>
+<td>Bean 延迟初始化模式</td>
+</tr>
+<tr>
+<td>initialzation method</td>
+<td>Bean初始化回调方法名称</td>
+</tr>
+<tr>
+<td>destruction method</td>
+<td>Bean 销毁回调方法名称</td>
+</tr>
+</tbody></table>
+<h3 id="BeanDefinition-构建"><a href="#BeanDefinition-构建" class="headerlink" title="BeanDefinition 构建"></a>BeanDefinition 构建</h3><ul>
+<li>通过BeanDefinitionBuilder构建Beandefinition</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">        <span class="comment">//bean definition builder.</span></span><br><span class="line">BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">beanDefinitionBuilder.addPropertyValue(<span class="string">"id"</span>,<span class="number">1L</span>);</span><br><span class="line">beanDefinitionBuilder.addPropertyValue(<span class="string">"name"</span>,<span class="string">"lisi"</span>);</span><br><span class="line"></span><br><span class="line">BeanDefinition beanDefinition = beanDefinitionBuilder.getBeanDefinition();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过GenericBeanDefinition 构建</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GenericBeanDefinition genericBeanDefinition = <span class="keyword">new</span> GenericBeanDefinition();</span><br><span class="line">genericBeanDefinition.setBeanClass(User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">MutablePropertyValues propertyValues = <span class="keyword">new</span> MutablePropertyValues();</span><br><span class="line"><span class="comment">//        propertyValues.addPropertyValue("id",2L);</span></span><br><span class="line"><span class="comment">//        propertyValues.addPropertyValue("name","zhaowu");</span></span><br><span class="line"></span><br><span class="line">propertyValues.add(<span class="string">"id"</span>,<span class="number">2L</span>)</span><br><span class="line">        .add(<span class="string">"name"</span>,<span class="string">"zhaowu"</span>);</span><br><span class="line">genericBeanDefinition.setPropertyValues(propertyValues);</span><br></pre></td></tr></table></figure>
+
+<h2 id="SpringBean-命名"><a href="#SpringBean-命名" class="headerlink" title="SpringBean 命名"></a>SpringBean 命名</h2><p>每个Bean拥有一个或者多个标识符，这些标识符在Bean所在的容器必须是唯一的。<br>通常，一个Bean仅有一个标识符，可以考虑使用别名来扩充。</p>
+<p>在基于XML的配置元信息中，可以使用id或者name属性来贵姓Bean的标识符。通常Bean的标识符由字母组成，允许出现特殊字符。可以在Bean的name属性使用逗号“,”或者“;”或者空格来间隔。</p>
+<p>Bean的id或者name属性如果为空，容器会为Bean自动生成一个唯一的名称。</p>
+<h3 id="BeanNameGenerator"><a href="#BeanNameGenerator" class="headerlink" title="BeanNameGenerator"></a>BeanNameGenerator</h3><p><img src="/2020/07/14/Spring-Bean/bean_name_generator.jpg" alt="BeanNameGenerator 类图"></p>
+<h3 id="BeanDefinition-配置"><a href="#BeanDefinition-配置" class="headerlink" title="BeanDefinition 配置"></a>BeanDefinition 配置</h3><h4 id="Xml"><a href="#Xml" class="headerlink" title="Xml"></a>Xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user"</span> <span class="attr">class</span>=<span class="string">"com.github.springframework.models.User"</span> <span class="attr">primary</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"id"</span> <span class="attr">value</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"zhangsan"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"superUser"</span> <span class="attr">class</span>=<span class="string">"com.github.springframework.models.SuperUser"</span> <span class="attr">parent</span>=<span class="string">"user"</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"addr"</span> <span class="attr">value</span>=<span class="string">"上海"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"objectFactory"</span> <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"targetBeanName"</span> <span class="attr">value</span>=<span class="string">"user"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Java注解-Bean"><a href="#Java注解-Bean" class="headerlink" title="Java注解 @Bean"></a>Java注解 @Bean</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationBeanDefinitionDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//create factory bean</span></span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//register config class.</span></span><br><span class="line">        applicationContext.register(Config<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//refresh</span></span><br><span class="line">        applicationContext.refresh();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//getUser</span></span><br><span class="line">        System.out.println(applicationContext.getBean(User<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Config</span></span>&#123;</span><br><span class="line">        <span class="meta">@Bean</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> User <span class="title">user</span><span class="params">()</span></span>&#123;</span><br><span class="line">            User user = <span class="keyword">new</span> User();</span><br><span class="line">            user.setId(<span class="number">1L</span>);</span><br><span class="line">            user.setName(<span class="string">"Ann: zhangsan"</span>);</span><br><span class="line">            <span class="keyword">return</span> user;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Java注解-Component"><a href="#Java注解-Component" class="headerlink" title="Java注解 @Component"></a>Java注解 @Component</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationBeanDefinitionDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//create factory bean</span></span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//register config class.</span></span><br><span class="line">        applicationContext.register(Config<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//refresh</span></span><br><span class="line">        applicationContext.refresh();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        System.out.println(applicationContext.getBean(Config<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Component</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Config</span></span>&#123;</span><br><span class="line">        <span class="meta">@Bean</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> User <span class="title">user</span><span class="params">()</span></span>&#123;</span><br><span class="line">            User user = <span class="keyword">new</span> User();</span><br><span class="line">            user.setId(<span class="number">1L</span>);</span><br><span class="line">            user.setName(<span class="string">"Ann: zhangsan"</span>);</span><br><span class="line">            <span class="keyword">return</span> user;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="BeanDefinition注册到容器"><a href="#BeanDefinition注册到容器" class="headerlink" title="BeanDefinition注册到容器"></a>BeanDefinition注册到容器</h2><p><img src="/2020/07/14/Spring-Bean/BeanDefinitionRegistry_Class.jpg" alt="BeanDefinitionRegistry 类图"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">beanDefinitionRegistry</span><span class="params">(BeanDefinitionRegistry registry, String name)</span> </span>&#123;</span><br><span class="line">    BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanDefinitionBuilder.addPropertyValue(<span class="string">"id"</span>, <span class="number">1L</span>)</span><br><span class="line">            .addPropertyValue(<span class="string">"name"</span>, <span class="string">"Reg: zhangsan"</span>);</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(name)) &#123;</span><br><span class="line">        registry.registerBeanDefinition(name, beanDefinitionBuilder.getBeanDefinition());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        BeanDefinitionReaderUtils.registerWithGeneratedName(beanDefinitionBuilder.getBeanDefinition(),registry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于AnnotatinoConfigApplicationContext 是 BeanDefinitionRegistry的间接子类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line">applicationContext.register(Config<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">beanDefinitionRegistry(applicationContext,<span class="string">"REG:ZhangSan:Name"</span>);</span><br><span class="line">beanDefinitionRegistry(applicationContext,<span class="keyword">null</span>);</span><br><span class="line">applicationContext.refresh();</span><br><span class="line">System.out.println(applicationContext.getBeansOfType(Config<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">System.out.println(applicationContext.getBeansOfType(User<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">System.out.println(applicationContext.getBeansOfType(AnnotationApplicationContextDemo<span class="class">.<span class="keyword">class</span>))</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Bean-实例化"><a href="#Bean-实例化" class="headerlink" title="Bean 实例化"></a>Bean 实例化</h2><p>常规：</p>
+<ul>
+<li><p>通过构造器（配置元信息：XML、Java注解、JavaAPI）</p>
+</li>
+<li><p>静态工厂方法（配置元信息：XML、JavaAPI）</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> User2 <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user-by-static-method"</span> <span class="attr">class</span>=<span class="string">"com.github.spring.beans.User2"</span>  <span class="attr">factory-method</span>=<span class="string">"getInstance"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"classpath:/META-INF/bean-creation-context.xml"</span>);</span><br><span class="line"></span><br><span class="line">User2 user = applicationContext.getBean(<span class="string">"user-by-static-method"</span>, User2<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Bean工厂方法（配置元信息：XML、JavaAPI）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> User2 <span class="title">createuser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultUserFactory</span> <span class="keyword">implements</span> <span class="title">UserFactory</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userFactory"</span> <span class="attr">class</span>=<span class="string">"com.github.spring.factory.DefaultUserFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user-by-instance-method"</span> <span class="attr">factory-bean</span>=<span class="string">"userFactory"</span> <span class="attr">factory-method</span>=<span class="string">"createuser"</span>/&gt;</span></span><br><span class="line">``</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:/META-INF/bean-creation-context.xml");</span><br><span class="line">User2 user3 = applicationContext.getBean("user-by-instance-method", User2.class);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>FactoryBean（XML、Java注解、JavaAPI）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserFactoryBean</span> <span class="keyword">implements</span> <span class="title">FactoryBean</span>&lt;<span class="title">User2</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User2 <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> User2.getInstance();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Class&lt;?&gt; getObjectType() &#123;</span><br><span class="line">        <span class="keyword">return</span> User2<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user-by-factory-bean"</span> <span class="attr">class</span>=<span class="string">"com.github.spring.factory.UserFactoryBean"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"classpath:/META-INF/bean-creation-context.xml"</span>);</span><br><span class="line">User2 user2 = applicationContext.getBean(<span class="string">"user-by-factory-method"</span>, User2<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>特殊方式：</p>
+<ul>
+<li>ServiceLoaderFactoryBean</li>
+</ul>
+<p>Java ServiceLoader: 会在classpath:/META-INF/services下加载接口配置文件：</p>
+<p>文件名名称为全限定接口名称，内容为全限定实现类</p>
+<p><img src="/2020/07/14/Spring-Bean/service-loader.jpg" alt="services 配置文件"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">com.github.spring.factory.DefaultUserFactory</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">demoServiceLoader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ServiceLoader&lt;UserFactory&gt; serviceLoader = ServiceLoader.load(UserFactory<span class="class">.<span class="keyword">class</span>, <span class="title">Thread</span>.<span class="title">currentThread</span>().<span class="title">getContextClassLoader</span>())</span>;</span><br><span class="line">    displayServiceLoad(serviceLoader);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">displayServiceLoad</span><span class="params">(ServiceLoader&lt;UserFactory&gt; serviceLoader)</span> </span>&#123;</span><br><span class="line">    Iterator&lt;UserFactory&gt; iterator = serviceLoader.iterator();</span><br><span class="line">    <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">        UserFactory userFactory = iterator.next();</span><br><span class="line">        System.out.println(userFactory.createuser());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>ServiceLoaderFactoryBean的实现</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userFactoryServiceLoader"</span> <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.serviceloader.ServiceLoaderFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"serviceType"</span> <span class="attr">value</span>=<span class="string">"com.github.spring.factory.UserFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"classpath:/META-INF/sp-bean-creation-context.xml"</span>);</span><br><span class="line">ServiceLoader&lt;UserFactory&gt; serviceLoader = applicationContext.getBean(<span class="string">"userFactoryServiceLoader"</span>, ServiceLoader<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">displayServiceLoad(serviceLoader);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>AutowireCapableBeanFactory#createBean(java.lang.Class,int, boolean);</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AutowireCapableBeanFactory beanFactory = applicationContext.getAutowireCapableBeanFactory();</span><br><span class="line">UserFactory userFactory = beanFactory.createBean(DefaultUserFactory<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">System.out.println(userFactory.createuser());</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>BeanDefinitionRegistry#registerBeanDefinition(String,BeanDefinition);</li>
+</ul>
+<h2 id="Bean的初始化"><a href="#Bean的初始化" class="headerlink" title="Bean的初始化"></a>Bean的初始化</h2><ul>
+<li><p>@PostConstructor</p>
+</li>
+<li><p>InitializingBean 的 afterPropertiesSet</p>
+</li>
+<li><p>Bean的initMethod<br>@Bean(initMethod=””)</p>
+<bean initmethod>
+AbstractBeanDefinition.setInitMethodName("");
+
+
+
+</bean></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultUserFactory</span> <span class="keyword">implements</span> <span class="title">UserFactory</span>, <span class="title">InitializingBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DefaultUserFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"DefaultUserFactory Constructor Called."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"DefaultUserFactory PostConstructor Called."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initUserFactory</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"DefaultUserFactory initUserFactory Called."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"DefaultUserFactory afterPropertiesSet called."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanInitializationDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line">        applicationContext.register(BeanInitializationDemo<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        applicationContext.refresh();</span><br><span class="line">        UserFactory userFactory = applicationContext.getBean(UserFactory<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">        <span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span>(<span class="title">userFactory</span>.<span class="title">createuser</span>())</span>;</span><br><span class="line">        applicationContext.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span>(initMethod = <span class="string">"initUserFactory"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DefaultUserFactory <span class="title">userFactory</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DefaultUserFactory();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="延迟初始化"><a href="#延迟初始化" class="headerlink" title="延迟初始化"></a>延迟初始化</h3><ul>
+<li>xml: <bean lazy-init="true"></bean></li>
+<li>annotation: @Lazy</li>
+</ul>
+<p>对于延迟初始化，是在applicationContext初始化之后进行初始化。<br>非延迟初始化，是在applicationContext初始化之前进行初始化。</p>
+<h2 id="Bean-的销毁"><a href="#Bean-的销毁" class="headerlink" title="Bean 的销毁"></a>Bean 的销毁</h2><ul>
+<li>@PreDestroy</li>
+<li>实现DisposableBean接口的destoy()方法</li>
+<li>Bean的 destroy方法<bean destroy>
+@Bean(destroy="")
+AbstractBeanDefinition.setDestroyMethodName(""); 
+
+
+</bean></li>
+</ul>
+<h2 id><a href="#" class="headerlink" title></a></h2><ul>
+<li>如何注册一个Spring Bean</li>
+</ul>
+<p>可以通过BeanDefinition和外部单体对象来注册。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">UserFactory userFactory = <span class="keyword">new</span> DefaultUserFactory();</span><br><span class="line">ConfiguableListableBeanFactory factory = applicationContext.getBeanFactory();</span><br><span class="line">factory.registerSingleton(<span class="string">"userFactory"</span>, userFactory);</span><br><span class="line"></span><br><span class="line">UserFactory userFactory = applicationContext.getBean(<span class="string">"UserFactory"</span>,UserFactory<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Spring BeanDefinition 是什么？</p>
+</li>
+<li><p>Spring 容器是如何注册Bean的？</p>
+</li>
+</ul>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+
+              
+            </div>
+          
+        </div>
+
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-14T21:43:11+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年7月14日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Spring/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Spring</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Spring-Bean/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Spring-Bean</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+              <a class='prev' href='/2020/07/14/Spring-%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Spring-依赖查找</p>
+                <p class='content'>依赖查找历史单一类型依赖查找集合类型依赖查找层次性依赖查找延迟依赖查找安全依赖查找内建可查找的依赖依赖查找中的异常劝退</p>
+              </a>
+            
+            
+              <a class='next' href='/2020/07/12/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/'>
+                <p class='title'>享元模式<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>享元模式享元模式的目的在于运用共享技术，使得一些细粒度的对象可以共享。多食用细粒度的对象，以便于重用或者重构。
+定义使用共享对象可以有效地支持大量的细粒度的对象。
+大量的细粒度对象，需要把对象的...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'Spring-Bean',
+      tools: true
+    }
+  </script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#BeanDefinition"><span class="toc-text">BeanDefinition</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BeanDefinition-元信息"><span class="toc-text">BeanDefinition 元信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BeanDefinition-构建"><span class="toc-text">BeanDefinition 构建</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBean-命名"><span class="toc-text">SpringBean 命名</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BeanNameGenerator"><span class="toc-text">BeanNameGenerator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BeanDefinition-配置"><span class="toc-text">BeanDefinition 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Xml"><span class="toc-text">Xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Java注解-Bean"><span class="toc-text">Java注解 @Bean</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Java注解-Component"><span class="toc-text">Java注解 @Component</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BeanDefinition注册到容器"><span class="toc-text">BeanDefinition注册到容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bean-实例化"><span class="toc-text">Bean 实例化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bean的初始化"><span class="toc-text">Bean的初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#延迟初始化"><span class="toc-text">延迟初始化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bean-的销毁"><span class="toc-text">Bean 的销毁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+  
+  <footer class="clearfix">
+    <br><br>
+
+    
+  </footer>
+
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4/dist/jquery.min.js"></script>
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '8px',
+        duration: '800',
+        interval: '100',
+        scale: '1'
+      });
+    });
+  </script>
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/xaoxuu/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2.6.5/js/search.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/comment_typing.js"></script>
+
+
+
+
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-check-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-check-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-times-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-times-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 标准 markdown 描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

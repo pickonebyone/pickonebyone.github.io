@@ -356,9 +356,381 @@
         
           
         
+          
+        
+          
+        
       
     
     
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/07/14/Spring-%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/">
+      Spring-依赖查找
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月14日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="依赖查找"><a href="#依赖查找" class="headerlink" title="依赖查找"></a>依赖查找</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><h3 id="单一类型依赖查找"><a href="#单一类型依赖查找" class="headerlink" title="单一类型依赖查找"></a>单一类型依赖查找</h3><h3 id="集合类型依赖查找"><a href="#集合类型依赖查找" class="headerlink" title="集合类型依赖查找"></a>集合类型依赖查找</h3><h3 id="层次性依赖查找"><a href="#层次性依赖查找" class="headerlink" title="层次性依赖查找"></a>层次性依赖查找</h3><h3 id="延迟依赖查找"><a href="#延迟依赖查找" class="headerlink" title="延迟依赖查找"></a>延迟依赖查找</h3><h3 id="安全依赖查找"><a href="#安全依赖查找" class="headerlink" title="安全依赖查找"></a>安全依赖查找</h3><h3 id="内建可查找的依赖"><a href="#内建可查找的依赖" class="headerlink" title="内建可查找的依赖"></a>内建可查找的依赖</h3><h3 id="依赖查找中的异常"><a href="#依赖查找中的异常" class="headerlink" title="依赖查找中的异常"></a>依赖查找中的异常</h3><h3 id="劝退"><a href="#劝退" class="headerlink" title="劝退"></a>劝退</h3>
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/07/14/Spring-Bean/">
+      Spring-Bean
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月14日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="BeanDefinition"><a href="#BeanDefinition" class="headerlink" title="BeanDefinition"></a>BeanDefinition</h2><blockquote>
+<p>A BeanDefinition describes a bean instance, which has property values,<br>Constructor arguments values, and further information supplied by concrete implementations.<br>This is just a minimal interface: The main intention is to allow a BeanFactoryPostProcessor to introspect and modify property values and other bean metadata.</p>
+</blockquote>
+<p><img src="/2020/07/14/Spring-Bean/beandefinition_class.jpg" alt="BeanDefinition 类图"></p>
+<p>BeanDefinition： 顶级父接口<br>AbstractBeanDefinition：是GenericBeanDefinition、RootBeanDefinition、ChildBeanDefinition 的通用属性的完整实现。<br>GenericBeanDefinition: 标准的bean定义目的的一站式服务类，</p>
+<p>BeanDefinition是SpringFramework中定义的配置元信息接口,包含了：</p>
+<ul>
+<li>Bean 的类名</li>
+<li>Bean 的行为配置元素，如作用域、自动绑定模式、生命周期回调等</li>
+<li>其他Bean引用，（Collaborators、Dependends)</li>
+<li>配置设置（Bean的Properties）</li>
+</ul>
+<h3 id="BeanDefinition-元信息"><a href="#BeanDefinition-元信息" class="headerlink" title="BeanDefinition 元信息"></a>BeanDefinition 元信息</h3><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Class</td>
+<td>Bean的全限类名，必须是具体类</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>Bean的名称或者🆔</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Bean的作用域，singleton、prototype</td>
+</tr>
+<tr>
+<td>Constructor arguments</td>
+<td>Bean的构造器参数 for DI</td>
+</tr>
+<tr>
+<td>Properties</td>
+<td>Bean的属性设置 for DI</td>
+</tr>
+<tr>
+<td>Autowiring Mode</td>
+<td>Bean的自动绑定模式：ByName 、 byType</td>
+</tr>
+<tr>
+<td>Lazy Initialization Mode</td>
+<td>Bean 延迟初始化模式</td>
+</tr>
+<tr>
+<td>initialzation method</td>
+<td>Bean初始化回调方法名称</td>
+</tr>
+<tr>
+<td>destruction method</td>
+<td>Bean 销毁回调方法名称</td>
+</tr>
+</tbody></table>
+<h3 id="BeanDefinition-构建"><a href="#BeanDefinition-构建" class="headerlink" title="BeanDefinition 构建"></a>BeanDefinition 构建</h3><ul>
+<li>通过BeanDefinitionBuilder构建Beandefinition</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">        <span class="comment">//bean definition builder.</span></span><br><span class="line">BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">beanDefinitionBuilder.addPropertyValue(<span class="string">"id"</span>,<span class="number">1L</span>);</span><br><span class="line">beanDefinitionBuilder.addPropertyValue(<span class="string">"name"</span>,<span class="string">"lisi"</span>);</span><br><span class="line"></span><br><span class="line">BeanDefinition beanDefinition = beanDefinitionBuilder.getBeanDefinition();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过GenericBeanDefinition 构建</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GenericBeanDefinition genericBeanDefinition = <span class="keyword">new</span> GenericBeanDefinition();</span><br><span class="line">genericBeanDefinition.setBeanClass(User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">MutablePropertyValues propertyValues = <span class="keyword">new</span> MutablePropertyValues();</span><br><span class="line"><span class="comment">//        propertyValues.addPropertyValue("id",2L);</span></span><br><span class="line"><span class="comment">//        propertyValues.addPropertyValue("name","zhaowu");</span></span><br><span class="line"></span><br><span class="line">propertyValues.add(<span class="string">"id"</span>,<span class="number">2L</span>)</span><br><span class="line">        .add(<span class="string">"name"</span>,<span class="string">"zhaowu"</span>);</span><br><span class="line">genericBeanDefinition.setPropertyValues(propertyValues);</span><br></pre></td></tr></table></figure>
+
+<h2 id="SpringBean-命名"><a href="#SpringBean-命名" class="headerlink" title="SpringBean 命名"></a>SpringBean 命名</h2><p>每个Bean拥有一个或者多个标识符，这些标识符在Bean所在的容器必须是唯一的。<br>通常，一个Bean仅有一个标识符，可以考虑使用别名来扩充。</p>
+<p>在基于XML的配置元信息中，可以使用id或者name属性来贵姓Bean的标识符。通常Bean的标识符由字母组成，允许出现特殊字符。可以在Bean的name属性使用逗号“,”或者“;”或者空格来间隔。</p>
+<p>Bean的id或者name属性如果为空，容器会为Bean自动生成一个唯一的名称。</p>
+<h3 id="BeanNameGenerator"><a href="#BeanNameGenerator" class="headerlink" title="BeanNameGenerator"></a>BeanNameGenerator</h3><p><img src="/2020/07/14/Spring-Bean/bean_name_generator.jpg" alt="BeanNameGenerator 类图"></p>
+<h3 id="BeanDefinition-配置"><a href="#BeanDefinition-配置" class="headerlink" title="BeanDefinition 配置"></a>BeanDefinition 配置</h3><h4 id="Xml"><a href="#Xml" class="headerlink" title="Xml"></a>Xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user"</span> <span class="attr">class</span>=<span class="string">"com.github.springframework.models.User"</span> <span class="attr">primary</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"id"</span> <span class="attr">value</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"zhangsan"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"superUser"</span> <span class="attr">class</span>=<span class="string">"com.github.springframework.models.SuperUser"</span> <span class="attr">parent</span>=<span class="string">"user"</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"addr"</span> <span class="attr">value</span>=<span class="string">"上海"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"objectFactory"</span> <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"targetBeanName"</span> <span class="attr">value</span>=<span class="string">"user"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Java注解-Bean"><a href="#Java注解-Bean" class="headerlink" title="Java注解 @Bean"></a>Java注解 @Bean</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationBeanDefinitionDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//create factory bean</span></span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//register config class.</span></span><br><span class="line">        applicationContext.register(Config<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//refresh</span></span><br><span class="line">        applicationContext.refresh();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//getUser</span></span><br><span class="line">        System.out.println(applicationContext.getBean(User<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Config</span></span>&#123;</span><br><span class="line">        <span class="meta">@Bean</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> User <span class="title">user</span><span class="params">()</span></span>&#123;</span><br><span class="line">            User user = <span class="keyword">new</span> User();</span><br><span class="line">            user.setId(<span class="number">1L</span>);</span><br><span class="line">            user.setName(<span class="string">"Ann: zhangsan"</span>);</span><br><span class="line">            <span class="keyword">return</span> user;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Java注解-Component"><a href="#Java注解-Component" class="headerlink" title="Java注解 @Component"></a>Java注解 @Component</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationBeanDefinitionDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//create factory bean</span></span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//register config class.</span></span><br><span class="line">        applicationContext.register(Config<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//refresh</span></span><br><span class="line">        applicationContext.refresh();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        System.out.println(applicationContext.getBean(Config<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Component</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Config</span></span>&#123;</span><br><span class="line">        <span class="meta">@Bean</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> User <span class="title">user</span><span class="params">()</span></span>&#123;</span><br><span class="line">            User user = <span class="keyword">new</span> User();</span><br><span class="line">            user.setId(<span class="number">1L</span>);</span><br><span class="line">            user.setName(<span class="string">"Ann: zhangsan"</span>);</span><br><span class="line">            <span class="keyword">return</span> user;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="BeanDefinition注册到容器"><a href="#BeanDefinition注册到容器" class="headerlink" title="BeanDefinition注册到容器"></a>BeanDefinition注册到容器</h2><p><img src="/2020/07/14/Spring-Bean/BeanDefinitionRegistry_Class.jpg" alt="BeanDefinitionRegistry 类图"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">beanDefinitionRegistry</span><span class="params">(BeanDefinitionRegistry registry, String name)</span> </span>&#123;</span><br><span class="line">    BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanDefinitionBuilder.addPropertyValue(<span class="string">"id"</span>, <span class="number">1L</span>)</span><br><span class="line">            .addPropertyValue(<span class="string">"name"</span>, <span class="string">"Reg: zhangsan"</span>);</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(name)) &#123;</span><br><span class="line">        registry.registerBeanDefinition(name, beanDefinitionBuilder.getBeanDefinition());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        BeanDefinitionReaderUtils.registerWithGeneratedName(beanDefinitionBuilder.getBeanDefinition(),registry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于AnnotatinoConfigApplicationContext 是 BeanDefinitionRegistry的间接子类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line">applicationContext.register(Config<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">beanDefinitionRegistry(applicationContext,<span class="string">"REG:ZhangSan:Name"</span>);</span><br><span class="line">beanDefinitionRegistry(applicationContext,<span class="keyword">null</span>);</span><br><span class="line">applicationContext.refresh();</span><br><span class="line">System.out.println(applicationContext.getBeansOfType(Config<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">System.out.println(applicationContext.getBeansOfType(User<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">System.out.println(applicationContext.getBeansOfType(AnnotationApplicationContextDemo<span class="class">.<span class="keyword">class</span>))</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Bean-实例化"><a href="#Bean-实例化" class="headerlink" title="Bean 实例化"></a>Bean 实例化</h2><p>常规：</p>
+<ul>
+<li><p>通过构造器（配置元信息：XML、Java注解、JavaAPI）</p>
+</li>
+<li><p>静态工厂方法（配置元信息：XML、JavaAPI）</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> User2 <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user-by-static-method"</span> <span class="attr">class</span>=<span class="string">"com.github.spring.beans.User2"</span>  <span class="attr">factory-method</span>=<span class="string">"getInstance"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"classpath:/META-INF/bean-creation-context.xml"</span>);</span><br><span class="line"></span><br><span class="line">User2 user = applicationContext.getBean(<span class="string">"user-by-static-method"</span>, User2<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Bean工厂方法（配置元信息：XML、JavaAPI）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> User2 <span class="title">createuser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultUserFactory</span> <span class="keyword">implements</span> <span class="title">UserFactory</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userFactory"</span> <span class="attr">class</span>=<span class="string">"com.github.spring.factory.DefaultUserFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user-by-instance-method"</span> <span class="attr">factory-bean</span>=<span class="string">"userFactory"</span> <span class="attr">factory-method</span>=<span class="string">"createuser"</span>/&gt;</span></span><br><span class="line">``</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:/META-INF/bean-creation-context.xml");</span><br><span class="line">User2 user3 = applicationContext.getBean("user-by-instance-method", User2.class);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>FactoryBean（XML、Java注解、JavaAPI）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserFactoryBean</span> <span class="keyword">implements</span> <span class="title">FactoryBean</span>&lt;<span class="title">User2</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User2 <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> User2.getInstance();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Class&lt;?&gt; getObjectType() &#123;</span><br><span class="line">        <span class="keyword">return</span> User2<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user-by-factory-bean"</span> <span class="attr">class</span>=<span class="string">"com.github.spring.factory.UserFactoryBean"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"classpath:/META-INF/bean-creation-context.xml"</span>);</span><br><span class="line">User2 user2 = applicationContext.getBean(<span class="string">"user-by-factory-method"</span>, User2<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>特殊方式：</p>
+<ul>
+<li>ServiceLoaderFactoryBean</li>
+</ul>
+<p>Java ServiceLoader: 会在classpath:/META-INF/services下加载接口配置文件：</p>
+<p>文件名名称为全限定接口名称，内容为全限定实现类</p>
+<p><img src="/2020/07/14/Spring-Bean/service-loader.jpg" alt="services 配置文件"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">com.github.spring.factory.DefaultUserFactory</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">demoServiceLoader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ServiceLoader&lt;UserFactory&gt; serviceLoader = ServiceLoader.load(UserFactory<span class="class">.<span class="keyword">class</span>, <span class="title">Thread</span>.<span class="title">currentThread</span>().<span class="title">getContextClassLoader</span>())</span>;</span><br><span class="line">    displayServiceLoad(serviceLoader);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">displayServiceLoad</span><span class="params">(ServiceLoader&lt;UserFactory&gt; serviceLoader)</span> </span>&#123;</span><br><span class="line">    Iterator&lt;UserFactory&gt; iterator = serviceLoader.iterator();</span><br><span class="line">    <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">        UserFactory userFactory = iterator.next();</span><br><span class="line">        System.out.println(userFactory.createuser());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>ServiceLoaderFactoryBean的实现</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userFactoryServiceLoader"</span> <span class="attr">class</span>=<span class="string">"org.springframework.beans.factory.serviceloader.ServiceLoaderFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"serviceType"</span> <span class="attr">value</span>=<span class="string">"com.github.spring.factory.UserFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"classpath:/META-INF/sp-bean-creation-context.xml"</span>);</span><br><span class="line">ServiceLoader&lt;UserFactory&gt; serviceLoader = applicationContext.getBean(<span class="string">"userFactoryServiceLoader"</span>, ServiceLoader<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">displayServiceLoad(serviceLoader);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>AutowireCapableBeanFactory#createBean(java.lang.Class,int, boolean);</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AutowireCapableBeanFactory beanFactory = applicationContext.getAutowireCapableBeanFactory();</span><br><span class="line">UserFactory userFactory = beanFactory.createBean(DefaultUserFactory<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">System.out.println(userFactory.createuser());</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>BeanDefinitionRegistry#registerBeanDefinition(String,BeanDefinition);</li>
+</ul>
+<h2 id="Bean的初始化"><a href="#Bean的初始化" class="headerlink" title="Bean的初始化"></a>Bean的初始化</h2><ul>
+<li><p>@PostConstructor</p>
+</li>
+<li><p>InitializingBean 的 afterPropertiesSet</p>
+</li>
+<li><p>Bean的initMethod<br>@Bean(initMethod=””)</p>
+<bean initmethod>
+AbstractBeanDefinition.setInitMethodName("");
+
+
+
+</bean></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultUserFactory</span> <span class="keyword">implements</span> <span class="title">UserFactory</span>, <span class="title">InitializingBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DefaultUserFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"DefaultUserFactory Constructor Called."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"DefaultUserFactory PostConstructor Called."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initUserFactory</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"DefaultUserFactory initUserFactory Called."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"DefaultUserFactory afterPropertiesSet called."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanInitializationDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line">        applicationContext.register(BeanInitializationDemo<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        applicationContext.refresh();</span><br><span class="line">        UserFactory userFactory = applicationContext.getBean(UserFactory<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">        <span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span>(<span class="title">userFactory</span>.<span class="title">createuser</span>())</span>;</span><br><span class="line">        applicationContext.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span>(initMethod = <span class="string">"initUserFactory"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DefaultUserFactory <span class="title">userFactory</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DefaultUserFactory();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="延迟初始化"><a href="#延迟初始化" class="headerlink" title="延迟初始化"></a>延迟初始化</h3><ul>
+<li>xml: <bean lazy-init="true"></bean></li>
+<li>annotation: @Lazy</li>
+</ul>
+<p>对于延迟初始化，是在applicationContext初始化之后进行初始化。<br>非延迟初始化，是在applicationContext初始化之前进行初始化。</p>
+<h2 id="Bean-的销毁"><a href="#Bean-的销毁" class="headerlink" title="Bean 的销毁"></a>Bean 的销毁</h2><ul>
+<li>@PreDestroy</li>
+<li>实现DisposableBean接口的destoy()方法</li>
+<li>Bean的 destroy方法<bean destroy>
+@Bean(destroy="")
+AbstractBeanDefinition.setDestroyMethodName(""); 
+
+
+</bean></li>
+</ul>
+<h2 id><a href="#" class="headerlink" title></a></h2><ul>
+<li>如何注册一个Spring Bean</li>
+</ul>
+<p>可以通过BeanDefinition和外部单体对象来注册。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">UserFactory userFactory = <span class="keyword">new</span> DefaultUserFactory();</span><br><span class="line">ConfiguableListableBeanFactory factory = applicationContext.getBeanFactory();</span><br><span class="line">factory.registerSingleton(<span class="string">"userFactory"</span>, userFactory);</span><br><span class="line"></span><br><span class="line">UserFactory userFactory = applicationContext.getBean(<span class="string">"UserFactory"</span>,UserFactory<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Spring BeanDefinition 是什么？</p>
+</li>
+<li><p>Spring 容器是如何注册Bean的？</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
       
         
           <div class='post-wrapper'>
@@ -447,21 +819,22 @@
 <li>1996年，Michael Mattson在《Object-Oriented Frameworks, A survey of methodological issues》将控制反转命名为好莱坞原则。</li>
 <li>2004，Martin Fowler在《Inversion Of Control Containers and the Dependency Injection pattern》提出自己对和IOC和DI的理解</li>
 <li>2005年，Martin Folower在《Inversion Of Control》中对IOC进一步说明。</li>
+<li><a href="https://www.martinfowler.com/articles/injection.html" target="_blank" rel="noopener">Martin 大爷关于IOC的说明</a></li>
 </ul>
 <h2 id="IOC-的实现策略"><a href="#IOC-的实现策略" class="headerlink" title="IOC 的实现策略"></a>IOC 的实现策略</h2><p>WIKI:</p>
 <p> In object-oriented programming, there are several basic techniques to implement inversion of control. there are:</p>
 <ul>
 <li>Using a service locator pattern</li>
 <li>Using dependency injection<ul>
-<li>constructor injection</li>
+<li>constructor  injection</li>
 <li>parameter injection</li>
 <li>setter injection</li>
 <li>interface injection</li>
+</ul>
+</li>
 <li>Using a contextualized lookup.</li>
 <li>Using template method design pattern</li>
 <li>Using Strategy design pattern.</li>
-</ul>
-</li>
 </ul>
 <p>EXPERT ONE-ON-ONE J2EE DEVELOPMENT without EJB提到的策略：</p>
 
@@ -670,7 +1043,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(18)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(20)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
@@ -685,7 +1058,7 @@
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/"
             id="categoriesJavaE68A80E69CAFE6A088Spring"
-            ><div class='name'>Spring</div><div class='badge'>(2)</div></a></li>
+            ><div class='name'>Spring</div><div class='badge'>(4)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/Linux/" href="/categories/Linux/"
@@ -779,7 +1152,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 21.14px; color: #686868">JVM</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Spring/" style="font-size: 14px; color: #999">Spring</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.43px; color: #8f8f8f">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18.29px; color: #7c7c7c">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19.71px; color: #727272">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.57px; color: #5f5f5f">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.43px; color: #8f8f8f">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.86px; color: #868686">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 21.14px; color: #686868">JVM</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Spring/" style="font-size: 16.86px; color: #868686">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.43px; color: #8f8f8f">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18.29px; color: #7c7c7c">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19.71px; color: #727272">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.57px; color: #5f5f5f">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.43px; color: #8f8f8f">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.86px; color: #868686">责任链模式</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
     </div>
   </section>
 
