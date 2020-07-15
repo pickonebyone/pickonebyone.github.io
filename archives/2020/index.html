@@ -455,7 +455,124 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="依赖查找"><a href="#依赖查找" class="headerlink" title="依赖查找"></a>依赖查找</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><h3 id="单一类型依赖查找"><a href="#单一类型依赖查找" class="headerlink" title="单一类型依赖查找"></a>单一类型依赖查找</h3><h3 id="集合类型依赖查找"><a href="#集合类型依赖查找" class="headerlink" title="集合类型依赖查找"></a>集合类型依赖查找</h3><h3 id="层次性依赖查找"><a href="#层次性依赖查找" class="headerlink" title="层次性依赖查找"></a>层次性依赖查找</h3><h3 id="延迟依赖查找"><a href="#延迟依赖查找" class="headerlink" title="延迟依赖查找"></a>延迟依赖查找</h3><h3 id="安全依赖查找"><a href="#安全依赖查找" class="headerlink" title="安全依赖查找"></a>安全依赖查找</h3><h3 id="内建可查找的依赖"><a href="#内建可查找的依赖" class="headerlink" title="内建可查找的依赖"></a>内建可查找的依赖</h3><h3 id="依赖查找中的异常"><a href="#依赖查找中的异常" class="headerlink" title="依赖查找中的异常"></a>依赖查找中的异常</h3><h3 id="劝退"><a href="#劝退" class="headerlink" title="劝退"></a>劝退</h3>
+        <h2 id="依赖查找"><a href="#依赖查找" class="headerlink" title="依赖查找"></a>依赖查找</h2><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><h3 id="单一类型依赖查找"><a href="#单一类型依赖查找" class="headerlink" title="单一类型依赖查找"></a>单一类型依赖查找</h3><p>JNDI - javax.naming.Context#lookup*(javax.naming.Name);<br>JavaBeans - java.beans.beancontext.BeanContext</p>
+<p>BeanFactory:</p>
+<p> 根据bean名称查找<br> getBean(String);<br> getBean(String,Object…) //覆盖默认参数</p>
+<p> 根据Bean类型查找<br> bean实时查找<br>   getBean(Class)<br>   getBean(Class,Object…)<br> bean延时查找<br>   getBeanProvider(Class);<br>   getBeanProvider(String,Class); //覆盖默认参数</p>
+<p>根据Bean名称和类型查找<br>  getBean(String,Class);</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 通过 &#123;<span class="doctag">@link</span> org.springframework.beans.factory.ObjectProvider&#125; 进行依赖查找</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectProviderDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line">        applicationContext.register(ObjectProviderDemo<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        applicationContext.refresh();</span><br><span class="line">        lookupByObjectProvider(applicationContext);</span><br><span class="line">        applicationContext.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">helloWorld</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lookupByObjectProvider</span><span class="params">(AnnotationConfigApplicationContext applicationContext)</span> </span>&#123;</span><br><span class="line">        ObjectProvider&lt;String&gt; objectProvider = applicationContext.getBeanProvider(String<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        System.out.println(objectProvider.getObject());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="集合类型依赖查找"><a href="#集合类型依赖查找" class="headerlink" title="集合类型依赖查找"></a>集合类型依赖查找</h3><p>java.beans.beancontext.BeanContext</p>
+<h4 id="ListableBeanFactory"><a href="#ListableBeanFactory" class="headerlink" title="ListableBeanFactory"></a>ListableBeanFactory</h4><p>是针对某个类型去查找一个集合列表。<br>一种是查询bean的名称， 一种是查询bean的实例。<br>一般情况下应该使用bean的名称来判断当前bean是否存在，或者进一步判断BeanDefinition是否存在。<br>而查询bean实例会提早初始化bean实例，造成初始化不完整。</p>
+<ul>
+<li>根据Bean类型查找<ul>
+<li>获取同类型Bean名称列表<ul>
+<li>getBeanNamesForType(Class)</li>
+<li>getBeanNamesForType(ResolvableType)</li>
+</ul>
+</li>
+<li>获取痛类型Bean实例列表<ul>
+<li>getBeansOfType(Class)以及重载方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>根据注解类型查找<ul>
+<li>获取标注类型Bean 名称列表<ul>
+<li>getBeanNamesForAnnotation(Class&lt;? extends Annotation&gt;);</li>
+</ul>
+</li>
+<li>获取标注类型Bean实例列表<ul>
+<li>getBeansWithAnnotation(Class&lt;? extends Annotation&gt;);</li>
+</ul>
+</li>
+<li>获取指定名称+标注类型实例<ul>
+<li>findAnnotationOnBean(String,Class&lt;? extends Annotation&gt;);</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="层次性依赖查找"><a href="#层次性依赖查找" class="headerlink" title="层次性依赖查找"></a>层次性依赖查找</h3><p>java.beans.beancontext.BeanContext</p>
+<h4 id="HierachicalBeanFactory"><a href="#HierachicalBeanFactory" class="headerlink" title="HierachicalBeanFactory"></a>HierachicalBeanFactory</h4><p><img src="/2020/07/14/Spring-%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/hierarchical_class.jpg" alt></p>
+<ul>
+<li>双亲 BeanFactory: getParentBeanFactory();<ul>
+<li>层次查找</li>
+<li>根据Bean名称查找<ul>
+<li>基于containsLocalBean方法实现   </li>
+</ul>
+</li>
+<li>根据Bean类型查找实例列表<ul>
+<li>单一类型：BeanFactoryUtils#beanOfType</li>
+<li>集合类型：BeanFactoryUtils#beansOfTypeIncludingAncestors</li>
+</ul>
+</li>
+<li>根据Java注解查找名称列表<ul>
+<li>BeanFactoryUtils#beanNamesForTypeIncludingAncestors</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HierarchicalDependencyLookupDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line"></span><br><span class="line">        ConfigurableListableBeanFactory beanFactory = applicationContext.getBeanFactory();</span><br><span class="line"></span><br><span class="line">        HierarchicalBeanFactory parentBeanFactory = createParentBeanFactory();</span><br><span class="line"></span><br><span class="line">        beanFactory.setParentBeanFactory(parentBeanFactory);</span><br><span class="line"></span><br><span class="line">        displayContainsLocalBean(beanFactory, <span class="string">"user"</span>); <span class="comment">//false</span></span><br><span class="line">        displayContainsLocalBean(parentBeanFactory, <span class="string">"user"</span>); <span class="comment">//true</span></span><br><span class="line">        </span><br><span class="line">        displayContainsBean(beanFactory, <span class="string">"user"</span>); <span class="comment">//true</span></span><br><span class="line">        displayContainsBean(parentBeanFactory,<span class="string">"user"</span>);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line">        applicationContext.refresh();</span><br><span class="line">        applicationContext.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">displayContainsBean</span><span class="params">(HierarchicalBeanFactory beanFactory, String beanName)</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"当前 BeanFactory [%s] 是否包含  bean[name:%s]  %s\n"</span>, beanFactory, beanName, containsBean(beanFactory,beanName));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">containsBean</span><span class="params">(HierarchicalBeanFactory beanFactory, String beanName)</span> </span>&#123;</span><br><span class="line">        BeanFactory parentBeanFactory = beanFactory.getParentBeanFactory();</span><br><span class="line">        <span class="keyword">if</span> (parentBeanFactory <span class="keyword">instanceof</span> HierarchicalBeanFactory) &#123;</span><br><span class="line">            HierarchicalBeanFactory parentHierarchicalBeanFactory = HierarchicalBeanFactory<span class="class">.<span class="keyword">class</span>.<span class="title">cast</span>(<span class="title">parentBeanFactory</span>)</span>;</span><br><span class="line">            <span class="keyword">if</span> (containsBean(parentHierarchicalBeanFactory, beanName)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> beanFactory.containsLocalBean(beanName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">displayContainsLocalBean</span><span class="params">(HierarchicalBeanFactory parentBeanFactory, String user)</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"当前 BeanFactory [%s] 是否包含 Local bean[name:%s]  %s\n"</span>, parentBeanFactory, user, parentBeanFactory.containsLocalBean(user));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> HierarchicalBeanFactory <span class="title">createParentBeanFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DefaultListableBeanFactory beanFactory = <span class="keyword">new</span> DefaultListableBeanFactory();</span><br><span class="line">        XmlBeanDefinitionReader reader = <span class="keyword">new</span> XmlBeanDefinitionReader(beanFactory);</span><br><span class="line">        String location = <span class="string">"classpath:applicationContext-lookup.xml"</span>;</span><br><span class="line">        reader.loadBeanDefinitions(location);</span><br><span class="line">        <span class="keyword">return</span> beanFactory;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="延迟依赖查找"><a href="#延迟依赖查找" class="headerlink" title="延迟依赖查找"></a>延迟依赖查找</h3><p><img src="/2020/07/14/Spring-%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/ObjectFactory_Class.jpg" alt></p>
+<ul>
+<li>Bean延迟依赖查找接口<ul>
+<li>org.springframework.beans.factory.ObjectFactory#getObject();</li>
+<li>org.springframework.beans.factory.ObjectProvider<ul>
+<li>Spring5对于Java8的特性扩展</li>
+<li>函数式接口<ul>
+<li>getIfAvailable(Supplier)</li>
+<li>ifAvailable(Consumer)</li>
+</ul>
+</li>
+<li>Stream扩展 - stream() </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 通过 &#123;<span class="doctag">@link</span> org.springframework.beans.factory.ObjectProvider&#125; 进行依赖查找</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectProviderDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line">        applicationContext.register(ObjectProviderDemo<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        applicationContext.refresh();</span><br><span class="line"></span><br><span class="line">        lookupByObjectProvider(applicationContext);</span><br><span class="line">        lookupIfAvailable(applicationContext);</span><br><span class="line">        lookupByStream(applicationContext);</span><br><span class="line">        applicationContext.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lookupByStream</span><span class="params">(AnnotationConfigApplicationContext applicationContext)</span> </span>&#123;</span><br><span class="line">        ObjectProvider&lt;String&gt; objectProvider = applicationContext.getBeanProvider(String<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"><span class="comment">//        Iterator&lt;String&gt; iterator = objectProvider.iterator();</span></span><br><span class="line"><span class="comment">//        while(iterator.hasNext())&#123;</span></span><br><span class="line"><span class="comment">//            System.out.println(iterator.next());</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">        objectProvider.stream().forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lookupIfAvailable</span><span class="params">(AnnotationConfigApplicationContext applicationContext)</span> </span>&#123;</span><br><span class="line">        ObjectProvider&lt;User&gt; userObjectProvider = applicationContext.getBeanProvider(User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        User user = userObjectProvider.getIfAvailable(User::<span class="keyword">new</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@Primary</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">helloWorld</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">message</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"message"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lookupByObjectProvider</span><span class="params">(AnnotationConfigApplicationContext applicationContext)</span> </span>&#123;</span><br><span class="line">        ObjectProvider&lt;String&gt; objectProvider = applicationContext.getBeanProvider(String<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        System.out.println(objectProvider.getObject());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="安全依赖查找"><a href="#安全依赖查找" class="headerlink" title="安全依赖查找"></a>安全依赖查找</h3><p>依赖查找安全性对比</p>
+<table>
+<thead>
+<tr>
+<th>依赖查找类型</th>
+<th>代表实现</th>
+<th>是否安全</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单一类型查找</td>
+<td>BeanFactory#getBean</td>
+<td>否</td>
+</tr>
+<tr>
+<td></td>
+<td>ObjectFactory#getObject</td>
+<td>否</td>
+</tr>
+<tr>
+<td></td>
+<td>ObjectProvider#getIfAvailable</td>
+<td>是</td>
+</tr>
+<tr>
+<td>集合类型查找</td>
+<td>ListableBeanFactory#getBeansOfType</td>
+<td>是</td>
+</tr>
+<tr>
+<td></td>
+<td>ObjectProvider.stream</td>
+<td>是</td>
+</tr>
+</tbody></table>
+<h3 id="内建可查找的依赖"><a href="#内建可查找的依赖" class="headerlink" title="内建可查找的依赖"></a>内建可查找的依赖</h3><h3 id="依赖查找中的异常"><a href="#依赖查找中的异常" class="headerlink" title="依赖查找中的异常"></a>依赖查找中的异常</h3><h3 id="劝退"><a href="#劝退" class="headerlink" title="劝退"></a>劝退</h3>
       
     </div>
     
