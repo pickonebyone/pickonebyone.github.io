@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#®️Jun'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+    <title>Spring-生命周期 - 碎碎念</title>
+  
+    <meta name="keywords" content="Spring,生命周期">
+  
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+  <link rel="shortcut icon" type='image/x-icon' href="https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/favicon/favicon.ico">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+	  setTimeout(function() { 
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?0b970030787ceb090a4dc46259415a4c";
+		hm.defer=true;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+	  }, 5000);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+<header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h'>
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+          
+          
+          
+            JUNE <b><sup style='color:#3AA757'>®️Jun</sup></b>
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+<script>setLoadingBarProgress(40);</script>
+
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper'>
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+      Spring-生命周期
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月22日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <h2 id="SpringBean-元信息"><a href="#SpringBean-元信息" class="headerlink" title="SpringBean 元信息"></a>SpringBean 元信息</h2><p><img src="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/BeanDefinition.jpg" alt="BeanDefinition Class Diagram"></p>
+<h3 id="元信息的配置"><a href="#元信息的配置" class="headerlink" title="元信息的配置"></a>元信息的配置</h3><ul>
+<li>通过资源的方式配置，如： XML、 Properties、Groovy</li>
+<li>通过注解配置 ： @Bean</li>
+<li>通过API配置 ：BeanDefinitionBuilder / GenericBeanDefinition </li>
+</ul>
+<h3 id="元信息的读取"><a href="#元信息的读取" class="headerlink" title="元信息的读取"></a>元信息的读取</h3><p>1) Get beanDefinitionRegistry for registry beanDefinitions.<br>2) Get ResourceLoader<br>3) Get ClassLoader.</p>
+<ul>
+<li>读取通过资源方式配置，如：XmlBeanDefinitionReader、PropertiesBeanDefinitionReader、GroovyBeanDefinitionReader</li>
+<li>读取注解配置的Bean：AnnotatedBeanDefinitionReader</li>
+</ul>
+<p><img src="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/BeanDefinitionReader.jpg" alt="BeanDefinitionReader Class Diagram"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DefaultListableBeanFactory beanFactory = <span class="keyword">new</span> DefaultListableBeanFactory();</span><br><span class="line">AnnotatedBeanDefinitionReader reader = <span class="keyword">new</span> AnnotatedBeanDefinitionReader(beanFactory);</span><br><span class="line">reader.register(Main<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="元信息的解析"><a href="#元信息的解析" class="headerlink" title="元信息的解析"></a>元信息的解析</h3><p><img src="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/BeanDefinitionParser.png" alt="BeanDefinitionParser"></p>
+<p>图片版本的看不太清，整理一份文字版本的层级关系，除BeanDefinitionParser是顶层抽象接口外，其余Parser都是类或者抽象类。  </p>
+<ul>
+<li>BeanDefinitionParser<ul>
+<li>SpringConfiguredBeanDefinitionParser</li>
+<li>AnnotationDrivenCacheBeanDefinitionParser</li>
+<li>ScriptingDefaultsParser</li>
+<li>ComponentScanBeanDefinitionParser</li>
+<li>AnnotationConfigBeanDefinitionParser</li>
+<li>AspectJAutoProxyBeanDewfinitionParser</li>
+<li>SpringConfiguredBeanDefinitionParser</li>
+<li>ConfigBeanDefinitionParser</li>
+<li>AnnotationDrivenBeanDefinitionParser</li>
+<li>AbstractBeanDefinitionParser<ul>
+<li>MBeanExportBeanDefinitionParser</li>
+<li>MBeanServiceBeanDefinitionParser</li>
+<li>ScriptBeanDefinitionParser</li>
+<li>AbstractSingleBeanDefinitionParser<ul>
+<li>ExecutorBeanDefinitionParser</li>
+<li>SchedulerBeanDefinitionParser</li>
+<li>SetBeanDefinitionParser</li>
+<li>AbstractPropertyLoadingBeanDefinitionParser</li>
+<li>LoadTimeWeaverBeanDefinitionParser</li>
+<li>CacheAdviceParser</li>
+<li>ListBeanDefinitionParser</li>
+<li>ScheduledTasksBeanDefinitionParser</li>
+<li>MapBeanDefinitionParser</li>
+<li>PropertiesBeanDefinitionParser</li>
+<li>PropertyPathBeanDefinitionParser</li>
+<li>AbstractSimpleBeanDefinitionParser<ul>
+<li>ConstantBeanDefinitionParser</li>
+<li>AbstractJndiLocatingBeanDefinitionParser<ul>
+<li>JndiLookupBeanDefinitionParser</li>
+<li>LocalStatelessSessionBeanDefinitionParser</li>
+<li>RemoteStatelessSessionBeanDefinitionParser</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="SpringBean-注册"><a href="#SpringBean-注册" class="headerlink" title="SpringBean 注册"></a>SpringBean 注册</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">  public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)</span><br><span class="line">      throws BeanDefinitionStoreException &#123;</span><br><span class="line"></span><br><span class="line">    BeanDefinition existingDefinition &#x3D; this.beanDefinitionMap.get(beanName);</span><br><span class="line">      this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">      if (hasBeanCreationStarted()) &#123;</span><br><span class="line">        &#x2F;&#x2F; Cannot modify startup-time collection elements anymore (for stable iteration)</span><br><span class="line">        synchronized (this.beanDefinitionMap) &#123;</span><br><span class="line">          this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">          List&lt;String&gt; updatedDefinitions &#x3D; new ArrayList&lt;&gt;(this.beanDefinitionNames.size() + 1);</span><br><span class="line">          updatedDefinitions.addAll(this.beanDefinitionNames);</span><br><span class="line">          updatedDefinitions.add(beanName);</span><br><span class="line">          this.beanDefinitionNames &#x3D; updatedDefinitions;</span><br><span class="line">          removeManualSingletonName(beanName);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      else &#123;</span><br><span class="line">        &#x2F;&#x2F; Still in startup registration phase</span><br><span class="line">        this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">        this.beanDefinitionNames.add(beanName);</span><br><span class="line">        removeManualSingletonName(beanName);</span><br><span class="line">      &#125;</span><br><span class="line">      this.frozenBeanDefinitionNames &#x3D; null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (existingDefinition !&#x3D; null || containsSingleton(beanName)) &#123;</span><br><span class="line">      resetBeanDefinition(beanName);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>Spring BeanDefinition 合并阶段</p>
+<p>GenericBeanDefinition -&gt; RootBeanDefinition</p>
+<p>Spring Bean Class 加载阶段</p>
+<p>BeanDefinition 中定义的Class名称加载具体的Class类。 </p>
+<p>ClassLoader 类加载<br>Java Security 安全控制<br>ConfigurableBeanFactory 临时 ClassLoader</p>
+<p>Spring Bean 实例化<br>   实例化前：<br>     InstantiationAwareBeanProcessor.postProcessorBeforeInstantiation()<br>     提前生成一些代理对象，替换掉默认的springIOC的实现内容。<br>   实例化<br>     传统实例化方式<br>       + 实例化策略 InstantiationStrategy</p>
+<pre><code>构造器依赖注入（根据类型来注入）</code></pre><p>   实例化后<br>        InstantiationAwareBeanProcessor.postProcessorAfterInstantiation()</p>
+<p>Spring Bean 属性赋值前阶段</p>
+<p>   Bean的属性值元信息： PropertyValues<br>   构造器参数值：ConstructorValues</p>
+<p>   Bean属性赋值前回调<br>    &lt;= 5.0  InstantiationAwareBeanPostProcessor#postProcessorPropertyValues();<br>    &gt;= 5.1 InstantiationAwareBeanPostProcessor#postProcessorProperties();</p>
+<p>Spring Bean Aware 接口回调阶段</p>
+<p> Aware接口是一个标志接口，并没有提供任何实现。<br> BeanNameAware<br> BeanClassLoaderAware<br> BeanFactoryAware<br> EnvironmentAware<br> EmbeddedValueResolverAware<br> ApplicationEventPublisherAware<br> MessageSourceAware<br> ApplicationContextAware</p>
+<p>Spring Bean 初始化</p>
+<p>   初始化前<br>   BeanPostProcessor#postProcessorBeforeInitialization<br>   初始化<br>   @PostConstructor<br>   AfterPropertiesSet<br>   init-method<br>   初始化后<br>   BeanPostProcessor#postProcessAfterInitialization<br>   初始化完成<br>   SmartinitializingSingleton#afterSingletonsInstanted</p>
+<h5 id="AbstractAutowireCapableBeanFactory"><a href="#AbstractAutowireCapableBeanFactory" class="headerlink" title="AbstractAutowireCapableBeanFactory"></a>AbstractAutowireCapableBeanFactory</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Initialize the given bean instance, applying factory callbacks</span></span><br><span class="line"><span class="comment"> * as well as init methods and bean post processors.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;Called from &#123;<span class="doctag">@link</span> #createBean&#125; for traditionally defined beans,</span></span><br><span class="line"><span class="comment"> * and from &#123;<span class="doctag">@link</span> #initializeBean&#125; for existing bean instances.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> beanName the bean name in the factory (for debugging purposes)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> bean the new bean instance we may need to initialize</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> mbd the bean definition that the bean was created with</span></span><br><span class="line"><span class="comment"> * (can also be &#123;<span class="doctag">@code</span> null&#125;, if given an existing bean instance)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the initialized bean instance (potentially wrapped)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanNameAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanClassLoaderAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanFactoryAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #applyBeanPostProcessorsBeforeInitialization</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #invokeInitMethods</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #applyBeanPostProcessorsAfterInitialization</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">initializeBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> Object bean, @Nullable RootBeanDefinition mbd)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (System.getSecurityManager() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    AccessController.doPrivileged((PrivilegedAction&lt;Object&gt;) () -&gt; &#123;</span><br><span class="line">      invokeAwareMethods(beanName, bean);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;, getAccessControlContext());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    invokeAwareMethods(beanName, bean);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Object wrappedBean = bean;</span><br><span class="line">  <span class="keyword">if</span> (mbd == <span class="keyword">null</span> || !mbd.isSynthetic()) &#123;</span><br><span class="line">    wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    invokeInitMethods(beanName, wrappedBean, mbd);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">        (mbd != <span class="keyword">null</span> ? mbd.getResourceDescription() : <span class="keyword">null</span>),</span><br><span class="line">        beanName, <span class="string">"Invocation of init method failed"</span>, ex);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (mbd == <span class="keyword">null</span> || !mbd.isSynthetic()) &#123;</span><br><span class="line">    wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> wrappedBean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Spring  Bean 销毁<br>    销毁前<br>      DestructionAwareBeanPostProcessor#postProcessorBeforeDestruction<br>    销毁<br>      @PreDestroy<br>      实现DisposableBean接口的destroy方法<br>      自定义销毁方法<br>    垃圾回收<br>      关闭Spring 容器<br>      执行GC<br>      SpringBean 覆盖finalize()方法被回调</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+
+              
+            </div>
+          
+        </div>
+
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-28T21:28:38+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年7月28日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Spring/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Spring</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>生命周期</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+              <a class='prev' href='/2020/07/28/Spring-Bean%E9%85%8D%E7%BD%AE%E5%85%83%E4%BF%A1%E6%81%AF/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Spring-Bean配置元信息</p>
+                <p class='content'>Spring 配置元信息  Bean配置元信息：BeanDefinition  Bean属性元信息：PropertyValues  容器配置元信息  外部化配置元信息： PropertySour...</p>
+              </a>
+            
+            
+              <a class='next' href='/2020/07/21/Spring-%E4%BD%9C%E7%94%A8%E5%9F%9F/'>
+                <p class='title'>Spring-作用域<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>Spring Bean 作用域 单例模式singleton Bean 作用域：在BeanFactory中唯一。 原型模式prototype Bean 作用域：
+servlet 引擎：reques...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'Spring-生命周期',
+      tools: true
+    }
+  </script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBean-元信息"><span class="toc-text">SpringBean 元信息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#元信息的配置"><span class="toc-text">元信息的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元信息的读取"><span class="toc-text">元信息的读取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元信息的解析"><span class="toc-text">元信息的解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBean-注册"><span class="toc-text">SpringBean 注册</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#AbstractAutowireCapableBeanFactory"><span class="toc-text">AbstractAutowireCapableBeanFactory</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+  
+  <footer class="clearfix">
+    <br><br>
+
+    
+  </footer>
+
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4/dist/jquery.min.js"></script>
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '8px',
+        duration: '800',
+        interval: '100',
+        scale: '1'
+      });
+    });
+  </script>
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/xaoxuu/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2.6.5/js/search.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/comment_typing.js"></script>
+
+
+
+
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-check-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-check-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-times-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-times-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 标准 markdown 描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
