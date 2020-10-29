@@ -366,6 +366,204 @@
         
           
   <h2 class="title">
+    <a href="/2020/06/17/%E5%B8%B8%E7%94%A8JVM%E5%8F%82%E6%95%B0/">
+      常用JVM参数
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月17日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HotSpot 虚拟机常用配置</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-Xms1g</td>
+<td>最小堆内存</td>
+</tr>
+<tr>
+<td>-Xmx4g</td>
+<td>最大堆内存</td>
+</tr>
+<tr>
+<td>-XX:+UseG1GC</td>
+<td>使用G1垃圾回收器</td>
+</tr>
+<tr>
+<td>-Xss256k</td>
+<td>每个线程栈大小256k</td>
+</tr>
+<tr>
+<td>-XX:MetaspaceSize=256m</td>
+<td>元数据区大小256M</td>
+</tr>
+<tr>
+<td>-XX:MaxMetaspaceSize=256m</td>
+<td>元数据区最大256M</td>
+</tr>
+<tr>
+<td>-XX:MaxGCPauseMillis=500</td>
+<td>GC最大停顿毫秒数</td>
+</tr>
+<tr>
+<td>-XX:+DisableExplicitGC</td>
+<td>禁用代码中显式调用GC，System.gc()将会失效</td>
+</tr>
+<tr>
+<td>-XX:+UnlockExperimentalVMOptions</td>
+<td>解锁实验参数</td>
+</tr>
+<tr>
+<td>-XX:+UseStringDeduplication</td>
+<td>GC的同时做重复字符串消除，只用于G1</td>
+</tr>
+<tr>
+<td>-XX:InitiatingHeapOccupancyPercent=60</td>
+<td>启动并发GC周期时的堆内存占用百分比. G1之类的垃圾收集器用它来触发并发GC周期,基于整个堆的使用率,而不只是某一代内存的使用比. 值为 0 则表示”一直执行GC循环”. 默认值为 45.</td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=8</td>
+<td>设置垃圾收集器在并行阶段使用的线程数,默认值随JVM运行的平台不同而不同.</td>
+</tr>
+<tr>
+<td>-XX:G1MixedGCCountTarget=4</td>
+<td>设置在标记周期完成之后混合收集的数量，以维持old region（也就是老年代）中，最多有G1MixedGCLiveThresholdPercent的存活对象。默认值为8，混合收集的数量将维持在这个值之内。（JVM build &gt; 23）</td>
+</tr>
+<tr>
+<td>-XX:MaxTenuringThreshold=7</td>
+<td>年老代的最大临界值(tenuring threshold). 默认值为 15.</td>
+</tr>
+<tr>
+<td>-XX:+UseGCLogFileRotation</td>
+<td>滚动记录GC日志文件</td>
+</tr>
+<tr>
+<td>-XX:NumberOfGCLogFiles=5</td>
+<td>GC日志文件数量为5个</td>
+</tr>
+<tr>
+<td>-XX:GCLogFileSize=64M</td>
+<td>单个GC日志文件大小64M</td>
+</tr>
+<tr>
+<td>-Xloggc:/app/data/logs/gc-<code>date +%Y%m%d-%H-%M</code>.log</td>
+<td>GC日志文件存储目录和名称</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDetails</td>
+<td>打印GC详情</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDateStamps</td>
+<td>打印GC时时间戳</td>
+</tr>
+<tr>
+<td>-XX:+PrintHeapAtGC</td>
+<td>GC时打印堆信息</td>
+</tr>
+<tr>
+<td>-XX:+PrintAdaptiveSizePolicy</td>
+<td>自适应大小策略，每次 GC 后会重新计算 Eden、From 和 To 区的大小，计算依据是 GC 过程中统计的 GC 时间、吞吐量、内存占用量。</td>
+</tr>
+<tr>
+<td>-XX:+UseFastAccessorMethods</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:SoftRefLRUPolicyMSPerMB=0</td>
+<td>softly reachable objects will remain alive for some amount of time after the last time they were referenced. The default value is one second of lifetime per free megabyte in the heap</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/06/16/%E5%B8%B8%E7%94%A8%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7/">
       常用监控与故障处理工具
     </a>
@@ -1795,8 +1993,6 @@
           </div>
         
       
-        
-      
     
   </section>
   
@@ -1875,7 +2071,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(34)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(35)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"

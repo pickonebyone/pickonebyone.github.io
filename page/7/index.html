@@ -365,8 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/17/Spring-BeanFactory/">
-      Spring-BeanFactory
+    <a href="/2020/07/21/Spring-%E4%BD%9C%E7%94%A8%E5%9F%9F/">
+      Spring-作用域
     </a>
   </h2>
 
@@ -404,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月17日</p>
+    <p>发布于：2020年7月21日</p>
   </a>
 </div>
 
@@ -432,14 +432,8 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="/2020/07/17/Spring-BeanFactory/BeanFactory.jpg" alt="Spring BeanFactory 类图"></p>
-<p>BeanFactory是访问Spring bean容器的根接口。提供了一些获取Bean的基础方法定义。</p>
-<p><img src="/2020/07/17/Spring-BeanFactory/BeanFactoryMethods.jpg" alt="BeanFactory"></p>
-<p>ListableBeanFactory 和 ConfigurableBeanFactory 提供了一些更具体的特殊目标。</p>
-<p>ListableBeanFactory继承了BeanFactory, 容器可以以列表的形式获取bean的相关信息，提供了获取多个beanName的基础方法。<br><img src="/2020/07/17/Spring-BeanFactory/listable_bean_factory.jpg" alt="ListableBeanFactory"></p>
-<p>ConfigurableBeanFactory 继承了 hierarchicalBeanFactory, 提供了IOC容器的可配置能力，几乎所有的BeanFactory都会实现这个接口。<br><img src="/2020/07/17/Spring-BeanFactory/configurable_bean_factory.jpg" alt="ConfigurableBeanFactory"></p>
-<p>AutowireCapableBeanFactory 提供了自动装配Bean的能力。</p>
-<p><img src="/2020/07/17/Spring-BeanFactory/AutowireCapableBeanFactory.jpg" alt="AutowireCapableBeanFactory"></p>
+        <p>Spring Bean 作用域<br> 单例模式<br>singleton Bean 作用域：在BeanFactory中唯一。<br> 原型模式<br>prototype Bean 作用域：</p>
+<p>servlet 引擎：<br>request Bean 作用域： 将Spring Bean 存储在Servlet Request上下文中<br>session Bean 作用域：将SpringBean存储在HttpSession中<br>application bean 作用域：将SpringBean存储在ServletContext中。<br>自定义Bean 作用域</p>
 
       
     </div>
@@ -466,8 +460,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/16/Spring-%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">
-      Spring-依赖注入
+    <a href="/2020/07/18/Spring-%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/">
+      Spring-依赖处理
     </a>
   </h2>
 
@@ -505,7 +499,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月16日</p>
+    <p>发布于：2020年7月18日</p>
   </a>
 </div>
 
@@ -533,67 +527,7 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>依赖注入的模式和类型</p>
-<ul>
-<li>手动<ul>
-<li>Xml资源配置元信息</li>
-<li>Java注解配置元信息<ul>
-<li>@Bean</li>
-<li>@Autowired</li>
-</ul>
-</li>
-<li>API配置元信息</li>
-</ul>
-</li>
-<li>自动<ul>
-<li>Autowiring</li>
-</ul>
-<ul>
-<li>类型<ul>
-<li>No : 默认值，未激活自动绑定，需要手动指定依赖注入</li>
-<li>byName: 根据被注入属性的名称做为Bean名称进行依赖查找，并将对象设置到该属性</li>
-<li>byType: 根据被注入属性的类型做为依赖类型进行查找，并将对象设置到该属性</li>
-<li>constructor： 特殊的byType，用于构造器参数</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>xml 资源配置元信息</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">name</span>=<span class="string">""</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">ref</span>=<span class="string">"nameObj"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th>依赖注入类型</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>set</td>
-<td>&lt;property name=”user” ref=”userBean”/&gt;</td>
-</tr>
-<tr>
-<td>构造器</td>
-<td>&lt;constructor-arg name=”user” ref=”userBean”/&gt;</td>
-</tr>
-<tr>
-<td>字段注入</td>
-<td>@Autowired User user;</td>
-</tr>
-<tr>
-<td>方法注入</td>
-<td>@Autowired public void user(User user){}</td>
-</tr>
-<tr>
-<td>回调注入</td>
-<td>class MyBean implements BeanFactoryAware{}</td>
-</tr>
-</tbody></table>
-<p>依赖注入选择</p>
-<p>基础类型注入<br>集合类型注入<br>限定注入<br>延迟依赖注入<br>依赖处理过程<br>@Autowired 注入原理<br>JSR-330@inject注入原理<br>Java通用注解注入原理<br>自定义依赖注解</p>
-<p>自动绑定<br>  模式<br>  限制和不足</p>
-<p>题目精选</p>
+        <p>入口：DefaltListableBeanFactory#resolveDependency<br>依赖描述符：DependencyDescriptor<br>自定绑定候选对象处理器：AutowireCandidateResolver</p>
 
       
     </div>
@@ -620,7 +554,7 @@
           </a>
         
         <p class="current">
-          7 / 33
+          7 / 34
         </p>
         
           <a class="next" rel="next" href="/page/8/">
@@ -681,7 +615,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(34)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(35)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"

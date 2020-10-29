@@ -365,8 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/06/Spring-IOC-And-DI/">
-      Spring IOC And DI
+    <a href="/2020/07/08/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+      装饰器模式
     </a>
   </h2>
 
@@ -391,9 +391,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Spring</p>
+      <p>设计模式/结构型模式</p>
     </a>
   </div>
 
@@ -404,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月6日</p>
+    <p>发布于：2020年7月8日</p>
   </a>
 </div>
 
@@ -432,30 +432,26 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="IOC-简史"><a href="#IOC-简史" class="headerlink" title="IOC 简史"></a>IOC 简史</h2><ul>
-<li>1983年，Richard E.Sweet 在&lt;<The mesa programming enviroment>&gt;提出好莱坞原则（“不要打电话给我，我会打电话给你”）。</The></li>
-<li>1988年，Rolph E.Johnson 和Brian Foote在《Designing Reusable Classes》中提出控制反转。</li>
-<li>1996年，Michael Mattson在《Object-Oriented Frameworks, A survey of methodological issues》将控制反转命名为好莱坞原则。</li>
-<li>2004，Martin Fowler在《Inversion Of Control Containers and the Dependency Injection pattern》提出自己对和IOC和DI的理解</li>
-<li>2005年，Martin Folower在《Inversion Of Control》中对IOC进一步说明。</li>
-<li><a href="https://www.martinfowler.com/articles/injection.html" target="_blank" rel="noopener">Martin 大爷关于IOC的说明</a></li>
-</ul>
-<h2 id="IOC-的实现策略"><a href="#IOC-的实现策略" class="headerlink" title="IOC 的实现策略"></a>IOC 的实现策略</h2><p>WIKI:</p>
-<p> In object-oriented programming, there are several basic techniques to implement inversion of control. there are:</p>
-<ul>
-<li>Using a service locator pattern</li>
-<li>Using dependency injection<ul>
-<li>constructor  injection</li>
-<li>parameter injection</li>
-<li>setter injection</li>
-<li>interface injection</li>
-</ul>
-</li>
-<li>Using a contextualized lookup.</li>
-<li>Using template method design pattern</li>
-<li>Using Strategy design pattern.</li>
-</ul>
-<p>EXPERT ONE-ON-ONE J2EE DEVELOPMENT without EJB提到的策略：</p>
+        <h2 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>动态地给一个对象添加一些额外的职责，就增加功能来说，装饰器模式相比生成子类更加灵活。</p>
+<p><img src="/2020/07/08/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/decorator_class.jpeg" alt="装饰器模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h4><p>Component 是一个接口或者抽象类，定义需要被装饰的原始类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Concrete-Component"><a href="#Concrete-Component" class="headerlink" title="Concrete Component"></a>Concrete Component</h4><p>Component 的实现类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteComponent</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="comment">//....</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Decorator"><a href="#Decorator" class="headerlink" title="Decorator"></a>Decorator</h4><p>抽象类，用于实现接口或者抽象方法。包含被修饰的Componnet属性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Decorator</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Component component = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Decorator</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.component = c;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.component.operate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Concrete-Decorator"><a href="#Concrete-Decorator" class="headerlink" title="Concrete Decorator"></a>Concrete Decorator</h4><p>具体装饰角色</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteDecorator1</span> <span class="keyword">extends</span> <span class="title">Decorator</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteDecorator1</span><span class="params">(Component component)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(component);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//....</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">this</span>.method1();</span><br><span class="line">       <span class="keyword">super</span>.operate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteDecorator2</span> <span class="keyword">extends</span> <span class="title">Decorator</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteDecorator2</span><span class="params">(Component component)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(component);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//....</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">super</span>.operate();</span><br><span class="line">       <span class="keyword">this</span>.method2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Component c = <span class="keyword">new</span> ConcreteComponent();</span><br><span class="line">c = <span class="keyword">new</span> ConcreteDecorator1(c);</span><br><span class="line">c = <span class="keyword">new</span> ConcreteDecorator2(c);</span><br><span class="line">c.operate();</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>装饰类和被装饰类可以独立发展，而不会相互耦合。<br>装饰模式是继承关系的一个替代方案。<br>装饰模式可以动态地扩展一个实现类的功能。</p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>当装饰多层时导致系统复杂度高。</p>
 
       
     </div>
@@ -482,8 +478,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/06/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/">
-      中介者模式
+    <a href="/2020/07/07/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/">
+      观察者模式
     </a>
   </h2>
 
@@ -521,7 +517,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月6日</p>
+    <p>发布于：2020年7月7日</p>
   </a>
 </div>
 
@@ -549,28 +545,34 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h2><p>主要为了降低模块内部之间类的相互引用，防止出现系统或者模块内部过度耦合。</p>
-<p>中介者模式也叫调停者模式，一个对象要和N个对象交流特别混乱，这个时候加入一个中心，所有的类都和中心交流，这样就变成了星型拓扑结构。</p>
-<p><img src="/2020/07/06/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/star_class.jpeg" alt="星型拓扑结构"></p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>用一个中介对象封装一些列的对象交互，中介者使各对象不需要显示地相互调用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
-<p><img src="/2020/07/06/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/mediator_class.jpeg" alt="中介者模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Mediator"><a href="#Mediator" class="headerlink" title="Mediator"></a>Mediator</h4><p>抽象中介者角色，定义统一的接口，用于各同事角色之间的通信。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Mediator</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> ConcreteColleague1 c1;</span><br><span class="line">    <span class="keyword">protected</span> ConcreteColleague2 c2;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ConcreteColleague1 <span class="title">getC1</span><span class="params">()</span></span>&#123; <span class="keyword">return</span> c1;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ConcreteColleague2 <span class="title">getC2</span><span class="params">()</span></span>&#123; <span class="keyword">return</span> c2;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setC1</span><span class="params">(ConcreteColleague1 c1)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.c1 = c1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setC2</span><span class="params">(ConcreteColleague2 c2)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.c2 = c2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doSomething1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doSomething2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>观察者模式也叫发布订阅模式。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>定义对象间的一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并且被自动更新。</p>
+<p><img src="/2020/07/07/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/observer_class.jpeg" alt="观察者模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Subject"><a href="#Subject" class="headerlink" title="Subject"></a>Subject</h4><p>定义被观察者必须实现的职责，必须能够动态的增加、取消观察者。<br>它一般是抽象类或者实现类，仅仅完成作为被观察者必须实现的职责，管理观察者并通知观察者。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Vector&lt;Observer&gt; obsVector = <span class="keyword">new</span> Vector&lt;Observer&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addObserver</span><span class="params">(Observer o)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.obsVector.add(o);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delObserver</span><span class="params">(Observer o)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.obsVector.remove(o);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyObservers</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(Observer o : <span class="keyword">this</span>.obsVector)&#123;</span><br><span class="line">            o.update();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="Concrete-Mediator"><a href="#Concrete-Mediator" class="headerlink" title="Concrete Mediator"></a>Concrete Mediator</h4><p>具体中介者角色通过协调各同事角色实现协作行为，因为它必须依赖于各个同事角色。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteMediator</span> <span class="keyword">extends</span> <span class="title">Mediator</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.c1.selfMethod1();</span><br><span class="line">        <span class="keyword">super</span>.c2.selfMethod2();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.c1.selfMethod1();</span><br><span class="line">        <span class="keyword">super</span>.c2.selfMethod2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Colleague"><a href="#Colleague" class="headerlink" title="Colleague"></a>Colleague</h4><p>同事角色，每个同事角色都知道中介者角色，而且与其他同事角色通信时，一定要通过中介者角色协作。<br>一种是同事本身的行为叫自发行为，比如改变对象本身的状态，处理自己的行为，与其他同事类或者中介者<br>第二种是依赖行为，必须依赖中介者才能完成的行为。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Colleague</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> Mediator mediator;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Colleague</span><span class="params">(Mediator mediator)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mediator = mediator;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteColleague1</span> <span class="keyword">extends</span> <span class="title">Colleague</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteColleague1</span><span class="params">(Mediator mediator)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(mediator);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">selfMethod1</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">depMethod1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.mediator.doSomething1();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteColleague2</span> <span class="keyword">extends</span> <span class="title">Colleague</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteColleague2</span><span class="params">(Mediator mediator)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(mediator);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">selfMethod1</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">depMethod1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.mediator.doSomething1();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ConcreteSubject"><a href="#ConcreteSubject" class="headerlink" title="ConcreteSubject"></a>ConcreteSubject</h4><p>具体的被观察者，定义被观察者自己的业务，同时定义对哪些事件进行通知。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteSubject</span> <span class="keyword">extends</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">        <span class="keyword">super</span>.notifyObservers();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>减少类之间的依赖，把原有的一对多的依赖变成了一对一的依赖，同事类只依赖中介者，减少了依赖，同时降低了类之间的耦合。</p>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>中介者模式的缺点是中介者会膨胀，而且逻辑复杂，原本N个对象直接的相互依赖关系转换为中介者和同事类的依赖关系，同事类越多，中介者的逻辑就越复杂。</p>
-<h3 id="应用-1"><a href="#应用-1" class="headerlink" title="应用"></a>应用</h3><h4 id="机场调度中心"><a href="#机场调度中心" class="headerlink" title="机场调度中心"></a>机场调度中心</h4><p>每一架飞机都和机场调度中心保持联系。</p>
-<h4 id="MVC框架"><a href="#MVC框架" class="headerlink" title="MVC框架"></a>MVC框架</h4><p>Controller做为一个中介者，把Model和View隔离开，协调MV协同工作，把M运行的结果和V代表的视图融合成一个前端可以展示的页面，减少MV的依赖关系。</p>
-<h4 id="媒体网关"><a href="#媒体网关" class="headerlink" title="媒体网关"></a>媒体网关</h4><h4 id="中介服务"><a href="#中介服务" class="headerlink" title="中介服务"></a>中介服务</h4>
+<h4 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h4><p>观察者接收到消息后，对接收到的信息进行处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ConcreteObserver"><a href="#ConcreteObserver" class="headerlink" title="ConcreteObserver"></a>ConcreteObserver</h4><p>具体的观察者，不同的观察者在处理消息的时候的具体定义。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteObserver</span> <span class="keyword">implements</span> <span class="title">Observer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//do something when invoked.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ConcreteSubject subject = <span class="keyword">new</span> ConcreteSubject();</span><br><span class="line">Observer obs = <span class="keyword">new</span> ConcreteObserver();</span><br><span class="line">subject.addObserver(obs);</span><br><span class="line">subject.doBusiness();</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>观察者和被观察之间是抽象耦合<br>如论增加观察者还是被观察者都非常容易扩展</li>
+<li>建立了一套规则的触发机制</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>效率缺陷，考虑采用异步方式通知。</p>
+<p>广播链的问题 A -&gt; B -&gt; C</p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="Java中的观察者"><a href="#Java中的观察者" class="headerlink" title="Java中的观察者"></a>Java中的观察者</h4><p>java 提供了java.util.Observer接口 和 java.util.Observable 类。<br>被观察者继承java.util.Observable， 观察者实现java.util.Observer.<br>但是在生产环境中考虑到性能一般不会用这种方式来实现。</p>
+<h4 id="生产中的观察者"><a href="#生产中的观察者" class="headerlink" title="生产中的观察者"></a>生产中的观察者</h4><p>一般使用MQ来异步处理<br>本地的如Disruptor</p>
+
       
     </div>
     
@@ -596,7 +598,7 @@
           </a>
         
         <p class="current">
-          12 / 33
+          12 / 34
         </p>
         
           <a class="next" rel="next" href="/page/13/">
@@ -657,7 +659,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(34)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(35)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
