@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#®️Jun'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+    <title>InnoDB体系架构 - 碎碎念</title>
+  
+    <meta name="keywords" content="Mysql">
+  
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+  <link rel="shortcut icon" type='image/x-icon' href="https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/favicon/favicon.ico">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+	  setTimeout(function() { 
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?0b970030787ceb090a4dc46259415a4c";
+		hm.defer=true;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+	  }, 5000);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+<header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h'>
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+          
+          
+          
+            JUNE <b><sup style='color:#3AA757'>®️Jun</sup></b>
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+<script>setLoadingBarProgress(40);</script>
+
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper'>
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/">
+      InnoDB体系架构
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Mysql</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年11月3日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <h2 id="InnoDB-体系架构"><a href="#InnoDB-体系架构" class="headerlink" title="InnoDB 体系架构"></a>InnoDB 体系架构</h2><h3 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h3><h4 id="Master-Thread"><a href="#Master-Thread" class="headerlink" title="Master Thread"></a>Master Thread</h4><p>主要负责将缓冲池中的数据异步刷新到磁盘，保证数据的一致性。<br>包括脏页的刷新、合并插入缓冲、UNDO页的会后等。</p>
+<h4 id="IO-Thread"><a href="#IO-Thread" class="headerlink" title="IO Thread"></a>IO Thread</h4><p>InnoDB中使用了AIO（AsyncIO）来处理写IO请求，提高了数据库性能。<br>IO线程的工作主要是负责AIO的回调处理。</p>
+<p>可以使用innodb_read_io_threads和innodb_write_io_threads进行设置。</p>
+<h4 id="Purge-Thread"><a href="#Purge-Thread" class="headerlink" title="Purge Thread"></a>Purge Thread</h4><p>事务被提交后，其所用的undolog可能不再需要，因此需要Perge Thread来回收已经使用并分配的undo页。<br>可以使用 innodb_purge_thread 来设置线程数量。</p>
+<h4 id="Page-Cleaner-Thread"><a href="#Page-Cleaner-Thread" class="headerlink" title="Page Cleaner Thread"></a>Page Cleaner Thread</h4><p>为了减轻MasterThread的工作，以及用户查询线程的阻塞提升性能。<br>将之前版本中脏页的舒心操作都放入到单独的线程中完成。</p>
+<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><h4 id="缓冲池"><a href="#缓冲池" class="headerlink" title="缓冲池"></a>缓冲池</h4><p>InnoDB存储引擎是基于磁盘存储的，将其中的记录按照页的方式进行管理。缓冲池就是一块内存区域，通过内存的速度来弥补磁盘速度较慢对数据库的性能影响。</p>
+<p>在数据库中进行读取页的操作，首先从磁盘读取到的页放在缓冲池中，下一次再读取相同的页时，首先判断该页是否在缓冲池中。如果在缓冲池中，则直接读取该页，否则读取磁盘上的页。</p>
+<p>对于数据库中页的修改操作，首先修改在缓冲池中的页，然后再以一定的频率刷新到磁盘上。</p>
+<p>页从缓冲池刷新到磁盘上的操作是通过Checkpoint的机制刷新回到磁盘。</p>
+<p>因此缓冲池的大小直接影响着数据库的整体性能。可以使用 innodb_buffer_pool_size 来设置缓冲池大小。</p>
+<p>缓冲池中缓存的数据页类型有：索引页、数据页、undo页、插入缓冲、自使用哈希索引、InnoDB存储的锁信息、数据字典信息等。</p>
+<p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/buffer_pool.jpeg" alt="缓冲池"></p>
+<p>InnoDB可以有多个缓冲池实例，每个页根据哈希值平均分配到不同的缓冲池实例中。这样减少了数据库内部的资源竞争，增加了数据库的兵法处理能力。可以使用 innodb_buffer_pool_instances来进行配置。</p>
+<h4 id="缓冲池管理算法"><a href="#缓冲池管理算法" class="headerlink" title="缓冲池管理算法"></a>缓冲池管理算法</h4><h5 id="LRU-List"><a href="#LRU-List" class="headerlink" title="LRU List"></a>LRU List</h5><p>LRU List 用来管理已经读取的页，最频繁使用的页存放在LRU列表的前端，最少使用的页存放在LRU列表的尾端。当缓冲池不能存放新读取到的页时，首先释放LRU列表中尾端的页。</p>
+<p>新读取的页并不直接存放在LRUList列表的前端，而是存放在midPoint的位置。midPoint之后的列表称为Old列表，之前的列表称为New列表，New列表中的页都是活跃的热点数据。</p>
+<p>这是因为，如果新读取的页如果放在最前端时，如果遇到需要访问和扫描大部分甚至全部页的时候，热点页面被刷出缓存，但是非热点数据却存放在了LRU列表的最前端。 </p>
+<p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/mid_point.jpg" alt="MID POINT"></p>
+<p>使用参数：innodb_old_blocks_pct 来控制midPoint的位置。<br>         innodb_old_blocks_times 来控制读取到MidPoint位置后需要等待多久才会被加入到LRU列表的New列表。</p>
+<h5 id="Free-List"><a href="#Free-List" class="headerlink" title="Free List"></a>Free List</h5><p>数据库刚启动的时候，LRUList是空的没有任何页。此时页都存放在FreeList中。当需要从缓冲中分页时，县从Free列表中查找是否有可用的空闲页，如果有可用的空闲页，则将该页从FreeList中删除，存放到LRUList中。如果FreeList中没有可用的空闲页，根据LRU算法，淘汰LRU尾部的页，将该页内存空间分配给新的页。</p>
+<h5 id="Flush-List"><a href="#Flush-List" class="headerlink" title="Flush List"></a>Flush List</h5><p>在LRU列表中的页被修改后，该页需要通过CheckPoint机制刷回磁盘。<br>FlushList中的页称为脏页里诶包，脏页既存在于LRUList，也存在于FlushList。<br>LRUList用来管理缓冲池中页的可用性，FlushList用来管理将页刷新回磁盘。</p>
+<h4 id="重做缓冲日志"><a href="#重做缓冲日志" class="headerlink" title="重做缓冲日志"></a>重做缓冲日志</h4><p>InnoDB存储引擎首先将重做日志信息先放入到这个缓冲区，然后按照一定的频率（每秒一次）将其刷新到重做日志文件。<br>可以使用参数：innodb_log_buffer_size来调整该缓冲区域的大小，默认为8MB。</p>
+<h4 id="额外的内存池"><a href="#额外的内存池" class="headerlink" title="额外的内存池"></a>额外的内存池</h4><p>例如：分配了缓冲池（innodb_buffer_pool），但是每个缓冲池中的帧缓冲还有对应的缓冲控制对象，这些对象记录了一些如LRU、锁、等待信息，而这个对象的内存需要从额外内存池中申请。</p>
+<p>在对一些数据结构本身的内存进行分配是，需要从额外的内存池中进行申请。因此在申请了很大的InnoDB缓冲池是，需要相应地增加额外的内存池。</p>
+<h2 id="Checkpoint技术"><a href="#Checkpoint技术" class="headerlink" title="Checkpoint技术"></a>Checkpoint技术</h2><p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/check_point.png" alt="CheckPoint"></p>
+<p>Write Pos 是当前记录的位置，一边写好一遍往后移。<br>CheckPoint 是当前要擦除的位置，也就是往后推移并且循环的，擦除记录前要把记录更新到数据文件。<br>Write Pos和 CheckPoint之间是可以写入的部分，用来记录新的操作。</p>
+<p>1） 缩短数据库的恢复时间；<br>    当数据库发生宕机时，数据库不需要重做所有的日志，因为CheckPoint之前的页都已经刷新回磁盘，因此只需要对checkPoint之后的重做日志进行恢复，这样大大缩短了数据库的恢复时间。</p>
+<p>2） 缓冲池不够用时，将脏页刷新到磁盘；<br>    当缓冲池不够用时，根据LRU算法会移除最近最少使用的页，如果当前页为脏页，则需要刷新该脏页到磁盘。</p>
+<p>3） 重做日志不可用时，刷新脏页；<br>    重做日志中Write Pos和checkPint之间没有空间来记录RedoLog时，强制刷新脏页，使得CheckPoint后移。</p>
+<h2 id="InnoDB关键特性"><a href="#InnoDB关键特性" class="headerlink" title="InnoDB关键特性"></a>InnoDB关键特性</h2><h3 id="插入缓冲"><a href="#插入缓冲" class="headerlink" title="插入缓冲"></a>插入缓冲</h3><h4 id="Insert-Buffer"><a href="#Insert-Buffer" class="headerlink" title="Insert Buffer"></a>Insert Buffer</h4><p>对于非聚集索引的插入或者更新操作，不是每一次直接插入到索引页中，而是先判断插入的非聚集索引页是否在缓冲池中，如果存在则直接插入；如果不在则先放入到一个InsertBuffer对象中。然后再以一定的频率进行InsertBuffer和辅助索引页子结点的Merge操作。<br>通常会将多个插入操作合并到一个操作中，大大提高了非聚集索引插入的性能。</p>
+<p>InsertBuffer的使用要同时满足两个条件：<br>1） 索引是辅助索引（非聚集索引）<br>    如果是聚集索引，则直接按照顺序写就行了，很高效。<br>2） 索引不是唯一的<br>    因为在插入缓冲时，数据库并不去查找索引页来判断插入的记录唯一性。如果去查找肯定又会有离散读取的情况发生，从而导致InsertBuffer失去意义。</p>
+<p>当满足索引是辅助索引且非唯一时，InnoDB存储引擎会使用InsertBuffer， 这样就可以提高插入操作的性能。</p>
+<p>当应用程序进行大量的插入操作时数据库发生了宕机，这个时候会有大量的InsertBuffer并没有合并到实际的非聚集索引中，因此恢复可能需要很长的时间。</p>
+<p>同时在写密集的情况下，InsertBuffer会占用过多的缓冲池内存（innodb_buffer_pool），默认最大可以占用1/2的缓冲池内存。修改IBUF_POOL_SIZE_PER_MAX_SIZE 可以对 InsertBuffer大小进行控制，比如改为3则最大只能使用1/3的缓冲池内存。</p>
+<h4 id="Change-Buffer"><a href="#Change-Buffer" class="headerlink" title="Change Buffer"></a>Change Buffer</h4><p>InsertBuffer 的升级版本，可以对Insert、Delete、Update都进行缓冲，分别是InsertBuffer、DeleteBuffer、PurgeBuffer。</p>
+<p>ChangeBuffer适用对象依然是非唯一的辅助索引。</p>
+<p>对一条记录进行UPDATE操作需要分为：<br>1）将记录标记为删除（DeleteBuffer对应该过程）；<br>2）真正将记录删除（PurgeBuffer对应删除操作）</p>
+<p>开启Buffer选项：<br>innodb_change_buffering: [inserts、deletes、purges、changes、all、none]<br>changes表示启用inserts、deletes<br>all表示启用所有，默认值<br>none表示都不启用。</p>
+<p>可以通过innodb_change_buffer_max_size控制changebuffer最大使用内存的数量：<br>该参数的最大有效值为50， 表示只能占用缓冲池的50%。</p>
+<h4 id="Merge-InsertBuffer"><a href="#Merge-InsertBuffer" class="headerlink" title="Merge InsertBuffer"></a>Merge InsertBuffer</h4><ul>
+<li>辅助索引页被读取到缓冲池时；<br>  执行SELECT语句时，要确认该辅助索引页是否有记录存放于InsertBufferB+树中。<br>  有，则将InsertBufferB+树中该页的记录插入到该辅助索引页中。</li>
+<li>InsertBuffer BitMap 追踪到该辅助索引页已无可用空间时；<br>  InsertBuffer BitMap用来追踪每个辅助索引页的可用空间，并至少有1/32页的可用空间。如果插入辅助索引记录时监测到插入记录后可用空间小雨1/32页，则会强制进行一个合并操作。<br>  （强制读取辅助索引页，将InsertBufferB+树中该页的记录以及待插入的记录插入到辅助索引页中。）</li>
+<li>Master Thread<br> Master Thread 每秒或者每10秒 根据srv_innodb_io_capacity 的百分比来进行一个Merge InsertBuffer操作。</li>
+</ul>
+<p>如果在merge时，要进行的merge表已经被删除，此时直接丢弃已经被Insert/Change Buffer的数据记录。</p>
+<h3 id="两次写"><a href="#两次写" class="headerlink" title="两次写"></a>两次写</h3><p>DoubleWrite为了提升InnoDB存储引擎的数据页可靠性。</p>
+<p>当InnoDB存储引擎正在将某个页写入到表中，当这个页只被写了一部分（16k的页，只写了前4k）就发生了宕机，这种情况被称为写失效（partial page write）。</p>
+<p>为了解决partial page write，InnoDB实现了Double write buffer，就是在写数据页之前，先把这个数据页写到一块独立的物理文件位置（ibdata），然后再写到数据页。<br>这样在宕机重启时，如果出现数据页损坏，就需要通过该页的副本来还愿该页，然后再进行redo log重做。</p>
+<p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/double_write.png" alt="两次写"></p>
+<p>double write由两部分组成，一部分是内存中的double write buffer，大小是2MB， 另一部分是磁盘上的共享表空间中连续的128个页，大小也是2M。<br>1）当触发数据缓冲池中的脏页刷新时，并不直接写入磁盘数据文件中，而是先拷贝到内存中的doublewrite buffer中；<br>2）接着从两次写缓冲区分两次写入磁盘共享表空间中（连续存储、顺序写）每次写1MB；<br>3）再将doublewrite buffer中的脏页数据写入实际的各个表空间中（离散写）。</p>
+<p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/double_write_recovery.png" alt="两次写恢复"></p>
+<p>当不需要开启doublewrite时，使用skip_innodb_doublewrite 关闭。</p>
+<p>innodb_buffer_pool_flushed : 当前从缓冲池中刷新到磁盘页的数量<br>innodb_dblwr_pages_written: double write 的数量</p>
+<h3 id="自适应哈希索引"><a href="#自适应哈希索引" class="headerlink" title="自适应哈希索引"></a>自适应哈希索引</h3><p>InnoDB存储引擎会监控对标上各索引页的查询，如果观察到建立哈希索引可以带来速度上的提升，则建立哈希索引。自适应哈希索引是通过缓冲池的B+树页构造而来，因此建立的速度很快，不需要对整张表建立哈希索引。 InnoDB存储引擎会自动根据访问的频率和模式来自动地为某些热点页建立哈希索引。</p>
+<p>自使用哈希索引有一个要求，对这个页的查询条件是一样的。<br>如：where a = xxx;<br>   where a = xxx and b = xxx;</p>
+<p>自使用哈希索引是数据库自优化的，无需DBA对数据库进行调整。<br>可以通过innodb_adaptive_hash_index 来启用或者禁用。</p>
+<h3 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h3><p>1）提升吞吐量<br>2）IO Merge操作</p>
+<h3 id="刷新邻接页"><a href="#刷新邻接页" class="headerlink" title="刷新邻接页"></a>刷新邻接页</h3><p>当刷新一个脏页时，InnoDB存储引擎会检测该页所在区的所有页，如果是脏页，那么一起进行刷新。<br>通过AIO可以将多个IO卸乳操作合并为一个IO操作。</p>
+<p>可以通过innodb_flush_neighbors 来关闭或者开启该特性。</p>
+<p>select version();<br>show variables like ‘innodb_%_threads’;<br>show variables like ‘innodb_buffer_pool_size’;<br>show variables like ‘innodb_buffer_pool_instances’;<br>show variables like ‘innodb_change_buffering’;<br>show engine innodb status;</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+
+              
+            </div>
+          
+        </div>
+
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-11-04T10:55:30+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年11月4日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Mysql/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Mysql</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+              <a class='prev' href='/2020/11/04/%E6%96%87%E4%BB%B6/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>MySQL 文件</p>
+                <p class='content'>参数文件动态参数  动态参数可以在Mysql实例运行中进行更改，可以通过SET命令对动态参数值进行修改。  SET [global|session]  key = value;
+静态参数  静态...</p>
+              </a>
+            
+            
+              <a class='next' href='/2020/11/03/Mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/'>
+                <p class='title'>Mysql体系结构和存储引擎<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>Mysql 体系结构
+
+链接池组件
+管理服务和工具组件
+SQL接口组件
+查询分析器组件
+优化器组件
+缓存组件
+插件式表存储引擎
+物理文件
+
+存储引擎可以根据MySQL官方手册给出的定义存储引擎的...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'InnoDB体系架构',
+      tools: true
+    }
+  </script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB-体系架构"><span class="toc-text">InnoDB 体系架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#后台线程"><span class="toc-text">后台线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Master-Thread"><span class="toc-text">Master Thread</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IO-Thread"><span class="toc-text">IO Thread</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Purge-Thread"><span class="toc-text">Purge Thread</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-Cleaner-Thread"><span class="toc-text">Page Cleaner Thread</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存"><span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#缓冲池"><span class="toc-text">缓冲池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缓冲池管理算法"><span class="toc-text">缓冲池管理算法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#LRU-List"><span class="toc-text">LRU List</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Free-List"><span class="toc-text">Free List</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Flush-List"><span class="toc-text">Flush List</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#重做缓冲日志"><span class="toc-text">重做缓冲日志</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#额外的内存池"><span class="toc-text">额外的内存池</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Checkpoint技术"><span class="toc-text">Checkpoint技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB关键特性"><span class="toc-text">InnoDB关键特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入缓冲"><span class="toc-text">插入缓冲</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Insert-Buffer"><span class="toc-text">Insert Buffer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Change-Buffer"><span class="toc-text">Change Buffer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Merge-InsertBuffer"><span class="toc-text">Merge InsertBuffer</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#两次写"><span class="toc-text">两次写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自适应哈希索引"><span class="toc-text">自适应哈希索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步IO"><span class="toc-text">异步IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#刷新邻接页"><span class="toc-text">刷新邻接页</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+  
+  <footer class="clearfix">
+    <br><br>
+
+    
+  </footer>
+
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4/dist/jquery.min.js"></script>
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '8px',
+        duration: '800',
+        interval: '100',
+        scale: '1'
+      });
+    });
+  </script>
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/xaoxuu/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2.6.5/js/search.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/comment_typing.js"></script>
+
+
+
+
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-check-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-check-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-times-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-times-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 标准 markdown 描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

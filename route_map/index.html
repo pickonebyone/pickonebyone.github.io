@@ -5310,6 +5310,8 @@ var Ajax={
 
       pathArrays = [];
 
+      map.clearMap();
+
       // 根据起终点经纬度规划驾车导航路线
       var origin = document.getElementById('start_pos_lng').value + "," + document.getElementById('start_pos_lat').value;
       var destination = document.getElementById('dest_pos_lng').value + "," + document.getElementById('dest_pos_lat').value;

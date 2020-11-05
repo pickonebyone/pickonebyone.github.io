@@ -365,8 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/08/18/Spring-%E6%B3%A8%E8%A7%A3/">
-      Spring-注解
+    <a href="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">
+      DataBase-分布式事务
     </a>
   </h2>
 
@@ -391,9 +391,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%95%B0%E6%8D%AE%E5%BA%93/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
+      <p>Java技术栈/数据库</p>
     </a>
   </div>
 
@@ -404,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年8月18日</p>
+    <p>发布于：2020年10月16日</p>
   </a>
 </div>
 
@@ -432,47 +432,39 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Spring 注解驱动编程发展历程</p>
-<p> 1.2 @Transactional<br>     @ManagedResource<br> 2.0 @Component<br>     @Repository<br> 3.0 @Bean<br>     @Import</p>
-<p> 4.0 @Profile<br>     @Conditional<br>     @Indexed<br>Spring 核心注解场景分类</p>
-<pre><code>|注解|场景说明|起始版本|
-|---|---|---|
-|@Repository| 数据仓储模式注解| 2.0|
-|@Component| 通用组件模式注解| 2.5|
-|@Service| 服务模式注解| 2.5|
-|@Controller| Web控制器模式注解| 2.5|
-|@Configuration| 配置类模式注解| 3.0|</code></pre><h4 id="装配注解"><a href="#装配注解" class="headerlink" title="装配注解"></a>装配注解</h4><pre><code>|注解|场景说明|起始版本|
-|---|---|---|
-|@ImportResource| 替换XML元素\&lt;import\&gt;| 2.5|
-|@Import| 导入Configuration类，无论是否标记@Configuration| 2.5|
-|@ComponentScan| 扫描指定package下标注Spring模式注解的类| 3.1|</code></pre><h4 id="依赖注入注解"><a href="#依赖注入注解" class="headerlink" title="依赖注入注解"></a>依赖注入注解</h4><pre><code>|注解|场景说明|起始版本|
-|---|---|---|
-|@Autowired| Bean依赖注入，支持多种依赖查找方式| 2.5|
-|@Qualifier| 细粒度的@Autowired查找| 2.5|</code></pre><h2 id="Spring-注解编程模型"><a href="#Spring-注解编程模型" class="headerlink" title="Spring 注解编程模型"></a>Spring 注解编程模型</h2><p>   元注解<br>   Spring 模式注解<br>   Spring 组合注解<br>   Spring 注解属性别名/覆盖</p>
-<h2 id="Spring-元注解（Meta-Annotations）"><a href="#Spring-元注解（Meta-Annotations）" class="headerlink" title="Spring 元注解（Meta-Annotations）"></a>Spring 元注解（Meta-Annotations）</h2><p> A meta-annotation is an annotation that is declared on another annotation.<br> An annotation is therefore meta-annotated if it is annotated with another annotation. For example, any annotation that is declared to be documented is meta-annotated with @Documented from the java.lang.annotation package.</p>
-<ul>
-<li>java.lang.annotation.Documented</li>
-<li>java.lang.annotation.Inherited</li>
-<li>java.lang.annotation.Repeatable</li>
-</ul>
-<h2 id="Spring-模式注解（Stereotype-Annotations）"><a href="#Spring-模式注解（Stereotype-Annotations）" class="headerlink" title="Spring 模式注解（Stereotype Annotations）"></a>Spring 模式注解（Stereotype Annotations）</h2><p>  元标注@Component的注解在XML元素 <a href="context:component-scan">context:component-scan</a> 或 注解 @ComponentScan 扫描中派生了 @Component 特性， 并且从Spring Framework 4.0 开始支持多层次派生。</p>
-<ul>
-<li>@Repository</li>
-<li>@Service</li>
-<li>@Controller</li>
-<li>@Configuration</li>
-<li>@SpringBootConfiguration </li>
-</ul>
-<p>Spring 组合注解（Composed Annotations）</p>
-<p>  A composed annotation is an annotation that is meta-annotated withy one or more annotations with the intent of combining the behavor associated with those meta-annotations into a single custom annotation.<br>  For example, an annotation named @TransactionalService that is meta-annotation with Spring’s @Transactional and @Service annotations is a composed annotation that combines the semantics of @Transactional and @Service.<br>  @TransactionalService is technically also a custom stereotype annotation.</p>
-<p>  基本定义： </p>
-<p>  spring组合注解中的元注解允许是Spring模式注解与其他Spring功能性注解的任意组合。</p>
-<p>Spring 注解属性别名（Attribute Alias）</p>
-<p>Spring 注解属性覆盖（Attribute Ovverides）</p>
-<p>Spring @Enable 模块驱动</p>
-<p>  @Import(@Configuration)<br>  @Import(ImportSelector)<br>  @Import(ImportBeanDefinitionRegistrar)<br>    AnnotatedBeanDefinition ad = new AnnotatedGenericBeanDefinition();<br>    BeanDefinitionReaderUtils.registerWithGeneratedName(ad, register);</p>
-<p>Spring 条件注解</p>
-<p>上下文对象： org.springframework.context.annotation.ConditionContext<br>条件判断：org.springframework.context.annotation.ConditionEvaluator<br>配置阶段：org.sprignframework.context.annotation.ConfigurationCondition.ConfigurationPhase<br>判断入口：org.springframework.context.annotation.ConfigurationClassPostProcessor<br>        org.springframework.context.annotation.ConfigurationClassPasser<br>ConditionContext<br>ConditionEvaluator</p>
+        <p>随着业务的增长，需要进行分表、分库，甚至拆分应用演化成微服务。<br>因此一次交易需要跨库、跨服务保证每个系统中的交易要么全部成功，否则全部回滚。这里就涉及到分布式事务。</p>
+<p>XA协议时一个基于数据库的分布式事务协议，其分为两部分：事务管理器和本地资源管理器。<br>事务管理器作为一个全局调度着，负责对各个本地资源管理器统一发送提交或者回滚命令。<br>二阶段提交和三阶段提交都是根据此协议衍生而来，Oracle和Mysql均已实现了XA接口。<br>除了二阶段提交和三阶段提交外还有Try Confirm Cancel (TCC)、本地消息队列等分布式事务解决方案。</p>
+<h3 id="二阶段提交-2PC"><a href="#二阶段提交-2PC" class="headerlink" title="二阶段提交 2PC"></a>二阶段提交 2PC</h3><p>二阶段提交需要进行两个阶段的操作，准备阶段和提交阶段。</p>
+<p>准备阶段就是事务管理器（协调者）分别给不同的系统发送“准备”命令，这些系统出了提交数据库事务之外的所有操作，都要在准备阶段操作完成。</p>
+<p>提交阶段就是事务管理器（协调者）给不同的系统发送“提交”命令，每个系统提交自己的数据库事务，然后给协调者返回“提交成功”， 协调者收到所有响应以后，返回给客户端成功响应。<br>如果遇到异常情况提交不成功，需要做一些补偿机制来保证成功。</p>
+<p><img src="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/2pc.jpg" alt="二阶段提交"></p>
+<p>对于二阶段提交：<br>如果准备阶段全部返回成功， 那么进入提交阶段，该必须保证成功。<br>如果准备阶段有一个失败，那么协调者通知每个系统回滚。</p>
+<p>二阶段提交保证了原子性与隔离性。所以2PC适合对数据一致性高的场景。</p>
+<p>缺陷：<br>性能低：整个事务的执行过程需要阻塞服务端线程和数据库会话。<br>协调者单点故障：一旦协调者宕机，就会导致事务回话一致处于等待提交阶段，直到事务超时自动回滚。<br>超时导致同步阻塞：当某个参与者节点通信处于超时，其余参与者都会被懂阻塞导致占用的资源不能释放。</p>
+<p>适合场景：只有病发量不大且需要强一致的情况下才考虑使用2PC。</p>
+<h3 id="三阶段提交-3PC"><a href="#三阶段提交-3PC" class="headerlink" title="三阶段提交 3PC"></a>三阶段提交 3PC</h3><p>三阶段提交是对二阶段提交的一种升级优化，它在二阶段提交的中间增加了precommit阶段。保证了在最后提交阶段之前，各个参与者节点状态都一致。<br>同时在协调者与参与者中都引入超时机制，当参与者由于各种原因未收到协调者的commit请求后，会对本地事务进行commit，不会一直阻塞等待，解决了2pc的单点故障问题，但是3pc还是没有能从根本上解决数据一致性的问题。</p>
+<p>三个阶段分别是can commit、Pre Commit 、Do Commit；</p>
+<p><img src="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/3pc.jpg" alt="三阶段提交"></p>
+<h4 id="CanCommit"><a href="#CanCommit" class="headerlink" title="CanCommit"></a>CanCommit</h4><p>类似于二阶段提交的准备阶段，协调者向所有参与者发送CanCommit命令，询问是否可以执行事务提交操作，如果可以提交就返回YES，否则返回NO。如果全部响应YES则进入下一个阶段。</p>
+<h4 id="PreCommit"><a href="#PreCommit" class="headerlink" title="PreCommit"></a>PreCommit</h4><p>协调者根据参与者的反应情况来决定是否可以进行事务的PreCommit操作。根据响应情况，有两种可能</p>
+<p>所有参与者的反馈都是YES那么执行事务的预执行：<br>  1）发送于提交请求，协调者向参与者发送Precommit请求，并进入Prepared阶段。<br>  2）事务预提交，参与者接收到PreCommit请求后，会执行事务操作，并将undo和redo信息记录到事务日志中。<br>  3）响应反馈：如果参与者成功的执行了事务操作，则返回ACK响应，同时开始等待最终指令。</p>
+<p>假如任何一个参与者向协调者发送了NO响应，或者等待超时之后，协调者都没有接到参与者的响应，那么就执行事务的中断。<br>  1）发送终端请求： 协调者向所有参与者发送abort请求。<br>  2）中断事务：参与者收到来自协调者的abort请求之后（或者超时之后，仍未收到协调者的请求）执行事务的中断。</p>
+<h4 id="DoCommit"><a href="#DoCommit" class="headerlink" title="DoCommit"></a>DoCommit</h4><p>该阶段进行真正的事务提交，也分为两种情况。</p>
+<h5 id="执行提交"><a href="#执行提交" class="headerlink" title="执行提交"></a>执行提交</h5><p>发送提交请求： 协调者接收到参与者发送的ACK响应，那么它将从预提交状态进入到提交状态。<br>并向所有参与者发送doCommit请求。<br>事务提交：参与者收到docommit请求之后，执行正式的事务提交。并在完成事务提交之后释放所有的事务资源。<br>响应反馈：参与者事务提交之后，向协调者发送ACK请求<br>完成事务： 协调者接收到所有参与者的ACK响应之后，完成事务。</p>
+<h5 id="中断事务"><a href="#中断事务" class="headerlink" title="中断事务"></a>中断事务</h5><p>协调者没有接收到参与者发送的ACK响应（可能是参与者发送的不是ACK响应，也可能是响应超时），那么就会执行中断事务。</p>
+<p>发送中断请求：协调者向所有参与者发送abort请求。<br>事务回滚：参与者接收到abort请求后，利用其在阶段二记录的undo信息来执行事务的回滚操作，并在完成回滚之后释放所有的事务资源。<br>反馈结果：参与者完成事务回滚之后，向协调者发送ACK信息<br>中断事务：协调者接收到参与者反馈的ACK消息之后，执行事务的中断操作。</p>
+<p><img src="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/3pc-status.jpg" alt="三阶段提交状态图"></p>
+<p>如果已经完成了Precommit进入到Docommit阶段，有的参与者由于超时没有收到Docommit请求时，会自动提交本地事务，并且释放资源。</p>
+<p>三阶段提交解决了二阶段提交无法释放资源的问题。<br>也保证了在提交事务之前所有参与者的状态都一致</p>
+<h3 id="补偿事务（TCC）"><a href="#补偿事务（TCC）" class="headerlink" title="补偿事务（TCC）"></a>补偿事务（TCC）</h3><p>针对每个操作都要注册一个与其对应的确认和补偿（撤销操作）</p>
+<p>它分为三个操作：</p>
+<h5 id="Try阶段"><a href="#Try阶段" class="headerlink" title="Try阶段"></a>Try阶段</h5><p>主要针对业务系统做检测以及资源预留。</p>
+<h5 id="Confirm阶段"><a href="#Confirm阶段" class="headerlink" title="Confirm阶段"></a>Confirm阶段</h5><p>确认执行业务操作。</p>
+<h5 id="Cancel阶段"><a href="#Cancel阶段" class="headerlink" title="Cancel阶段"></a>Cancel阶段</h5><p>取消执行业务操作。</p>
+<p>TCC处理流程与2PC类似，不过2PC通常是在跨库的DB层面，TCC本质上就是一个应用层面的2PC，需要通过业务逻辑来实现。这种分布式事务的实现方式的优势在于，可以让应用自己定义数据库操作的粒度，是的降低锁冲突、提高吞吐量成为可能。</p>
+<p>不足之处在于对应用的侵入性非常强，业务逻辑的每个分支都需要实现try、confirm、cancel三个操作。<br>此外其实现难度也比较大，需要按照网络状态、系统故障等不同的失败原因实现不同的回滚策略。<br>为了满足一致性的要求，confirm和cancel必须实现幂等。</p>
+<p><img src="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/TCC.png" alt="TCC(图片来源于网络)"></p>
+<h3 id="本地消息队列"><a href="#本地消息队列" class="headerlink" title="本地消息队列"></a>本地消息队列</h3><p>如果只需要保证数据的最终一致性，那么可以使用消息队列来解决。</p>
 
       
     </div>
@@ -499,8 +491,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/08/15/Spring-DataBind/">
-      Spring-DataBind
+    <a href="/2020/10/15/DataBase-%E4%BA%8B%E5%8A%A1/">
+      DataBase-事务
     </a>
   </h2>
 
@@ -525,9 +517,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%95%B0%E6%8D%AE%E5%BA%93/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
+      <p>Java技术栈/数据库</p>
     </a>
   </div>
 
@@ -538,7 +530,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年8月15日</p>
+    <p>发布于：2020年10月15日</p>
   </a>
 </div>
 
@@ -566,7 +558,30 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="什么是事务Transaction"><a href="#什么是事务Transaction" class="headerlink" title="什么是事务Transaction"></a>什么是事务Transaction</h2><p>Transaction一词在英语的翻译中还有一次交易、业务、事务、办理、处理；</p>
+<p>对于一次账户充值100元的操作，其中就有多个环节。<br>1）检查账户的有效性，查询账户余额；<br>2）记录充值流水；<br>3）为账户余额增加100元。</p>
+<p>对于这三个操作来讲，他是一个Transaction， 要么都成功，只要有一个失败，就必须整个Transaction失败，不允许记录了充值流水成功，但是余额增加失败。这三个是一个整体，是不可分割的工作单元。</p>
+<h2 id="事务的特性"><a href="#事务的特性" class="headerlink" title="事务的特性"></a>事务的特性</h2><p>原子性 Atomic：要么都成功，只要有一个步骤失败，整个步骤必须回滚（失败）。<br>一致性 Consistency：事务保证读取到的数据总是一致的，如（不存在100元的充值流水时金额为100元， 存在100元的充值流水时金额为200元）。<br>但是对于这个充值过程来讲，肯定是先记录了充值记录，后增加100元余额。可以查到充值记录，但余额是100是客观存在的。<br>隔离性Isolation：为了保证一致性，事务执行过程中的中间状态不对外部可见，事务需要对整个过程进行隔离。<br>持久性 Durability：只要事务一经提交，就一定会被持久化到磁盘中。</p>
+<h2 id="Transaction-阶段"><a href="#Transaction-阶段" class="headerlink" title="Transaction 阶段"></a>Transaction 阶段</h2><p>Transaction 需要有开始和结束，标记一个Transaction的开始和截止；<br>当所有的操作都成功的时候，需要Commit;<br>当其中某个操作失败的时候，之前的操作需要Rollback；</p>
+<p>Transaction Start;<br>Transaction Commit Or Rollback;<br>Transaction End;</p>
+<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><p>假如业务员给账户A增加100元的操作的同时（记录了充值流水100元，流水号为666），对账系统也在同时运行同时读取到了这一笔流水号为666的流水记录。但是后续的为余额增加100元的操作失败了，整个Transaction RollBack。 导致账户余额比对账系统少了100元。</p>
+<p>在这里，对账系统看到了业务系统Transaction未提交时的数据，叫脏读。<br>也就是说当前事务的中间状态，对其他事务时可见的。</p>
+<p>事务的最低隔离级别是未提交读（Read Uncommitted），因此会发生脏读的现象。<br>为了解决脏读的现象，需要将事务隔离起来，只允许读到已提交的数据。 Read Committed.</p>
+<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><p>假如业务员A给用户增加100元。</p>
+<p>开启事务；<br>查询账户余额 100元；<br>有其他事情去忙……</p>
+<p>此时业务员B也给用户增加100元。<br>开启事务；<br>查询账户余额 100元<br>增加流水记录；<br>增加账户余额100元，变为200元；<br>结束事务；</p>
+<p>业务员A回来为A增加100元：<br>查询账户余额 200元；</p>
+<p>不可重复读就是业务员A在同一个事务内，先后两次读取同一条数据的结果可能不一样。<br>可重复读就是业务员A在同一个事务内，先后两次读取同一条数据的结果总是相同的，无论其他会话是否已经更新了这条数据。</p>
+<p>为了保障在同一事务下，先后两次读取到的同一条数据结果一致，需要将事务的隔离级别调整为可重复读（Repeatable Read）。</p>
+<h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><p>假如业务员A给用户增加100元。</p>
+<p>开启事务；<br>查询流水中是否有ID为1000的流水记录，不存在；</p>
+<p>业务员B给用户增加100元；<br>开启事务；<br>查询流水中是否有ID为1000的流水记录，不存在；<br>插入流水记录；<br>更新账户余额为200；<br>提交事务；</p>
+<p>业务员A开始执行；<br>插入流水记录，此时已经有ID为1000的流水记录，系统异常；<br>可以开启重试机制；<br>由于隔离性，查询是否有ID为1000的流水记录时还是不存在，重试插入时还是异常。</p>
+<p>为了解决幻读的问题，需要将所有的事务和操作进行串行化。这也是Database的最高隔离级别，性能也最差。</p>
+<p><img src="/2020/10/15/DataBase-%E4%BA%8B%E5%8A%A1/Transaction-Isolation.jpg" alt="事务的隔离级别以及解决的问题"></p>
+<p>对于账户充值来讲，交易的原子性以及持久性是最重要的。可以适当牺牲一些一致性和隔离性。</p>
+<p>以下操作在 ReadCommitted 和 Repeatable Read下是安全的。<br>1）给账户余额表增加一个log_id属性，记录最后一笔交易的流水号。<br>2）首先开启事务，查询并记录当前账户的余额和最后一笔交易的流水号。<br>3）写入流水记录。<br>4）更新账户余额以及流水记录ID，需要在更新语句的Where条件中限定，只有流水好等于之前查询出的流水号时才能更新。<br>  update account_balance set amount = amount + 100 , log_id = 2 where user_id = 0 and log_id = 1;<br>5）检查更新余额的返回值，如果为1 提交事务，否则回滚。</p>
+
       
     </div>
     
@@ -592,7 +607,7 @@
           </a>
         
         <p class="current">
-          4 / 34
+          4 / 36
         </p>
         
           <a class="next" rel="next" href="/page/5/">
@@ -653,7 +668,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(35)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(39)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
@@ -664,6 +679,11 @@
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/"
             id="categoriesJavaE68A80E69CAFE6A088JavaE8999AE68B9FE69CBA"
             ><div class='name'>Java虚拟机</div><div class='badge'>(11)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/"
+            id="categoriesJavaE68A80E69CAFE6A088Mysql"
+            ><div class='name'>Mysql</div><div class='badge'>(4)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/"
@@ -772,7 +792,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.25px; color: #6f6f6f">JVM</a> <a href="/tags/Java/" style="font-size: 15.25px; color: #919191">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Spring/" style="font-size: 21.5px; color: #666">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.25px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 17.75px; color: #808080">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.25px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.75px; color: #5e5e5e">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.67px; color: #6c6c6c">JVM</a> <a href="/tags/Java/" style="font-size: 15.11px; color: #919191">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 17.33px; color: #828282">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.78px; color: #646464">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.11px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18.44px; color: #7b7b7b">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.11px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19.56px; color: #737373">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.89px; color: #5d5d5d">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.22px; color: #8a8a8a">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
     </div>
   </section>
 

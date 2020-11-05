@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#®️Jun'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+    <title>Mysql表 - 碎碎念</title>
+  
+    <meta name="keywords" content="Mysql">
+  
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+  <link rel="shortcut icon" type='image/x-icon' href="https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/favicon/favicon.ico">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+	  setTimeout(function() { 
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?0b970030787ceb090a4dc46259415a4c";
+		hm.defer=true;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+	  }, 5000);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+<header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h'>
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+          
+          
+          
+            JUNE <b><sup style='color:#3AA757'>®️Jun</sup></b>
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+<script>setLoadingBarProgress(40);</script>
+
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper'>
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/11/05/Mysql%E8%A1%A8/">
+      Mysql表
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Mysql</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年11月5日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <h3 id="索引组织表"><a href="#索引组织表" class="headerlink" title="索引组织表"></a>索引组织表</h3><p>在InnoDB存储索引中，表时根据主键顺序组织存放的，这种存储方式的表称为索引组织表。</p>
+<p>在InnoDB存储引擎表中，每张表都有个主键，如果在创建表时没有显式地定义主键，则会按照如下方式创建主键：</p>
+<ul>
+<li>判断表中是否有非空的唯一索引，如果有该列为主键；</li>
+<li>表中没有非空的唯一索引，InnoDB引擎自动创建一个6字节大小的指针；<br>当表中有多个非空唯一索引时，InnoDB存储引擎将选择建表时第一个定义的非空唯一索引为主键（根据定义的索引顺序，而不是建表时列的顺序）。</li>
+</ul>
+<h3 id="InnoDB逻辑存储结构"><a href="#InnoDB逻辑存储结构" class="headerlink" title="InnoDB逻辑存储结构"></a>InnoDB逻辑存储结构</h3><h4 id="表空间"><a href="#表空间" class="headerlink" title="表空间"></a>表空间</h4><p>表空间是InnoDB存储引擎逻辑结构的最高层，所有的数据都存放在表空间中。<br>表空间由段（Segment）、区（extent）、页（Page）组成。<br><img src="/2020/11/05/Mysql%E8%A1%A8/table_space_struct.jpg" alt="表空间结构"></p>
+<p>在默认情况下，InnoDB存储引擎有一个共享表空间ibdata1，所有的数据都存放在这个表空间内。<br>如果配置了innodb_file_per_table，则每张表内的数据可以单独存放在一个表空间中。此时每张表的表空间存放的只是数据、索引和插入缓冲的BitMap页，其他类的数据如回滚（undo）、插入缓冲索引页、系统事务信息、二次写缓冲等还是存放在原来的共享表空间。</p>
+<h4 id="段"><a href="#段" class="headerlink" title="段"></a>段</h4><p>表空间是由各个段组成的，包含数据段、索引段、回滚段等。<br>数据段就是B+树的叶子节点，索引段就是B+树的非叶子结点。<br>回滚段？？？<br>在InnoDB存储引擎中，对段的管理都是由引擎自身完成的，DBA不能对其进行控制。</p>
+<h4 id="区"><a href="#区" class="headerlink" title="区"></a>区</h4><p>区是由连续的页组成的空间，在任何情况下每个区的大小都是1MB。为了保证区中页的连续行，InnoDB引擎每次从磁盘申请4～5个区。默认情况下InnoDB存储引擎页的大小为16K，一个区中存放64个连续的页。</p>
+<h4 id="页"><a href="#页" class="headerlink" title="页"></a>页</h4><p>页是InnoDB磁盘管理的最小单位，在InnoDB存储引擎中，默认每个页的大小为16KB。<br>可以通过参数 innodb_page_size 来设置页的大小为4K、8K、16K。<br>如果设置完成，则所有表中的页大小都变成innodb_page_size，不可用对其再次进行修改。除非通过mysqldump导入和导出来生成新的库。</p>
+<p>页的类型有：</p>
+<ul>
+<li>数据页（B-Tree Node）</li>
+<li>undo 页（undo log Page）</li>
+<li>系统页（System Page）</li>
+<li>事务数据页（Transaction System Page）</li>
+<li>插入缓冲位图页（Insert Buffer BitMap）</li>
+<li>插入缓冲空闲列表页（Insert Buffer Free List）</li>
+<li>未压缩的二进制大对象页（Uncompressed BLOB Page）</li>
+<li>压缩的二进制大对象页（Compressed BLOB Page）</li>
+</ul>
+<h4 id="行"><a href="#行" class="headerlink" title="行"></a>行</h4><p>Innodb存储引擎按行进行存放，每个页存放的行记录有影星的定义，最多允许存放16KB/2 - 200 行的记录。</p>
+<h3 id="InnoDB行记录格式"><a href="#InnoDB行记录格式" class="headerlink" title="InnoDB行记录格式"></a>InnoDB行记录格式</h3><h4 id="Compact-行记录格式"><a href="#Compact-行记录格式" class="headerlink" title="Compact 行记录格式"></a>Compact 行记录格式</h4><p>从Mysql5.0开始，设计目的是高效地存储数据。一个页中存放的行数据越多，其性能就越高。</p>
+<p>|—|—|—|—|—|—|—|—|—|<br>| 变长字段长度列表 | NULL标志位 | 记录头信息 | 列1数据 | 列 2 数据 | …|事务ID列|回滚指针列|__rowid|</p>
+<p>变长字段长度列表：按照列的顺序，逆序放置。<br>  如果列的长度小于255个字节，占用1字节；<br>  如果列的长度大于255个字节，占用2字节；<br>  变长字段的长度最大不可以超过2个字节，因为Mysql数据库中VARCHAR类型的最大长度限制为65535.<br>NULL标志位：表示改行数据中是否有NULL值，有用1表示，占用1个字节。<br>记录头信息：固定占用5个字节。<br>最后的部分是实际存储没咧的数据。<br>事务ID列：隐藏列，占用6字节。<br>回滚指针列:隐藏列，占用7字节。<br>__rowid：占用6字节。</p>
+<h4 id="行溢出数据"><a href="#行溢出数据" class="headerlink" title="行溢出数据"></a>行溢出数据</h4><p>InnoDB存储引擎的数据都是存放在页类型为B-tree Node中，当发生行溢出是，数据存放在页类型为uncompress BLOG页中。</p>
+<h3 id="InnoDB数据页结构"><a href="#InnoDB数据页结构" class="headerlink" title="InnoDB数据页结构"></a>InnoDB数据页结构</h3><h3 id="Named-File-Formats-机制"><a href="#Named-File-Formats-机制" class="headerlink" title="Named File Formats 机制"></a>Named File Formats 机制</h3><p>###约束</p>
+<h4 id="数据完整性"><a href="#数据完整性" class="headerlink" title="数据完整性"></a>数据完整性</h4><h4 id="约束的创建和查找"><a href="#约束的创建和查找" class="headerlink" title="约束的创建和查找"></a>约束的创建和查找</h4><h4 id="约束和索引的区别"><a href="#约束和索引的区别" class="headerlink" title="约束和索引的区别"></a>约束和索引的区别</h4><h4 id="对错误数据的约束"><a href="#对错误数据的约束" class="headerlink" title="对错误数据的约束"></a>对错误数据的约束</h4><h4 id="ENUM和SET约束"><a href="#ENUM和SET约束" class="headerlink" title="ENUM和SET约束"></a>ENUM和SET约束</h4><h4 id="触发器与约束"><a href="#触发器与约束" class="headerlink" title="触发器与约束"></a>触发器与约束</h4><h4 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h4><h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><h3 id="分区表"><a href="#分区表" class="headerlink" title="分区表"></a>分区表</h3><p>分区功能不是在存储引擎层面完成的。<br>支持分区的存储引擎有：MyISAM、InnoDB、NDB。<br>不支持分区的存储引擎有：CSV、FEDORATED、MERGE。</p>
+<p>分区的过程是将一个表或者索引分解为多个更小的、更可管理的部分。<br>从逻辑上讲只有一个表或者一个索引库，但是在物理上这个表或者索引可能由数十个物理分区组成。每个分区都是独立的对象，可以独自处理，页可以作为一个更大的对象的一部分进行处理。</p>
+<p>Mysql支持水平分区，不支持垂直分区（水平分区，将同一表中的不同行的记录分配到不同的物理文件；垂直分区，将同一表中的不同列分配到不同的物理文件）。<br>Mysql不支持全局分区，只支持局部分区。<br>局部分区：一个分区中既存放了数据由存放了索引。<br>全局分区：数据存放在各个区，所有数据的索引存放在一个对象中。</p>
+<p>分区主要用来数据库高可用性的管理，对于某些SQL的性能带来提高。</p>
+<h4 id="分区类型"><a href="#分区类型" class="headerlink" title="分区类型"></a>分区类型</h4><ul>
+<li>RANGE分区:行数据基于属于一个给定连续区间的列值被放入分区。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table t (</span><br><span class="line">  id int</span><br><span class="line">)engine&#x3D;innodb</span><br><span class="line">partition by range(id)(</span><br><span class="line"> partition p0 values less than (10),</span><br><span class="line"> partition p1 values less than (20)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table t add partition (partition p2 values less than maxvalue);</span><br></pre></td></tr></table></figure>
+<p>启用分区后，表是由建立各个分区时的各个分区ibd文件组成。</p>
+<ul>
+<li>List分区：和RANGE分区类似，只是LIST分区面向的是离散的值。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">   a INT, </span><br><span class="line">   b INT</span><br><span class="line">) engine &#x3D; INNODB</span><br><span class="line">partition by list(b)(</span><br><span class="line">  partition p0 values in (1,3,5,7,9),</span><br><span class="line">  partition p1 values in (0,2,4,6,8)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>HASH分区：根据用户自定义的表达式返回值进行分区，返回值不能为负数。<br>Hash分区的目的是将数据均匀地分布到盂县定义的各个区中，保证各分区的数据数量大致都一样。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">  a int, </span><br><span class="line">  b datetime</span><br><span class="line">)engine&#x3D;innodb</span><br><span class="line">partition by hash(year(b))</span><br><span class="line">partitions 4;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">  a int,</span><br><span class="line">  b datetime</span><br><span class="line">)engine&#x3D;innodb</span><br><span class="line">partition by linear hash(year(b))</span><br><span class="line">prtions 4;</span><br></pre></td></tr></table></figure>
+
+<p>LINEAR HASH分区的优点在于，增加、删除、合并和拆分分区将变得更加快捷，有利于处理含有大量数据的表。<br>缺点在于，与使用HASH分区得到的数据分布相比，各个分区间数据的分布可能不大均衡。</p>
+<ul>
+<li>KEY分区：根据MYSQL数据库提供的哈希函数来分区。<br>与HASH分区相似，不同之处在于HASH分区使用用户定义的函数进行分区，KEY分区使用MYSQL数据库提供的函数进行分区。对于NDB Cluster引擎，MYSQL数据库使用MD5函数来分区；对于其他引擎，Mysql数据库使用内部的哈希函数。<br>在KEY分区中，使用关键字LINEAR 和在HASH分区中具有同样的效果。</li>
+</ul>
+<p>无论哪种类型的分区，如果表中存在主键或者唯一索引时，分区列必须时唯一索引的一个组成部分。<br>如果建表时没有指定主键，唯一索引，可以指定任何一个列为分区列。</p>
+<p>以上四种RANGE、LIST、HASH、KEY分区条件是，数据必须是整形，如果不是整型，那应该需要通过函数将其转化成整型，如YEAR（）, TO_DAYS(), MONTH()等函数。</p>
+<ul>
+<li>Column分区，RANGE分区和LIST分区的一种进化。<br>COLUMN分区可以直接使用菲整形的数据进行分区，分区根据类型直接比较得到，不需要转化为整形。<br>RANGECOLUMNS分区可以对多个列的值进行分区。</li>
+</ul>
+<p>COLUMN分区支持<br>所有的整型：INT、SMALLINT、TINYINT、BIGING。<br>日期类型：DATE、DATETIME<br>字符串类型：CHAR、VARCHAR、BINARY、VARBINARY。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">  a INT,</span><br><span class="line">  b DATETIME</span><br><span class="line">)engine&#x3D;innodb</span><br><span class="line">partition by range columns(b)(</span><br><span class="line">  partition p0 values less than (&#39;2020-01-01&#39;),</span><br><span class="line">  partition p1 values less than (&#39;2020-02-01&#39;)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="子分区"><a href="#子分区" class="headerlink" title="子分区"></a>子分区</h4><p>   子分区是在分区的基础上再进行分区，有时页称为符合分区。 MySQL允许在RANGE和LIST的分区傻姑娘再进行KEY或者HASH的子分区。</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">   a int,</span><br><span class="line">   b date</span><br><span class="line"> )engine &#x3D; innodb</span><br><span class="line"> partition by range(year(b))</span><br><span class="line"> subpartition by hash(to_days(b))</span><br><span class="line"> subpartitions 2(</span><br><span class="line">     partition p0 values less than (1990),</span><br><span class="line">     partition p1 values less than (2000),</span><br><span class="line">     partition p2 values less than maxvalue</span><br><span class="line">     );</span><br></pre></td></tr></table></figure>
+
+<h4 id="分区中的NULL值"><a href="#分区中的NULL值" class="headerlink" title="分区中的NULL值"></a>分区中的NULL值</h4><p>MysQL允许对NULL值做分区，对于RANGE分区，如果像分区列插入了NULL值，则Mysql数据库将该值放入到最左边的分区。<br>LIST分区下要使用NULL值，必须显式地指出将该值放入哪个分区。<br>HASH和KEY分区函数会将NULL值的记录返回0.</p>
+<h4 id="分区和性能"><a href="#分区和性能" class="headerlink" title="分区和性能"></a>分区和性能</h4><p>当数据量大时，分区可以有效降低B+树的层级。<br>当数据量小时，分区带来的收益并不明显，并且有可能导致扫描所有分区反而降低效率。</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+
+              
+            </div>
+          
+        </div>
+
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-11-05T19:50:09+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年11月5日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Mysql/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Mysql</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+            
+              <a class='next' href='/2020/11/04/%E6%96%87%E4%BB%B6/'>
+                <p class='title'>MySQL 文件<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>参数文件动态参数  动态参数可以在Mysql实例运行中进行更改，可以通过SET命令对动态参数值进行修改。  SET [global|session]  key = value;
+静态参数  静态...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'Mysql表',
+      tools: true
+    }
+  </script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#索引组织表"><span class="toc-text">索引组织表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB逻辑存储结构"><span class="toc-text">InnoDB逻辑存储结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#表空间"><span class="toc-text">表空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#段"><span class="toc-text">段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#区"><span class="toc-text">区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#页"><span class="toc-text">页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#行"><span class="toc-text">行</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB行记录格式"><span class="toc-text">InnoDB行记录格式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Compact-行记录格式"><span class="toc-text">Compact 行记录格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#行溢出数据"><span class="toc-text">行溢出数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB数据页结构"><span class="toc-text">InnoDB数据页结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Named-File-Formats-机制"><span class="toc-text">Named File Formats 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#数据完整性"><span class="toc-text">数据完整性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#约束的创建和查找"><span class="toc-text">约束的创建和查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#约束和索引的区别"><span class="toc-text">约束和索引的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对错误数据的约束"><span class="toc-text">对错误数据的约束</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ENUM和SET约束"><span class="toc-text">ENUM和SET约束</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#触发器与约束"><span class="toc-text">触发器与约束</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#外键约束"><span class="toc-text">外键约束</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#视图"><span class="toc-text">视图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分区表"><span class="toc-text">分区表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#分区类型"><span class="toc-text">分区类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子分区"><span class="toc-text">子分区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分区中的NULL值"><span class="toc-text">分区中的NULL值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分区和性能"><span class="toc-text">分区和性能</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+  
+  <footer class="clearfix">
+    <br><br>
+
+    
+  </footer>
+
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4/dist/jquery.min.js"></script>
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '8px',
+        duration: '800',
+        interval: '100',
+        scale: '1'
+      });
+    });
+  </script>
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/xaoxuu/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2.6.5/js/search.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/comment_typing.js"></script>
+
+
+
+
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-check-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-check-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-times-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-times-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 标准 markdown 描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
