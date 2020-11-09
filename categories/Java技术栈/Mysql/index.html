@@ -360,9 +360,169 @@
         
           
         
+          
+        
       
     
     
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/11/06/Mysql%E7%B4%A2%E5%BC%95/">
+      Mysql索引
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Mysql</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年11月6日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="InnoDB存储引擎索引"><a href="#InnoDB存储引擎索引" class="headerlink" title="InnoDB存储引擎索引"></a>InnoDB存储引擎索引</h2><p>InnoDB支持B+树索引、全文索引和哈希索引。</p>
+<p>B+树索引就是传统意义上的索引，是目前关系型数据库中查找最为常用和最为有效的索引。<br>InnoDB存储引擎会根据表的使用情况自动为表生成哈希索引，不能人为敢于是否在一张表中生成哈希索引。</p>
+<h2 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h2><h3 id="二分查找法"><a href="#二分查找法" class="headerlink" title="二分查找法"></a>二分查找法</h3><p>也叫折半查找，必须是一组有序的记录数组。具体详见《二分查找法》。</p>
+<h3 id="二叉查找树与平衡二叉树"><a href="#二叉查找树与平衡二叉树" class="headerlink" title="二叉查找树与平衡二叉树"></a>二叉查找树与平衡二叉树</h3><p>二叉查找树中，左子树的键值总是小于根的键值，右子树的键值总是大于根的键值。</p>
+<p>前序遍历：根 -&gt; 左 -&gt; 右<br>中序遍历: 左 -&gt; 根 -&gt; 右<br>后序遍历: 左 -&gt; 右 -&gt; 根</p>
+<p>当一个二叉查找树的每个结点只有左子树或者只有右子树时，该数据结构退化成了链表，查找性能会变低，时间复杂度变成O(n).</p>
+<p>平衡二叉树：在二叉树的基础上，必须满足任何结点的两个子树高度最大差1. 平衡二叉树的查询速度极快，但是维护一颗平衡二叉树的代价非常大。 需要经过1次或者多次左旋和右旋来得到插入或者更新后的平衡树。</p>
+<h2 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h2><p>B+树由B树和索引顺序访问方法演化而来，为磁盘或者其他直接存取辅助设备设计的一种平衡查找树。<br>在B+树中，所有记录结点都是按照键值的大小顺序存放在同一层的叶子结点上，由各个叶子结点指针进行连接。</p>
+<h3 id="B-树的插入"><a href="#B-树的插入" class="headerlink" title="B+树的插入"></a>B+树的插入</h3><p>B+树的插入必须保证插入后叶子结点中的记录依然排序，同时要考虑插入到B+树的三种情况，每种情况都可能会导致不同的插入算法。</p>
+<p>1）叶子页未满，索引页未满：直接将记录插入到叶子结点。<br>2）叶子页已满，索引页未满：<br>   2.1）拆分LeafPage<br>   2.2) 将中间的结点放入到IndexPage中<br>   2.3）小于中间结点的记录放在左边<br>   2.4) 大于或者等于中间结点的记录放在右边<br>3）叶子页已满，索引页已满：<br>   3.1）拆分LeafPage<br>   3.2) 小于中间结点的记录放左边<br>   3.3) 大于或者等于中间结点的记录放右边<br>   3.4) 拆分索引页IndexPage<br>   4.5) 小于中间结点的记录放左边<br>   4.6) 大于中间结点的记录放右边<br>   4.7) 中间结点放入上一层IndexPage</p>
+<p>无论如何变化，B+树总会保持平衡。但是为了保持平衡对于新插入的键值可能需要做大量的拆分页操作。<br>因为B+树结构主要用于磁盘，页的拆分意味着磁盘的额操作，所以在可能的情况下尽量减少页的拆分。<br>B+树提供了类似于平衡二叉树的旋转功能。<br>旋转发生在LeafPage已满，但是其左右兄弟结点没有满的情况下。这时B+树并不会急于去做拆分页的操作，而是将记录转移到所在页的兄弟结点上。在通常情况下，左兄弟回被首先检查用来做旋转操作。</p>
+<h3 id="B-树的删除"><a href="#B-树的删除" class="headerlink" title="B+树的删除"></a>B+树的删除</h3><p>B+树删除时根据填充因子的变化来衡量（最小填充因子的值为50%）。<br>删除操作同样必须保证删除后叶子结点中的记录已俨然排序。</p>
+<p>叶子结点大于填充因子， 中间结点大于填充因子：直接将记录从叶子结点删除，如果该结点还是IndexPage的结点，用该结点的右结点代替。<br>叶子结点小于填充因子，中间结点大于填充因子：合并叶子结点和它的兄弟结点，同时更新IndexPage<br>叶子结点小于填充因子，中间结点小于填充因子：合并叶子结点和它的兄弟结点，更新IndexPage，合并IndexPage和它的兄弟结点。</p>
+<h2 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h2><h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><p>按照每张表的主键构造一颗B+树，同时叶子结点中存放的是张张表的行记录数据，聚集索引的叶子结点称为数据页。<br>由于实际的树叶也只能按照一颗B+树进行排序，因此每张表只能拥有一个聚集索引。大多数情况下，查询优化器倾向于采用聚集索引。因为聚集索引能够在B+树索引的叶子结点上直接找到数据。此外定义了数据的逻辑顺序，聚集索引能够特别快地访问针对范围的查询。</p>
+<p>数据页存放的是完整的每行的数据，索引页存放的是键值和指向数据页的偏移量Offset。<br>聚集索引是按照主键逻辑顺序在磁盘存储。</p>
+<h3 id="辅助索引"><a href="#辅助索引" class="headerlink" title="辅助索引"></a>辅助索引</h3><p>对于辅助索引，叶子结点除了包含键值意外，每个结点中的索引行中包含了聚集索引键。<br>每张表中可以有多个辅助索引，当通过辅助索引来寻找数据时，InnoDB存储引擎会遍历并通过叶子级别的指针获得指向主键索引的主键，然后再通过主键索引来找到一个完整的行记录。</p>
+<h3 id="B-树索引的分裂"><a href="#B-树索引的分裂" class="headerlink" title="B+树索引的分裂"></a>B+树索引的分裂</h3><p>InnoDB存储引擎的PageHeader中包含了Page_Last_Insert、Page_Direction、Page_N_Direction，通过这几个参数来决定向左分裂或者向右分裂。</p>
+<p>如果插入是随机的，则取页的中间记录作为分裂点的记录。<br>如果向同一方向进行插入的记录数量是5，并且目前已经定位到的记录之后还有3条记录，则分裂点的记录为定位到的记录后的第三条记录，否则分裂点记录就是待插入的记录。</p>
+<h3 id="B-树索引的管理"><a href="#B-树索引的管理" class="headerlink" title="B+树索引的管理"></a>B+树索引的管理</h3><p>只对表中b字段的前100个字符创建索引。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table t  add key idx_b(b(100));</span><br></pre></td></tr></table></figure>
+
+<p>查看t表中的所有索引。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show index from t;</span><br></pre></td></tr></table></figure>
+
+<p>在非高峰时期执行以下语句，更新索引Cardinality信息，使得优化器和索引可以更好的工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">analyze table t;</span><br></pre></td></tr></table></figure>
+
+
+<p>生产环境创建索引时遇到的问题：</p>
+<h4 id="临时表方式创建索引"><a href="#临时表方式创建索引" class="headerlink" title="临时表方式创建索引"></a>临时表方式创建索引</h4><p>先创建临时表，导入数据，创建索引然后修改临时表名称。</p>
+<h4 id="Fast-Index-Creation"><a href="#Fast-Index-Creation" class="headerlink" title="Fast Index Creation"></a>Fast Index Creation</h4><p>FIC在辅助索引创建的过程中对表加了S锁，因此在创建的过程中之能对该表进行读操作，如果有大量的食物需要对目标表进行写操作，那么数据库的服务同样不可用。<br>FIC方式只限于辅助索引，对于主键的创建和删除需要重建一张表。</p>
+<h4 id="Online-Schema-Change"><a href="#Online-Schema-Change" class="headerlink" title="Online Schema Change"></a>Online Schema Change</h4><p>PHP脚本维护，且在进行OSC过程中，允许SET sql_bin_log=0， 因此所做的操作不会同步到slave服务器，可能导致主从不一致的情况。</p>
+<h4 id="Online-DDL"><a href="#Online-DDL" class="headerlink" title="Online DDL"></a>Online DDL</h4><p>允许辅助索引创建的同时，还允许Insert、UPdate、Delete等DML操作，极大地提高了Mysql数据库在生产环境的可用性。<br>还可以在线的操作以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">辅助索引的创建与删除</span><br><span class="line">改变自增长值</span><br><span class="line">添加或者删除外键约束</span><br><span class="line">列的重命名</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> table_name <span class="keyword">add</span> <span class="keyword">index</span> index_name algorithm=&#123;<span class="keyword">default</span>|INPLACE|COPY&#125;</span><br><span class="line"><span class="keyword">lock</span>=&#123;<span class="keyword">default</span>|<span class="keyword">none</span>|<span class="keyword">shared</span>|exclusive&#125;</span><br></pre></td></tr></table></figure>
+
+<p>algorithm:<br>  copy: 临时表方式创建索引<br>  inplace:不需要创建临时表（默认）<br>  default:根据参数old_alter_table判断通过copy或者inplace算法。<br>lock: 创建索引或者删除索引时对表解锁的情况。<br>   none: 不加锁，任意读写操作都不会收到阻塞。<br>   share: 与FIC类似，执行索引创建或者删除操作时，对目标加S锁。可以并发读，阻塞写事务。<br>   exclusive：执行索引创建或者删除时，对表增加一个X锁，阻塞所有的读写事务。<br>   default：通过判断事物的最大并发性来判断执行DDL模式。none -&gt; share-&gt; exclusive.</p>
+<p>远离：在执行创建或者删除操作时，将INsert、UPDATE、DELETE等DML操作日志写入缓冲中，等待索引创建完成后，再将重做应用到表上，达到数据一致性。因此索引在创建过程中SQL优化器不会选择正在创建中的索引。<br>缓存大小由innodb_online_alter_log_max_size=128MB控制。</p>
+<h2 id="Cardinality值"><a href="#Cardinality值" class="headerlink" title="Cardinality值"></a>Cardinality值</h2><p>表示索引中不重复记录数量的预估值。InnoDB根据Cardinality来决定是否使用该索引。<br>Cardinality的值是通过采样的方法来完成的。</p>
+<p>当insert、update的数据占有表中数据的1/16时。<br>每一行的更新次数：stat_modified_counter &gt; 2 000 000 000时<br>就会更新Cardinality值。</p>
+<p>当执行以下命令时会导致InnoDB存储引擎重新计算Cardinality值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">analyze table</span><br><span class="line">show table status</span><br><span class="line">show index</span><br><span class="line">访问information_schema 下的表tables和表statistics</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="B-树索引的使用"><a href="#B-树索引的使用" class="headerlink" title="B+树索引的使用"></a>B+树索引的使用</h2><h3 id="不同应用中B-树索引的使用"><a href="#不同应用中B-树索引的使用" class="headerlink" title="不同应用中B+树索引的使用"></a>不同应用中B+树索引的使用</h3><p>OLTP应用和OLAP应用中索引的使用。</p>
+<h3 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h3><h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>从辅助索引就可以查询到想要的数据，而不需要再查一次聚集索引中的记录。</p>
+<h3 id="优化器选择不使用索引的情况"><a href="#优化器选择不使用索引的情况" class="headerlink" title="优化器选择不使用索引的情况"></a>优化器选择不使用索引的情况</h3><p>当优化器发现辅助索引不能进行索引覆盖时，并且查找的数据量比较大时会放弃辅助索引，转向全表扫描。</p>
+<p>使用force index();</p>
+<h3 id="Multi-range-Read优化"><a href="#Multi-range-Read优化" class="headerlink" title="Multi-range Read优化"></a>Multi-range Read优化</h3><p>为了减少磁盘的随机访问，并且将随机访问转化为较顺序的数据访问。</p>
+<p>MRR的好处：</p>
+<ul>
+<li>MRR 使得数据访问变得较为顺序，在查询辅助索引时，首先根据得到的查询结果，按照主键进行排序，并按照主键排序的顺序进行书签查找。</li>
+<li>减少缓冲池中页被替换的次数</li>
+<li>批量处理对键值的查询操作</li>
+</ul>
+<p>对于InnoDB和MyISAM存储引擎的范围查询和JOIN查询操作，MRR的工作方式如下：</p>
+<ul>
+<li>将查询得到的辅助索引键值存放在一个缓存中，这时缓存中的数据时根据辅助索引键值排序的。</li>
+<li>将缓存中的键值根据rowID进行排序</li>
+<li>根据rowID的排序顺序来访问实际的数据文件。</li>
+</ul>
+<p>如果InnoDB或者MyISAM存储引擎的缓冲池不是足够大，不能存放下一张表中的所有数据，此时频繁的离散读操作还是会导致缓存中的页被替换出缓冲池，然后又不断地被读入缓冲池。如果按照住建顺序进行访问，就可以将重复行为降到最低。<br>可以通过optimizer_swith中的flag来控制，当mrr为on时表示启用mrr优化。<br>mrr_cost_based标记表示是否通过cost_based方式选择是否启用mrr。<br>如果mrr = 0n , mrr_cost_based=off ,  表示总启用mrr。</p>
+<p>SET @@optimizer_switch=’mrr=on,mrr_cost_based=off’;</p>
+<h3 id="IndexConditionPushDown优化"><a href="#IndexConditionPushDown优化" class="headerlink" title="IndexConditionPushDown优化"></a>IndexConditionPushDown优化</h3><p>IndexConditionPushDown 会在读取索引的同时，判断是否可以进行WHERE条件的过滤从而提升性能。</p>
+<h2 id="HASH算法"><a href="#HASH算法" class="headerlink" title="HASH算法"></a>HASH算法</h2><h3 id="Hash表"><a href="#Hash表" class="headerlink" title="Hash表"></a>Hash表</h3><h3 id="InnoDB存储引擎中的哈希算法"><a href="#InnoDB存储引擎中的哈希算法" class="headerlink" title="InnoDB存储引擎中的哈希算法"></a>InnoDB存储引擎中的哈希算法</h3><h3 id="自适应哈希索引"><a href="#自适应哈希索引" class="headerlink" title="自适应哈希索引"></a>自适应哈希索引</h3><h2 id="全文检索"><a href="#全文检索" class="headerlink" title="全文检索"></a>全文检索</h2><h3 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h3><h3 id="InnoDB全文索引"><a href="#InnoDB全文索引" class="headerlink" title="InnoDB全文索引"></a>InnoDB全文索引</h3><h3 id="全文检索-1"><a href="#全文检索-1" class="headerlink" title="全文检索"></a>全文检索</h3>
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
       
         
           <div class='post-wrapper'>
@@ -1000,12 +1160,17 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(39)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(40)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
             id="categoriesJavaE68A80E69CAFE6A088Etcd"
             ><div class='name'>Etcd</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java/"
+            id="categoriesJavaE68A80E69CAFE6A088Java"
+            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/"
@@ -1015,7 +1180,7 @@
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/"
             id="categoriesJavaE68A80E69CAFE6A088Mysql"
-            ><div class='name'>Mysql</div><div class='badge'>(4)</div></a></li>
+            ><div class='name'>Mysql</div><div class='badge'>(5)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/"
@@ -1124,7 +1289,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.67px; color: #6c6c6c">JVM</a> <a href="/tags/Java/" style="font-size: 15.11px; color: #919191">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 17.33px; color: #828282">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.78px; color: #646464">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.11px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18.44px; color: #7b7b7b">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.11px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19.56px; color: #737373">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.89px; color: #5d5d5d">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.22px; color: #8a8a8a">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.67px; color: #6c6c6c">JVM</a> <a href="/tags/Java/" style="font-size: 16.22px; color: #8a8a8a">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 17.33px; color: #828282">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.78px; color: #646464">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.11px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18.44px; color: #7b7b7b">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.11px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19.56px; color: #737373">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.89px; color: #5d5d5d">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.22px; color: #8a8a8a">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
     </div>
   </section>
 

@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#®️Jun'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+    <title>Mysql索引 - 碎碎念</title>
+  
+    <meta name="keywords" content="Mysql">
+  
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+  <link rel="shortcut icon" type='image/x-icon' href="https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/favicon/favicon.ico">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+    <!-- ba -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+	  setTimeout(function() { 
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?0b970030787ceb090a4dc46259415a4c";
+		hm.defer=true;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+	  }, 5000);
+    })();
+    </script>
+  
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+<header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h'>
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+          
+          
+          
+            JUNE <b><sup style='color:#3AA757'>®️Jun</sup></b>
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>主页
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/books/
+                  
+                  
+                  
+                    id="books"
+                  >
+                  <i class='fas fa-book fa-fw'></i>书单
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/aim/
+                  
+                  
+                  
+                    id="aim"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>小目标
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+<script>setLoadingBarProgress(40);</script>
+
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper'>
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/11/06/Mysql%E7%B4%A2%E5%BC%95/">
+      Mysql索引
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Mysql</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年11月6日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <h2 id="InnoDB存储引擎索引"><a href="#InnoDB存储引擎索引" class="headerlink" title="InnoDB存储引擎索引"></a>InnoDB存储引擎索引</h2><p>InnoDB支持B+树索引、全文索引和哈希索引。</p>
+<p>B+树索引就是传统意义上的索引，是目前关系型数据库中查找最为常用和最为有效的索引。<br>InnoDB存储引擎会根据表的使用情况自动为表生成哈希索引，不能人为敢于是否在一张表中生成哈希索引。</p>
+<h2 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h2><h3 id="二分查找法"><a href="#二分查找法" class="headerlink" title="二分查找法"></a>二分查找法</h3><p>也叫折半查找，必须是一组有序的记录数组。具体详见《二分查找法》。</p>
+<h3 id="二叉查找树与平衡二叉树"><a href="#二叉查找树与平衡二叉树" class="headerlink" title="二叉查找树与平衡二叉树"></a>二叉查找树与平衡二叉树</h3><p>二叉查找树中，左子树的键值总是小于根的键值，右子树的键值总是大于根的键值。</p>
+<p>前序遍历：根 -&gt; 左 -&gt; 右<br>中序遍历: 左 -&gt; 根 -&gt; 右<br>后序遍历: 左 -&gt; 右 -&gt; 根</p>
+<p>当一个二叉查找树的每个结点只有左子树或者只有右子树时，该数据结构退化成了链表，查找性能会变低，时间复杂度变成O(n).</p>
+<p>平衡二叉树：在二叉树的基础上，必须满足任何结点的两个子树高度最大差1. 平衡二叉树的查询速度极快，但是维护一颗平衡二叉树的代价非常大。 需要经过1次或者多次左旋和右旋来得到插入或者更新后的平衡树。</p>
+<h2 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h2><p>B+树由B树和索引顺序访问方法演化而来，为磁盘或者其他直接存取辅助设备设计的一种平衡查找树。<br>在B+树中，所有记录结点都是按照键值的大小顺序存放在同一层的叶子结点上，由各个叶子结点指针进行连接。</p>
+<h3 id="B-树的插入"><a href="#B-树的插入" class="headerlink" title="B+树的插入"></a>B+树的插入</h3><p>B+树的插入必须保证插入后叶子结点中的记录依然排序，同时要考虑插入到B+树的三种情况，每种情况都可能会导致不同的插入算法。</p>
+<p>1）叶子页未满，索引页未满：直接将记录插入到叶子结点。<br>2）叶子页已满，索引页未满：<br>   2.1）拆分LeafPage<br>   2.2) 将中间的结点放入到IndexPage中<br>   2.3）小于中间结点的记录放在左边<br>   2.4) 大于或者等于中间结点的记录放在右边<br>3）叶子页已满，索引页已满：<br>   3.1）拆分LeafPage<br>   3.2) 小于中间结点的记录放左边<br>   3.3) 大于或者等于中间结点的记录放右边<br>   3.4) 拆分索引页IndexPage<br>   4.5) 小于中间结点的记录放左边<br>   4.6) 大于中间结点的记录放右边<br>   4.7) 中间结点放入上一层IndexPage</p>
+<p>无论如何变化，B+树总会保持平衡。但是为了保持平衡对于新插入的键值可能需要做大量的拆分页操作。<br>因为B+树结构主要用于磁盘，页的拆分意味着磁盘的额操作，所以在可能的情况下尽量减少页的拆分。<br>B+树提供了类似于平衡二叉树的旋转功能。<br>旋转发生在LeafPage已满，但是其左右兄弟结点没有满的情况下。这时B+树并不会急于去做拆分页的操作，而是将记录转移到所在页的兄弟结点上。在通常情况下，左兄弟回被首先检查用来做旋转操作。</p>
+<h3 id="B-树的删除"><a href="#B-树的删除" class="headerlink" title="B+树的删除"></a>B+树的删除</h3><p>B+树删除时根据填充因子的变化来衡量（最小填充因子的值为50%）。<br>删除操作同样必须保证删除后叶子结点中的记录已俨然排序。</p>
+<p>叶子结点大于填充因子， 中间结点大于填充因子：直接将记录从叶子结点删除，如果该结点还是IndexPage的结点，用该结点的右结点代替。<br>叶子结点小于填充因子，中间结点大于填充因子：合并叶子结点和它的兄弟结点，同时更新IndexPage<br>叶子结点小于填充因子，中间结点小于填充因子：合并叶子结点和它的兄弟结点，更新IndexPage，合并IndexPage和它的兄弟结点。</p>
+<h2 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h2><h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><p>按照每张表的主键构造一颗B+树，同时叶子结点中存放的是张张表的行记录数据，聚集索引的叶子结点称为数据页。<br>由于实际的树叶也只能按照一颗B+树进行排序，因此每张表只能拥有一个聚集索引。大多数情况下，查询优化器倾向于采用聚集索引。因为聚集索引能够在B+树索引的叶子结点上直接找到数据。此外定义了数据的逻辑顺序，聚集索引能够特别快地访问针对范围的查询。</p>
+<p>数据页存放的是完整的每行的数据，索引页存放的是键值和指向数据页的偏移量Offset。<br>聚集索引是按照主键逻辑顺序在磁盘存储。</p>
+<h3 id="辅助索引"><a href="#辅助索引" class="headerlink" title="辅助索引"></a>辅助索引</h3><p>对于辅助索引，叶子结点除了包含键值意外，每个结点中的索引行中包含了聚集索引键。<br>每张表中可以有多个辅助索引，当通过辅助索引来寻找数据时，InnoDB存储引擎会遍历并通过叶子级别的指针获得指向主键索引的主键，然后再通过主键索引来找到一个完整的行记录。</p>
+<h3 id="B-树索引的分裂"><a href="#B-树索引的分裂" class="headerlink" title="B+树索引的分裂"></a>B+树索引的分裂</h3><p>InnoDB存储引擎的PageHeader中包含了Page_Last_Insert、Page_Direction、Page_N_Direction，通过这几个参数来决定向左分裂或者向右分裂。</p>
+<p>如果插入是随机的，则取页的中间记录作为分裂点的记录。<br>如果向同一方向进行插入的记录数量是5，并且目前已经定位到的记录之后还有3条记录，则分裂点的记录为定位到的记录后的第三条记录，否则分裂点记录就是待插入的记录。</p>
+<h3 id="B-树索引的管理"><a href="#B-树索引的管理" class="headerlink" title="B+树索引的管理"></a>B+树索引的管理</h3><p>只对表中b字段的前100个字符创建索引。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table t  add key idx_b(b(100));</span><br></pre></td></tr></table></figure>
+
+<p>查看t表中的所有索引。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show index from t;</span><br></pre></td></tr></table></figure>
+
+<p>在非高峰时期执行以下语句，更新索引Cardinality信息，使得优化器和索引可以更好的工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">analyze table t;</span><br></pre></td></tr></table></figure>
+
+
+<p>生产环境创建索引时遇到的问题：</p>
+<h4 id="临时表方式创建索引"><a href="#临时表方式创建索引" class="headerlink" title="临时表方式创建索引"></a>临时表方式创建索引</h4><p>先创建临时表，导入数据，创建索引然后修改临时表名称。</p>
+<h4 id="Fast-Index-Creation"><a href="#Fast-Index-Creation" class="headerlink" title="Fast Index Creation"></a>Fast Index Creation</h4><p>FIC在辅助索引创建的过程中对表加了S锁，因此在创建的过程中之能对该表进行读操作，如果有大量的食物需要对目标表进行写操作，那么数据库的服务同样不可用。<br>FIC方式只限于辅助索引，对于主键的创建和删除需要重建一张表。</p>
+<h4 id="Online-Schema-Change"><a href="#Online-Schema-Change" class="headerlink" title="Online Schema Change"></a>Online Schema Change</h4><p>PHP脚本维护，且在进行OSC过程中，允许SET sql_bin_log=0， 因此所做的操作不会同步到slave服务器，可能导致主从不一致的情况。</p>
+<h4 id="Online-DDL"><a href="#Online-DDL" class="headerlink" title="Online DDL"></a>Online DDL</h4><p>允许辅助索引创建的同时，还允许Insert、UPdate、Delete等DML操作，极大地提高了Mysql数据库在生产环境的可用性。<br>还可以在线的操作以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">辅助索引的创建与删除</span><br><span class="line">改变自增长值</span><br><span class="line">添加或者删除外键约束</span><br><span class="line">列的重命名</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> table_name <span class="keyword">add</span> <span class="keyword">index</span> index_name algorithm=&#123;<span class="keyword">default</span>|INPLACE|COPY&#125;</span><br><span class="line"><span class="keyword">lock</span>=&#123;<span class="keyword">default</span>|<span class="keyword">none</span>|<span class="keyword">shared</span>|exclusive&#125;</span><br></pre></td></tr></table></figure>
+
+<p>algorithm:<br>  copy: 临时表方式创建索引<br>  inplace:不需要创建临时表（默认）<br>  default:根据参数old_alter_table判断通过copy或者inplace算法。<br>lock: 创建索引或者删除索引时对表解锁的情况。<br>   none: 不加锁，任意读写操作都不会收到阻塞。<br>   share: 与FIC类似，执行索引创建或者删除操作时，对目标加S锁。可以并发读，阻塞写事务。<br>   exclusive：执行索引创建或者删除时，对表增加一个X锁，阻塞所有的读写事务。<br>   default：通过判断事物的最大并发性来判断执行DDL模式。none -&gt; share-&gt; exclusive.</p>
+<p>远离：在执行创建或者删除操作时，将INsert、UPDATE、DELETE等DML操作日志写入缓冲中，等待索引创建完成后，再将重做应用到表上，达到数据一致性。因此索引在创建过程中SQL优化器不会选择正在创建中的索引。<br>缓存大小由innodb_online_alter_log_max_size=128MB控制。</p>
+<h2 id="Cardinality值"><a href="#Cardinality值" class="headerlink" title="Cardinality值"></a>Cardinality值</h2><p>表示索引中不重复记录数量的预估值。InnoDB根据Cardinality来决定是否使用该索引。<br>Cardinality的值是通过采样的方法来完成的。</p>
+<p>当insert、update的数据占有表中数据的1/16时。<br>每一行的更新次数：stat_modified_counter &gt; 2 000 000 000时<br>就会更新Cardinality值。</p>
+<p>当执行以下命令时会导致InnoDB存储引擎重新计算Cardinality值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">analyze table</span><br><span class="line">show table status</span><br><span class="line">show index</span><br><span class="line">访问information_schema 下的表tables和表statistics</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="B-树索引的使用"><a href="#B-树索引的使用" class="headerlink" title="B+树索引的使用"></a>B+树索引的使用</h2><h3 id="不同应用中B-树索引的使用"><a href="#不同应用中B-树索引的使用" class="headerlink" title="不同应用中B+树索引的使用"></a>不同应用中B+树索引的使用</h3><p>OLTP应用和OLAP应用中索引的使用。</p>
+<h3 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h3><h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>从辅助索引就可以查询到想要的数据，而不需要再查一次聚集索引中的记录。</p>
+<h3 id="优化器选择不使用索引的情况"><a href="#优化器选择不使用索引的情况" class="headerlink" title="优化器选择不使用索引的情况"></a>优化器选择不使用索引的情况</h3><p>当优化器发现辅助索引不能进行索引覆盖时，并且查找的数据量比较大时会放弃辅助索引，转向全表扫描。</p>
+<p>使用force index();</p>
+<h3 id="Multi-range-Read优化"><a href="#Multi-range-Read优化" class="headerlink" title="Multi-range Read优化"></a>Multi-range Read优化</h3><p>为了减少磁盘的随机访问，并且将随机访问转化为较顺序的数据访问。</p>
+<p>MRR的好处：</p>
+<ul>
+<li>MRR 使得数据访问变得较为顺序，在查询辅助索引时，首先根据得到的查询结果，按照主键进行排序，并按照主键排序的顺序进行书签查找。</li>
+<li>减少缓冲池中页被替换的次数</li>
+<li>批量处理对键值的查询操作</li>
+</ul>
+<p>对于InnoDB和MyISAM存储引擎的范围查询和JOIN查询操作，MRR的工作方式如下：</p>
+<ul>
+<li>将查询得到的辅助索引键值存放在一个缓存中，这时缓存中的数据时根据辅助索引键值排序的。</li>
+<li>将缓存中的键值根据rowID进行排序</li>
+<li>根据rowID的排序顺序来访问实际的数据文件。</li>
+</ul>
+<p>如果InnoDB或者MyISAM存储引擎的缓冲池不是足够大，不能存放下一张表中的所有数据，此时频繁的离散读操作还是会导致缓存中的页被替换出缓冲池，然后又不断地被读入缓冲池。如果按照住建顺序进行访问，就可以将重复行为降到最低。<br>可以通过optimizer_swith中的flag来控制，当mrr为on时表示启用mrr优化。<br>mrr_cost_based标记表示是否通过cost_based方式选择是否启用mrr。<br>如果mrr = 0n , mrr_cost_based=off ,  表示总启用mrr。</p>
+<p>SET @@optimizer_switch=’mrr=on,mrr_cost_based=off’;</p>
+<h3 id="IndexConditionPushDown优化"><a href="#IndexConditionPushDown优化" class="headerlink" title="IndexConditionPushDown优化"></a>IndexConditionPushDown优化</h3><p>IndexConditionPushDown 会在读取索引的同时，判断是否可以进行WHERE条件的过滤从而提升性能。</p>
+<h2 id="HASH算法"><a href="#HASH算法" class="headerlink" title="HASH算法"></a>HASH算法</h2><h3 id="Hash表"><a href="#Hash表" class="headerlink" title="Hash表"></a>Hash表</h3><h3 id="InnoDB存储引擎中的哈希算法"><a href="#InnoDB存储引擎中的哈希算法" class="headerlink" title="InnoDB存储引擎中的哈希算法"></a>InnoDB存储引擎中的哈希算法</h3><h3 id="自适应哈希索引"><a href="#自适应哈希索引" class="headerlink" title="自适应哈希索引"></a>自适应哈希索引</h3><h2 id="全文检索"><a href="#全文检索" class="headerlink" title="全文检索"></a>全文检索</h2><h3 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h3><h3 id="InnoDB全文索引"><a href="#InnoDB全文索引" class="headerlink" title="InnoDB全文索引"></a>InnoDB全文索引</h3><h3 id="全文检索-1"><a href="#全文检索-1" class="headerlink" title="全文检索"></a>全文检索</h3>
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+
+              
+            </div>
+          
+        </div>
+
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-11-09T20:52:00+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年11月9日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Mysql/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Mysql</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+              <a class='prev' href='/2020/11/06/ThreadLocal/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>ThreadLocal</p>
+                <p class='content'>简介 ThreadLocal 是JDK包提供的，它提供线程本地变量，如果创建一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的副本，在实际多线程操作的时候，操作的都是自己...</p>
+              </a>
+            
+            
+              <a class='next' href='/2020/11/05/Mysql%E8%A1%A8/'>
+                <p class='title'>Mysql表<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>索引组织表在InnoDB存储索引中，表时根据主键顺序组织存放的，这种存储方式的表称为索引组织表。
+在InnoDB存储引擎表中，每张表都有个主键，如果在创建表时没有显式地定义主键，则会按照如下方式...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'Mysql索引',
+      tools: true
+    }
+  </script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB存储引擎索引"><span class="toc-text">InnoDB存储引擎索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据结构与算法"><span class="toc-text">数据结构与算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二分查找法"><span class="toc-text">二分查找法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉查找树与平衡二叉树"><span class="toc-text">二叉查找树与平衡二叉树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-树"><span class="toc-text">B+树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#B-树的插入"><span class="toc-text">B+树的插入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-树的删除"><span class="toc-text">B+树的删除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-树索引"><span class="toc-text">B+树索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#聚集索引"><span class="toc-text">聚集索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#辅助索引"><span class="toc-text">辅助索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-树索引的分裂"><span class="toc-text">B+树索引的分裂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-树索引的管理"><span class="toc-text">B+树索引的管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#临时表方式创建索引"><span class="toc-text">临时表方式创建索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fast-Index-Creation"><span class="toc-text">Fast Index Creation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Online-Schema-Change"><span class="toc-text">Online Schema Change</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Online-DDL"><span class="toc-text">Online DDL</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cardinality值"><span class="toc-text">Cardinality值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-树索引的使用"><span class="toc-text">B+树索引的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#不同应用中B-树索引的使用"><span class="toc-text">不同应用中B+树索引的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#联合索引"><span class="toc-text">联合索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#覆盖索引"><span class="toc-text">覆盖索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优化器选择不使用索引的情况"><span class="toc-text">优化器选择不使用索引的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multi-range-Read优化"><span class="toc-text">Multi-range Read优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IndexConditionPushDown优化"><span class="toc-text">IndexConditionPushDown优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HASH算法"><span class="toc-text">HASH算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash表"><span class="toc-text">Hash表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB存储引擎中的哈希算法"><span class="toc-text">InnoDB存储引擎中的哈希算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自适应哈希索引"><span class="toc-text">自适应哈希索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#全文检索"><span class="toc-text">全文检索</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#倒排索引"><span class="toc-text">倒排索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB全文索引"><span class="toc-text">InnoDB全文索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全文检索-1"><span class="toc-text">全文检索</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+  
+  <footer class="clearfix">
+    <br><br>
+
+    
+  </footer>
+
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4/dist/jquery.min.js"></script>
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '8px',
+        duration: '800',
+        interval: '100',
+        scale: '1'
+      });
+    });
+  </script>
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/xaoxuu/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2.6.5/js/search.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/comment_typing.js"></script>
+
+
+
+
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-check-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-check-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-times-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-times-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 标准 markdown 描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

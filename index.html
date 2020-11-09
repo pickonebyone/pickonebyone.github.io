@@ -352,6 +352,12 @@
       
         
           
+        
+          
+        
+          
+        
+          
             
               <div class='post-wrapper'>
                 <article class="post white-box shadow reveal ">
@@ -477,12 +483,6 @@
 
               </div>
             
-          
-        
-          
-        
-          
-        
           
         
           
@@ -749,6 +749,355 @@
         
           
         
+          
+        
+          
+        
+          
+            
+              <div class='post-wrapper'>
+                <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/01/ClassLoader/">
+      类加载器和类加载机制
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月1日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item top-post">
+    <a class='notlink'>
+      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
+      <p>3</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java代码要在JVM中正常运行，首先要先编译成.class文件，由类加载器将其加载到内存中。之后由类编译器来编译执行。<br>在加载的过程中需要注意什么呢？<br>1）什么时候需要加载一个类呢？<br>2）随便任何一个文件都是否可以被加载呢，它的加载过程是什么样的？<br>3）类加载器需要对内存中的内容做什么工作才可以被JVM直接使用？</p>
+<blockquote>
+<p>虚拟机把描述类的数据从 Class 文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Class类型，这就是虚拟机的类加载机制。—《深入理解Java虚拟机》</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">类型的加载、链接和初始化过程都是在程序运行期间完成的。</span><br><span class="line">Java可以动态扩展的语言特性就是依赖运行期动态加载和动态连接这个特点实现的。</span><br></pre></td></tr></table></figure>
+
+<h1 id="类的加载时机"><a href="#类的加载时机" class="headerlink" title="类的加载时机"></a>类的加载时机</h1><p>  Java虚拟机规范并没有规定什么时候加载类，但是规定了什么时候初始化一个类。</p>
+<p>  虚拟机规范严格规定了有且只有5中情况必须立即对类进行“初始化”。<br>  1）遇到new、getstatic、putstatic、invokestatic；<br>  2）初始化类的时候，对父类进行初始化；<br>  3）JVM执行的时候，对主类进行初始化；<br>  4）使用java.lang.reflect包的方法对类进行反射调用时；<br>  5）使用jdk1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandler实例最后解析结果是REF_getstatic, REF_putstatic, REF_invokestatic时，对该类进行初始化；<br>  6) jdk1.8中子类实现的接口中定义了default方法时；</p>
+<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p>类的加载过程总共分为：Loading（加载）、Linking（连接）、Initializing（初始化）、Using（使用）、Unloading（卸载）。<br>其中 Linking阶段 分为 Verification（验证）、Preparation（准备）、Resolution（解析）。</p>
+<p><img src="/2020/06/01/ClassLoader/ClassLoader.jpeg" alt="ClassLoader"></p>
+<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>加载阶段的成果是生成Class类对象，并将该对象存储在堆中。Class对象作为访问该对象数据的访问入口。<br>加载的步骤：<br>1） 根据类的全限定名读取类的二进制字节流；<br>2） 对二进制字节流进行解析转换，并将类信息存储在方法区中；<br>3） 堆中生成Class类对象，作为程序访问方法区中的类型数据的外部接口；</p>
+<blockquote>
+<p>注意：<br>数组类不通过类加载器创建，由java虚拟机直接在内存中动态构造出来的。<br>数组的元素类型（去掉所有维度）要靠类加载器加载完成。<br>数组的组件类型（去掉一个维度）是引用类型，数组将被标识在加载该组建类型的类加载器的类名称空间上。<br>如果数组的组件类型不是引用类型，Java虚拟机会把数组标记为与引导类加载器关联。</p>
+</blockquote>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证加载的类信息是否符合Java虚拟机规范，类的实现和继承、方法的执行、对象和方法的可访问性等等，主要分为四个阶段：</p>
+<p>1）文件格式的验证<br>   主要对Class文件中内容进行验证，是否符合Java虚拟机规范。<br>   比如魔数、常量池的类型、指向常量的索引值是否存在或者类型是否正确等等；</p>
+<blockquote>
+<p>这个阶段的验证是基于二进制字节流进行的，只有通过了验证才会被允许进入Java虚拟机的内存方法区存储。</p>
+</blockquote>
+<p>2）元数据验证<br>   对字节码描述信息进行语义分析，保证描述信息符合《Java语言规范》比如:</p>
+<ul>
+<li>这个类是否有父类、父类是否允许继承（被final修饰）；</li>
+<li>这个类是否实现了父类所要求实现的所有方法；</li>
+<li>类中的字段、方法是否与父类产生矛盾；</li>
+</ul>
+<p>3）字节码验证<br>   对类的方法体进行验证，保证任何跳转指令都不会跳转到方法体以外的字节码指令上；<br>   保证类型转化都是有效的.</p>
+<p>4）符号引用验证</p>
+<blockquote>
+<p>虚拟机在解析阶段将符号引用转化为直接引用的时候，对符号引用进行验证；</p>
+</blockquote>
+<ul>
+<li>符号引用中通过字符串描述的全限定名能否找到对应的类；</li>
+<li>在指定类中是否存在符合方法的字段描述以及简单名称所描述的方法和字段；</li>
+<li>符号引用中的类、字段、方法的可访问性是否可以被当前类访问；</li>
+</ul>
+<p>符号引用阶段抛出的异常有：IllegalAccessError、NoSuchFieldError、NoSuchMethodError；</p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是正式为类中定义的变量分配内存并设置类变量初始值的阶段；</p>
+<p>对于类变量（静态属性），设置的是“零值”，真正赋值是在初始化阶段；<br>对于常量（final static），会被设置为ConstantValue属性所指定的初始值。</p>
+<blockquote>
+<p>对于常量，Javac时会为value生成ConstantValue属性。</p>
+</blockquote>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是Java虚拟机将常量池的符号引用替换为直接引用的过程。《Java虚拟机规范》并没有规定何时进行解析。</p>
+<ul>
+<li>符号引用：可以无歧义的定位到目标即可；与虚拟机的内存布局无关；引用的目标不一定已经加载到虚拟机中；必须遵循《Java虚拟机规范》；</li>
+<li>直接引用：直接可以指向目标的指针、偏移量，或者可以间接定位到目标的句柄；与虚拟机的内存布局直接相关；直接引用的目标一定已经加载到虚拟机内存中；</li>
+</ul>
+<p>解析动作主要针对类或者接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符号引用进行。</p>
+<h5 id="类、接口解析："><a href="#类、接口解析：" class="headerlink" title="类、接口解析："></a>类、接口解析：</h5><p>虚拟机的完整解析过程：<br>1）如果不是一个数组类型，虚拟机将会把全限定名传给当前类的加载器去加载，在加载的过程中，由于元数据验证、字节码验证的需要，又可能出发其他相关类的加载动作。<br>2）如果是一个数组类型，并且数组的元素类型为对象，那么会按照第一点的规则加载数组元素类型。如果是基础数据类型包装类，那么由虚拟机生成一个代表该数组唯独和元素的数组对象；<br>3）前面两部解析OK后进行符号引用验证，确定当前类是否有加载类的访问权限。</p>
+<p>如果一个类拥有另外一个类的访问权限，那么至少有一条是成立的：<br>1）被访问类是public的，并且与访问类处于同一个模块；<br>2）被访问类是public的，不与访问类处于同一个模块，但是被访问类的模块允许访问类访问；<br>3）被访问类不是public的，但是与访问类处于同一个包中</p>
+<h5 id="字段解析"><a href="#字段解析" class="headerlink" title="字段解析"></a>字段解析</h5><p>对字段表内class_index项中索引的CONSTANT_Class_Info符号引用进行解析（即字段所属类）</p>
+<p>1）先查找当前类是否包含了简单名称与描述符与目标相匹配<br>2）从下往上的顺序查找实现的接口类<br>3）从下往上的顺序查找父类<br>4）都无法查找到，抛出java.lang.NoSuchFieldError.</p>
+<p>如果查找成果返回了引用，将会对这个字段进行权限验证，对于不具备权限的访问会抛出IllegalAccessError；</p>
+<h5 id="方法解析"><a href="#方法解析" class="headerlink" title="方法解析"></a>方法解析</h5><p>解析出方法表class_index项中索引的方法所属的类或者接口的符号引用。<br>具体的解析过程与字段解析类似。</p>
+<h5 id="接口方法解析"><a href="#接口方法解析" class="headerlink" title="接口方法解析"></a>接口方法解析</h5><p>与方法解析类似。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>这个阶段Java虚拟机才真正开始执行类中编写的程序代码。程序在这个阶段初始化类变量和其他资源。</p>
+<p>初始化阶段也是执行&lt;clinit&gt;()的过程。<br>&lt;clinit&gt;()方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块中的语句合并产生的；<br>编译器收集顺序是由语句在源文件中出现的顺序决定的；<br>静态语句块中智能访问到定义在静态语句块之前的变量；<br>定义在静态语句块后的变量，静态语句块可以赋值，但是不能访问；<br>Java虚拟机保证父类的&lt;clinit&gt;() 总是优先于子类的&lt;clinit&gt;()执行；</p>
+<blockquote>
+<p>如果一个类中没有静态语句块，也没有对变量的赋值操作，编译器可以不为这个类生成clinit()方法。</p>
+</blockquote>
+<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><p>类加载器主要通过一个类的全限定名来获取描述该类的二进制字节流，它处于Java虚拟机的外部，方便让应用程序自己决定如何获取所需的类。</p>
+<p>对于任意一个类，必须由加载它的类加载器与类本身来确定在Java虚拟机中的唯一性。<br>每个类加载器都拥有一个独立的类名称空间。</p>
+<h3 id="类加载器的双亲委派模型"><a href="#类加载器的双亲委派模型" class="headerlink" title="类加载器的双亲委派模型"></a>类加载器的双亲委派模型</h3><p><img src="/2020/06/01/ClassLoader/ClassLoader02.webp" alt="双亲委派模型"></p>
+<p>双亲委派模型要求除了顶层的启动类加载器之外，其余的类加载器都应有自己的父“类加载器”。<br>当类加载器需要加载一个类的时候，首先看该类是否已经被加载，如果没有被加载则尝试着让父“类加载器”去加载，如果没有父“类加载器”则让bootstrapClassLoader作为父“类加载器”，如果父“类加载器”加载失败，则使用自己的find_class方法去加载。</p>
+<ul>
+<li>启动类加载器（Bootstrap Class Loader）<br>启动类加载器负责加载&lt;JAVA_HOME&gt;\lib 目录下的jar包（按名字识别，名字不符合的类库存放在lib目录下也不会被加载），也可以指定 -Xbootclasspath参数指定加载目录。启动类加载器无法被java程序直接引用。</li>
+<li>扩展类加载器（Extension Class Loader）<br>扩展类加载器负责加载&lt;JAVA_HOME&gt;\lib\ext目录下的jar包，或者被java.ext.dirs指定的路径这种的所有类库。这个类加载器是在类sun.misc.Launcher$ExtClassLoader中以Java代码实现的。</li>
+<li>应用程序类加载器（Application Class Loader）<br>负责加载用户类路径上的所有类库。这个类加载器是在sun.misc.Launcher$AppClassLoader实现。</li>
+</ul>
+<h5 id="定制自己的类加载器"><a href="#定制自己的类加载器" class="headerlink" title="定制自己的类加载器"></a>定制自己的类加载器</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomClassLoader</span><span class="params">(ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">        String path = <span class="string">"/classes/"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream ins = <span class="keyword">new</span> FileInputStream(path + name.replace(<span class="string">"."</span>, File.separator) + <span class="string">".class"</span>);</span><br><span class="line">            ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            <span class="keyword">int</span> bufferSize = <span class="number">4096</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[bufferSize];</span><br><span class="line">            <span class="keyword">int</span> bytesNumRead = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> ((bytesNumRead = ins.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                baos.write(buffer, <span class="number">0</span>, bytesNumRead);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">byte</span>[] classData = baos.toByteArray();</span><br><span class="line">            <span class="keyword">return</span> defineClass(name, classData, <span class="number">0</span>, classData.length);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CustomClassLoader classLoader = <span class="keyword">new</span> CustomClassLoader(<span class="keyword">null</span>);</span><br><span class="line">        Class clazz = classLoader.loadClass(<span class="string">"com.*.ClassLoader"</span>);</span><br><span class="line">        System.out.println(clazz.getClassLoader());</span><br><span class="line">        System.out.println(clazz.getClass());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+              </div>
+            
+          
+        
+          
+            
+              <div class='post-wrapper'>
+                <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+      JVM内存模型
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Java虚拟机</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月2日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item top-post">
+    <a class='notlink'>
+      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
+      <p>5</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>计算机为了提升效率，增加了多内核，并且为每个内核增加了自己的高速缓存，而他们又共享同一个主内存。</p>
+<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm01.jpeg" alt="计算机处理器、高速缓存、主内存之间的交互关系"></p>
+<p>除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，但保证结果与顺序执行的结果一致。</p>
+<p>与处理器的乱序执行优化类似，Java虚拟机的即时编译器也有指令重排序优化。</p>
+<h2 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h2><p>《Java虚拟机规范》中曾试图定义一种Java内存模型来屏蔽各种硬件和操作系统的内存访问差异。</p>
+<h4 id="主内存与工作内存"><a href="#主内存与工作内存" class="headerlink" title="主内存与工作内存"></a>主内存与工作内存</h4><p>Java内存模型的主要目的是定义程序中各种变量的访问规则（关注虚拟机中把变量存储到内存和从内存中取出变量的底层细节。）<br>Java内存模型规定了所有的变量都存储在主内存（除线程私有的以外）。<br>线程的工作内存保存了被该线程使用的变量的主内存副本，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存的数据。不同的线程之间也无法直接访问对方工作内存的变量，线程之间变量值的传递均需要通过主内存来完成。</p>
+<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm02.jpeg" alt></p>
+<h3 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h3><p>关于主内存与工作内存之间的交互协议，Java内存模型中定义了8种的操作。</p>
+<p>Java虚拟机实现时必须保证每种操作都是原子的，不可再分的（对于double和long来讲，load、store、、read、write允许有例外）。</p>
+<ul>
+<li><p>lock ： 锁定，作用于主内存的变量，把一个变量标识为一条线程独占的状态。</p>
+</li>
+<li><p>unlock: 解锁，作用于主内存的变量，把一个处于锁定状体的变量释放出来，释放后的变量才可以被其他线程锁定。</p>
+</li>
+<li><p>read: 读取，作用于主内存的变量，把一个变量的值从主内存传输到工作内存，以便随后的load动作使用。</p>
+</li>
+<li><p>write: 写入，作用于主内存的变量，把store操作从工作内存中得到的变量值存放到主内存变量中。</p>
+</li>
+<li><p>load: 载入，作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。</p>
+</li>
+<li><p>use：使用，作用于工作内存的变量，把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。</p>
+</li>
+<li><p>assign: 赋值，作用于工作变量，把一个从执行引擎接收的值赋给工作内存变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</p>
+</li>
+<li><p>store: 存储，把工作内存中一个变量的值传送到内存中，以便随后的write操作使用。</p>
+</li>
+</ul>
+<p>Java内存模型规定必须满足如下规则：</p>
+<blockquote>
+<p>1) 不允许read 和 load、store和write操作单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者工作内存发起回写单主内存不接受<br>2）不允许一个线程丢弃它最近的assign操作，即变量在工作内存中改变了之后必须把该变化同步回主内存。<br>3）不允许一个线程在没有发生assign操作就把数据从线程的工作内存同步回主内存中。<br>4) 一个新的变量只能在主内存中“诞生”，不允许在工作内存中直接使用一个未被初始化（load\assign）的变量,即对一个变量进行use之前必须使用load， 使用store之前必须使用assign。。<br>5）一个变量在同一个时刻内只允许一个线程对其进行lock操作， 但lock操作可以被同一个线程重复执行多次， 多次执行lock后， 只有执行相同次数的unlock操作，变量才会被解锁。<br>6)对一个变量执行unlock之前， 必须先把此变量同步回主内存中（执行store、write操作）</p>
+</blockquote>
+<h3 id="volatile型变量的特殊规则"><a href="#volatile型变量的特殊规则" class="headerlink" title="volatile型变量的特殊规则"></a>volatile型变量的特殊规则</h3><p>volatile是Java虚拟机最轻量级的同步机制。它有两个特性：<br>1）保证此变量对于所有线程的可见性（一个线程修改了这个变量的值，其他线程立即可见，也就是每个线程在使用被volatile修饰的变量时，都会强制从主内存中同步该变量的值到工作内存中）<br> 在不符合以下两条规则的场景中，仍然需要通过加锁来保证原子性（synchronized、java.util.concurrent中的锁或者原子类）：</p>
+<ul>
+<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值；</li>
+<li>变量不需要与其他状态变量共同参与不变约束；</li>
+</ul>
+<p>2） 禁止指令重排序优化</p>
+<p>volatile变量读操作的性能与普通变量几乎没有差别，但是写操作会慢些， 因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
+<h4 id="Singleton-DoubleCheck"><a href="#Singleton-DoubleCheck" class="headerlink" title="Singleton DoubleCheck"></a>Singleton DoubleCheck</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private Singleton() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    private volatile static Singleton instance &#x3D; null;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">                    instance &#x3D; new Singleton(); &#x2F;&#x2F;warning</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，instance = new Singleton()最终会被编译成多条汇编指令。<br>（1）为Singleton的实例分配内存。<br>（2）调用Singleton的构造函数，初始化成员变量<br>（3）将instance对象指向分配的内存空间。</p>
+<p>或者可能被重排序为(1)、(3)、（2）， 也就是当分配内存后，如果没有对instance 加volatile，将instance对象指向分配的内存空间后，另外一个线程可以读到未被初始化的对象。</p>
+<h3 id="针对long和double类型变量的特殊规则"><a href="#针对long和double类型变量的特殊规则" class="headerlink" title="针对long和double类型变量的特殊规则"></a>针对long和double类型变量的特殊规则</h3><p>Java内存模型要求lock、unlock、read、write、 load、assign、use、store这8种操作都具有原子性，但是对于64位数据类型的long 和double, 在模型中定义了一条宽松的规定， 允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为2次32为的操作来执行，也就是虚拟机自己选择是否要保证64位数据类型的load、store、read、write这四个操作的原子性。</p>
+<p>经过实际的测试，在目前的主流平台下商用的64位Java虚拟机中并不会出现非原子性访问行为，但是对于32位的Java虚拟机（如32位的X86Hotspot）存在非原子性访问的风险。</p>
+<p>因此，在实际开发中，除非该数据有明确可知的线程竞争，否则我们在编写代码的时候一般不需要因为这个原因刻意把用到的long和double变量专门声明位volatile。</p>
+<h3 id="原子性、可见性与有序性"><a href="#原子性、可见性与有序性" class="headerlink" title="原子性、可见性与有序性"></a>原子性、可见性与有序性</h3><h5 id="原子性（Atomicity）"><a href="#原子性（Atomicity）" class="headerlink" title="原子性（Atomicity）"></a>原子性（Atomicity）</h5><p>有Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store、write。因此基本数据类型的访问都是具备原子性的。</p>
+<p>如果应用场景需要一个更大范围的保证，需要使用锁、或者synchronized关键字来保证原子性。<br>（lock、unlock并没有直接开放给用户使用）。</p>
+<h5 id="可见性（visibility）"><a href="#可见性（visibility）" class="headerlink" title="可见性（visibility）"></a>可见性（visibility）</h5><p>可见性就是当一个线程修改了共享变量的值时，其他线程能够立即得知这个修改。</p>
+<h6 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h6><p>volatile的特殊规则保证了新值立即能同步到主内存，以及每次使用前都立即从主内存刷新。而普通变量则不能保证“立即”。</p>
+<h6 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h6><p>同步块的可见性时由“对一个变量执行unlock操作之前，必须先把此变量同步回主内存中”这条规则获得。</p>
+<h6 id="final"><a href="#final" class="headerlink" title="final"></a>final</h6><p>被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把this的引用传递出去，那么在其他线程中就能看见final字段的值。</p>
+<blockquote>
+<p>this引用逃逸，其他线程有可能通过这个引用访问到“初始化了一般”的对象。</p>
+</blockquote>
+<h5 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h5><p>如果在本线程中观察，所有的操作都是有序的（线程内似表现为串行的语义）；<br>如果在一个线程中观察另一个线程，所有的操作都是无序的（指令重排序和工作内存与主内存同步延迟现象）；</p>
+<p>Java语言提供了volatile和sychronized两个关键字来保证线程之间的有序性。<br>volatile：本身包含了禁用指令重排序的语义；<br>synchronized：一个变量在同一时刻只允许一个线程对其进行lock操作；</p>
+<h3 id="先行发生原则"><a href="#先行发生原则" class="headerlink" title="先行发生原则"></a>先行发生原则</h3><p>先行发生原则：判断数据是否存在竞争，线程是否安全的重要手段。</p>
+<p>程序次序规则：在一个线程内，按照控制流顺序（分支、循环等），书写在前面的操作先行发生在书写在后面的操作；</p>
+<p>管程锁定规则：一个unlock的操作先行发生在后面对同一个锁的操作。</p>
+<p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作；</p>
+<p>线程启动规则：Thread对象的start（）方法先行发生于此线程的每一个动作；</p>
+<p>线程的中止规则：线程中所有的操作都先行发生于此线程的终止检测，可以通过thread.join()方法是否结束、thread.isAlive()返回值来检测线程是否已经停止；</p>
+<p>线程的终端规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过thread.interrupted()检测是否有中断发生；</p>
+<p>对象终结规则：一个对象初始化完成（构造函数执行结束）先行发生于他的finalize()方法的开始；</p>
+<p>传递性：如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出，操作A先行发生于操作C。</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+              </div>
+            
           
         
           
@@ -1376,353 +1725,6 @@
           
         
           
-            
-              <div class='post-wrapper'>
-                <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/01/ClassLoader/">
-      类加载器和类加载机制
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月1日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>3</p>
-    </a>
-  </div>
-
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Java代码要在JVM中正常运行，首先要先编译成.class文件，由类加载器将其加载到内存中。之后由类编译器来编译执行。<br>在加载的过程中需要注意什么呢？<br>1）什么时候需要加载一个类呢？<br>2）随便任何一个文件都是否可以被加载呢，它的加载过程是什么样的？<br>3）类加载器需要对内存中的内容做什么工作才可以被JVM直接使用？</p>
-<blockquote>
-<p>虚拟机把描述类的数据从 Class 文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Class类型，这就是虚拟机的类加载机制。—《深入理解Java虚拟机》</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">类型的加载、链接和初始化过程都是在程序运行期间完成的。</span><br><span class="line">Java可以动态扩展的语言特性就是依赖运行期动态加载和动态连接这个特点实现的。</span><br></pre></td></tr></table></figure>
-
-<h1 id="类的加载时机"><a href="#类的加载时机" class="headerlink" title="类的加载时机"></a>类的加载时机</h1><p>  Java虚拟机规范并没有规定什么时候加载类，但是规定了什么时候初始化一个类。</p>
-<p>  虚拟机规范严格规定了有且只有5中情况必须立即对类进行“初始化”。<br>  1）遇到new、getstatic、putstatic、invokestatic；<br>  2）初始化类的时候，对父类进行初始化；<br>  3）JVM执行的时候，对主类进行初始化；<br>  4）使用java.lang.reflect包的方法对类进行反射调用时；<br>  5）使用jdk1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandler实例最后解析结果是REF_getstatic, REF_putstatic, REF_invokestatic时，对该类进行初始化；<br>  6) jdk1.8中子类实现的接口中定义了default方法时；</p>
-<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p>类的加载过程总共分为：Loading（加载）、Linking（连接）、Initializing（初始化）、Using（使用）、Unloading（卸载）。<br>其中 Linking阶段 分为 Verification（验证）、Preparation（准备）、Resolution（解析）。</p>
-<p><img src="/2020/06/01/ClassLoader/ClassLoader.jpeg" alt="ClassLoader"></p>
-<h4 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h4><p>加载阶段的成果是生成Class类对象，并将该对象存储在堆中。Class对象作为访问该对象数据的访问入口。<br>加载的步骤：<br>1） 根据类的全限定名读取类的二进制字节流；<br>2） 对二进制字节流进行解析转换，并将类信息存储在方法区中；<br>3） 堆中生成Class类对象，作为程序访问方法区中的类型数据的外部接口；</p>
-<blockquote>
-<p>注意：<br>数组类不通过类加载器创建，由java虚拟机直接在内存中动态构造出来的。<br>数组的元素类型（去掉所有维度）要靠类加载器加载完成。<br>数组的组件类型（去掉一个维度）是引用类型，数组将被标识在加载该组建类型的类加载器的类名称空间上。<br>如果数组的组件类型不是引用类型，Java虚拟机会把数组标记为与引导类加载器关联。</p>
-</blockquote>
-<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>验证加载的类信息是否符合Java虚拟机规范，类的实现和继承、方法的执行、对象和方法的可访问性等等，主要分为四个阶段：</p>
-<p>1）文件格式的验证<br>   主要对Class文件中内容进行验证，是否符合Java虚拟机规范。<br>   比如魔数、常量池的类型、指向常量的索引值是否存在或者类型是否正确等等；</p>
-<blockquote>
-<p>这个阶段的验证是基于二进制字节流进行的，只有通过了验证才会被允许进入Java虚拟机的内存方法区存储。</p>
-</blockquote>
-<p>2）元数据验证<br>   对字节码描述信息进行语义分析，保证描述信息符合《Java语言规范》比如:</p>
-<ul>
-<li>这个类是否有父类、父类是否允许继承（被final修饰）；</li>
-<li>这个类是否实现了父类所要求实现的所有方法；</li>
-<li>类中的字段、方法是否与父类产生矛盾；</li>
-</ul>
-<p>3）字节码验证<br>   对类的方法体进行验证，保证任何跳转指令都不会跳转到方法体以外的字节码指令上；<br>   保证类型转化都是有效的.</p>
-<p>4）符号引用验证</p>
-<blockquote>
-<p>虚拟机在解析阶段将符号引用转化为直接引用的时候，对符号引用进行验证；</p>
-</blockquote>
-<ul>
-<li>符号引用中通过字符串描述的全限定名能否找到对应的类；</li>
-<li>在指定类中是否存在符合方法的字段描述以及简单名称所描述的方法和字段；</li>
-<li>符号引用中的类、字段、方法的可访问性是否可以被当前类访问；</li>
-</ul>
-<p>符号引用阶段抛出的异常有：IllegalAccessError、NoSuchFieldError、NoSuchMethodError；</p>
-<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>准备阶段是正式为类中定义的变量分配内存并设置类变量初始值的阶段；</p>
-<p>对于类变量（静态属性），设置的是“零值”，真正赋值是在初始化阶段；<br>对于常量（final static），会被设置为ConstantValue属性所指定的初始值。</p>
-<blockquote>
-<p>对于常量，Javac时会为value生成ConstantValue属性。</p>
-</blockquote>
-<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>解析阶段是Java虚拟机将常量池的符号引用替换为直接引用的过程。《Java虚拟机规范》并没有规定何时进行解析。</p>
-<ul>
-<li>符号引用：可以无歧义的定位到目标即可；与虚拟机的内存布局无关；引用的目标不一定已经加载到虚拟机中；必须遵循《Java虚拟机规范》；</li>
-<li>直接引用：直接可以指向目标的指针、偏移量，或者可以间接定位到目标的句柄；与虚拟机的内存布局直接相关；直接引用的目标一定已经加载到虚拟机内存中；</li>
-</ul>
-<p>解析动作主要针对类或者接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符号引用进行。</p>
-<h5 id="类、接口解析："><a href="#类、接口解析：" class="headerlink" title="类、接口解析："></a>类、接口解析：</h5><p>虚拟机的完整解析过程：<br>1）如果不是一个数组类型，虚拟机将会把全限定名传给当前类的加载器去加载，在加载的过程中，由于元数据验证、字节码验证的需要，又可能出发其他相关类的加载动作。<br>2）如果是一个数组类型，并且数组的元素类型为对象，那么会按照第一点的规则加载数组元素类型。如果是基础数据类型包装类，那么由虚拟机生成一个代表该数组唯独和元素的数组对象；<br>3）前面两部解析OK后进行符号引用验证，确定当前类是否有加载类的访问权限。</p>
-<p>如果一个类拥有另外一个类的访问权限，那么至少有一条是成立的：<br>1）被访问类是public的，并且与访问类处于同一个模块；<br>2）被访问类是public的，不与访问类处于同一个模块，但是被访问类的模块允许访问类访问；<br>3）被访问类不是public的，但是与访问类处于同一个包中</p>
-<h5 id="字段解析"><a href="#字段解析" class="headerlink" title="字段解析"></a>字段解析</h5><p>对字段表内class_index项中索引的CONSTANT_Class_Info符号引用进行解析（即字段所属类）</p>
-<p>1）先查找当前类是否包含了简单名称与描述符与目标相匹配<br>2）从下往上的顺序查找实现的接口类<br>3）从下往上的顺序查找父类<br>4）都无法查找到，抛出java.lang.NoSuchFieldError.</p>
-<p>如果查找成果返回了引用，将会对这个字段进行权限验证，对于不具备权限的访问会抛出IllegalAccessError；</p>
-<h5 id="方法解析"><a href="#方法解析" class="headerlink" title="方法解析"></a>方法解析</h5><p>解析出方法表class_index项中索引的方法所属的类或者接口的符号引用。<br>具体的解析过程与字段解析类似。</p>
-<h5 id="接口方法解析"><a href="#接口方法解析" class="headerlink" title="接口方法解析"></a>接口方法解析</h5><p>与方法解析类似。</p>
-<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>这个阶段Java虚拟机才真正开始执行类中编写的程序代码。程序在这个阶段初始化类变量和其他资源。</p>
-<p>初始化阶段也是执行&lt;clinit&gt;()的过程。<br>&lt;clinit&gt;()方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块中的语句合并产生的；<br>编译器收集顺序是由语句在源文件中出现的顺序决定的；<br>静态语句块中智能访问到定义在静态语句块之前的变量；<br>定义在静态语句块后的变量，静态语句块可以赋值，但是不能访问；<br>Java虚拟机保证父类的&lt;clinit&gt;() 总是优先于子类的&lt;clinit&gt;()执行；</p>
-<blockquote>
-<p>如果一个类中没有静态语句块，也没有对变量的赋值操作，编译器可以不为这个类生成clinit()方法。</p>
-</blockquote>
-<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><p>类加载器主要通过一个类的全限定名来获取描述该类的二进制字节流，它处于Java虚拟机的外部，方便让应用程序自己决定如何获取所需的类。</p>
-<p>对于任意一个类，必须由加载它的类加载器与类本身来确定在Java虚拟机中的唯一性。<br>每个类加载器都拥有一个独立的类名称空间。</p>
-<h3 id="类加载器的双亲委派模型"><a href="#类加载器的双亲委派模型" class="headerlink" title="类加载器的双亲委派模型"></a>类加载器的双亲委派模型</h3><p><img src="/2020/06/01/ClassLoader/ClassLoader02.webp" alt="双亲委派模型"></p>
-<p>双亲委派模型要求除了顶层的启动类加载器之外，其余的类加载器都应有自己的父“类加载器”。<br>当类加载器需要加载一个类的时候，首先看该类是否已经被加载，如果没有被加载则尝试着让父“类加载器”去加载，如果没有父“类加载器”则让bootstrapClassLoader作为父“类加载器”，如果父“类加载器”加载失败，则使用自己的find_class方法去加载。</p>
-<ul>
-<li>启动类加载器（Bootstrap Class Loader）<br>启动类加载器负责加载&lt;JAVA_HOME&gt;\lib 目录下的jar包（按名字识别，名字不符合的类库存放在lib目录下也不会被加载），也可以指定 -Xbootclasspath参数指定加载目录。启动类加载器无法被java程序直接引用。</li>
-<li>扩展类加载器（Extension Class Loader）<br>扩展类加载器负责加载&lt;JAVA_HOME&gt;\lib\ext目录下的jar包，或者被java.ext.dirs指定的路径这种的所有类库。这个类加载器是在类sun.misc.Launcher$ExtClassLoader中以Java代码实现的。</li>
-<li>应用程序类加载器（Application Class Loader）<br>负责加载用户类路径上的所有类库。这个类加载器是在sun.misc.Launcher$AppClassLoader实现。</li>
-</ul>
-<h5 id="定制自己的类加载器"><a href="#定制自己的类加载器" class="headerlink" title="定制自己的类加载器"></a>定制自己的类加载器</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomClassLoader</span><span class="params">(ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">        String path = <span class="string">"/classes/"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream ins = <span class="keyword">new</span> FileInputStream(path + name.replace(<span class="string">"."</span>, File.separator) + <span class="string">".class"</span>);</span><br><span class="line">            ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            <span class="keyword">int</span> bufferSize = <span class="number">4096</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[bufferSize];</span><br><span class="line">            <span class="keyword">int</span> bytesNumRead = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> ((bytesNumRead = ins.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                baos.write(buffer, <span class="number">0</span>, bytesNumRead);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">byte</span>[] classData = baos.toByteArray();</span><br><span class="line">            <span class="keyword">return</span> defineClass(name, classData, <span class="number">0</span>, classData.length);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CustomClassLoader classLoader = <span class="keyword">new</span> CustomClassLoader(<span class="keyword">null</span>);</span><br><span class="line">        Class clazz = classLoader.loadClass(<span class="string">"com.*.ClassLoader"</span>);</span><br><span class="line">        System.out.println(clazz.getClassLoader());</span><br><span class="line">        System.out.println(clazz.getClass());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-              </div>
-            
-          
-        
-          
-            
-              <div class='post-wrapper'>
-                <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
-      JVM内存模型
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Java虚拟机</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月2日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  <div class="new-meta-item top-post">
-    <a class='notlink'>
-      <i class="fas fa-angle-double-up fa-fw" aria-hidden="true"></i>
-      <p>5</p>
-    </a>
-  </div>
-
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>计算机为了提升效率，增加了多内核，并且为每个内核增加了自己的高速缓存，而他们又共享同一个主内存。</p>
-<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm01.jpeg" alt="计算机处理器、高速缓存、主内存之间的交互关系"></p>
-<p>除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，但保证结果与顺序执行的结果一致。</p>
-<p>与处理器的乱序执行优化类似，Java虚拟机的即时编译器也有指令重排序优化。</p>
-<h2 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h2><p>《Java虚拟机规范》中曾试图定义一种Java内存模型来屏蔽各种硬件和操作系统的内存访问差异。</p>
-<h4 id="主内存与工作内存"><a href="#主内存与工作内存" class="headerlink" title="主内存与工作内存"></a>主内存与工作内存</h4><p>Java内存模型的主要目的是定义程序中各种变量的访问规则（关注虚拟机中把变量存储到内存和从内存中取出变量的底层细节。）<br>Java内存模型规定了所有的变量都存储在主内存（除线程私有的以外）。<br>线程的工作内存保存了被该线程使用的变量的主内存副本，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存的数据。不同的线程之间也无法直接访问对方工作内存的变量，线程之间变量值的传递均需要通过主内存来完成。</p>
-<p><img src="/2020/06/02/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/jmm02.jpeg" alt></p>
-<h3 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h3><p>关于主内存与工作内存之间的交互协议，Java内存模型中定义了8种的操作。</p>
-<p>Java虚拟机实现时必须保证每种操作都是原子的，不可再分的（对于double和long来讲，load、store、、read、write允许有例外）。</p>
-<ul>
-<li><p>lock ： 锁定，作用于主内存的变量，把一个变量标识为一条线程独占的状态。</p>
-</li>
-<li><p>unlock: 解锁，作用于主内存的变量，把一个处于锁定状体的变量释放出来，释放后的变量才可以被其他线程锁定。</p>
-</li>
-<li><p>read: 读取，作用于主内存的变量，把一个变量的值从主内存传输到工作内存，以便随后的load动作使用。</p>
-</li>
-<li><p>write: 写入，作用于主内存的变量，把store操作从工作内存中得到的变量值存放到主内存变量中。</p>
-</li>
-<li><p>load: 载入，作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。</p>
-</li>
-<li><p>use：使用，作用于工作内存的变量，把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。</p>
-</li>
-<li><p>assign: 赋值，作用于工作变量，把一个从执行引擎接收的值赋给工作内存变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</p>
-</li>
-<li><p>store: 存储，把工作内存中一个变量的值传送到内存中，以便随后的write操作使用。</p>
-</li>
-</ul>
-<p>Java内存模型规定必须满足如下规则：</p>
-<blockquote>
-<p>1) 不允许read 和 load、store和write操作单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者工作内存发起回写单主内存不接受<br>2）不允许一个线程丢弃它最近的assign操作，即变量在工作内存中改变了之后必须把该变化同步回主内存。<br>3）不允许一个线程在没有发生assign操作就把数据从线程的工作内存同步回主内存中。<br>4) 一个新的变量只能在主内存中“诞生”，不允许在工作内存中直接使用一个未被初始化（load\assign）的变量,即对一个变量进行use之前必须使用load， 使用store之前必须使用assign。。<br>5）一个变量在同一个时刻内只允许一个线程对其进行lock操作， 但lock操作可以被同一个线程重复执行多次， 多次执行lock后， 只有执行相同次数的unlock操作，变量才会被解锁。<br>6)对一个变量执行unlock之前， 必须先把此变量同步回主内存中（执行store、write操作）</p>
-</blockquote>
-<h3 id="volatile型变量的特殊规则"><a href="#volatile型变量的特殊规则" class="headerlink" title="volatile型变量的特殊规则"></a>volatile型变量的特殊规则</h3><p>volatile是Java虚拟机最轻量级的同步机制。它有两个特性：<br>1）保证此变量对于所有线程的可见性（一个线程修改了这个变量的值，其他线程立即可见，也就是每个线程在使用被volatile修饰的变量时，都会强制从主内存中同步该变量的值到工作内存中）<br> 在不符合以下两条规则的场景中，仍然需要通过加锁来保证原子性（synchronized、java.util.concurrent中的锁或者原子类）：</p>
-<ul>
-<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值；</li>
-<li>变量不需要与其他状态变量共同参与不变约束；</li>
-</ul>
-<p>2） 禁止指令重排序优化</p>
-<p>volatile变量读操作的性能与普通变量几乎没有差别，但是写操作会慢些， 因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
-<h4 id="Singleton-DoubleCheck"><a href="#Singleton-DoubleCheck" class="headerlink" title="Singleton DoubleCheck"></a>Singleton DoubleCheck</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private Singleton() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    private volatile static Singleton instance &#x3D; null;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">            synchronized (Singleton.class) &#123;</span><br><span class="line">                if (instance &#x3D;&#x3D; null) &#123;</span><br><span class="line">                    instance &#x3D; new Singleton(); &#x2F;&#x2F;warning</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上面的代码中，instance = new Singleton()最终会被编译成多条汇编指令。<br>（1）为Singleton的实例分配内存。<br>（2）调用Singleton的构造函数，初始化成员变量<br>（3）将instance对象指向分配的内存空间。</p>
-<p>或者可能被重排序为(1)、(3)、（2）， 也就是当分配内存后，如果没有对instance 加volatile，将instance对象指向分配的内存空间后，另外一个线程可以读到未被初始化的对象。</p>
-<h3 id="针对long和double类型变量的特殊规则"><a href="#针对long和double类型变量的特殊规则" class="headerlink" title="针对long和double类型变量的特殊规则"></a>针对long和double类型变量的特殊规则</h3><p>Java内存模型要求lock、unlock、read、write、 load、assign、use、store这8种操作都具有原子性，但是对于64位数据类型的long 和double, 在模型中定义了一条宽松的规定， 允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为2次32为的操作来执行，也就是虚拟机自己选择是否要保证64位数据类型的load、store、read、write这四个操作的原子性。</p>
-<p>经过实际的测试，在目前的主流平台下商用的64位Java虚拟机中并不会出现非原子性访问行为，但是对于32位的Java虚拟机（如32位的X86Hotspot）存在非原子性访问的风险。</p>
-<p>因此，在实际开发中，除非该数据有明确可知的线程竞争，否则我们在编写代码的时候一般不需要因为这个原因刻意把用到的long和double变量专门声明位volatile。</p>
-<h3 id="原子性、可见性与有序性"><a href="#原子性、可见性与有序性" class="headerlink" title="原子性、可见性与有序性"></a>原子性、可见性与有序性</h3><h5 id="原子性（Atomicity）"><a href="#原子性（Atomicity）" class="headerlink" title="原子性（Atomicity）"></a>原子性（Atomicity）</h5><p>有Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store、write。因此基本数据类型的访问都是具备原子性的。</p>
-<p>如果应用场景需要一个更大范围的保证，需要使用锁、或者synchronized关键字来保证原子性。<br>（lock、unlock并没有直接开放给用户使用）。</p>
-<h5 id="可见性（visibility）"><a href="#可见性（visibility）" class="headerlink" title="可见性（visibility）"></a>可见性（visibility）</h5><p>可见性就是当一个线程修改了共享变量的值时，其他线程能够立即得知这个修改。</p>
-<h6 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h6><p>volatile的特殊规则保证了新值立即能同步到主内存，以及每次使用前都立即从主内存刷新。而普通变量则不能保证“立即”。</p>
-<h6 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h6><p>同步块的可见性时由“对一个变量执行unlock操作之前，必须先把此变量同步回主内存中”这条规则获得。</p>
-<h6 id="final"><a href="#final" class="headerlink" title="final"></a>final</h6><p>被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把this的引用传递出去，那么在其他线程中就能看见final字段的值。</p>
-<blockquote>
-<p>this引用逃逸，其他线程有可能通过这个引用访问到“初始化了一般”的对象。</p>
-</blockquote>
-<h5 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h5><p>如果在本线程中观察，所有的操作都是有序的（线程内似表现为串行的语义）；<br>如果在一个线程中观察另一个线程，所有的操作都是无序的（指令重排序和工作内存与主内存同步延迟现象）；</p>
-<p>Java语言提供了volatile和sychronized两个关键字来保证线程之间的有序性。<br>volatile：本身包含了禁用指令重排序的语义；<br>synchronized：一个变量在同一时刻只允许一个线程对其进行lock操作；</p>
-<h3 id="先行发生原则"><a href="#先行发生原则" class="headerlink" title="先行发生原则"></a>先行发生原则</h3><p>先行发生原则：判断数据是否存在竞争，线程是否安全的重要手段。</p>
-<p>程序次序规则：在一个线程内，按照控制流顺序（分支、循环等），书写在前面的操作先行发生在书写在后面的操作；</p>
-<p>管程锁定规则：一个unlock的操作先行发生在后面对同一个锁的操作。</p>
-<p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作；</p>
-<p>线程启动规则：Thread对象的start（）方法先行发生于此线程的每一个动作；</p>
-<p>线程的中止规则：线程中所有的操作都先行发生于此线程的终止检测，可以通过thread.join()方法是否结束、thread.isAlive()返回值来检测线程是否已经停止；</p>
-<p>线程的终端规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过thread.interrupted()检测是否有中断发生；</p>
-<p>对象终结规则：一个对象初始化完成（构造函数执行结束）先行发生于他的finalize()方法的开始；</p>
-<p>传递性：如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出，操作A先行发生于操作C。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-              </div>
-            
-          
-        
-          
         
           
         
@@ -1762,8 +1764,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/11/05/Mysql%E8%A1%A8/">
-      Mysql表
+    <a href="/2020/11/06/ThreadLocal/">
+      ThreadLocal
     </a>
   </h2>
 
@@ -1788,9 +1790,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Mysql</p>
+      <p>Java技术栈/Java</p>
     </a>
   </div>
 
@@ -1801,7 +1803,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年11月5日</p>
+    <p>发布于：2020年11月6日</p>
   </a>
 </div>
 
@@ -1829,77 +1831,17 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="索引组织表"><a href="#索引组织表" class="headerlink" title="索引组织表"></a>索引组织表</h3><p>在InnoDB存储索引中，表时根据主键顺序组织存放的，这种存储方式的表称为索引组织表。</p>
-<p>在InnoDB存储引擎表中，每张表都有个主键，如果在创建表时没有显式地定义主键，则会按照如下方式创建主键：</p>
-<ul>
-<li>判断表中是否有非空的唯一索引，如果有该列为主键；</li>
-<li>表中没有非空的唯一索引，InnoDB引擎自动创建一个6字节大小的指针；<br>当表中有多个非空唯一索引时，InnoDB存储引擎将选择建表时第一个定义的非空唯一索引为主键（根据定义的索引顺序，而不是建表时列的顺序）。</li>
-</ul>
-<h3 id="InnoDB逻辑存储结构"><a href="#InnoDB逻辑存储结构" class="headerlink" title="InnoDB逻辑存储结构"></a>InnoDB逻辑存储结构</h3><h4 id="表空间"><a href="#表空间" class="headerlink" title="表空间"></a>表空间</h4><p>表空间是InnoDB存储引擎逻辑结构的最高层，所有的数据都存放在表空间中。<br>表空间由段（Segment）、区（extent）、页（Page）组成。<br><img src="/2020/11/05/Mysql%E8%A1%A8/table_space_struct.jpg" alt="表空间结构"></p>
-<p>在默认情况下，InnoDB存储引擎有一个共享表空间ibdata1，所有的数据都存放在这个表空间内。<br>如果配置了innodb_file_per_table，则每张表内的数据可以单独存放在一个表空间中。此时每张表的表空间存放的只是数据、索引和插入缓冲的BitMap页，其他类的数据如回滚（undo）、插入缓冲索引页、系统事务信息、二次写缓冲等还是存放在原来的共享表空间。</p>
-<h4 id="段"><a href="#段" class="headerlink" title="段"></a>段</h4><p>表空间是由各个段组成的，包含数据段、索引段、回滚段等。<br>数据段就是B+树的叶子节点，索引段就是B+树的非叶子结点。<br>回滚段？？？<br>在InnoDB存储引擎中，对段的管理都是由引擎自身完成的，DBA不能对其进行控制。</p>
-<h4 id="区"><a href="#区" class="headerlink" title="区"></a>区</h4><p>区是由连续的页组成的空间，在任何情况下每个区的大小都是1MB。为了保证区中页的连续行，InnoDB引擎每次从磁盘申请4～5个区。默认情况下InnoDB存储引擎页的大小为16K，一个区中存放64个连续的页。</p>
-<h4 id="页"><a href="#页" class="headerlink" title="页"></a>页</h4><p>页是InnoDB磁盘管理的最小单位，在InnoDB存储引擎中，默认每个页的大小为16KB。<br>可以通过参数 innodb_page_size 来设置页的大小为4K、8K、16K。<br>如果设置完成，则所有表中的页大小都变成innodb_page_size，不可用对其再次进行修改。除非通过mysqldump导入和导出来生成新的库。</p>
-<p>页的类型有：</p>
-<ul>
-<li>数据页（B-Tree Node）</li>
-<li>undo 页（undo log Page）</li>
-<li>系统页（System Page）</li>
-<li>事务数据页（Transaction System Page）</li>
-<li>插入缓冲位图页（Insert Buffer BitMap）</li>
-<li>插入缓冲空闲列表页（Insert Buffer Free List）</li>
-<li>未压缩的二进制大对象页（Uncompressed BLOB Page）</li>
-<li>压缩的二进制大对象页（Compressed BLOB Page）</li>
-</ul>
-<h4 id="行"><a href="#行" class="headerlink" title="行"></a>行</h4><p>Innodb存储引擎按行进行存放，每个页存放的行记录有影星的定义，最多允许存放16KB/2 - 200 行的记录。</p>
-<h3 id="InnoDB行记录格式"><a href="#InnoDB行记录格式" class="headerlink" title="InnoDB行记录格式"></a>InnoDB行记录格式</h3><h4 id="Compact-行记录格式"><a href="#Compact-行记录格式" class="headerlink" title="Compact 行记录格式"></a>Compact 行记录格式</h4><p>从Mysql5.0开始，设计目的是高效地存储数据。一个页中存放的行数据越多，其性能就越高。</p>
-<p>|—|—|—|—|—|—|—|—|—|<br>| 变长字段长度列表 | NULL标志位 | 记录头信息 | 列1数据 | 列 2 数据 | …|事务ID列|回滚指针列|__rowid|</p>
-<p>变长字段长度列表：按照列的顺序，逆序放置。<br>  如果列的长度小于255个字节，占用1字节；<br>  如果列的长度大于255个字节，占用2字节；<br>  变长字段的长度最大不可以超过2个字节，因为Mysql数据库中VARCHAR类型的最大长度限制为65535.<br>NULL标志位：表示改行数据中是否有NULL值，有用1表示，占用1个字节。<br>记录头信息：固定占用5个字节。<br>最后的部分是实际存储没咧的数据。<br>事务ID列：隐藏列，占用6字节。<br>回滚指针列:隐藏列，占用7字节。<br>__rowid：占用6字节。</p>
-<h4 id="行溢出数据"><a href="#行溢出数据" class="headerlink" title="行溢出数据"></a>行溢出数据</h4><p>InnoDB存储引擎的数据都是存放在页类型为B-tree Node中，当发生行溢出是，数据存放在页类型为uncompress BLOG页中。</p>
-<h3 id="InnoDB数据页结构"><a href="#InnoDB数据页结构" class="headerlink" title="InnoDB数据页结构"></a>InnoDB数据页结构</h3><h3 id="Named-File-Formats-机制"><a href="#Named-File-Formats-机制" class="headerlink" title="Named File Formats 机制"></a>Named File Formats 机制</h3><p>###约束</p>
-<h4 id="数据完整性"><a href="#数据完整性" class="headerlink" title="数据完整性"></a>数据完整性</h4><h4 id="约束的创建和查找"><a href="#约束的创建和查找" class="headerlink" title="约束的创建和查找"></a>约束的创建和查找</h4><h4 id="约束和索引的区别"><a href="#约束和索引的区别" class="headerlink" title="约束和索引的区别"></a>约束和索引的区别</h4><h4 id="对错误数据的约束"><a href="#对错误数据的约束" class="headerlink" title="对错误数据的约束"></a>对错误数据的约束</h4><h4 id="ENUM和SET约束"><a href="#ENUM和SET约束" class="headerlink" title="ENUM和SET约束"></a>ENUM和SET约束</h4><h4 id="触发器与约束"><a href="#触发器与约束" class="headerlink" title="触发器与约束"></a>触发器与约束</h4><h4 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h4><h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><h3 id="分区表"><a href="#分区表" class="headerlink" title="分区表"></a>分区表</h3><p>分区功能不是在存储引擎层面完成的。<br>支持分区的存储引擎有：MyISAM、InnoDB、NDB。<br>不支持分区的存储引擎有：CSV、FEDORATED、MERGE。</p>
-<p>分区的过程是将一个表或者索引分解为多个更小的、更可管理的部分。<br>从逻辑上讲只有一个表或者一个索引库，但是在物理上这个表或者索引可能由数十个物理分区组成。每个分区都是独立的对象，可以独自处理，页可以作为一个更大的对象的一部分进行处理。</p>
-<p>Mysql支持水平分区，不支持垂直分区（水平分区，将同一表中的不同行的记录分配到不同的物理文件；垂直分区，将同一表中的不同列分配到不同的物理文件）。<br>Mysql不支持全局分区，只支持局部分区。<br>局部分区：一个分区中既存放了数据由存放了索引。<br>全局分区：数据存放在各个区，所有数据的索引存放在一个对象中。</p>
-<p>分区主要用来数据库高可用性的管理，对于某些SQL的性能带来提高。</p>
-<h4 id="分区类型"><a href="#分区类型" class="headerlink" title="分区类型"></a>分区类型</h4><ul>
-<li>RANGE分区:行数据基于属于一个给定连续区间的列值被放入分区。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table t (</span><br><span class="line">  id int</span><br><span class="line">)engine&#x3D;innodb</span><br><span class="line">partition by range(id)(</span><br><span class="line"> partition p0 values less than (10),</span><br><span class="line"> partition p1 values less than (20)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p> ThreadLocal 是JDK包提供的，它提供线程本地变量，如果创建一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的副本，在实际多线程操作的时候，操作的都是自己本地内存中的变量，从而规避了线程安全问题。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ThreadLocal tl = <span class="keyword">new</span> ThreadLocal();</span><br><span class="line">tl.set(k);</span><br><span class="line">tl.get();</span><br><span class="line">tl.remove();</span><br></pre></td></tr></table></figure>
 
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table t add partition (partition p2 values less than maxvalue);</span><br></pre></td></tr></table></figure>
-<p>启用分区后，表是由建立各个分区时的各个分区ibd文件组成。</p>
-<ul>
-<li>List分区：和RANGE分区类似，只是LIST分区面向的是离散的值。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">   a INT, </span><br><span class="line">   b INT</span><br><span class="line">) engine &#x3D; INNODB</span><br><span class="line">partition by list(b)(</span><br><span class="line">  partition p0 values in (1,3,5,7,9),</span><br><span class="line">  partition p1 values in (0,2,4,6,8)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    ThreadLocalMap map = getMap(t);</span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>)</span><br><span class="line">        map.set(<span class="keyword">this</span>, value);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        createMap(t, value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ThreadLocalMap <span class="title">getMap</span><span class="params">(Thread t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">createMap</span><span class="params">(Thread t, T firstValue)</span> </span>&#123;</span><br><span class="line">    t.threadLocals = <span class="keyword">new</span> ThreadLocalMap(<span class="keyword">this</span>, firstValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Thread.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ThreadLocal values pertaining to this thread. This map is maintained</span></span><br><span class="line"><span class="comment"> * by the ThreadLocal class. */</span></span><br><span class="line">ThreadLocal.ThreadLocalMap threadLocals = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * InheritableThreadLocal values pertaining to this thread. This map is</span></span><br><span class="line"><span class="comment"> * maintained by the InheritableThreadLocal class.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">ThreadLocal.ThreadLocalMap inheritableThreadLocals = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
 
 
-<ul>
-<li>HASH分区：根据用户自定义的表达式返回值进行分区，返回值不能为负数。<br>Hash分区的目的是将数据均匀地分布到盂县定义的各个区中，保证各分区的数据数量大致都一样。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">  a int, </span><br><span class="line">  b datetime</span><br><span class="line">)engine&#x3D;innodb</span><br><span class="line">partition by hash(year(b))</span><br><span class="line">partitions 4;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">  a int,</span><br><span class="line">  b datetime</span><br><span class="line">)engine&#x3D;innodb</span><br><span class="line">partition by linear hash(year(b))</span><br><span class="line">prtions 4;</span><br></pre></td></tr></table></figure>
-
-<p>LINEAR HASH分区的优点在于，增加、删除、合并和拆分分区将变得更加快捷，有利于处理含有大量数据的表。<br>缺点在于，与使用HASH分区得到的数据分布相比，各个分区间数据的分布可能不大均衡。</p>
-<ul>
-<li>KEY分区：根据MYSQL数据库提供的哈希函数来分区。<br>与HASH分区相似，不同之处在于HASH分区使用用户定义的函数进行分区，KEY分区使用MYSQL数据库提供的函数进行分区。对于NDB Cluster引擎，MYSQL数据库使用MD5函数来分区；对于其他引擎，Mysql数据库使用内部的哈希函数。<br>在KEY分区中，使用关键字LINEAR 和在HASH分区中具有同样的效果。</li>
-</ul>
-<p>无论哪种类型的分区，如果表中存在主键或者唯一索引时，分区列必须时唯一索引的一个组成部分。<br>如果建表时没有指定主键，唯一索引，可以指定任何一个列为分区列。</p>
-<p>以上四种RANGE、LIST、HASH、KEY分区条件是，数据必须是整形，如果不是整型，那应该需要通过函数将其转化成整型，如YEAR（）, TO_DAYS(), MONTH()等函数。</p>
-<ul>
-<li>Column分区，RANGE分区和LIST分区的一种进化。<br>COLUMN分区可以直接使用菲整形的数据进行分区，分区根据类型直接比较得到，不需要转化为整形。<br>RANGECOLUMNS分区可以对多个列的值进行分区。</li>
-</ul>
-<p>COLUMN分区支持<br>所有的整型：INT、SMALLINT、TINYINT、BIGING。<br>日期类型：DATE、DATETIME<br>字符串类型：CHAR、VARCHAR、BINARY、VARBINARY。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">  a INT,</span><br><span class="line">  b DATETIME</span><br><span class="line">)engine&#x3D;innodb</span><br><span class="line">partition by range columns(b)(</span><br><span class="line">  partition p0 values less than (&#39;2020-01-01&#39;),</span><br><span class="line">  partition p1 values less than (&#39;2020-02-01&#39;)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="子分区"><a href="#子分区" class="headerlink" title="子分区"></a>子分区</h4><p>   子分区是在分区的基础上再进行分区，有时页称为符合分区。 MySQL允许在RANGE和LIST的分区傻姑娘再进行KEY或者HASH的子分区。</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">create table t(</span><br><span class="line">   a int,</span><br><span class="line">   b date</span><br><span class="line"> )engine &#x3D; innodb</span><br><span class="line"> partition by range(year(b))</span><br><span class="line"> subpartition by hash(to_days(b))</span><br><span class="line"> subpartitions 2(</span><br><span class="line">     partition p0 values less than (1990),</span><br><span class="line">     partition p1 values less than (2000),</span><br><span class="line">     partition p2 values less than maxvalue</span><br><span class="line">     );</span><br></pre></td></tr></table></figure>
-
-<h4 id="分区中的NULL值"><a href="#分区中的NULL值" class="headerlink" title="分区中的NULL值"></a>分区中的NULL值</h4><p>MysQL允许对NULL值做分区，对于RANGE分区，如果像分区列插入了NULL值，则Mysql数据库将该值放入到最左边的分区。<br>LIST分区下要使用NULL值，必须显式地指出将该值放入哪个分区。<br>HASH和KEY分区函数会将NULL值的记录返回0.</p>
-<h4 id="分区和性能"><a href="#分区和性能" class="headerlink" title="分区和性能"></a>分区和性能</h4><p>当数据量大时，分区可以有效降低B+树的层级。<br>当数据量小时，分区带来的收益并不明显，并且有可能导致扫描所有分区反而降低效率。</p>
-
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>Thread 类中有两个变量，一个threadLocals， 一个inheritableThreadLocals。</p>
+<h2 id="不支持继承性"><a href="#不支持继承性" class="headerlink" title="不支持继承性"></a>不支持继承性</h2><h2 id="InheritableThreadLocal"><a href="#InheritableThreadLocal" class="headerlink" title="InheritableThreadLocal"></a>InheritableThreadLocal</h2><h2 id="内存泄漏问题"><a href="#内存泄漏问题" class="headerlink" title="内存泄漏问题"></a>内存泄漏问题</h2>
       
     </div>
     
@@ -1925,8 +1867,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/11/04/%E6%96%87%E4%BB%B6/">
-      MySQL 文件
+    <a href="/2020/11/06/Mysql%E7%B4%A2%E5%BC%95/">
+      Mysql索引
     </a>
   </h2>
 
@@ -1964,7 +1906,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年11月4日</p>
+    <p>发布于：2020年11月6日</p>
   </a>
 </div>
 
@@ -1992,60 +1934,72 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="参数文件"><a href="#参数文件" class="headerlink" title="参数文件"></a>参数文件</h2><h3 id="动态参数"><a href="#动态参数" class="headerlink" title="动态参数"></a>动态参数</h3><p>  动态参数可以在Mysql实例运行中进行更改，可以通过SET命令对动态参数值进行修改。<br>  SET [global|session]  key = value;</p>
-<h3 id="静态参数"><a href="#静态参数" class="headerlink" title="静态参数"></a>静态参数</h3><p>  静态参数在整个实例生命周期内不得进行更改，需要重新启动实例才会生效。</p>
-<h2 id="日志文件"><a href="#日志文件" class="headerlink" title="日志文件"></a>日志文件</h2><h3 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h3><p>记录了对Mysql的启动、运行、关闭过程中所有的错误、警告和正确的信息。</p>
-<h3 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h3><p>可以帮助定位可能存在问题的SQL语句，从而进行SQL层面的优化。Mysql在启动时设置一个阈值，将运行时间超过该值的所有SQL语句都记录到慢查询日志文件中。<br>通过设置 long_query_time 来设置，单位为秒。<br>log_queries_not_using_indexes: 记录没有使用索引的查询日志。<br>log_throttle_queries_not_using_indexes:每分钟允许记录到showLog的且未使用索引的SQL语句次数，0表示不限制。</p>
-<p>查看慢日志</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysqldumpslow *.log</span><br><span class="line">&#x2F;&#x2F;查看执行时间最长的10条sql语句</span><br><span class="line">mysqldumpslow -s al -n 10 *.log</span><br></pre></td></tr></table></figure>
+        <h2 id="InnoDB存储引擎索引"><a href="#InnoDB存储引擎索引" class="headerlink" title="InnoDB存储引擎索引"></a>InnoDB存储引擎索引</h2><p>InnoDB支持B+树索引、全文索引和哈希索引。</p>
+<p>B+树索引就是传统意义上的索引，是目前关系型数据库中查找最为常用和最为有效的索引。<br>InnoDB存储引擎会根据表的使用情况自动为表生成哈希索引，不能人为敢于是否在一张表中生成哈希索引。</p>
+<h2 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h2><h3 id="二分查找法"><a href="#二分查找法" class="headerlink" title="二分查找法"></a>二分查找法</h3><p>也叫折半查找，必须是一组有序的记录数组。具体详见《二分查找法》。</p>
+<h3 id="二叉查找树与平衡二叉树"><a href="#二叉查找树与平衡二叉树" class="headerlink" title="二叉查找树与平衡二叉树"></a>二叉查找树与平衡二叉树</h3><p>二叉查找树中，左子树的键值总是小于根的键值，右子树的键值总是大于根的键值。</p>
+<p>前序遍历：根 -&gt; 左 -&gt; 右<br>中序遍历: 左 -&gt; 根 -&gt; 右<br>后序遍历: 左 -&gt; 右 -&gt; 根</p>
+<p>当一个二叉查找树的每个结点只有左子树或者只有右子树时，该数据结构退化成了链表，查找性能会变低，时间复杂度变成O(n).</p>
+<p>平衡二叉树：在二叉树的基础上，必须满足任何结点的两个子树高度最大差1. 平衡二叉树的查询速度极快，但是维护一颗平衡二叉树的代价非常大。 需要经过1次或者多次左旋和右旋来得到插入或者更新后的平衡树。</p>
+<h2 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h2><p>B+树由B树和索引顺序访问方法演化而来，为磁盘或者其他直接存取辅助设备设计的一种平衡查找树。<br>在B+树中，所有记录结点都是按照键值的大小顺序存放在同一层的叶子结点上，由各个叶子结点指针进行连接。</p>
+<h3 id="B-树的插入"><a href="#B-树的插入" class="headerlink" title="B+树的插入"></a>B+树的插入</h3><p>B+树的插入必须保证插入后叶子结点中的记录依然排序，同时要考虑插入到B+树的三种情况，每种情况都可能会导致不同的插入算法。</p>
+<p>1）叶子页未满，索引页未满：直接将记录插入到叶子结点。<br>2）叶子页已满，索引页未满：<br>   2.1）拆分LeafPage<br>   2.2) 将中间的结点放入到IndexPage中<br>   2.3）小于中间结点的记录放在左边<br>   2.4) 大于或者等于中间结点的记录放在右边<br>3）叶子页已满，索引页已满：<br>   3.1）拆分LeafPage<br>   3.2) 小于中间结点的记录放左边<br>   3.3) 大于或者等于中间结点的记录放右边<br>   3.4) 拆分索引页IndexPage<br>   4.5) 小于中间结点的记录放左边<br>   4.6) 大于中间结点的记录放右边<br>   4.7) 中间结点放入上一层IndexPage</p>
+<p>无论如何变化，B+树总会保持平衡。但是为了保持平衡对于新插入的键值可能需要做大量的拆分页操作。<br>因为B+树结构主要用于磁盘，页的拆分意味着磁盘的额操作，所以在可能的情况下尽量减少页的拆分。<br>B+树提供了类似于平衡二叉树的旋转功能。<br>旋转发生在LeafPage已满，但是其左右兄弟结点没有满的情况下。这时B+树并不会急于去做拆分页的操作，而是将记录转移到所在页的兄弟结点上。在通常情况下，左兄弟回被首先检查用来做旋转操作。</p>
+<h3 id="B-树的删除"><a href="#B-树的删除" class="headerlink" title="B+树的删除"></a>B+树的删除</h3><p>B+树删除时根据填充因子的变化来衡量（最小填充因子的值为50%）。<br>删除操作同样必须保证删除后叶子结点中的记录已俨然排序。</p>
+<p>叶子结点大于填充因子， 中间结点大于填充因子：直接将记录从叶子结点删除，如果该结点还是IndexPage的结点，用该结点的右结点代替。<br>叶子结点小于填充因子，中间结点大于填充因子：合并叶子结点和它的兄弟结点，同时更新IndexPage<br>叶子结点小于填充因子，中间结点小于填充因子：合并叶子结点和它的兄弟结点，更新IndexPage，合并IndexPage和它的兄弟结点。</p>
+<h2 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h2><h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><p>按照每张表的主键构造一颗B+树，同时叶子结点中存放的是张张表的行记录数据，聚集索引的叶子结点称为数据页。<br>由于实际的树叶也只能按照一颗B+树进行排序，因此每张表只能拥有一个聚集索引。大多数情况下，查询优化器倾向于采用聚集索引。因为聚集索引能够在B+树索引的叶子结点上直接找到数据。此外定义了数据的逻辑顺序，聚集索引能够特别快地访问针对范围的查询。</p>
+<p>数据页存放的是完整的每行的数据，索引页存放的是键值和指向数据页的偏移量Offset。<br>聚集索引是按照主键逻辑顺序在磁盘存储。</p>
+<h3 id="辅助索引"><a href="#辅助索引" class="headerlink" title="辅助索引"></a>辅助索引</h3><p>对于辅助索引，叶子结点除了包含键值意外，每个结点中的索引行中包含了聚集索引键。<br>每张表中可以有多个辅助索引，当通过辅助索引来寻找数据时，InnoDB存储引擎会遍历并通过叶子级别的指针获得指向主键索引的主键，然后再通过主键索引来找到一个完整的行记录。</p>
+<h3 id="B-树索引的分裂"><a href="#B-树索引的分裂" class="headerlink" title="B+树索引的分裂"></a>B+树索引的分裂</h3><p>InnoDB存储引擎的PageHeader中包含了Page_Last_Insert、Page_Direction、Page_N_Direction，通过这几个参数来决定向左分裂或者向右分裂。</p>
+<p>如果插入是随机的，则取页的中间记录作为分裂点的记录。<br>如果向同一方向进行插入的记录数量是5，并且目前已经定位到的记录之后还有3条记录，则分裂点的记录为定位到的记录后的第三条记录，否则分裂点记录就是待插入的记录。</p>
+<h3 id="B-树索引的管理"><a href="#B-树索引的管理" class="headerlink" title="B+树索引的管理"></a>B+树索引的管理</h3><p>只对表中b字段的前100个字符创建索引。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table t  add key idx_b(b(100));</span><br></pre></td></tr></table></figure>
 
-<h3 id="查询日志"><a href="#查询日志" class="headerlink" title="查询日志"></a>查询日志</h3><p>查询日志记录了所有对MySQL数据库请求的信息，无论这些请求是否得到了正确的执行。</p>
-<p>查看查询日志：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail *.log</span><br></pre></td></tr></table></figure>
+<p>查看t表中的所有索引。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show index from t;</span><br></pre></td></tr></table></figure>
+
+<p>在非高峰时期执行以下语句，更新索引Cardinality信息，使得优化器和索引可以更好的工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">analyze table t;</span><br></pre></td></tr></table></figure>
 
 
-<h3 id="二进制日志"><a href="#二进制日志" class="headerlink" title="二进制日志"></a>二进制日志</h3><p>二进制日志记录了对MySQL数据库执行更改的所有操作，但是不包括SELECT和SHOW这类对数据本身没有修改的操作。二进制日志还包括了执行数据库更改操作的时间等其他额外信息。</p>
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul>
-<li>恢复<br>某些数据的恢复需要二进制日志，如在一个数据库全备文件恢复后，用户可以通过二进制日志进行pint-in-time的恢复。</li>
-<li>复制<br>与恢复类似，通过复制和执行二进制日志使另一台远程的MySQL数据库与当前数据库进行实时同步。</li>
-<li>审计<br>通过二进制日志中的信息来进行审计，判断是否有对数据库进行注入的攻击。</li>
+<p>生产环境创建索引时遇到的问题：</p>
+<h4 id="临时表方式创建索引"><a href="#临时表方式创建索引" class="headerlink" title="临时表方式创建索引"></a>临时表方式创建索引</h4><p>先创建临时表，导入数据，创建索引然后修改临时表名称。</p>
+<h4 id="Fast-Index-Creation"><a href="#Fast-Index-Creation" class="headerlink" title="Fast Index Creation"></a>Fast Index Creation</h4><p>FIC在辅助索引创建的过程中对表加了S锁，因此在创建的过程中之能对该表进行读操作，如果有大量的食物需要对目标表进行写操作，那么数据库的服务同样不可用。<br>FIC方式只限于辅助索引，对于主键的创建和删除需要重建一张表。</p>
+<h4 id="Online-Schema-Change"><a href="#Online-Schema-Change" class="headerlink" title="Online Schema Change"></a>Online Schema Change</h4><p>PHP脚本维护，且在进行OSC过程中，允许SET sql_bin_log=0， 因此所做的操作不会同步到slave服务器，可能导致主从不一致的情况。</p>
+<h4 id="Online-DDL"><a href="#Online-DDL" class="headerlink" title="Online DDL"></a>Online DDL</h4><p>允许辅助索引创建的同时，还允许Insert、UPdate、Delete等DML操作，极大地提高了Mysql数据库在生产环境的可用性。<br>还可以在线的操作以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">辅助索引的创建与删除</span><br><span class="line">改变自增长值</span><br><span class="line">添加或者删除外键约束</span><br><span class="line">列的重命名</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> table_name <span class="keyword">add</span> <span class="keyword">index</span> index_name algorithm=&#123;<span class="keyword">default</span>|INPLACE|COPY&#125;</span><br><span class="line"><span class="keyword">lock</span>=&#123;<span class="keyword">default</span>|<span class="keyword">none</span>|<span class="keyword">shared</span>|exclusive&#125;</span><br></pre></td></tr></table></figure>
+
+<p>algorithm:<br>  copy: 临时表方式创建索引<br>  inplace:不需要创建临时表（默认）<br>  default:根据参数old_alter_table判断通过copy或者inplace算法。<br>lock: 创建索引或者删除索引时对表解锁的情况。<br>   none: 不加锁，任意读写操作都不会收到阻塞。<br>   share: 与FIC类似，执行索引创建或者删除操作时，对目标加S锁。可以并发读，阻塞写事务。<br>   exclusive：执行索引创建或者删除时，对表增加一个X锁，阻塞所有的读写事务。<br>   default：通过判断事物的最大并发性来判断执行DDL模式。none -&gt; share-&gt; exclusive.</p>
+<p>远离：在执行创建或者删除操作时，将INsert、UPDATE、DELETE等DML操作日志写入缓冲中，等待索引创建完成后，再将重做应用到表上，达到数据一致性。因此索引在创建过程中SQL优化器不会选择正在创建中的索引。<br>缓存大小由innodb_online_alter_log_max_size=128MB控制。</p>
+<h2 id="Cardinality值"><a href="#Cardinality值" class="headerlink" title="Cardinality值"></a>Cardinality值</h2><p>表示索引中不重复记录数量的预估值。InnoDB根据Cardinality来决定是否使用该索引。<br>Cardinality的值是通过采样的方法来完成的。</p>
+<p>当insert、update的数据占有表中数据的1/16时。<br>每一行的更新次数：stat_modified_counter &gt; 2 000 000 000时<br>就会更新Cardinality值。</p>
+<p>当执行以下命令时会导致InnoDB存储引擎重新计算Cardinality值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">analyze table</span><br><span class="line">show table status</span><br><span class="line">show index</span><br><span class="line">访问information_schema 下的表tables和表statistics</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="B-树索引的使用"><a href="#B-树索引的使用" class="headerlink" title="B+树索引的使用"></a>B+树索引的使用</h2><h3 id="不同应用中B-树索引的使用"><a href="#不同应用中B-树索引的使用" class="headerlink" title="不同应用中B+树索引的使用"></a>不同应用中B+树索引的使用</h3><p>OLTP应用和OLAP应用中索引的使用。</p>
+<h3 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h3><h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>从辅助索引就可以查询到想要的数据，而不需要再查一次聚集索引中的记录。</p>
+<h3 id="优化器选择不使用索引的情况"><a href="#优化器选择不使用索引的情况" class="headerlink" title="优化器选择不使用索引的情况"></a>优化器选择不使用索引的情况</h3><p>当优化器发现辅助索引不能进行索引覆盖时，并且查找的数据量比较大时会放弃辅助索引，转向全表扫描。</p>
+<p>使用force index();</p>
+<h3 id="Multi-range-Read优化"><a href="#Multi-range-Read优化" class="headerlink" title="Multi-range Read优化"></a>Multi-range Read优化</h3><p>为了减少磁盘的随机访问，并且将随机访问转化为较顺序的数据访问。</p>
+<p>MRR的好处：</p>
+<ul>
+<li>MRR 使得数据访问变得较为顺序，在查询辅助索引时，首先根据得到的查询结果，按照主键进行排序，并按照主键排序的顺序进行书签查找。</li>
+<li>减少缓冲池中页被替换的次数</li>
+<li>批量处理对键值的查询操作</li>
 </ul>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><ul>
-<li>max_binlog_size: 单个日志文件的最大值，默认1G</li>
-<li>binlog_cache_size: 所有未提交的二进制日志会被记录到一个缓存中，等该事务提交时直接将缓冲中的二进制日志写入二进制日志文件，该缓冲的大小默认为32。该值是基于会话的，每个会话会申请32K的空间。</li>
-<li>binlog_cache_use: 记录了使用临时文件写二进制日志的次数。</li>
-<li>sync_binlog：表示每写缓冲多少次就同步到磁盘，为1时，表示采用同步写磁盘的方式来写二进制日志，这时写操作不使用操作系统的缓冲来写二进制日志。默认值为0.</li>
-<li>binlog-do-db：写入哪些库的日志，默认为空表示同步所有库的日志到二进制日志。</li>
-<li>binlog-ignore-db：忽略哪些库的日志</li>
-<li>log-slave-update：当前库为slave时，如果需要将从master取得并执行的二进制日志写入自己的二进制日志文件中时需要设置该值。</li>
-<li>binlog_format：STATEMENT/ROW/MIXED<br>STATEMENT：格式基于SQL语句，如果主服务器运行rand、uuid等函数或者触发器等操作时，就会导致主从服务器上表中的数据库表中的数据库不一致。<br>ROW：二进制的日志，记录了表的更改情况，解决了Statement下复制的问题。可以设置InnoDB的事务隔离设置为READ_COMMITTED，以获得更好的并发性。<br>MIXED：默认采用STATEMENT，但是在特殊情况下会转为ROW。</li>
+<p>对于InnoDB和MyISAM存储引擎的范围查询和JOIN查询操作，MRR的工作方式如下：</p>
+<ul>
+<li>将查询得到的辅助索引键值存放在一个缓存中，这时缓存中的数据时根据辅助索引键值排序的。</li>
+<li>将缓存中的键值根据rowID进行排序</li>
+<li>根据rowID的排序顺序来访问实际的数据文件。</li>
 </ul>
-<h2 id="套接字文件"><a href="#套接字文件" class="headerlink" title="套接字文件"></a>套接字文件</h2><p>名为mysql.sock,可以通过Unix域套接字方式进行与本地MySQL进行连接。套接字文件由参数socket控制。</p>
-<h2 id="PID文件"><a href="#PID文件" class="headerlink" title="PID文件"></a>PID文件</h2><p>MySQL实例启动时，会将自己的进程ID写入一个文件中，该文件为PID文件。</p>
-<h2 id="表结构定义文件"><a href="#表结构定义文件" class="headerlink" title="表结构定义文件"></a>表结构定义文件</h2><p>因为MySQL插件式存储引擎的体系结构关系，MySQL数据的存储是根据表进行的，每个表都会有与之对应的文件。但不论表采用哪种存储引擎，MySQL都有一个以frm为后缀名的文件，记录了这个表结构或者视图的定义。</p>
-<h2 id="Innodb存储引擎文件"><a href="#Innodb存储引擎文件" class="headerlink" title="Innodb存储引擎文件"></a>Innodb存储引擎文件</h2><h3 id="表空间文件"><a href="#表空间文件" class="headerlink" title="表空间文件"></a>表空间文件</h3><p>InnoDB采用将存储的数据按照表空间进行存放的设计。默认配置喜爱会有一个初始大小为10MB，名为ibdata1的默认表空间文件。</p>
-<p>将ibdata1,ibdata2两个文件用来组成表空间。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">innodb_data_file_path&#x3D;&#x2F;db&#x2F;ibdata1:2000M;&#x2F;dr2&#x2F;db&#x2F;ibdata2:2000M:autoextend</span><br></pre></td></tr></table></figure>
-<p>如果该两个文件位于不同的磁盘上，磁盘的负载可能被平均，因此可以提高数据库的整体性能。<br>设置innodb_data_file_path后，所有给予innoDB存储引擎的表的数据都会记录带该共享表空间中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">innodb_file_per_table&#x3D;ON &#x2F;&#x2F;每个基于InnoDB存储引擎的表产生一个独立表空间。命名规则是：表名.ibd</span><br></pre></td></tr></table></figure>
-<p>单独的表空间文件仅存储该表的数据、索引和插入缓冲BITMAP等信息，其余信息还存放在默认的表空间中。</p>
-<p><img src="/2020/11/04/%E6%96%87%E4%BB%B6/table_space.jpg" alt="表空间"></p>
-<h3 id="重做日志文件"><a href="#重做日志文件" class="headerlink" title="重做日志文件"></a>重做日志文件</h3><p>默认情况下，在InnoDB存储引擎的数据目录下会有两个名为ib_logfile0和ib_logfile1的文件。<br>他们记录了对于InnoDB存储引擎的事务日志。</p>
-<p>重做日志用于由于主机宕机导致实例失败时，恢复到失败前的状态，一次来保证数据的完整性。</p>
-<p>每个InnoDB存储引擎至少有1个重做日志文件组，每个文件组下至少有2个重做日志文件。为了得到更高的可靠性，用户可以设置多个的景象日志组。将不同的组存放在不同的磁盘上，以此提高重做日志的高可用性。在日志组中每个重做日志文件的大小一致，并以循环写入的方式运行。<br>InnoDB存储引擎献血重做日志文件1，当达到文件的最后时，会切换到重做日志文件2，再当重做日志文件2也被写满时，再切换到重做日志文件1中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">innodb_log_file_size:每个重做日志文件的大小</span><br><span class="line">innodb_log_files_in_group: 日志文件组中重做日志文件的数量，默认为2</span><br><span class="line">innodb_mirrored_log_groups: 日志镜像文件组的数量，默认为1，表示没有镜像。</span><br><span class="line">innodb_log_group_home_dir: 日志文件组所在的路径，默认为.&#x2F;</span><br></pre></td></tr></table></figure>
-
-
-<p>重做日志文件的大小对InnoDB存储性能有非常大的影响。<br>如果设置太大，在恢复时可能需要很长的时间。<br>如果设置太小，会导致一个事务的日志需要多次切换重做日志文件。同时会导致频繁地发生 async checkpoint， 导致性能抖动。</p>
-<h4 id="二进制文件与重做日志"><a href="#二进制文件与重做日志" class="headerlink" title="二进制文件与重做日志"></a>二进制文件与重做日志</h4><p>层次不同：<br>二进制日志：记录所有与MySQL数据库有关的日志记录，包括InnoDB，MyISAM，Heap等其他存储引擎的日志。<br>重做日志：值记录InnoDB存储引擎本身的事务日志。</p>
-<p>内容不同：<br>二进制日志文件记录的是一个事务的具体操作内容，为逻辑日志。<br>重做日志记录的是关于每个页的更改的物理情况。</p>
-<p>写入时间不同：<br>二进制文件仅在事务提交前进行，无论事务大小，只写磁盘一次。<br>在事务进行的过程后再难过，不断有重做日志条目被写入到重做日志文件中。</p>
-<h4 id="重做日志条目结构"><a href="#重做日志条目结构" class="headerlink" title="重做日志条目结构"></a>重做日志条目结构</h4><p>redo_log_type | space | page_no | redo_log_body<br>redo_log_type ： 占用1字节，表示重做日志的类型<br>space： 表示表空间的ID，采用压缩的方式，占用空间可能小于4字节<br>page_no：表示页的偏移量，压缩方式<br>redo_log_body:每个重做日志的数据部分，恢复时需要调用相应函数解析。</p>
-<h4 id="重做日志写入"><a href="#重做日志写入" class="headerlink" title="重做日志写入"></a>重做日志写入</h4><p>重做日志的写入不是直接写，而是先写入重做日志缓冲（redo log buffer）中，然后按照一定的条件顺序地写入日志文件。</p>
-<p>从重做日志缓冲网磁盘写入时，按照写入的最小单位（扇区大小：512个字节）进行写入，因此可以保证写入必定是成功的，因此在重做日志的写入过程不需要有doublewrite。</p>
-<p>写入时机：<br>1） 不论事务已经提交，主线程每秒都会将重做日志缓冲写入到磁盘的重做日志文件中。<br>2） 事务提交时，设置了innodb_flush_log_at_trx_commit。<br>    值为0时，不将事物的重做日志写入磁盘上的日志文件，<br>    1表示在执行commit时将重做日志缓冲同步写到磁盘，<br>    2表示将重做日志异步写到磁盘（也就是写到文件系统的缓存中）</p>
-<p>因此，为了保证ACID中的D（持久性），必须将innodb_flush_log_at_trx_commit设置为1，当数据库因为意外宕机时，可以通过重做日志文件恢复，并保证可以恢复已经提交的事务。</p>
-
+<p>如果InnoDB或者MyISAM存储引擎的缓冲池不是足够大，不能存放下一张表中的所有数据，此时频繁的离散读操作还是会导致缓存中的页被替换出缓冲池，然后又不断地被读入缓冲池。如果按照住建顺序进行访问，就可以将重复行为降到最低。<br>可以通过optimizer_swith中的flag来控制，当mrr为on时表示启用mrr优化。<br>mrr_cost_based标记表示是否通过cost_based方式选择是否启用mrr。<br>如果mrr = 0n , mrr_cost_based=off ,  表示总启用mrr。</p>
+<p>SET @@optimizer_switch=’mrr=on,mrr_cost_based=off’;</p>
+<h3 id="IndexConditionPushDown优化"><a href="#IndexConditionPushDown优化" class="headerlink" title="IndexConditionPushDown优化"></a>IndexConditionPushDown优化</h3><p>IndexConditionPushDown 会在读取索引的同时，判断是否可以进行WHERE条件的过滤从而提升性能。</p>
+<h2 id="HASH算法"><a href="#HASH算法" class="headerlink" title="HASH算法"></a>HASH算法</h2><h3 id="Hash表"><a href="#Hash表" class="headerlink" title="Hash表"></a>Hash表</h3><h3 id="InnoDB存储引擎中的哈希算法"><a href="#InnoDB存储引擎中的哈希算法" class="headerlink" title="InnoDB存储引擎中的哈希算法"></a>InnoDB存储引擎中的哈希算法</h3><h3 id="自适应哈希索引"><a href="#自适应哈希索引" class="headerlink" title="自适应哈希索引"></a>自适应哈希索引</h3><h2 id="全文检索"><a href="#全文检索" class="headerlink" title="全文检索"></a>全文检索</h2><h3 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h3><h3 id="InnoDB全文索引"><a href="#InnoDB全文索引" class="headerlink" title="InnoDB全文索引"></a>InnoDB全文索引</h3><h3 id="全文检索-1"><a href="#全文检索-1" class="headerlink" title="全文检索"></a>全文检索</h3>
       
     </div>
     
@@ -2065,7 +2019,7 @@
       <div class="prev-next">
         
         <p class="current">
-          1 / 36
+          1 / 37
         </p>
         
           <a class="next" rel="next" href="/page/2/">
@@ -2126,12 +2080,17 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(39)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(40)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
             id="categoriesJavaE68A80E69CAFE6A088Etcd"
             ><div class='name'>Etcd</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java/"
+            id="categoriesJavaE68A80E69CAFE6A088Java"
+            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/"
@@ -2141,7 +2100,7 @@
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/"
             id="categoriesJavaE68A80E69CAFE6A088Mysql"
-            ><div class='name'>Mysql</div><div class='badge'>(4)</div></a></li>
+            ><div class='name'>Mysql</div><div class='badge'>(5)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/"
@@ -2250,7 +2209,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.67px; color: #6c6c6c">JVM</a> <a href="/tags/Java/" style="font-size: 15.11px; color: #919191">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 17.33px; color: #828282">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.78px; color: #646464">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.11px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18.44px; color: #7b7b7b">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.11px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19.56px; color: #737373">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.89px; color: #5d5d5d">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.22px; color: #8a8a8a">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.67px; color: #6c6c6c">JVM</a> <a href="/tags/Java/" style="font-size: 16.22px; color: #8a8a8a">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 17.33px; color: #828282">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.78px; color: #646464">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.11px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 18.44px; color: #7b7b7b">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.11px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19.56px; color: #737373">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.89px; color: #5d5d5d">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.11px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.22px; color: #8a8a8a">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
     </div>
   </section>
 
