@@ -365,171 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/28/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
-      代理模式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/结构型模式</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月28日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>代理模式也叫委托模式，许多其他的模式如状态模式、策略模式、访问者模式本质上是在更特殊的场合采用了代理模式。<br>在日常应用中，代理模式可以提供非常好的访问控制。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>为其他对象提供一种代理以控制这个对象的访问。</p>
-<p>比如，我们的DB的访问权限不能直接公开，一般会公开一个接口来提供对这些数据。</p>
-<p><img src="/2020/06/28/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/proxy_class.jpeg" alt="代理模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="抽象主题Subject"><a href="#抽象主题Subject" class="headerlink" title="抽象主题Subject"></a>抽象主题Subject</h4><p>可以是抽象类或者接口，普通的业务类型定义。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="具体主题RealSubject"><a href="#具体主题RealSubject" class="headerlink" title="具体主题RealSubject"></a>具体主题RealSubject</h4><p>委托角色或者被代理角色。业务逻辑的具体执行者。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span> <span class="keyword">implements</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//do something.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="代理主题Proxy"><a href="#代理主题Proxy" class="headerlink" title="代理主题Proxy"></a>代理主题Proxy</h4><p>代理类、委托类， 负责对真实角色的调用，把所有抽象主题类定义的方法限制委托给真实主题角色实现，并且在真实主题角色处理完毕前后做预处理和善后处理工作。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Proxy</span> <span class="keyword">implements</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Subject subject = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Proxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.subject = <span class="keyword">new</span> Proxy();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Proxy</span><span class="params">(Subject subject)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.subject = subject;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.before();</span><br><span class="line">        <span class="keyword">this</span>.subject.request();</span><br><span class="line">        <span class="keyword">this</span>.after();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//before </span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//after.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>职责清晰<br>真实的角色就是实现实际的业务逻辑，不用关心其他非本职责的事物，通过后期的代理完成一件事物，附带的结果就是编程简洁清晰。</li>
-<li>扩展性好<br>具体主题角色是随时都会发生变化的，只要它实现了接口，代理类可以在不做任何修改的情况下使用。</li>
-<li>智能化<br>用于动态代理。</li>
-</ul>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><h3 id="普通代理"><a href="#普通代理" class="headerlink" title="普通代理"></a>普通代理</h3><p>客户端只能访问代理角色，而不能访问真实角色。屏蔽了真实角色的变更对高层模块的影响。该模式适合对扩展性要求较高的场合。一般通过编程规范类约束来禁止new一个真实的角色。</p>
-<p>这种方式调用者只需要知道代理即可， 不需要知道代理了谁。</p>
-<p>普通代理的实现者：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GamePlayer</span> <span class="keyword">implements</span> <span class="title">IGamePlayer</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name = <span class="string">""</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GamePlayer</span><span class="params">(IGamePlayer _gamePlayer, String _name)</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(_gamePlayer == <span class="keyword">null</span> || !(_gamePlayer <span class="keyword">instanceof</span> GameProxy))&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"Create Not Allowed!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.name = _name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">killMonster</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//do...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>普通代理的代理者：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GamePlayerProxy</span> <span class="keyword">implements</span> <span class="title">IGamePlayer</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> IGamePlayer gamePlayer = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GamePlayerProxy</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            gamePlayer = <span class="keyword">new</span> GamePlayer(<span class="keyword">this</span>,name);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            <span class="comment">//TODO </span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">killMonster</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gamePlayer.killMonster();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="强制代理"><a href="#强制代理" class="headerlink" title="强制代理"></a>强制代理</h3><p>只有通过真实角色指定的代理类才可以访问。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IGamePlayer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">killMonster</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IGamePlayer <span class="title">getProxy</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GamePlayer</span> <span class="keyword">implements</span> <span class="title">IGamePlayer</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> IGamePlayer proxy = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GamePlayer</span><span class="params">(String _name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = _name;</span><br><span class="line">        <span class="keyword">this</span>.proxy = <span class="keyword">new</span> GamepPlayerProxy(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IGamePlayer <span class="title">getProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.proxy;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">killMonster</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//do...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GamePlayerProxy</span> <span class="keyword">implements</span> <span class="title">IGamePlayer</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> IGamePlayer gamePlayer = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GamePlayerProxy</span><span class="params">(IGamePlayer _gamePlayer)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gamePlayer = _gamePlayer;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">killMonster</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gamePlayer.killMonster();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>在实现阶段不需要关心代理谁， 在运行阶段才指定代理哪个对象。</p>
-<p>通过InvocationHandler接口，所有方法都由该Handler来接管实际的业务处理。</p>
-<p>在不改变已有代码结构的情况下增强或者控制对象的行为。</p>
-<p>动态代理Handler类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyInvocationHandler</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object target = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyInvocationHandler</span><span class="params">(Object _obj)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = _obj;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span><span class="keyword">throws</span> Throwable</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>.target, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通知接口与实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IAdvice</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exec</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeforeAdvice</span> <span class="keyword">implements</span> <span class="title">IAdvice</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exec</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//....</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>动态代理类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicProxy</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">newProxyInstance</span><span class="params">(ClassLoader loader, Class&lt;?&gt;[] interfaces, InvocationHandler h)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(condition)&#123; <span class="comment">//在condition连接点执行BeforeAdvice通知。</span></span><br><span class="line">            (<span class="keyword">new</span> BeforeAdvice()).exec();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (T)Proxy.newProxyInstance(loader, <span class="class"><span class="keyword">interface</span>, <span class="title">h</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Client:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Subject subject = <span class="keyword">new</span> RealSubject();</span><br><span class="line">InvocationHandler handler = <span class="keyword">new</span> MyInvocationHandler(subject);</span><br><span class="line">Subject proxy = DynamicProxy.newProxyInstance(subject.getClass().getClassLoader(), subject.getClass().getInterfaces(), handler);</span><br><span class="line">proxy.killMonster();</span><br></pre></td></tr></table></figure>
-
-<h3 id="扩展-1"><a href="#扩展-1" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li>CGLib</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogInterceptor</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"Before Interceptor1"</span>);</span><br><span class="line">        Object result = methodProxy.invokeSuper(o, objects);</span><br><span class="line">        System.out.println(<span class="string">"After Interceptor1"</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogInterceptor2</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"Before Interceptor2"</span>);</span><br><span class="line">        Object result = methodProxy.invokeSuper(o, objects);</span><br><span class="line">        System.out.println(<span class="string">"After Interceptor2"</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogCallBackFilter</span> <span class="keyword">implements</span> <span class="title">CallbackFilter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">accept</span><span class="params">(Method method)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"upgrade"</span>.equals(method.getName()))&#123;</span><br><span class="line">            System.out.println(<span class="string">"Upgrade Filter"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"Kill Monster Filter"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">LogInterceptor logInterceptor = <span class="keyword">new</span> LogInterceptor();</span><br><span class="line"></span><br><span class="line">LogInterceptor2 logInterceptor2 = <span class="keyword">new</span> LogInterceptor2();</span><br><span class="line"></span><br><span class="line">Enhancer enhancer = <span class="keyword">new</span> Enhancer();</span><br><span class="line">enhancer.setSuperclass(GamePlayer<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">enhancer.setCallbacks(<span class="keyword">new</span> Callback[]&#123;logInterceptor,logInterceptor2, NoOp.INSTANCE&#125;);</span><br><span class="line"></span><br><span class="line">enhancer.setCallbackFilter(<span class="keyword">new</span> LogCallBackFilter());</span><br><span class="line"></span><br><span class="line">IGamePlayer gamePlayer = (IGamePlayer)enhancer.create(new Class[]&#123;String.class&#125;, new Object[]&#123;"Lisi"&#125;);</span><br><span class="line"></span><br><span class="line">gamePlayer.killMonster();</span><br><span class="line">gamePlayer.upgrade();</span><br></pre></td></tr></table></figure>
-
-
-<ul>
-<li>ASM</li>
-<li>AOP</li>
-</ul>
-<p>扩展阅读<br><a href="https://www.jianshu.com/p/a728dac249e1?tdsourcetag=s_pcqq_aiomsg" target="_blank" rel="noopener">cglib动态代理、asm学习笔记
-</a><br><a href="https://juejin.im/post/5c1ca8df6fb9a049b347f55c" target="_blank" rel="noopener">Java动态代理详解</a></p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/28/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
-      策略模式
+    <a href="/2020/06/30/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/">
+      访问者模式
     </a>
   </h2>
 
@@ -567,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月28日</p>
+    <p>发布于：2020年6月30日</p>
   </a>
 </div>
 
@@ -595,51 +432,183 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>策略模式使用的就是面向对象的继承和多态机制。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。</p>
-<p><img src="/2020/06/28/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/strategy_class.jpeg" alt="策略模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Strategy-抽象策略角色"><a href="#Strategy-抽象策略角色" class="headerlink" title="Strategy 抽象策略角色"></a>Strategy 抽象策略角色</h4><p>策略算法的抽象，通常是接口，定义每个策略或者算法必须具有的方法和属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Strategy</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h2 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h2><p>访问者模式是一种集中规整模式，适合用于重构项目时（重构时需求已经清晰，原有的功能点也明确）<br>通过访问者模式可以很容易达到功能集中化。<br>还可以与其他模式混编建立一套自己的过滤器和拦截器。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>封装一些用于某种数据结构中的各个元素的操作，可以在不改变数据结构的前提下定义作用于这些元素的新操作。</p>
+<p><img src="/2020/06/30/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/visitor_class.jpeg" alt="访问者模式通用类图"></p>
+<h3 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h3><h4 id="Visitor-抽象访问者"><a href="#Visitor-抽象访问者" class="headerlink" title="Visitor 抽象访问者"></a>Visitor 抽象访问者</h4><p>抽象类或者接口，声明访问者可以访问哪些元素，具体到程序中就是visit方法的参数定义哪些对象是可以被访问的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IVisitor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visit</span><span class="params">(ConcreteElement1 el1)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visit</span><span class="params">(ConcreteElement2 el2)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="ConcreteStrategy-具体策略角色"><a href="#ConcreteStrategy-具体策略角色" class="headerlink" title="ConcreteStrategy 具体策略角色"></a>ConcreteStrategy 具体策略角色</h4><p>实现抽象策略的具体算法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteStrategy1</span> <span class="keyword">implements</span> <span class="title">Strategy</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//Do Strategy1.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteStrategy2</span> <span class="keyword">implements</span> <span class="title">Strategy</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//Do Strategy2.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ConcreteVisitor-具体访问者"><a href="#ConcreteVisitor-具体访问者" class="headerlink" title="ConcreteVisitor 具体访问者"></a>ConcreteVisitor 具体访问者</h4><p>影响访问者访问到一个类后该做什么事情。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Visitor</span> <span class="keyword">implements</span> <span class="title">IVisitor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visit</span><span class="params">(ConcreteElement1 el1)</span></span>&#123;</span><br><span class="line">        el1.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visit</span><span class="params">(ConcreteElement2 el2)</span></span>&#123;</span><br><span class="line">        el2.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="Context-封装角色"><a href="#Context-封装角色" class="headerlink" title="Context 封装角色"></a>Context 封装角色</h4><p>封装上下文，屏蔽高层模块对策略、算法的直接访问，封装可能存在的变化。<br>策略模式的重点就是封装角色，它借用了代理模式的思路。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Strategy strategy = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Context</span><span class="params">(Strategy strategy)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.strategy = strategy;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAny</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.strategy.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Strategy strategy = <span class="keyword">new</span> ConcreteStrategy1();</span><br><span class="line">Context context = <span class="keyword">new</span> Context(strategy);</span><br><span class="line">context.doAny(strategy);</span><br></pre></td></tr></table></figure>
+<h4 id="Element-抽象元素"><a href="#Element-抽象元素" class="headerlink" title="Element 抽象元素"></a>Element 抽象元素</h4><p>接口或者抽象类，声明接受哪一类访问者访问。<br>抽象元素有两类方法， 一类是本身的业务逻辑。另一类是允许访问者来访问的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Element</span></span>&#123;</span><br><span class="line">    <span class="comment">//业务逻辑</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//接受访问者</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(IVisitor visitor)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>算法可以自由切换<br>只需要实现策略接口类，通过封装角色对其进行封装即可。</li>
-<li>避免使用多重条件判断<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (condition1)&#123;</span><br><span class="line">   strategy1.<span class="keyword">do</span>();</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(condition2)&#123;</span><br><span class="line">   strategy2.<span class="keyword">do</span>();</span><br><span class="line">&#125;</span><br><span class="line"> <span class="comment">// .....</span></span><br></pre></td></tr></table></figure></li>
-<li>扩展性好</li>
+
+<h4 id="ConcreteElement-具体元素"><a href="#ConcreteElement-具体元素" class="headerlink" title="ConcreteElement 具体元素"></a>ConcreteElement 具体元素</h4><p>实现accept方法， 通常是 visitor.visit(this)模式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteElement1</span> <span class="keyword">extends</span> <span class="title">Element</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(IVisitor visitor)</span></span>&#123;</span><br><span class="line">        visitor.visit(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteElement2</span> <span class="keyword">extends</span> <span class="title">Element</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(IVisitor visitor)</span></span>&#123;</span><br><span class="line">        visitor.visit(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ObjectStructure结构对象"><a href="#ObjectStructure结构对象" class="headerlink" title="ObjectStructure结构对象"></a>ObjectStructure结构对象</h4><p>元素生产者，一般容纳在多个不同类、不同接口的容器，如List/Set/Map。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectStructure</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Element <span class="title">createElement</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Random().nextInt(<span class="number">10</span>) &gt; <span class="number">5</span> ? <span class="keyword">new</span> ConcreteElement1() : <span class="keyword">new</span> ConcreteElement2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span> ; i++)&#123;</span><br><span class="line">     ObjectStructure.createElement().accept(<span class="keyword">new</span> Visitor());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>符合单一职责原则</li>
+<li>优秀的扩展性</li>
+<li>灵活</li>
 </ul>
 <h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>策略类数量多</li>
-<li>所有策略类都需要对外暴露<br>上层模块必须知道有哪些策略， 然后才能决定使用哪一个策略，与迪米特法则相违背。<br>(迪米特法则：一个类对于其他类知道的越少越好)</li>
+<li>违背了迪米特法则，Element具体的细节需要公布给Visitor</li>
+<li>具体元素变更比较困难，元素增加/减少字段Visitor都需要修改</li>
+<li>违背了依赖倒置原则，访问者依赖的是具体的元素，而不是抽象元素。</li>
 </ul>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>当具体的策略数量超过一定个数时，考虑使用混合模式，解决策略类膨胀和对外暴露的问题，否则会带来很大的系统维护成本。</p>
-<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
-<li>多个类只有在算法或者行为上稍有不同的场景</li>
-<li>算法需要自由切换的场景</li>
-<li>需要屏蔽算法规则的场景</li>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>当一个对象结构包含很多类对象，它们有不同的接口，需要对这些对象实施一些依赖于其具体类的操作。</p>
+<h3 id="双分派"><a href="#双分派" class="headerlink" title="双分派"></a>双分派</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbsActor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">act</span><span class="params">(Role role)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Actor can act any role."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">act</span><span class="params">(KungFuRole role)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Actor can act Kungfu Role."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">YongActor</span> <span class="keyword">extends</span> <span class="title">AbsActor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">act</span><span class="params">(KungFuRole role)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Yong Man Lov Act KungFu Role."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OldActor</span> <span class="keyword">extends</span> <span class="title">AbsActor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">act</span><span class="params">(KungFuRole role)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Old Man Can Not Act KungFu Role."</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Role</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(AbsActor actor)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KungFuRole</span> <span class="keyword">extends</span> <span class="title">Role</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(AbsActor actor)</span></span>&#123;</span><br><span class="line">        actor.act(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IdiotRole</span> <span class="keyword">extends</span> <span class="title">Role</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(AbsActor actor)</span></span>&#123;</span><br><span class="line">        actor.act(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">AbsActor actor = <span class="keyword">new</span> OldActor();</span><br><span class="line">Role role = <span class="keyword">new</span> KungFuRole();</span><br><span class="line">actor.act(role); <span class="comment">//oldActor.act(Role)</span></span><br><span class="line">actor.act(<span class="keyword">new</span> KungFuRole()); <span class="comment">//oldActor.act(KungFuRole);</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">AbsActor actor = <span class="keyword">new</span> OldActor();</span><br><span class="line">Role role = <span class="keyword">new</span> KungFuRole();</span><br><span class="line">role.accept(actor); <span class="comment">//KungFuRole.accept(OldActor);</span></span><br><span class="line">                    <span class="comment">//OldActor.act(KungFuRole)</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/29/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/">
+      状态模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/行为型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月29日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><p>在状态模式中， 类的行为时给予它的状态改变的。折中类型的设计模式属于行为型模式。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。</p>
+<p><img src="/2020/06/29/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/State_class.jpeg" alt="状态模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="抽象状态角色State"><a href="#抽象状态角色State" class="headerlink" title="抽象状态角色State"></a>抽象状态角色State</h4><p>接口或者抽象类，负责对象状态的定义，并且封装环境角色以实现状态切换。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IState</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseState</span> <span class="keyword">implements</span> <span class="title">IState</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> Car context;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContext</span><span class="params">(Car context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="具体状态角色ConcreteState"><a href="#具体状态角色ConcreteState" class="headerlink" title="具体状态角色ConcreteState"></a>具体状态角色ConcreteState</h4><p>每个具体状态必须完成两个职责：本状态下要做的事情以及本状态如何过渡到其他状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OpenState</span> <span class="keyword">extends</span> <span class="title">BaseState</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Car.OPEN_STATE);</span><br><span class="line">        System.out.println(<span class="string">"车门已开启"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Car.CLOSE_STATE);</span><br><span class="line">        System.out.println(<span class="string">"关闭车门。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"开门状态下不允许飙车start"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"开门状态下不允许飙车Stop"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StopState</span> <span class="keyword">extends</span> <span class="title">BaseState</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Car.OPEN_STATE);</span><br><span class="line">        System.out.println(<span class="string">"停车后开启车门"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Car.CLOSE_STATE);</span><br><span class="line">        System.out.println(<span class="string">"停车后关闭车门"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Car.RUN_STATE);</span><br><span class="line">        System.out.println(<span class="string">"停车后再次跑起来"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Car.STOP_STATE);</span><br><span class="line">        System.out.println(<span class="string">"停车后。。停止不同"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunState</span> <span class="keyword">extends</span> <span class="title">BaseState</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"飙车时不能开门"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"飙车时车门已关闭"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Car.RUN_STATE);</span><br><span class="line">        System.out.println(<span class="string">"飙车Run"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">super</span>.context.setCurrentState(Car.STOP_STATE);</span><br><span class="line">        System.out.println(<span class="string">"飙车 stop"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CloseState</span> <span class="keyword">extends</span> <span class="title">BaseState</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setCurrentState(Car.OPEN_STATE);</span><br><span class="line">        System.out.println(<span class="string">"开启车门。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"车门已经关闭！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context.setCurrentState(Car.RUN_STATE);</span><br><span class="line">        System.out.println(<span class="string">"汽车开始运行。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context.setCurrentState(Car.STOP_STATE);</span><br><span class="line">        System.out.println(<span class="string">"汽车停止。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="环境角色Context"><a href="#环境角色Context" class="headerlink" title="环境角色Context"></a>环境角色Context</h4><p>定义客户端需要的接口，并且负责具体状态的切换。</p>
+<p>把状态对象声明为静态常量，有几个状态对象就声明几个静态常量。<br>环境角色具有状态抽象角色定义的所有行为，具体执行使用委托方式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span> <span class="keyword">implements</span> <span class="title">IState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BaseState OPEN_STATE = <span class="keyword">new</span> OpenState();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BaseState CLOSE_STATE = <span class="keyword">new</span> CloseState();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BaseState RUN_STATE = <span class="keyword">new</span> RunState();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BaseState STOP_STATE = <span class="keyword">new</span> StopState();</span><br><span class="line">    <span class="keyword">private</span> BaseState currentState;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Car</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setCurrentState(CLOSE_STATE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> BaseState <span class="title">getCurrentState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> currentState;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Car <span class="title">setCurrentState</span><span class="params">(BaseState currentState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState = currentState;</span><br><span class="line">        <span class="keyword">this</span>.currentState.setContext(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState.open();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState.close();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState.run();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentState.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>结合建造者模式将已有的状态按照一定的顺序再重新组装。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Car car = <span class="keyword">new</span> Car();</span><br><span class="line"></span><br><span class="line">car.setCurrentState(Car.CLOSE_STATE);</span><br><span class="line"></span><br><span class="line">car.run(); <span class="comment">//汽车开始运行。。。</span></span><br><span class="line">car.stop(); <span class="comment">//飙车 stop</span></span><br><span class="line"></span><br><span class="line">car.run(); <span class="comment">//停车后再次跑起来</span></span><br><span class="line">car.open(); <span class="comment">//飙车时不能开门</span></span><br><span class="line"></span><br><span class="line">car.stop(); <span class="comment">//飙车 stop</span></span><br><span class="line"></span><br><span class="line">car.open(); <span class="comment">//停车后开启车门</span></span><br><span class="line">car.close(); <span class="comment">//关闭车门。。。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>结构清晰<br>避免过多的switch case和if else，降低了程序的复杂性，提高系统的可维护性。</li>
+<li>遵循设计原则<br>遵循了开闭原则以及单一职责原则，每个状态都是一个子类，要增加状态就要增加子类，修改状态时只修改一个子类即可。</li>
+<li>封装性良好<br>状态变换防止到类的内部来实现，外部调用不需要知道类内部如何实现状态和行为的变换。</li>
 </ul>
-<h3 id="策略枚举"><a href="#策略枚举" class="headerlink" title="策略枚举"></a>策略枚举</h3><p>当策略枚举不经常发生变化时可以使用。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> StrategyEnum &#123;</span><br><span class="line"></span><br><span class="line">    ADD(<span class="string">"+"</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">exec</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> a + b;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    SUB(<span class="string">"-"</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">exec</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> a - b;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String opt;</span><br><span class="line">    StrategyEnum(String opt) &#123;</span><br><span class="line">        <span class="keyword">this</span>.opt = opt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">exec</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>状态过多时子类膨胀</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>行为跟随状态改变而改变的场景</li>
+<li>条件、分支判断语句的替代</li>
+</ul>
 
       
     </div>
@@ -666,7 +635,7 @@
           </a>
         
         <p class="current">
-          22 / 37
+          22 / 38
         </p>
         
           <a class="next" rel="next" href="/page/23/">
@@ -727,7 +696,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(40)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(42)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"

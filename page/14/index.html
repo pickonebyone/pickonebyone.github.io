@@ -365,8 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/09/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/">
-      桥接模式
+    <a href="/2020/07/11/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/">
+      门面模式
     </a>
   </h2>
 
@@ -404,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月9日</p>
+    <p>发布于：2020年7月11日</p>
   </a>
 </div>
 
@@ -432,42 +432,29 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p>桥梁模式的重点在解耦。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将抽象和实现解耦，使得两者可以独立的变化。<br>它使用了类间的聚合关系、继承、覆写等常用功能。解决了继承的缺点而提出的设计模式。</p>
-<p><img src="/2020/07/09/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/bridge_class.jpeg" alt="桥接模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>抽象角色引用实现角色，或者说抽象角色的部分实现是由实现角色完成的。</p>
-<h4 id="Abstraction"><a href="#Abstraction" class="headerlink" title="Abstraction"></a>Abstraction</h4><p>抽象化角色，定义出该抽象角色的行为，同时保存一个对实现化角色的引用。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Abstraction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Implementor imp;</span><br><span class="line">    <span class="comment">//必须指定实现者</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Abstraction</span><span class="params">(Implementor imp)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.imp = imp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.imp.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Implementor <span class="title">getImp</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> imp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="RefindAbstraction"><a href="#RefindAbstraction" class="headerlink" title="RefindAbstraction"></a>RefindAbstraction</h4><p>修正抽象化角色，引用实现化角色对抽象化角色进行修正。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RefindAbstraction</span> <span class="keyword">extends</span> <span class="title">Abstraction</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RefindAbstraction</span><span class="params">(Implementor imp)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(imp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="comment">//....</span></span><br><span class="line">      <span class="keyword">super</span>.request();</span><br><span class="line">      <span class="keyword">super</span>.getImp().doAnyThing();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h2 id="门面模式"><a href="#门面模式" class="headerlink" title="门面模式"></a>门面模式</h2><p>门面模式也叫外观模式。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>要求一个子系统的外部与其内部的通信必须通过一个统一的对象进行。</p>
+<p>外观模式提供一个高层次的接口，使得子系统更易于使用。</p>
+<p>门面模式注重要求“统一的对象”，提供一个访问子系统的接口，除了这个接口不允许任何访问子系统的行为发生。</p>
+<p><img src="/2020/07/11/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/facade_class.jpeg" alt="外观模式"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Subsystem"><a href="#Subsystem" class="headerlink" title="Subsystem"></a>Subsystem</h4><p>子系统角色，可以同时有一个或者多个子系统，每一个子系统都不是一个单独的类，而是一个类的集合。子系统并不知道门面的存在。对于子系统而言，门面知识一个客户端而已。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">classA</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomethingA</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//..logic a</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">classB</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomethingB</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//. logic b</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">classC</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomethingC</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//. logic c.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-
-<h4 id="Implementor"><a href="#Implementor" class="headerlink" title="Implementor"></a>Implementor</h4><p>实现化角色，接口或者抽象类，定义角色必须的行为和属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="ConcreteImplementor"><a href="#ConcreteImplementor" class="headerlink" title="ConcreteImplementor"></a>ConcreteImplementor</h4><p>具体实现化角色，实现接口或者抽象类定义的方法和属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteImplementor1</span> <span class="keyword">implements</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteImplementor2</span> <span class="keyword">implements</span> <span class="title">Implementor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAnyThing</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Implementor imp = <span class="keyword">new</span> ConcreteImplementor1();</span><br><span class="line">Abstraction abs = <span class="keyword">new</span> RefindAbstraction(imp);</span><br><span class="line">abs.request();</span><br></pre></td></tr></table></figure>
+<h4 id="Facade"><a href="#Facade" class="headerlink" title="Facade"></a>Facade</h4><p>门面角色，客户端可以调用这个角色的方法。这个角色知道子系统的所有功能和责任。一般情况下，本角色会将所有从客户端发来的请求委派到相应的子系统，也就是说改角色没有实际的业务逻辑，只是一个委托类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Facade</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> classA a = <span class="keyword">new</span> classA();</span><br><span class="line">    <span class="keyword">private</span> classB b = <span class="keyword">new</span> classB();</span><br><span class="line">    <span class="keyword">private</span> classC c = <span class="keyword">new</span> classC();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodA</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.a.doSomethingA();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodB</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.b.doSomethingB();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodC</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.c.doSomethingC();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
-<li><p>抽象和实现分离<br>为了解决继承的缺点而提出的设计模式，在该模式下，实现可以不受抽象的约束，不再绑定到固定的抽象层次上。</p>
-</li>
-<li><p>优秀的扩展能力</p>
-</li>
+<li>减少系统的相互依赖</li>
+<li>提高了灵活性</li>
+<li>提高安全性</li>
 </ul>
-<p>可以随意增加抽象和实现。</p>
-<ul>
-<li>实现细节对客户透明</li>
-</ul>
-<p>由抽象层通过聚合关系完成了封装。</p>
 <h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
-<li>不希望或者不适用使用继承的场景<br>继承层次太高，无法更细化设计颗粒等场景，需要考虑使用。</li>
-<li>接口或者抽象类不稳定的场景<br>接口或者抽象类不稳定，经常变更时，使用桥梁模式。</li>
-<li>重用型要求高的场景<br>设计的颗粒度粤西，被重用的可能性越大。<br>采用继承受到父类的限制，不可能出现太细的粒度。</li>
+<li>为一个复杂的模块或者子系统提供一个供外界访问的接口</li>
+<li>子系统相对独立</li>
+<li>预防低水平人员带来的风险扩散</li>
+<li>一个子系统可以有多个门面</li>
+<li>门面不参与子系统内的业务逻辑</li>
 </ul>
 
       
@@ -495,8 +482,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/08/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/">
-      装饰器模式
+    <a href="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+      适配器模式
     </a>
   </h2>
 
@@ -534,7 +521,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月8日</p>
+    <p>发布于：2020年7月10日</p>
   </a>
 </div>
 
@@ -562,26 +549,29 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>动态地给一个对象添加一些额外的职责，就增加功能来说，装饰器模式相比生成子类更加灵活。</p>
-<p><img src="/2020/07/08/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/decorator_class.jpeg" alt="装饰器模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h4><p>Component 是一个接口或者抽象类，定义需要被装饰的原始类。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p>当我们去国外旅行时，我们国内的插头不能直接插入到国外的插线板上，我们需要购买一个电源适配器来适配国外的插线板。</p>
+<p>或者最新版的macbook pro 用的是utypec，并不能直接插入usb3.0的u盘，我们需要购买一个适配器做转换。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将一个类的接口编程客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。</p>
+<p><img src="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/adaptor_class.jpeg" alt="适配器模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h4><p>目标角色是一个接口或者抽象类，是一个已经存在的角色，不可能去修改角色中的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="Concrete-Component"><a href="#Concrete-Component" class="headerlink" title="Concrete Component"></a>Concrete Component</h4><p>Component 的实现类。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteComponent</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="comment">//....</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ConcreteTarget"><a href="#ConcreteTarget" class="headerlink" title="ConcreteTarget"></a>ConcreteTarget</h4><p>具体的目标角色实现类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteTarget</span> <span class="keyword">implements</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Adaptee"><a href="#Adaptee" class="headerlink" title="Adaptee"></a>Adaptee</h4><p>源角色，已经使用中的角色。需要将Adaptee转换为Target。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adaptee</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Adaptor"><a href="#Adaptor" class="headerlink" title="Adaptor"></a>Adaptor</h4><p>适配器角色。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adaptor</span> <span class="keyword">extends</span> <span class="title">Adaptee</span> <span class="keyword">implements</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-<h4 id="Decorator"><a href="#Decorator" class="headerlink" title="Decorator"></a>Decorator</h4><p>抽象类，用于实现接口或者抽象方法。包含被修饰的Componnet属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Decorator</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Component component = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Decorator</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.component = c;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.component.operate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Concrete-Decorator"><a href="#Concrete-Decorator" class="headerlink" title="Concrete Decorator"></a>Concrete Decorator</h4><p>具体装饰角色</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteDecorator1</span> <span class="keyword">extends</span> <span class="title">Decorator</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteDecorator1</span><span class="params">(Component component)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(component);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//....</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">this</span>.method1();</span><br><span class="line">       <span class="keyword">super</span>.operate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteDecorator2</span> <span class="keyword">extends</span> <span class="title">Decorator</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteDecorator2</span><span class="params">(Component component)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(component);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//....</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">super</span>.operate();</span><br><span class="line">       <span class="keyword">this</span>.method2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Component c = <span class="keyword">new</span> ConcreteComponent();</span><br><span class="line">c = <span class="keyword">new</span> ConcreteDecorator1(c);</span><br><span class="line">c = <span class="keyword">new</span> ConcreteDecorator2(c);</span><br><span class="line">c.operate();</span><br></pre></td></tr></table></figure>
+<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Target target = <span class="keyword">new</span> ConcreteTarget();</span><br><span class="line">target.request();</span><br><span class="line"></span><br><span class="line">Target target2 = <span class="keyword">new</span> Adaptor();</span><br><span class="line">target2.request();</span><br></pre></td></tr></table></figure>
 
 
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>装饰类和被装饰类可以独立发展，而不会相互耦合。<br>装饰模式是继承关系的一个替代方案。<br>装饰模式可以动态地扩展一个实现类的功能。</p>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>当装饰多层时导致系统复杂度高。</p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>当需要把多个Adaptee转换为Target的时候，就不能使用继承了，因为Java中不支持多继承。<br>这种方式叫做对象适配器。<br>我们可以使用聚合（关联）来完成适配。</p>
+<p><img src="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/adaptor_calss2.jpeg" alt="对象适配器类图"></p>
+<p>类适配器是由类的继承关系完成的。<br>对象适配器是由类的关联关系纪念性耦合。</p>
 
       
     </div>
@@ -608,7 +598,7 @@
           </a>
         
         <p class="current">
-          14 / 37
+          14 / 38
         </p>
         
           <a class="next" rel="next" href="/page/15/">
@@ -669,7 +659,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(40)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(42)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"

@@ -364,6 +364,235 @@
         
           
   <h2 class="title">
+    <a href="/2020/10/15/DataBase-%E4%BA%8B%E5%8A%A1/">
+      DataBase-事务
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%95%B0%E6%8D%AE%E5%BA%93/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/数据库</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年10月15日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是事务Transaction"><a href="#什么是事务Transaction" class="headerlink" title="什么是事务Transaction"></a>什么是事务Transaction</h2><p>Transaction一词在英语的翻译中还有一次交易、业务、事务、办理、处理；</p>
+<p>对于一次账户充值100元的操作，其中就有多个环节。<br>1）检查账户的有效性，查询账户余额；<br>2）记录充值流水；<br>3）为账户余额增加100元。</p>
+<p>对于这三个操作来讲，他是一个Transaction， 要么都成功，只要有一个失败，就必须整个Transaction失败，不允许记录了充值流水成功，但是余额增加失败。这三个是一个整体，是不可分割的工作单元。</p>
+<h2 id="事务的特性"><a href="#事务的特性" class="headerlink" title="事务的特性"></a>事务的特性</h2><p>原子性 Atomic：要么都成功，只要有一个步骤失败，整个步骤必须回滚（失败）。<br>一致性 Consistency：事务保证读取到的数据总是一致的，如（不存在100元的充值流水时金额为100元， 存在100元的充值流水时金额为200元）。<br>但是对于这个充值过程来讲，肯定是先记录了充值记录，后增加100元余额。可以查到充值记录，但余额是100是客观存在的。<br>隔离性Isolation：为了保证一致性，事务执行过程中的中间状态不对外部可见，事务需要对整个过程进行隔离。<br>持久性 Durability：只要事务一经提交，就一定会被持久化到磁盘中。</p>
+<h2 id="Transaction-阶段"><a href="#Transaction-阶段" class="headerlink" title="Transaction 阶段"></a>Transaction 阶段</h2><p>Transaction 需要有开始和结束，标记一个Transaction的开始和截止；<br>当所有的操作都成功的时候，需要Commit;<br>当其中某个操作失败的时候，之前的操作需要Rollback；</p>
+<p>Transaction Start;<br>Transaction Commit Or Rollback;<br>Transaction End;</p>
+<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><p>假如业务员给账户A增加100元的操作的同时（记录了充值流水100元，流水号为666），对账系统也在同时运行同时读取到了这一笔流水号为666的流水记录。但是后续的为余额增加100元的操作失败了，整个Transaction RollBack。 导致账户余额比对账系统少了100元。</p>
+<p>在这里，对账系统看到了业务系统Transaction未提交时的数据，叫脏读。<br>也就是说当前事务的中间状态，对其他事务时可见的。</p>
+<p>事务的最低隔离级别是未提交读（Read Uncommitted），因此会发生脏读的现象。<br>为了解决脏读的现象，需要将事务隔离起来，只允许读到已提交的数据。 Read Committed.</p>
+<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><p>假如业务员A给用户增加100元。</p>
+<p>开启事务；<br>查询账户余额 100元；<br>有其他事情去忙……</p>
+<p>此时业务员B也给用户增加100元。<br>开启事务；<br>查询账户余额 100元<br>增加流水记录；<br>增加账户余额100元，变为200元；<br>结束事务；</p>
+<p>业务员A回来为A增加100元：<br>查询账户余额 200元；</p>
+<p>不可重复读就是业务员A在同一个事务内，先后两次读取同一条数据的结果可能不一样。<br>可重复读就是业务员A在同一个事务内，先后两次读取同一条数据的结果总是相同的，无论其他会话是否已经更新了这条数据。</p>
+<p>为了保障在同一事务下，先后两次读取到的同一条数据结果一致，需要将事务的隔离级别调整为可重复读（Repeatable Read）。</p>
+<h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><p>假如业务员A给用户增加100元。</p>
+<p>开启事务；<br>查询流水中是否有ID为1000的流水记录，不存在；</p>
+<p>业务员B给用户增加100元；<br>开启事务；<br>查询流水中是否有ID为1000的流水记录，不存在；<br>插入流水记录；<br>更新账户余额为200；<br>提交事务；</p>
+<p>业务员A开始执行；<br>插入流水记录，此时已经有ID为1000的流水记录，系统异常；<br>可以开启重试机制；<br>由于隔离性，查询是否有ID为1000的流水记录时还是不存在，重试插入时还是异常。</p>
+<p>为了解决幻读的问题，需要将所有的事务和操作进行串行化。这也是Database的最高隔离级别，性能也最差。</p>
+<p><img src="/2020/10/15/DataBase-%E4%BA%8B%E5%8A%A1/Transaction-Isolation.jpg" alt="事务的隔离级别以及解决的问题"></p>
+<p>对于账户充值来讲，交易的原子性以及持久性是最重要的。可以适当牺牲一些一致性和隔离性。</p>
+<p>以下操作在 ReadCommitted 和 Repeatable Read下是安全的。<br>1）给账户余额表增加一个log_id属性，记录最后一笔交易的流水号。<br>2）首先开启事务，查询并记录当前账户的余额和最后一笔交易的流水号。<br>3）写入流水记录。<br>4）更新账户余额以及流水记录ID，需要在更新语句的Where条件中限定，只有流水好等于之前查询出的流水号时才能更新。<br>  update account_balance set amount = amount + 100 , log_id = 2 where user_id = 0 and log_id = 1;<br>5）检查更新余额的返回值，如果为1 提交事务，否则回滚。</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/09/08/Spring-%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+      Spring-应用上下文生命周期
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年9月8日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="refresh"><a href="#refresh" class="headerlink" title="refresh()"></a>refresh()</h2><p>AbstractApplicationContext#refresh()</p>
+<p>该方法是线程安全的方法，在startupShutdownMonitor的锁同步块中。</p>
+<h2 id="prepareRefresh"><a href="#prepareRefresh" class="headerlink" title="prepareRefresh()"></a>prepareRefresh()</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Prepare this context for refreshing, setting its startup date and</span></span><br><span class="line"><span class="comment"> * active flag as well as performing any initialization of property sources.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">prepareRefresh</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Switch to active.</span></span><br><span class="line">    <span class="keyword">this</span>.startupDate = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">this</span>.closed.set(<span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">this</span>.active.set(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">            logger.trace(<span class="string">"Refreshing "</span> + <span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            logger.debug(<span class="string">"Refreshing "</span> + getDisplayName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initialize any placeholder property sources in the context environment.</span></span><br><span class="line">    initPropertySources();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Validate that all properties marked as required are resolvable:</span></span><br><span class="line">    <span class="comment">// see ConfigurablePropertyResolver#setRequiredProperties</span></span><br><span class="line">    getEnvironment().validateRequiredProperties();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Store pre-refresh ApplicationListeners...</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.earlyApplicationListeners == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.earlyApplicationListeners = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(<span class="keyword">this</span>.applicationListeners);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Reset local application listeners to pre-refresh state.</span></span><br><span class="line">        <span class="keyword">this</span>.applicationListeners.clear();</span><br><span class="line">        <span class="keyword">this</span>.applicationListeners.addAll(<span class="keyword">this</span>.earlyApplicationListeners);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Allow for the collection of early ApplicationEvents,</span></span><br><span class="line">    <span class="comment">// to be published once the multicaster is available...</span></span><br><span class="line">    <span class="keyword">this</span>.earlyApplicationEvents = <span class="keyword">new</span> LinkedHashSet&lt;&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="obtainFreshBeanFactory"><a href="#obtainFreshBeanFactory" class="headerlink" title="obtainFreshBeanFactory()"></a>obtainFreshBeanFactory()</h2><p> This implementation performs an actual refresh of this context’s underlying bean factory, shutting down the previous bean factory (if any) and initializing a fresh bean factory for the next phase of the context’s lifecycle.</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">refreshBeanFactory</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (hasBeanFactory()) &#123; <span class="comment">//如果存在beanfactory， 则关闭</span></span><br><span class="line">        destroyBeans();</span><br><span class="line">        closeBeanFactory();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//为上下文生命周期的下个阶段初始化一个新的beanfactory</span></span><br><span class="line">        DefaultListableBeanFactory beanFactory = createBeanFactory();</span><br><span class="line">        <span class="comment">//指定ID</span></span><br><span class="line">        beanFactory.setSerializationId(getId());</span><br><span class="line">        <span class="comment">//设置是否允许被覆盖，是否允许循环引用</span></span><br><span class="line">        customizeBeanFactory(beanFactory);</span><br><span class="line">        <span class="comment">//从Xml、Annotation、Groovy中读取Bean信息并注册。</span></span><br><span class="line">        loadBeanDefinitions(beanFactory);</span><br><span class="line">        <span class="comment">//set the refrences to this.beanFactory.</span></span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>.beanFactoryMonitor) &#123;</span><br><span class="line">            <span class="keyword">this</span>.beanFactory = beanFactory;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(<span class="string">"I/O error parsing bean definition source for "</span> + getDisplayName(), ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="prepareBeanFactory-beanFactory"><a href="#prepareBeanFactory-beanFactory" class="headerlink" title="prepareBeanFactory(beanFactory)"></a>prepareBeanFactory(beanFactory)</h2><p>Prepare the bean facotry for use in this context.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Configure the factory's standard context characteristics,</span></span><br><span class="line"><span class="comment"> * such as the context's ClassLoader and post-processors.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> beanFactory the BeanFactory to configure</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">prepareBeanFactory</span><span class="params">(ConfigurableListableBeanFactory beanFactory)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Tell the internal bean factory to use the context's class loader etc.</span></span><br><span class="line">    beanFactory.setBeanClassLoader(getClassLoader());</span><br><span class="line">    beanFactory.setBeanExpressionResolver(<span class="keyword">new</span> StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));</span><br><span class="line">    beanFactory.addPropertyEditorRegistrar(<span class="keyword">new</span> ResourceEditorRegistrar(<span class="keyword">this</span>, getEnvironment()));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Configure the bean factory with context callbacks.</span></span><br><span class="line">    beanFactory.addBeanPostProcessor(<span class="keyword">new</span> ApplicationContextAwareProcessor(<span class="keyword">this</span>));</span><br><span class="line">    beanFactory.ignoreDependencyInterface(EnvironmentAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(ResourceLoaderAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(ApplicationEventPublisherAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(MessageSourceAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(ApplicationContextAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// BeanFactory interface not registered as resolvable type in a plain factory.</span></span><br><span class="line">    <span class="comment">// MessageSource registered (and found for autowiring) as a bean.</span></span><br><span class="line">    beanFactory.registerResolvableDependency(BeanFactory<span class="class">.<span class="keyword">class</span>, <span class="title">beanFactory</span>)</span>;</span><br><span class="line">    beanFactory.registerResolvableDependency(ResourceLoader<span class="class">.<span class="keyword">class</span>, <span class="title">this</span>)</span>;</span><br><span class="line">    beanFactory.registerResolvableDependency(ApplicationEventPublisher<span class="class">.<span class="keyword">class</span>, <span class="title">this</span>)</span>;</span><br><span class="line">    beanFactory.registerResolvableDependency(ApplicationContext<span class="class">.<span class="keyword">class</span>, <span class="title">this</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Register early post-processor for detecting inner beans as ApplicationListeners.</span></span><br><span class="line">    beanFactory.addBeanPostProcessor(<span class="keyword">new</span> ApplicationListenerDetector(<span class="keyword">this</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Detect a LoadTimeWeaver and prepare for weaving, if found.</span></span><br><span class="line">    <span class="keyword">if</span> (beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) &#123;</span><br><span class="line">        beanFactory.addBeanPostProcessor(<span class="keyword">new</span> LoadTimeWeaverAwareProcessor(beanFactory));</span><br><span class="line">        <span class="comment">// Set a temporary ClassLoader for type matching.</span></span><br><span class="line">        beanFactory.setTempClassLoader(<span class="keyword">new</span> ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Register default environment beans.</span></span><br><span class="line">    <span class="keyword">if</span> (!beanFactory.containsLocalBean(ENVIRONMENT_BEAN_NAME)) &#123;</span><br><span class="line">        beanFactory.registerSingleton(ENVIRONMENT_BEAN_NAME, getEnvironment());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!beanFactory.containsLocalBean(SYSTEM_PROPERTIES_BEAN_NAME)) &#123;</span><br><span class="line">        beanFactory.registerSingleton(SYSTEM_PROPERTIES_BEAN_NAME, getEnvironment().getSystemProperties());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!beanFactory.containsLocalBean(SYSTEM_ENVIRONMENT_BEAN_NAME)) &#123;</span><br><span class="line">        beanFactory.registerSingleton(SYSTEM_ENVIRONMENT_BEAN_NAME, getEnvironment().getSystemEnvironment());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="postProcessBeanFactory-beanFactory"><a href="#postProcessBeanFactory-beanFactory" class="headerlink" title="postProcessBeanFactory(beanFactory)"></a>postProcessBeanFactory(beanFactory)</h2><p>Allows post-processing of the bean factory in context subclasses.</p>
+<p>Modify the application context’s internal bean factory after its standard initialization.<br>All bean definitions will have bean loaded, but no beans have been instantiated yet.<br>This alllows for registering special BeanPostProcessors etc in certain Applicationcontext implementations. </p>
+<h2 id="invokeBeanFactoryPostProcessors-beanFactory"><a href="#invokeBeanFactoryPostProcessors-beanFactory" class="headerlink" title="invokeBeanFactoryPostProcessors(beanFactory);"></a>invokeBeanFactoryPostProcessors(beanFactory);</h2><p>invoke factory processors registered as beans in the creation.</p>
+<p>Instantiate and invoke all registered BeanFactoryPostProcessor beans,<br>respecting explicit order if given. Must be called before singleton instantiation.</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/09/01/Redis-%E6%80%BB%E7%AB%A0/">
       Redis-总章
     </a>
@@ -1733,201 +1962,6 @@ AnnotatedBeanDefinition</code></pre><p>Spring Bean 属性元信息<br> PropertyV
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/07/18/Spring-%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/">
-      Spring-依赖处理
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Spring</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月18日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>入口：DefaltListableBeanFactory#resolveDependency<br>依赖描述符：DependencyDescriptor<br>自定绑定候选对象处理器：AutowireCandidateResolver</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/07/17/Spring-BeanFactory/">
-      Spring-BeanFactory
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Spring</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月17日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/2020/07/17/Spring-BeanFactory/BeanFactory.jpg" alt="Spring BeanFactory 类图"></p>
-<p>BeanFactory是访问Spring bean容器的根接口。提供了一些获取Bean的基础方法定义。</p>
-<p><img src="/2020/07/17/Spring-BeanFactory/BeanFactoryMethods.jpg" alt="BeanFactory"></p>
-<p>ListableBeanFactory 和 ConfigurableBeanFactory 提供了一些更具体的特殊目标。</p>
-<p>ListableBeanFactory继承了BeanFactory, 容器可以以列表的形式获取bean的相关信息，提供了获取多个beanName的基础方法。<br><img src="/2020/07/17/Spring-BeanFactory/listable_bean_factory.jpg" alt="ListableBeanFactory"></p>
-<p>ConfigurableBeanFactory 继承了 hierarchicalBeanFactory, 提供了IOC容器的可配置能力，几乎所有的BeanFactory都会实现这个接口。<br><img src="/2020/07/17/Spring-BeanFactory/configurable_bean_factory.jpg" alt="ConfigurableBeanFactory"></p>
-<p>AutowireCapableBeanFactory 提供了自动装配Bean的能力。</p>
-<p><img src="/2020/07/17/Spring-BeanFactory/AutowireCapableBeanFactory.jpg" alt="AutowireCapableBeanFactory"></p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1942,7 +1976,7 @@ AnnotatedBeanDefinition</code></pre><p>Spring Bean 属性元信息<br> PropertyV
           </a>
         
         <p class="current">
-          2 / 7
+          2 / 8
         </p>
         
           <a class="next" rel="next" href="/archives/2020/page/3/">
@@ -2004,7 +2038,7 @@ AnnotatedBeanDefinition</code></pre><p>Spring Bean 属性元信息<br> PropertyV
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(40)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(42)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"

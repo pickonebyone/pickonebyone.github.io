@@ -365,8 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/18/Spring-%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/">
-      Spring-依赖处理
+    <a href="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+      Spring-生命周期
     </a>
   </h2>
 
@@ -404,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月18日</p>
+    <p>发布于：2020年7月22日</p>
   </a>
 </div>
 
@@ -432,7 +432,84 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>入口：DefaltListableBeanFactory#resolveDependency<br>依赖描述符：DependencyDescriptor<br>自定绑定候选对象处理器：AutowireCandidateResolver</p>
+        <h2 id="SpringBean-元信息"><a href="#SpringBean-元信息" class="headerlink" title="SpringBean 元信息"></a>SpringBean 元信息</h2><p><img src="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/BeanDefinition.jpg" alt="BeanDefinition Class Diagram"></p>
+<h3 id="元信息的配置"><a href="#元信息的配置" class="headerlink" title="元信息的配置"></a>元信息的配置</h3><ul>
+<li>通过资源的方式配置，如： XML、 Properties、Groovy</li>
+<li>通过注解配置 ： @Bean</li>
+<li>通过API配置 ：BeanDefinitionBuilder / GenericBeanDefinition </li>
+</ul>
+<h3 id="元信息的读取"><a href="#元信息的读取" class="headerlink" title="元信息的读取"></a>元信息的读取</h3><p>1) Get beanDefinitionRegistry for registry beanDefinitions.<br>2) Get ResourceLoader<br>3) Get ClassLoader.</p>
+<ul>
+<li>读取通过资源方式配置，如：XmlBeanDefinitionReader、PropertiesBeanDefinitionReader、GroovyBeanDefinitionReader</li>
+<li>读取注解配置的Bean：AnnotatedBeanDefinitionReader</li>
+</ul>
+<p><img src="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/BeanDefinitionReader.jpg" alt="BeanDefinitionReader Class Diagram"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DefaultListableBeanFactory beanFactory = <span class="keyword">new</span> DefaultListableBeanFactory();</span><br><span class="line">AnnotatedBeanDefinitionReader reader = <span class="keyword">new</span> AnnotatedBeanDefinitionReader(beanFactory);</span><br><span class="line">reader.register(Main<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="元信息的解析"><a href="#元信息的解析" class="headerlink" title="元信息的解析"></a>元信息的解析</h3><p><img src="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/BeanDefinitionParser.png" alt="BeanDefinitionParser"></p>
+<p>图片版本的看不太清，整理一份文字版本的层级关系，除BeanDefinitionParser是顶层抽象接口外，其余Parser都是类或者抽象类。  </p>
+<ul>
+<li>BeanDefinitionParser<ul>
+<li>SpringConfiguredBeanDefinitionParser</li>
+<li>AnnotationDrivenCacheBeanDefinitionParser</li>
+<li>ScriptingDefaultsParser</li>
+<li>ComponentScanBeanDefinitionParser</li>
+<li>AnnotationConfigBeanDefinitionParser</li>
+<li>AspectJAutoProxyBeanDewfinitionParser</li>
+<li>SpringConfiguredBeanDefinitionParser</li>
+<li>ConfigBeanDefinitionParser</li>
+<li>AnnotationDrivenBeanDefinitionParser</li>
+<li>AbstractBeanDefinitionParser<ul>
+<li>MBeanExportBeanDefinitionParser</li>
+<li>MBeanServiceBeanDefinitionParser</li>
+<li>ScriptBeanDefinitionParser</li>
+<li>AbstractSingleBeanDefinitionParser<ul>
+<li>ExecutorBeanDefinitionParser</li>
+<li>SchedulerBeanDefinitionParser</li>
+<li>SetBeanDefinitionParser</li>
+<li>AbstractPropertyLoadingBeanDefinitionParser</li>
+<li>LoadTimeWeaverBeanDefinitionParser</li>
+<li>CacheAdviceParser</li>
+<li>ListBeanDefinitionParser</li>
+<li>ScheduledTasksBeanDefinitionParser</li>
+<li>MapBeanDefinitionParser</li>
+<li>PropertiesBeanDefinitionParser</li>
+<li>PropertyPathBeanDefinitionParser</li>
+<li>AbstractSimpleBeanDefinitionParser<ul>
+<li>ConstantBeanDefinitionParser</li>
+<li>AbstractJndiLocatingBeanDefinitionParser<ul>
+<li>JndiLookupBeanDefinitionParser</li>
+<li>LocalStatelessSessionBeanDefinitionParser</li>
+<li>RemoteStatelessSessionBeanDefinitionParser</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="SpringBean-注册"><a href="#SpringBean-注册" class="headerlink" title="SpringBean 注册"></a>SpringBean 注册</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">  public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)</span><br><span class="line">      throws BeanDefinitionStoreException &#123;</span><br><span class="line"></span><br><span class="line">    BeanDefinition existingDefinition &#x3D; this.beanDefinitionMap.get(beanName);</span><br><span class="line">      this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">      if (hasBeanCreationStarted()) &#123;</span><br><span class="line">        &#x2F;&#x2F; Cannot modify startup-time collection elements anymore (for stable iteration)</span><br><span class="line">        synchronized (this.beanDefinitionMap) &#123;</span><br><span class="line">          this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">          List&lt;String&gt; updatedDefinitions &#x3D; new ArrayList&lt;&gt;(this.beanDefinitionNames.size() + 1);</span><br><span class="line">          updatedDefinitions.addAll(this.beanDefinitionNames);</span><br><span class="line">          updatedDefinitions.add(beanName);</span><br><span class="line">          this.beanDefinitionNames &#x3D; updatedDefinitions;</span><br><span class="line">          removeManualSingletonName(beanName);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      else &#123;</span><br><span class="line">        &#x2F;&#x2F; Still in startup registration phase</span><br><span class="line">        this.beanDefinitionMap.put(beanName, beanDefinition);</span><br><span class="line">        this.beanDefinitionNames.add(beanName);</span><br><span class="line">        removeManualSingletonName(beanName);</span><br><span class="line">      &#125;</span><br><span class="line">      this.frozenBeanDefinitionNames &#x3D; null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (existingDefinition !&#x3D; null || containsSingleton(beanName)) &#123;</span><br><span class="line">      resetBeanDefinition(beanName);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>Spring BeanDefinition 合并阶段</p>
+<p>GenericBeanDefinition -&gt; RootBeanDefinition</p>
+<p>Spring Bean Class 加载阶段</p>
+<p>BeanDefinition 中定义的Class名称加载具体的Class类。 </p>
+<p>ClassLoader 类加载<br>Java Security 安全控制<br>ConfigurableBeanFactory 临时 ClassLoader</p>
+<p>Spring Bean 实例化<br>   实例化前：<br>     InstantiationAwareBeanProcessor.postProcessorBeforeInstantiation()<br>     提前生成一些代理对象，替换掉默认的springIOC的实现内容。<br>   实例化<br>     传统实例化方式<br>       + 实例化策略 InstantiationStrategy</p>
+<pre><code>构造器依赖注入（根据类型来注入）</code></pre><p>   实例化后<br>        InstantiationAwareBeanProcessor.postProcessorAfterInstantiation()</p>
+<p>Spring Bean 属性赋值前阶段</p>
+<p>   Bean的属性值元信息： PropertyValues<br>   构造器参数值：ConstructorValues</p>
+<p>   Bean属性赋值前回调<br>    &lt;= 5.0  InstantiationAwareBeanPostProcessor#postProcessorPropertyValues();<br>    &gt;= 5.1 InstantiationAwareBeanPostProcessor#postProcessorProperties();</p>
+<p>Spring Bean Aware 接口回调阶段</p>
+<p> Aware接口是一个标志接口，并没有提供任何实现。<br> BeanNameAware<br> BeanClassLoaderAware<br> BeanFactoryAware<br> EnvironmentAware<br> EmbeddedValueResolverAware<br> ApplicationEventPublisherAware<br> MessageSourceAware<br> ApplicationContextAware</p>
+<p>Spring Bean 初始化</p>
+<p>   初始化前<br>   BeanPostProcessor#postProcessorBeforeInitialization<br>   初始化<br>   @PostConstructor<br>   AfterPropertiesSet<br>   init-method<br>   初始化后<br>   BeanPostProcessor#postProcessAfterInitialization<br>   初始化完成<br>   SmartinitializingSingleton#afterSingletonsInstanted</p>
+<h5 id="AbstractAutowireCapableBeanFactory"><a href="#AbstractAutowireCapableBeanFactory" class="headerlink" title="AbstractAutowireCapableBeanFactory"></a>AbstractAutowireCapableBeanFactory</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Initialize the given bean instance, applying factory callbacks</span></span><br><span class="line"><span class="comment"> * as well as init methods and bean post processors.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;Called from &#123;<span class="doctag">@link</span> #createBean&#125; for traditionally defined beans,</span></span><br><span class="line"><span class="comment"> * and from &#123;<span class="doctag">@link</span> #initializeBean&#125; for existing bean instances.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> beanName the bean name in the factory (for debugging purposes)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> bean the new bean instance we may need to initialize</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> mbd the bean definition that the bean was created with</span></span><br><span class="line"><span class="comment"> * (can also be &#123;<span class="doctag">@code</span> null&#125;, if given an existing bean instance)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the initialized bean instance (potentially wrapped)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanNameAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanClassLoaderAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanFactoryAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #applyBeanPostProcessorsBeforeInitialization</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #invokeInitMethods</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #applyBeanPostProcessorsAfterInitialization</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">initializeBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> Object bean, @Nullable RootBeanDefinition mbd)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (System.getSecurityManager() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    AccessController.doPrivileged((PrivilegedAction&lt;Object&gt;) () -&gt; &#123;</span><br><span class="line">      invokeAwareMethods(beanName, bean);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;, getAccessControlContext());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    invokeAwareMethods(beanName, bean);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Object wrappedBean = bean;</span><br><span class="line">  <span class="keyword">if</span> (mbd == <span class="keyword">null</span> || !mbd.isSynthetic()) &#123;</span><br><span class="line">    wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    invokeInitMethods(beanName, wrappedBean, mbd);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">        (mbd != <span class="keyword">null</span> ? mbd.getResourceDescription() : <span class="keyword">null</span>),</span><br><span class="line">        beanName, <span class="string">"Invocation of init method failed"</span>, ex);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (mbd == <span class="keyword">null</span> || !mbd.isSynthetic()) &#123;</span><br><span class="line">    wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> wrappedBean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Spring  Bean 销毁<br>    销毁前<br>      DestructionAwareBeanPostProcessor#postProcessorBeforeDestruction<br>    销毁<br>      @PreDestroy<br>      实现DisposableBean接口的destroy方法<br>      自定义销毁方法<br>    垃圾回收<br>      关闭Spring 容器<br>      执行GC<br>      SpringBean 覆盖finalize()方法被回调</p>
 
       
     </div>
@@ -459,8 +536,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/17/Spring-BeanFactory/">
-      Spring-BeanFactory
+    <a href="/2020/07/21/Spring-%E4%BD%9C%E7%94%A8%E5%9F%9F/">
+      Spring-作用域
     </a>
   </h2>
 
@@ -498,7 +575,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月17日</p>
+    <p>发布于：2020年7月21日</p>
   </a>
 </div>
 
@@ -526,14 +603,8 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="/2020/07/17/Spring-BeanFactory/BeanFactory.jpg" alt="Spring BeanFactory 类图"></p>
-<p>BeanFactory是访问Spring bean容器的根接口。提供了一些获取Bean的基础方法定义。</p>
-<p><img src="/2020/07/17/Spring-BeanFactory/BeanFactoryMethods.jpg" alt="BeanFactory"></p>
-<p>ListableBeanFactory 和 ConfigurableBeanFactory 提供了一些更具体的特殊目标。</p>
-<p>ListableBeanFactory继承了BeanFactory, 容器可以以列表的形式获取bean的相关信息，提供了获取多个beanName的基础方法。<br><img src="/2020/07/17/Spring-BeanFactory/listable_bean_factory.jpg" alt="ListableBeanFactory"></p>
-<p>ConfigurableBeanFactory 继承了 hierarchicalBeanFactory, 提供了IOC容器的可配置能力，几乎所有的BeanFactory都会实现这个接口。<br><img src="/2020/07/17/Spring-BeanFactory/configurable_bean_factory.jpg" alt="ConfigurableBeanFactory"></p>
-<p>AutowireCapableBeanFactory 提供了自动装配Bean的能力。</p>
-<p><img src="/2020/07/17/Spring-BeanFactory/AutowireCapableBeanFactory.jpg" alt="AutowireCapableBeanFactory"></p>
+        <p>Spring Bean 作用域<br> 单例模式<br>singleton Bean 作用域：在BeanFactory中唯一。<br> 原型模式<br>prototype Bean 作用域：</p>
+<p>servlet 引擎：<br>request Bean 作用域： 将Spring Bean 存储在Servlet Request上下文中<br>session Bean 作用域：将SpringBean存储在HttpSession中<br>application bean 作用域：将SpringBean存储在ServletContext中。<br>自定义Bean 作用域</p>
 
       
     </div>
@@ -560,7 +631,7 @@
           </a>
         
         <p class="current">
-          10 / 37
+          10 / 38
         </p>
         
           <a class="next" rel="next" href="/page/11/">
@@ -621,7 +692,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(40)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(42)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"

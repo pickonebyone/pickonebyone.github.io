@@ -364,6 +364,243 @@
         
           
   <h2 class="title">
+    <a href="/2020/07/07/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/">
+      观察者模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/行为型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月7日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>观察者模式也叫发布订阅模式。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>定义对象间的一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并且被自动更新。</p>
+<p><img src="/2020/07/07/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/observer_class.jpeg" alt="观察者模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Subject"><a href="#Subject" class="headerlink" title="Subject"></a>Subject</h4><p>定义被观察者必须实现的职责，必须能够动态的增加、取消观察者。<br>它一般是抽象类或者实现类，仅仅完成作为被观察者必须实现的职责，管理观察者并通知观察者。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Vector&lt;Observer&gt; obsVector = <span class="keyword">new</span> Vector&lt;Observer&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addObserver</span><span class="params">(Observer o)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.obsVector.add(o);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delObserver</span><span class="params">(Observer o)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.obsVector.remove(o);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyObservers</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(Observer o : <span class="keyword">this</span>.obsVector)&#123;</span><br><span class="line">            o.update();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ConcreteSubject"><a href="#ConcreteSubject" class="headerlink" title="ConcreteSubject"></a>ConcreteSubject</h4><p>具体的被观察者，定义被观察者自己的业务，同时定义对哪些事件进行通知。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteSubject</span> <span class="keyword">extends</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBusiness</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">        <span class="keyword">super</span>.notifyObservers();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h4><p>观察者接收到消息后，对接收到的信息进行处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ConcreteObserver"><a href="#ConcreteObserver" class="headerlink" title="ConcreteObserver"></a>ConcreteObserver</h4><p>具体的观察者，不同的观察者在处理消息的时候的具体定义。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteObserver</span> <span class="keyword">implements</span> <span class="title">Observer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//do something when invoked.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ConcreteSubject subject = <span class="keyword">new</span> ConcreteSubject();</span><br><span class="line">Observer obs = <span class="keyword">new</span> ConcreteObserver();</span><br><span class="line">subject.addObserver(obs);</span><br><span class="line">subject.doBusiness();</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>观察者和被观察之间是抽象耦合<br>如论增加观察者还是被观察者都非常容易扩展</li>
+<li>建立了一套规则的触发机制</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>效率缺陷，考虑采用异步方式通知。</p>
+<p>广播链的问题 A -&gt; B -&gt; C</p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="Java中的观察者"><a href="#Java中的观察者" class="headerlink" title="Java中的观察者"></a>Java中的观察者</h4><p>java 提供了java.util.Observer接口 和 java.util.Observable 类。<br>被观察者继承java.util.Observable， 观察者实现java.util.Observer.<br>但是在生产环境中考虑到性能一般不会用这种方式来实现。</p>
+<h4 id="生产中的观察者"><a href="#生产中的观察者" class="headerlink" title="生产中的观察者"></a>生产中的观察者</h4><p>一般使用MQ来异步处理<br>本地的如Disruptor</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/07/06/Spring-IOC-And-DI/">
+      Spring IOC And DI
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月6日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="IOC-简史"><a href="#IOC-简史" class="headerlink" title="IOC 简史"></a>IOC 简史</h2><ul>
+<li>1983年，Richard E.Sweet 在&lt;<The mesa programming enviroment>&gt;提出好莱坞原则（“不要打电话给我，我会打电话给你”）。</The></li>
+<li>1988年，Rolph E.Johnson 和Brian Foote在《Designing Reusable Classes》中提出控制反转。</li>
+<li>1996年，Michael Mattson在《Object-Oriented Frameworks, A survey of methodological issues》将控制反转命名为好莱坞原则。</li>
+<li>2004，Martin Fowler在《Inversion Of Control Containers and the Dependency Injection pattern》提出自己对和IOC和DI的理解</li>
+<li>2005年，Martin Folower在《Inversion Of Control》中对IOC进一步说明。</li>
+<li><a href="https://www.martinfowler.com/articles/injection.html" target="_blank" rel="noopener">Martin 大爷关于IOC的说明</a></li>
+</ul>
+<h2 id="IOC-的实现策略"><a href="#IOC-的实现策略" class="headerlink" title="IOC 的实现策略"></a>IOC 的实现策略</h2><p>WIKI:</p>
+<p> In object-oriented programming, there are several basic techniques to implement inversion of control. there are:</p>
+<ul>
+<li>Using a service locator pattern</li>
+<li>Using dependency injection<ul>
+<li>constructor  injection</li>
+<li>parameter injection</li>
+<li>setter injection</li>
+<li>interface injection</li>
+</ul>
+</li>
+<li>Using a contextualized lookup.</li>
+<li>Using template method design pattern</li>
+<li>Using Strategy design pattern.</li>
+</ul>
+<p>EXPERT ONE-ON-ONE J2EE DEVELOPMENT without EJB提到的策略：</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/07/06/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/">
       中介者模式
     </a>
@@ -1354,254 +1591,6 @@
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/07/01/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/">
-      迭代器模式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/行为型模式</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月1日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h2><p>迭代器模式提供了遍历容器的方便性，容器只要管理增减元素即可，需要遍历的时候交由迭代器进行。</p>
-<p>比如Set、Map、List等容器的iterator。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>迭代器是为容器服务的，它提供一种方法访问一个容器对象中的各个元素，而又不需要暴露该对象的内部细节。</p>
-<p><img src="/2020/07/01/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/iterator_class.jpeg" alt="迭代器模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h4><p>抽象迭代器负责定义访问和遍历元素的接口。<br>first() 获取第一个元素；<br>next() 访问下一个元素；<br>hasNext() 是否还有下一个；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Iterator</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function">E <span class="title">next</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="ConcreteIterator"><a href="#ConcreteIterator" class="headerlink" title="ConcreteIterator"></a>ConcreteIterator</h4><p>具体迭代器要实现迭代器接口，完成容器元素的遍历。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Vector&lt;E&gt; v = <span class="keyword">new</span> Vector&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> cursor = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteIterator</span><span class="params">(Vector _vector)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.v = _vector;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.cursor != <span class="keyword">this</span>.v.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">next</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.hasNext() ? <span class="keyword">this</span>.v.get(<span class="keyword">this</span>.cursor++) : <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.v.remove(<span class="keyword">this</span>.cursor);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Aggregate"><a href="#Aggregate" class="headerlink" title="Aggregate"></a>Aggregate</h4><p>抽象容器角色负责提供创建具体迭代器角色的接口， 必然提供一个类似于createIterator（）的方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Aggregate</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(E e)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e)</span></span>;</span><br><span class="line">    <span class="function">Iterator <span class="title">iterator</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Concrete-Aggregate"><a href="#Concrete-Aggregate" class="headerlink" title="Concrete Aggregate"></a>Concrete Aggregate</h4><p>具体容器实现容器接口定义的方法，创建出容纳迭代器的对象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteAggrate</span> <span class="keyword">implements</span> <span class="title">Aggregate</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    Vector v = <span class="keyword">new</span> Vector();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.add(e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ConcreteIterator&lt;&gt;(<span class="keyword">this</span>.v);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.remove(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/07/01/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/">
-      组合模式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/结构型模式</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月1日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h2><p>也叫合成模式或者部分整体模式，主要用来描述部分与整体的关系。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将对象组合成树形结构以表示部分整体的层次结构，使得用于对单个对象和组合对象的使用具有一致性。</p>
-<p><img src="/2020/07/01/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/combination_class.jpeg" alt="组合模式的通用类图"></p>
-<h4 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h4><p>定义参加组合对象的共有方法和属性，可以定义一些默认的行为或者属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Component parent = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Component&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">         c.parent = <span class="keyword">this</span>;</span><br><span class="line">         <span class="keyword">this</span>.list.add(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list.remove(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Component&gt; <span class="title">getChildren</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Component <span class="title">getParent</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.parent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Composite"><a href="#Composite" class="headerlink" title="Composite"></a>Composite</h4><p>树枝对象，作用是组合树枝节点和叶子结点形成一个树形结构。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Composite</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Leaf"><a href="#Leaf" class="headerlink" title="Leaf"></a>Leaf</h4><p>叶子对象，下面没有分支，最小的遍历单位。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaf</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
-<li>高层模块调用简单<br>一颗属性结构中的所有节点都是Component，局部和整体对调用者来说没有任何区别，也就是说高层模块不必关心自己处理的是单个对象还是整个组合结构，简化了高层模块的代码。</li>
-<li>节点自由度增加<br>使用组合模式后，如果想增加一个树枝节点、树叶节点都非常容易。<br>如何开闭原则，利于维护。</li>
-</ul>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>（安全模式）直接使用了实现类(可以扩展)。与依赖倒置原则冲突，限制了接口的影响范围。</p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="透明的组合模式"><a href="#透明的组合模式" class="headerlink" title="透明的组合模式"></a>透明的组合模式</h4><p>以上的例子就是透明的组合模式，吧用来组合使用的方法放到抽象类中，无论叶子对象还是树枝对象都有相同的结构，通过getChildren();判断当前节点是否为叶子节点还是根节点。</p>
-<p>透明模式的好处是遵循了依赖倒置原则</p>
-<h4 id="安全的组合模式"><a href="#安全的组合模式" class="headerlink" title="安全的组合模式"></a>安全的组合模式</h4><p>安全模式是将叶子节点和树枝节点彻底分开，树枝节点单独拥有用来组合的方法。</p>
-<h5 id="Component-1"><a href="#Component-1" class="headerlink" title="Component"></a>Component</h5><p>定义参加组合对象的共有方法和属性，可以定义一些默认的行为或者属性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Component parent = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Component <span class="title">getParent</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.parent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="Composite-1"><a href="#Composite-1" class="headerlink" title="Composite"></a>Composite</h5><p>树枝对象，作用是组合树枝节点和叶子结点形成一个树形结构。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Composite</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Component&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">         c.parent = <span class="keyword">this</span>;</span><br><span class="line">         <span class="keyword">this</span>.list.add(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list.remove(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Component&gt; <span class="title">getChildren</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="Leaf-1"><a href="#Leaf-1" class="headerlink" title="Leaf"></a>Leaf</h5><p>叶子对象，下面没有分支，最小的遍历单位。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaf</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1616,7 +1605,7 @@
           </a>
         
         <p class="current">
-          4 / 7
+          4 / 8
         </p>
         
           <a class="next" rel="next" href="/archives/2020/page/5/">
@@ -1678,7 +1667,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(40)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(42)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"

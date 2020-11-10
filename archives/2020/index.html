@@ -388,6 +388,284 @@
         
           
   <h2 class="title">
+    <a href="/2020/11/10/Mysql%E4%BA%8B%E5%8A%A1/">
+      Mysql事务
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年11月10日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/11/09/Mysql%E9%94%81/">
+      Mysql锁
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://pickonebyone.github.io" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年11月9日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><p>InnoDB存储引擎锁的实现提供了一致性的非锁定读、行级锁支持。行级锁没有相关的额外开销，并可以同时得到并发性和一致性。</p>
+<h2 id="LOCK与LATCH"><a href="#LOCK与LATCH" class="headerlink" title="LOCK与LATCH"></a>LOCK与LATCH</h2><h3 id="Latch"><a href="#Latch" class="headerlink" title="Latch"></a>Latch</h3><p>轻量级的锁，因为其要求锁定的时间必须非常短，如果持续的时间长，则应用的性能会非常差。InnoDB存储引擎中，latch又可以分为mutex（互斥量）和rwlock（读写锁），目的就是用来保证并发线程操作临界资源的正确性，通常没有死锁检测机制。</p>
+<h3 id="LOCK"><a href="#LOCK" class="headerlink" title="LOCK"></a>LOCK</h3><p>Lock对象是事务，用来锁定数据库中的对象，如表、页、行。并且一般lock的对象仅在事务commit或者rollback后进行释放（不同的隔离级别释放时间不同）。lock有死锁机制。</p>
+<p><img src="/2020/11/09/Mysql%E9%94%81/lock_latch.jpg" alt="lock &amp; latch"></p>
+<h3 id="Latch-信息查看"><a href="#Latch-信息查看" class="headerlink" title="Latch 信息查看"></a>Latch 信息查看</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show engine innodb mutex;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>count</td>
+<td>mutext被请求的次数</td>
+</tr>
+<tr>
+<td>spin_waits</td>
+<td>spin lock 的次数，InnoDB存储引擎latch在不能获得锁时首先进行自旋，若自旋后还不能获得，则进入等待</td>
+</tr>
+<tr>
+<td>spin_rounds</td>
+<td>自旋内部循环的总次数，每次自旋的内部循环是一个随机数。spin_rounds/spin_waits 表示平均每次自旋所需要的内部循环次数</td>
+</tr>
+<tr>
+<td>os_waits</td>
+<td>操作系统等待的次数，当spinlock通过自旋还不能获得latch时，则会进入操作系统等待状态，等待被唤醒</td>
+</tr>
+<tr>
+<td>os_yields</td>
+<td>进行os_thread_yield唤醒操作的次数</td>
+</tr>
+<tr>
+<td>os_wait_times</td>
+<td>操作系统等待的时间，单位ms</td>
+</tr>
+</tbody></table>
+<h3 id="Lock信息查看"><a href="#Lock信息查看" class="headerlink" title="Lock信息查看"></a>Lock信息查看</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">show engine innodb status;</span><br><span class="line">information_schema 下 innodb_trx、innodb_locks、innodb_lock_waits</span><br></pre></td></tr></table></figure>
+
+<h2 id="InnoDB存储引擎中的锁"><a href="#InnoDB存储引擎中的锁" class="headerlink" title="InnoDB存储引擎中的锁"></a>InnoDB存储引擎中的锁</h2><h3 id="锁类型"><a href="#锁类型" class="headerlink" title="锁类型"></a>锁类型</h3><ul>
+<li>共享锁 S Lock, 允许事务读一行数据</li>
+<li>排他锁 X Lock, 允许事务删除或者更新一行数据。</li>
+</ul>
+<p>InnoDB存储引擎支持多力度锁定，允许事务在行级上的锁和表级上的锁同时存在。为了支持在不同粒度上进行加锁操作，Mysql支持意向锁。</p>
+<h3 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h3><p>一致性非锁定读是InnoDB存储引擎通过行多版本控制的方式来读取当前执行时间数据库中行的数据。<br>如果读取的行正在执行DELETE或者UPDATE操作，这时读取操作不会u因此去等待行上锁的释放，InnoDB存储引擎会读取行的一个快照数据。快照数据是改行之前的版本数据，通过undo段来完成，undo用来在事务中回滚数据，一次快照数据本身没有额外开销。读取快照数据本身没有额外开销，也不需要上锁。</p>
+<p>一个行记录可能有多个快照数据，由此来来的并发控制称为多版本并发控制。<br>在事务隔离级别为READCOMMITED和REPEATABLEREAD下， InnoDB存储引擎使用非锁定一致性读。但是对于快照的定义不同。</p>
+<p>在READ COMMITTED事务隔离级别下，对于快照数据，非一致性读总是读取被锁定行的最新一份快照数据。<br>在REPEATABLE READ事务隔离级别下，对于快照数据，非一致性读总是读取事务开始时的行数据版本。</p>
+<h3 id="一致性锁定读"><a href="#一致性锁定读" class="headerlink" title="一致性锁定读"></a>一致性锁定读</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select ... for update</span><br><span class="line">select ... lock in share mode</span><br></pre></td></tr></table></figure>
+
+<h3 id="自增长与锁"><a href="#自增长与锁" class="headerlink" title="自增长与锁"></a>自增长与锁</h3><p>InnoDB自增长ID的锁机制称为Auto-Inc Locking, 为了提高插入的性能，在完成对自增长值插入的SQL语句后立即释放，而不需要等到事务提交。必须等待前一个插入完成，并且对Inser。。Select的大户巨量的插入会影响插入性能，因为另一个事务中的插入会被阻塞。</p>
+<p>轻量级互斥量的自增长实现机制，大大提高了自增长值插入的性能。通过innodb_autoinc_lock_mode来控制自增长的模式。默认值为1.</p>
+<ul>
+<li>insert-like : 所有的插入语句，insert/replace/insert-select, replace-select, load data.</li>
+<li>simple-inserts: 插入之前就确定插入行数的语句，如insert/replace。</li>
+<li>bulk inserts: 插入前不能确定得到插入行数的语句。</li>
+<li>mixed-mode inserts: 插入中有一部分的数据是自增长的， 一部分是确定的。</li>
+</ul>
+<p>innodb_autoinc_lock_mode: 0, auto-inc locking 的方式，<br>innodb_autoinc_lock_mode: 1, 默认值，<br>                  对于imple inserts, 该值会用互斥量去对内存中的计数器进行累加操作，<br>                  对于bulk inserts,使用auto-inc locking 方式，不考虑回滚操作时，对于自增值列的增长是连续的，statement-based方式的replication可以很好的工作。<br>innodb_autoinc_lock_mode: 2, 所有的insert-like自增长的值产生的都是通过互斥量。性能最高。出现的问题是增长的值不连续， 基于statement-based replication 会出现问题。所以在使用当前模式时，任何时候都应该使用 row-based replalication, 这样才能保证最大的并发性能以及replication主从数据的一致。</p>
+<p>MyISAM自增主键是表锁设计，自增长不用考虑并发插入的问题， 因此在Master傻姑娘使用InnoDB存储引擎，slave上使用MyISAM存储引擎的replication架构下用户必须考虑这种问题。？？？</p>
+<h3 id="外键和锁"><a href="#外键和锁" class="headerlink" title="外键和锁"></a>外键和锁</h3><p>InnoDB引擎中，对于一个外键列，如果没有显式地对这个列加索引，InnoDB存储引擎自动对其家一个索引，这样就可以避免表锁。</p>
+<p>对于外键值的插入或者更新，首先要查询父表中的记录，如果以一致性非锁定读的方式读取，会发生数据不一致的问题，此时需要对父表加一个S锁。如果这时父表已经有一个X锁，则子表的操作会被阻塞。</p>
+<h2 id="锁的算法"><a href="#锁的算法" class="headerlink" title="锁的算法"></a>锁的算法</h2><h3 id="行锁的三种算法"><a href="#行锁的三种算法" class="headerlink" title="行锁的三种算法"></a>行锁的三种算法</h3><ul>
+<li>Record Lock: 单行记录上锁，总是会去锁定索引记录，如果InnoDB存储引擎在建立的时候没有设置任何一个索引，那么InnoDB存储引擎会使用隐式的主键来进行锁定。</li>
+<li>Gap Lock: 锁定一个范围，不包含记录本身,为了阻止多个事务将记录插入到同一个范围内。但是又导致Phantom Problem（幻读）问题的产生。</li>
+<li>Next-Key Lock: Gap Lock + Record Lock, 锁定一个范围，并锁定记录本身， 解决了Phantom Problem。</li>
+</ul>
+<p>当查询的索引含有唯一属性时，InnoDB存储引擎会对Next-Key Lock进行优化，将其降级为Record Lock锁住索引本身而不是范围。</p>
+<p>对于辅助所用，加上的是Next-keyLock， 锁定的是范围，并且还会对下一个键值加上Gap Lock.</p>
+<p>显示关闭gap_lock后，除了外键约束和唯一性检查依然需要GapLock，其余情况仅需要使用RecordLock进行锁定。</p>
+<ul>
+<li>将事务的隔离级别设置为READ COMMITTED</li>
+<li>设置innodb_locks_unsafe_for_binlog=1</li>
+</ul>
+<h3 id="解决Phantom-Problem"><a href="#解决Phantom-Problem" class="headerlink" title="解决Phantom Problem"></a>解决Phantom Problem</h3><p>默认的可重复读的事务隔离级别下，InnoDB存储引擎采用Next-Key Locking机制来避免幻读。<br>在ReadCommited模式下，仅采用RecordLock来加锁。</p>
+<h2 id="锁问题"><a href="#锁问题" class="headerlink" title="锁问题"></a>锁问题</h2><p>通过所及之可以实现事务的隔离性要求，使得事务可以并发地工作。<br>脏数据是指事务对缓冲池中行记录的修改，并且还没有被提交的数据。</p>
+<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><p>在不同的事务下，当前事务可以读到另外事务未提交的数据（脏数据）。</p>
+<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><p>在一个事务内，多次读取同一数据集合，由于当前事务看到了另外的事务提交的数据，两次返回的数据是不一样的。<br>InnoDB存储引擎中，使用Next-Key Lock算法来避免不可重复读的问题（不可重复读也叫幻读）。</p>
+<h3 id="丢失更新"><a href="#丢失更新" class="headerlink" title="丢失更新"></a>丢失更新</h3><p>一个事务的更新操作会被另一个事务的更新成操作覆盖。 </p>
+<h2 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h2><p>因为不同锁止键的兼容性关系，在有些时刻一个事务中的锁需要等待另一个事务中的锁匙放它所占用的资源，就是阻塞，阻塞时为了确保事务可以并发且正常地运行。</p>
+<p>innodb_lock_wait_timeout: 等待超时时间<br>innodb_rollback_on_timeout: 等待超时时是否对进行中的事务进行回滚。默认为OFF，默认情况下InnoDB存储引擎不会回滚超时引发的错误异常。。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET @@innodb_lock_wait_timeout&#x3D;60;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>两个或者两情歌以上的事务在执行过程中，因为争夺锁资源而造成相互等待的现象。</p>
+<h4 id="超时解决"><a href="#超时解决" class="headerlink" title="超时解决"></a>超时解决</h4><p>解决思索最简单的方式是不要有等待，将任何的等待都化为回滚，并且事务重新开始。<br>如果超时的事务更新了很多行，占用了较多的undo log会导致回滚性能差。</p>
+<h4 id="死锁检测"><a href="#死锁检测" class="headerlink" title="死锁检测"></a>死锁检测</h4><p>采用 wait-for graph（等待图）的方式进行死锁检测。要求数据库保存两种信息，通过这两种信息构造一张图，如果图中有回路，就代表存在死锁，从而选择回滚undo量最小的事务。</p>
+<ul>
+<li>锁的信息链表</li>
+<li>事务等待链表</li>
+</ul>
+<h2 id="锁升级"><a href="#锁升级" class="headerlink" title="锁升级"></a>锁升级</h2><p>锁升级是指将所得粒度降低。InnoDB存储引擎不存在锁升级的问题。因为不是根据每个记录来产生行锁，而是根据每个事务访问的每个页对锁进行管理，采用的是位图的方式。因此不管是一个事务锁住页中一个记录还是多个记录，开销通常是一样。</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/11/06/ThreadLocal/">
       ThreadLocal
     </a>
@@ -1431,235 +1709,6 @@
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/10/15/DataBase-%E4%BA%8B%E5%8A%A1/">
-      DataBase-事务
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%95%B0%E6%8D%AE%E5%BA%93/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/数据库</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年10月15日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="什么是事务Transaction"><a href="#什么是事务Transaction" class="headerlink" title="什么是事务Transaction"></a>什么是事务Transaction</h2><p>Transaction一词在英语的翻译中还有一次交易、业务、事务、办理、处理；</p>
-<p>对于一次账户充值100元的操作，其中就有多个环节。<br>1）检查账户的有效性，查询账户余额；<br>2）记录充值流水；<br>3）为账户余额增加100元。</p>
-<p>对于这三个操作来讲，他是一个Transaction， 要么都成功，只要有一个失败，就必须整个Transaction失败，不允许记录了充值流水成功，但是余额增加失败。这三个是一个整体，是不可分割的工作单元。</p>
-<h2 id="事务的特性"><a href="#事务的特性" class="headerlink" title="事务的特性"></a>事务的特性</h2><p>原子性 Atomic：要么都成功，只要有一个步骤失败，整个步骤必须回滚（失败）。<br>一致性 Consistency：事务保证读取到的数据总是一致的，如（不存在100元的充值流水时金额为100元， 存在100元的充值流水时金额为200元）。<br>但是对于这个充值过程来讲，肯定是先记录了充值记录，后增加100元余额。可以查到充值记录，但余额是100是客观存在的。<br>隔离性Isolation：为了保证一致性，事务执行过程中的中间状态不对外部可见，事务需要对整个过程进行隔离。<br>持久性 Durability：只要事务一经提交，就一定会被持久化到磁盘中。</p>
-<h2 id="Transaction-阶段"><a href="#Transaction-阶段" class="headerlink" title="Transaction 阶段"></a>Transaction 阶段</h2><p>Transaction 需要有开始和结束，标记一个Transaction的开始和截止；<br>当所有的操作都成功的时候，需要Commit;<br>当其中某个操作失败的时候，之前的操作需要Rollback；</p>
-<p>Transaction Start;<br>Transaction Commit Or Rollback;<br>Transaction End;</p>
-<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><p>假如业务员给账户A增加100元的操作的同时（记录了充值流水100元，流水号为666），对账系统也在同时运行同时读取到了这一笔流水号为666的流水记录。但是后续的为余额增加100元的操作失败了，整个Transaction RollBack。 导致账户余额比对账系统少了100元。</p>
-<p>在这里，对账系统看到了业务系统Transaction未提交时的数据，叫脏读。<br>也就是说当前事务的中间状态，对其他事务时可见的。</p>
-<p>事务的最低隔离级别是未提交读（Read Uncommitted），因此会发生脏读的现象。<br>为了解决脏读的现象，需要将事务隔离起来，只允许读到已提交的数据。 Read Committed.</p>
-<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><p>假如业务员A给用户增加100元。</p>
-<p>开启事务；<br>查询账户余额 100元；<br>有其他事情去忙……</p>
-<p>此时业务员B也给用户增加100元。<br>开启事务；<br>查询账户余额 100元<br>增加流水记录；<br>增加账户余额100元，变为200元；<br>结束事务；</p>
-<p>业务员A回来为A增加100元：<br>查询账户余额 200元；</p>
-<p>不可重复读就是业务员A在同一个事务内，先后两次读取同一条数据的结果可能不一样。<br>可重复读就是业务员A在同一个事务内，先后两次读取同一条数据的结果总是相同的，无论其他会话是否已经更新了这条数据。</p>
-<p>为了保障在同一事务下，先后两次读取到的同一条数据结果一致，需要将事务的隔离级别调整为可重复读（Repeatable Read）。</p>
-<h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><p>假如业务员A给用户增加100元。</p>
-<p>开启事务；<br>查询流水中是否有ID为1000的流水记录，不存在；</p>
-<p>业务员B给用户增加100元；<br>开启事务；<br>查询流水中是否有ID为1000的流水记录，不存在；<br>插入流水记录；<br>更新账户余额为200；<br>提交事务；</p>
-<p>业务员A开始执行；<br>插入流水记录，此时已经有ID为1000的流水记录，系统异常；<br>可以开启重试机制；<br>由于隔离性，查询是否有ID为1000的流水记录时还是不存在，重试插入时还是异常。</p>
-<p>为了解决幻读的问题，需要将所有的事务和操作进行串行化。这也是Database的最高隔离级别，性能也最差。</p>
-<p><img src="/2020/10/15/DataBase-%E4%BA%8B%E5%8A%A1/Transaction-Isolation.jpg" alt="事务的隔离级别以及解决的问题"></p>
-<p>对于账户充值来讲，交易的原子性以及持久性是最重要的。可以适当牺牲一些一致性和隔离性。</p>
-<p>以下操作在 ReadCommitted 和 Repeatable Read下是安全的。<br>1）给账户余额表增加一个log_id属性，记录最后一笔交易的流水号。<br>2）首先开启事务，查询并记录当前账户的余额和最后一笔交易的流水号。<br>3）写入流水记录。<br>4）更新账户余额以及流水记录ID，需要在更新语句的Where条件中限定，只有流水好等于之前查询出的流水号时才能更新。<br>  update account_balance set amount = amount + 100 , log_id = 2 where user_id = 0 and log_id = 1;<br>5）检查更新余额的返回值，如果为1 提交事务，否则回滚。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/09/08/Spring-%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
-      Spring-应用上下文生命周期
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://pickonebyone.github.io" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Spring</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年9月8日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="refresh"><a href="#refresh" class="headerlink" title="refresh()"></a>refresh()</h2><p>AbstractApplicationContext#refresh()</p>
-<p>该方法是线程安全的方法，在startupShutdownMonitor的锁同步块中。</p>
-<h2 id="prepareRefresh"><a href="#prepareRefresh" class="headerlink" title="prepareRefresh()"></a>prepareRefresh()</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Prepare this context for refreshing, setting its startup date and</span></span><br><span class="line"><span class="comment"> * active flag as well as performing any initialization of property sources.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">prepareRefresh</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Switch to active.</span></span><br><span class="line">    <span class="keyword">this</span>.startupDate = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">this</span>.closed.set(<span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">this</span>.active.set(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">            logger.trace(<span class="string">"Refreshing "</span> + <span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            logger.debug(<span class="string">"Refreshing "</span> + getDisplayName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initialize any placeholder property sources in the context environment.</span></span><br><span class="line">    initPropertySources();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Validate that all properties marked as required are resolvable:</span></span><br><span class="line">    <span class="comment">// see ConfigurablePropertyResolver#setRequiredProperties</span></span><br><span class="line">    getEnvironment().validateRequiredProperties();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Store pre-refresh ApplicationListeners...</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.earlyApplicationListeners == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.earlyApplicationListeners = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(<span class="keyword">this</span>.applicationListeners);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Reset local application listeners to pre-refresh state.</span></span><br><span class="line">        <span class="keyword">this</span>.applicationListeners.clear();</span><br><span class="line">        <span class="keyword">this</span>.applicationListeners.addAll(<span class="keyword">this</span>.earlyApplicationListeners);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Allow for the collection of early ApplicationEvents,</span></span><br><span class="line">    <span class="comment">// to be published once the multicaster is available...</span></span><br><span class="line">    <span class="keyword">this</span>.earlyApplicationEvents = <span class="keyword">new</span> LinkedHashSet&lt;&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="obtainFreshBeanFactory"><a href="#obtainFreshBeanFactory" class="headerlink" title="obtainFreshBeanFactory()"></a>obtainFreshBeanFactory()</h2><p> This implementation performs an actual refresh of this context’s underlying bean factory, shutting down the previous bean factory (if any) and initializing a fresh bean factory for the next phase of the context’s lifecycle.</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">refreshBeanFactory</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (hasBeanFactory()) &#123; <span class="comment">//如果存在beanfactory， 则关闭</span></span><br><span class="line">        destroyBeans();</span><br><span class="line">        closeBeanFactory();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//为上下文生命周期的下个阶段初始化一个新的beanfactory</span></span><br><span class="line">        DefaultListableBeanFactory beanFactory = createBeanFactory();</span><br><span class="line">        <span class="comment">//指定ID</span></span><br><span class="line">        beanFactory.setSerializationId(getId());</span><br><span class="line">        <span class="comment">//设置是否允许被覆盖，是否允许循环引用</span></span><br><span class="line">        customizeBeanFactory(beanFactory);</span><br><span class="line">        <span class="comment">//从Xml、Annotation、Groovy中读取Bean信息并注册。</span></span><br><span class="line">        loadBeanDefinitions(beanFactory);</span><br><span class="line">        <span class="comment">//set the refrences to this.beanFactory.</span></span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>.beanFactoryMonitor) &#123;</span><br><span class="line">            <span class="keyword">this</span>.beanFactory = beanFactory;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(<span class="string">"I/O error parsing bean definition source for "</span> + getDisplayName(), ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="prepareBeanFactory-beanFactory"><a href="#prepareBeanFactory-beanFactory" class="headerlink" title="prepareBeanFactory(beanFactory)"></a>prepareBeanFactory(beanFactory)</h2><p>Prepare the bean facotry for use in this context.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Configure the factory's standard context characteristics,</span></span><br><span class="line"><span class="comment"> * such as the context's ClassLoader and post-processors.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> beanFactory the BeanFactory to configure</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">prepareBeanFactory</span><span class="params">(ConfigurableListableBeanFactory beanFactory)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Tell the internal bean factory to use the context's class loader etc.</span></span><br><span class="line">    beanFactory.setBeanClassLoader(getClassLoader());</span><br><span class="line">    beanFactory.setBeanExpressionResolver(<span class="keyword">new</span> StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));</span><br><span class="line">    beanFactory.addPropertyEditorRegistrar(<span class="keyword">new</span> ResourceEditorRegistrar(<span class="keyword">this</span>, getEnvironment()));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Configure the bean factory with context callbacks.</span></span><br><span class="line">    beanFactory.addBeanPostProcessor(<span class="keyword">new</span> ApplicationContextAwareProcessor(<span class="keyword">this</span>));</span><br><span class="line">    beanFactory.ignoreDependencyInterface(EnvironmentAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(ResourceLoaderAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(ApplicationEventPublisherAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(MessageSourceAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    beanFactory.ignoreDependencyInterface(ApplicationContextAware<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// BeanFactory interface not registered as resolvable type in a plain factory.</span></span><br><span class="line">    <span class="comment">// MessageSource registered (and found for autowiring) as a bean.</span></span><br><span class="line">    beanFactory.registerResolvableDependency(BeanFactory<span class="class">.<span class="keyword">class</span>, <span class="title">beanFactory</span>)</span>;</span><br><span class="line">    beanFactory.registerResolvableDependency(ResourceLoader<span class="class">.<span class="keyword">class</span>, <span class="title">this</span>)</span>;</span><br><span class="line">    beanFactory.registerResolvableDependency(ApplicationEventPublisher<span class="class">.<span class="keyword">class</span>, <span class="title">this</span>)</span>;</span><br><span class="line">    beanFactory.registerResolvableDependency(ApplicationContext<span class="class">.<span class="keyword">class</span>, <span class="title">this</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Register early post-processor for detecting inner beans as ApplicationListeners.</span></span><br><span class="line">    beanFactory.addBeanPostProcessor(<span class="keyword">new</span> ApplicationListenerDetector(<span class="keyword">this</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Detect a LoadTimeWeaver and prepare for weaving, if found.</span></span><br><span class="line">    <span class="keyword">if</span> (beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) &#123;</span><br><span class="line">        beanFactory.addBeanPostProcessor(<span class="keyword">new</span> LoadTimeWeaverAwareProcessor(beanFactory));</span><br><span class="line">        <span class="comment">// Set a temporary ClassLoader for type matching.</span></span><br><span class="line">        beanFactory.setTempClassLoader(<span class="keyword">new</span> ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Register default environment beans.</span></span><br><span class="line">    <span class="keyword">if</span> (!beanFactory.containsLocalBean(ENVIRONMENT_BEAN_NAME)) &#123;</span><br><span class="line">        beanFactory.registerSingleton(ENVIRONMENT_BEAN_NAME, getEnvironment());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!beanFactory.containsLocalBean(SYSTEM_PROPERTIES_BEAN_NAME)) &#123;</span><br><span class="line">        beanFactory.registerSingleton(SYSTEM_PROPERTIES_BEAN_NAME, getEnvironment().getSystemProperties());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!beanFactory.containsLocalBean(SYSTEM_ENVIRONMENT_BEAN_NAME)) &#123;</span><br><span class="line">        beanFactory.registerSingleton(SYSTEM_ENVIRONMENT_BEAN_NAME, getEnvironment().getSystemEnvironment());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="postProcessBeanFactory-beanFactory"><a href="#postProcessBeanFactory-beanFactory" class="headerlink" title="postProcessBeanFactory(beanFactory)"></a>postProcessBeanFactory(beanFactory)</h2><p>Allows post-processing of the bean factory in context subclasses.</p>
-<p>Modify the application context’s internal bean factory after its standard initialization.<br>All bean definitions will have bean loaded, but no beans have been instantiated yet.<br>This alllows for registering special BeanPostProcessors etc in certain Applicationcontext implementations. </p>
-<h2 id="invokeBeanFactoryPostProcessors-beanFactory"><a href="#invokeBeanFactoryPostProcessors-beanFactory" class="headerlink" title="invokeBeanFactoryPostProcessors(beanFactory);"></a>invokeBeanFactoryPostProcessors(beanFactory);</h2><p>invoke factory processors registered as beans in the creation.</p>
-<p>Instantiate and invoke all registered BeanFactoryPostProcessor beans,<br>respecting explicit order if given. Must be called before singleton instantiation.</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1668,7 +1717,7 @@
       <div class="prev-next">
         
         <p class="current">
-          1 / 7
+          1 / 8
         </p>
         
           <a class="next" rel="next" href="/archives/2020/page/2/">
@@ -1730,7 +1779,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(40)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(42)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
