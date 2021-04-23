@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>caculator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.0/dist/echarts.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-echarts@6.0.0-rc.4"></script>
+
+    <style>
+        .input-group{
+            margin: 2px;
+        }
+ 
+        .input-group-addon-pre{
+            width: 81px!important;
+            text-align: justify;
+            text-align-last:justify;
+
+        }
+        .form-control{
+            width: 102px!important;
+        }
+        ul li{
+            list-style-type:none;
+        }
+        table {
+           margin: auto!important;
+        }
+        td{
+            text-align: center ;
+            vertical-align: middle!important;
+        }
+
+    </style>
+  </head>
+  <body>
+  <div id="caculator">
+      
+    <form class="container form-inline">
+        <h1>{{message}}</h1>
+   
+        <!--单套产品基本信息-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">单套产品基本信息</div>
+            <div class="panel-body">
+
+                <!--单套产品体积-->
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="input-group-addon">
+                           单套产品体积(含包装) =
+                        </label> 
+                        <div class="form-inline">
+                            <input type="number" class="form-control input-sm" id="productInfo_size_long" v-bind:placeholder="productInfo.size.long.placeholder" v-model="productInfo.size.long.value">
+                            <input type="number" class="form-control input-sm" id="productInfo_size_weidht" v-bind:placeholder="productInfo.size.width.placeholder" v-model="productInfo.size.width.value">
+                            <input type="number" class="form-control input-sm" id="productInfo_size_height" v-bind:placeholder="productInfo.size.height.placeholder" v-model="productInfo.size.height.value">
+                        </div>  
+                        <label class="input-group-addon">
+                            <input type="radio" name="productInfo_size_norms" id="productInfo_size_norms_cm" value="1" checked="checked" v-model="productInfo.size.norms">CM
+                            <input type="radio" name="productInfo_size_norms" id="productInfo_size_norms_inch" value="2.54" v-model="productInfo.size.norms">英寸
+                        </label> 
+                    </div>
+    
+                    <div class="input-group">
+                        <div id="productInfoNormsHelpBlock">
+                            = <kbd>{{productInfo.size.cm3 = 
+                                Number((productInfo.size.long.value * productInfo.size.norms) * 
+                                (productInfo.size.width.value * productInfo.size.norms) * 
+                                (productInfo.size.height.value * productInfo.size.norms)).toFixed(2)
+                            }}</kbd> CM<sup>3</sup>
+                            
+                        </div>
+                    </div>
+                </div>  
+
+                <p></p>
+                <!--单套产品重量-->
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="input-group-addon">
+                            单套产品重量(含包装) =
+                         </label> 
+                        <div class="form-inline">
+                            <input type="number" class="form-control input-sm" id="productInfo_weight" v-bind:placeholder="productInfo.weight.placeholder" v-model="productInfo.weight.value"/>
+                        </div>  
+                        <label class="input-group-addon">
+                            <input type="radio" name="productInfoWeightNorms" id="productInfoWeightNorms1" value="1" checked="checked" v-model="productInfo.weight.norms">KG
+                            <input type="radio" name="productInfoWeightNorms" id="productInfoWeightNorms2" value="2.2046226" v-model="productInfo.weight.norms">英镑(lbs)
+                        </label>   
+                     </div>
+                     <div class="input-group">
+                        <div id="productInfoNormsHelpBlock">
+                           = <kbd>{{productInfo.weight.kg = Number((productInfo.weight.value * productInfo.weight.norms)).toFixed(2)}}</kbd> KG
+                        </div>
+                    </div>
+                </div>
+
+                <!--采购单价-->
+                <p></p>
+                <div class="form-group">
+                     <div class="input-group">
+                        <label class="input-group-addon">
+                            单套采购价格(含包装) =
+                         </label> 
+                        <div class="form-inline">
+                            <input type="number" class="form-control input-sm" id="productPrice" v-bind:placeholder="productInfo.price.placeholder" v-model="productInfo.price.value"/>
+                        </div>  
+                        <label class="input-group-addon">
+                            元/套
+                         </label> 
+                     </div>
+                </div>
+
+                <!--采购数量-->
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="input-group-addon">
+                            共采购
+                         </label> 
+                        <div class="form-inline">
+                            <input type="number" class="form-control input-sm" id="productNumbers" v-bind:placeholder="productInfo.number.placeholder" v-model="productInfo.number.value"/>
+                        </div>  
+                        <label class="input-group-addon">
+                            套
+                         </label> 
+                     </div>
+                </div>
+
+                <!--采购成本-->
+                <div class="form-group">
+                    <div class="input-group">
+                        <div id="productInfoNormsHelpBlock">
+                            <h5>采购成本 = 
+                            <kbd>{{productInfo.totalCost.value = (productInfo.number.value * productInfo.price.value)}}</kbd> 元
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="panel-footer">
+            </div>
+        </div>
+
+       <!-- Package Infomation. -->
+        <div class="panel panel-primary">
+            <div class="panel-heading">包装箱基本信息</div>
+            <div class="panel-body">
+
+                <!-- 包装箱体积 -->
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="input-group-addon">
+                            单个包装箱体积(外径) =
+                         </label> 
+                        <div class="form-inline">
+                            <input type="number" class="form-control input-sm" id="packageInfoSizeLong" v-bind:placeholder="packageInfo.size.long.placeholder" v-model="packageInfo.size.long.value">
+                            <input type="number" class="form-control input-sm" id="packageInfoSizeWidth" v-bind:placeholder="packageInfo.size.width.placeholder" v-model="packageInfo.size.width.value"/>
+                            <input type="number" class="form-control input-sm" id="packageInfoSizeHeight" v-bind:placeholder="packageInfo.size.height.placeholder"  v-model="packageInfo.size.height.value"/>
+                        </div>  
+                        <label class="input-group-addon">
+                            <input type="radio" name="packageInfoNorms" id="packageInfoNormsCM" value="1" checked="checked" v-model="packageInfo.size.norms">CM
+                            <input type="radio" name="packageInfoNorms" id="packageInfoNormsInch" value="2.54" v-model="packageInfo.size.norms">英寸
+                        </label> 
+                    </div>
+    
+                    <div class="input-group">
+                        <div id="packageInfoNormsHelpBlock">
+                           = <kbd>{{packageInfo.cm3 = 
+                                Number(
+                                  (packageInfo.size.long.value * packageInfo.size.norms) 
+                                * (packageInfo.size.width.value * packageInfo.size.norms) 
+                                * (packageInfo.size.height.value * packageInfo.size.norms)
+                                ).toFixed(2)}}</kbd> CM<sup>3</sup>
+                        </div>
+                    </div>
+                </div>  
+
+                <p></p>
+                <!--包装箱重量-->
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="input-group-addon">
+                            单个箱子重量(不含商品)
+                         </label> 
+                        <div class="form-inline">
+                            <input type="number" class="form-control input-sm" id="packageInfoWeight" v-bind:placeholder="packageInfo.weight.placeholder" v-model="packageInfo.weight.value"/>
+                        </div>  
+                        <label class="input-group-addon">
+                            <input type="radio" name="packageInfoWeightNorms" id="packageInfoWeightNorms1" value="1" checked="checked" v-model="packageInfo.weight.norms">KG
+                            <input type="radio" name="packageInfoWeightNorms" id="packageInfoWeightNorms2" value="2.2046226" v-model="packageInfo.weight.norms">英镑
+                        </label>   
+                     </div>
+                     <div class="input-group">
+                        <div id="packageInfoNormsHelpBlock" style="padding-left:8px;">
+                            <kbd>{{packageInfo.weight.kg = 
+                                Number((packageInfo.weight.value * packageInfo.weight.norms)).toFixed(2)
+                            }}</kbd> KG
+                        </div>
+                    </div>
+                </div>
+
+                <p></p>
+                <!--装箱数量-->
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="input-group-addon">
+                            每箱装
+                         </label> 
+                        <div class="form-inline">
+                            <input type="number" class="form-control input-sm" id="packageOfNumbers" v-bind:placeholder="packageInfo.productNumber.placeholder" v-model="packageInfo.productNumber.value"/>
+                        </div>  
+                        <label class="input-group-addon">
+                            套
+                         </label> 
+                     </div>
+                     <div class="input-group">
+                        <label class="input-group-addon">
+                            共装
+                         </label> 
+                        <div class="form-inline">
+                            <input type="number" class="form-control input-sm" id="packageNumbers" v-bind:placeholder="packageInfo.number.placeholder" v-model="packageInfo.number.value"/>
+                        </div>  
+                        <label class="input-group-addon">
+                            箱
+                         </label> 
+                     </div>
+
+                </div>
+
+                <p></p>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div id="packageInfoNormsHelpBlock" class="help-block">
+                            <p>
+                                每箱重量 = 单套产品重量 * 每箱产品数量 + 单个箱子重量
+                                  = {{productInfo.weight.kg}} * {{packageInfo.productNumber.value}} + {{packageInfo.weight.kg}} 
+                                  = {{packageInfo.totalWeight = (productInfo.weight.kg * packageInfo.productNumber.value) + parseFloat(packageInfo.weight.kg)}} KG
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <p>美国、欧洲纸箱的任意一边尺寸不得超过25英寸（63.5cm），重量不超过23kg（50磅）;</p>
+                <p>日本：不得超过50*60*50cm，重量不超过40kg;</p>
+                <p class="text-danger">运输过程中箱体会膨胀变形，导致最长边超过FBA限制后增加仓储费用，因此定制包装箱尺寸要比FBA要求的小1～2公分;</p>
+            </div>
+        </div>
+
+        <!-- Exchange Rating Setting. -->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <a class="btn btn-default" role="button" data-toggle="collapse" href="#ratingContent">
+                   利润计算
+                </a>
+            </div>
+            <div id="ratingContent" class="panel-collapse collapse in" role="tabpanel" >
+                <div class="panel-body">
+                     <!--国内运费-->
+                    <div class="form-group">
+                        <ul>   
+                            <li>
+                                <div class="input-group">
+                                    <label class="input-group-addon">
+                                        国内运费
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" id="interShippCost" v-bind:placeholder="shipping.inter.cost.placeholder" v-model="shipping.inter.cost.value"/>
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        元
+                                    </label> 
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <ul>   
+                            <li>
+                                <div class="input-group">
+                                    <label class="input-group-addon">
+                                        其他成本
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm"  v-bind:placeholder="productInfo.otherCost.placeholder" v-model="productInfo.otherCost.value"/>
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        元
+                                    </label> 
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- US-->
+                    <div class="form-group">
+                        <label class="form-label">{{us.country}}</label>
+                        <ul>
+                            <!--汇率-->
+                            <li >
+                                <div class="input-group">
+                                    <label class="input-group-addon input-group-addon-pre">
+                                        1{{us.currency}}兑
+                                        </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" id="exchangeRateUS" placeholder="汇率" v-model="us.exchangeRate">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        元
+                                    </label> 
+                                </div> 
+                            </li>
+
+                            <!--产品售价-->
+                            <li>
+                                <div class="input-group">
+                                    <label class="input-group-addon input-group-addon-pre">
+                                        产品售价
+                                        </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.salePrice.placeholder" v-model="us.salePrice.value"/>
+                                    </div>  
+                                    <label class="input-group-addon"><strong>{{us.currencySymbol}} </strong></label> 
+                                </div>
+                                <div class="input-group text-danger">
+                                    <!-- 人民币
+                                    <kbd>{{Number( us.salePrice.value * us.exchangeRate ).toFixed(2)}} </kbd>
+                                    元/套。 -->
+                                    销售总额 = 售价 * 数量 = 
+                                    <code>{{Number(us.salePrice.value).toFixed(2)}}</code> 
+                                    * <code>{{productInfo.number.value}}</code> 
+                                    = <kbd>{{Number(us.saleTotal = us.salePrice.value * productInfo.number.value).toFixed(2) }}  </kbd> 
+                                    {{us.currencySymbol}}
+                                    <!-- = <code>{{us.saleTotal}} </code> {{us.currencySymbol}} * <code>{{us.exchangeRate}}</code> 元/{{us.currencySymbol}}
+                                    = <kbd>{{us.saleTotal * us.exchangeRate}}</kbd> 元。 -->
+                                </div>
+                            </li>
+
+                            <!--推广费用-->
+                            <li >
+                                <div class="input-group">
+                                    <label class="input-group-addon input-group-addon-pre">
+                                        营销占比
+                                        </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm"  placeholder="营销费用比例" v-model="us.marketingCostPercent">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        %
+                                    </label> 
+                                </div> 
+                                <div class="input-group text-danger">
+                                    营销成本 = 售价 * 营销占比 = 
+                                    <code>{{us.salePrice.value}}</code> * <code>{{us.marketingCostPercent}}%</code>
+                                    = {{Number(us.salePrice.value * us.marketingCostPercent / 100).toFixed(2)}}
+                                    {{us.currencySymbol}}/件， 
+                                    总营销成本 = 销售总额 * 营销占比 = 
+                                    <kbd>{{Number(us.marketingCostTotal = us.saleTotal * us.marketingCostPercent/100).toFixed(2)}} </kbd>
+                                    {{us.currencySymbol}}  (包含站内/外广告/评测)
+                                </div>
+                            </li>
+
+                            <!--弃货换货比例-->
+                            <li>
+                                
+                                <div class="input-group">
+                                    <label class="input-group-addon input-group-addon-pre">
+                                        弃货比例
+                                        </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm"  v-bind:placeholder="us.discard.placeholder" v-model="us.discard.value"/>
+                                    </div>  
+                                    <label class="input-group-addon">%</label> 
+                                </div>
+                                <div class="input-group text-danger">
+                                    弃货成本 = 销售总额 * 弃货比例 = 
+                                    <code>{{Number(us.saleTotal).toFixed(2)}}</code> * <code>{{us.discard.value}}%</code>
+                                    = {{Number(us.discard.total=us.saleTotal * us.discard.value/100).toFixed(2)}} {{us.currencySymbol}}
+                                      (包含赠送、退货、换货、弃货)
+                                </div>
+                            </li>
+
+
+
+                            <!--税率-->
+                            <li>
+                                <div class="input-group">
+                                    <label class="input-group-addon input-group-addon-pre" >
+                                        税率
+                                        </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" id="taxesRateUS" placeholder="税率" v-model="us.taxesRate">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        %
+                                    </label> 
+                                </div> 
+                                <div class="input-group text-danger">  
+                                    纳税额 = 售价 - 售价 / (1 + 税率) =          
+                                    {{Number(us.singleTax = us.salePrice.value - us.salePrice.value / (1 + us.taxesRate / 100)).toFixed(2)}}
+                                    {{us.currencySymbol}}/套，
+                                     总纳税额 = 单件纳税额 * 数量 = 
+                                     <kbd>{{ Number(us.taxesCostTotal = us.singleTax * productInfo.number.value).toFixed(2)}}</kbd>
+                                     {{us.currencySymbol}}。
+                                 </div> 
+                            </li>
+
+                            <!--平台费率-->
+                            <li>
+                                <div class="input-group">
+                                    <label class="input-group-addon input-group-addon-pre" >
+                                        平台费率
+                                        </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" id="platformRateUS" placeholder="平台费率" v-model="us.platformRate">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        %
+                                    </label>                                  
+                                </div> 
+                                <div class="input-group text-danger">                     
+                                   平台费用 = 售价 * 数量 * 平台费率 = 
+                                   <kbd>{{Number(us.platFormCostTotal = us.saleTotal * (us.platformRate/100)).toFixed(2)}}</kbd>
+                                   {{us.currencySymbol}}
+                                </div>
+                            </li>
+
+                            <!--FBA配送-->
+                            <li>
+                                <div class="input-group">
+                                    <label class="input-group-addon input-group-addon-pre" >
+                                        FBA费用
+                                        </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" placeholder="FBA费用" v-model="us.fbaCost">
+                                    </div>  
+                                    <label class="input-group-addon" style="width: 82px;">
+                                        {{us.currencySymbol}}/件
+                                    </label>                                  
+                                </div> 
+                                <div class="input-group text-danger">                     
+                                      FBA总费用 = 每件配送费用 * 数量 = {{Number(us.fbaCostTotal = us.fbaCost * productInfo.number.value).toFixed(2)}}
+                                </div>
+                            </li>
+
+                            <!--库存-->
+                            <li >
+                                <div class="input-group">
+                                    <label class="input-group-addon input-group-addon-pre">
+                                        库存时长
+                                        </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm"  placeholder="库存时常" v-model="us.storeMonth">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        月，每月
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm"  placeholder="成本" v-model="us.storeCost">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        {{us.currencySymbol}}
+                                    </label> 
+                                </div> 
+                                
+                                <div class="input-group text-danger">
+                                    库存成本 = <kbd>{{us.storeCostTotal = us.storeCost * us.storeMonth}}</kbd> {{us.currencySymbol}}
+                                </div>
+                            </li>
+
+                            <!--空运-->
+                            <li>
+                                <div class="input-group">
+                                    <label class="input-group-addon  input-group-addon-pre">
+                                        空运
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" placeholder="价格" v-model="us.air.price">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        元/KG，体积重比
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm"  placeholder="体积重比" v-model="us.air.cubePct">
+                                    </div> 
+                                    <label class="input-group-addon">
+                                        处理费
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.air.cost.process.placeholder" v-model="us.air.cost.process.value">
+                                    </div> 
+                                    <label class="input-group-addon">
+                                       元/件，旺季涨幅
+                                    </label>                            
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm"  placeholder="旺季涨幅比" v-model="us.air.cost.incPct">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        %
+                                    </label> 
+                                    
+                                </div>
+                                <div class="help-block">
+                                    材重 ：<kbd>{{Number(us.air.weight = packageInfo.cm3 / us.air.cubePct).toFixed(2)}}</kbd> KG，淡季价格：
+                                    <kbd>{{ Number(us.air.cost.value = (us.air.weight > packageInfo.totalWeight ? us.air.weight : packageInfo.totalWeight) * us.air.price).toFixed(2) }}</kbd>
+                                    元/件，
+                                    旺季价格：<kbd>{{Number(us.air.cost.busyValue = us.air.cost.value * (1 + (us.air.cost.incPct/100))).toFixed(2)}}</kbd> 元/件。
+                                </div>
+                            </li>
+                            
+                            <!--海运-->
+                            <li>
+                                <div class="input-group">
+                                    <label class="input-group-addon  input-group-addon-pre">
+                                        海运
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" placeholder="价格" v-model="us.shipping.price">
+                                    </div>  
+                                    <label class="input-group-addon">
+                                        元/KG，体积重比
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm"  placeholder="体积重比" v-model="us.shipping.cubePct">
+                                    </div> 
+                                    <label class="input-group-addon">
+                                        处理费
+                                    </label> 
+                                    <div class="form-inline">
+                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.shipping.cost.process.placeholder" v-model="us.shipping.cost.process.value">
+                                    </div> 
+                                    <label class="input-group-addon">
+                                        元/件，旺季涨幅
+                                     </label>                            
+                                     <div class="form-inline">
+                                         <input type="number" class="form-control input-sm"  placeholder="旺季涨幅比" v-model="us.shipping.cost.incPct">
+                                     </div>  
+                                     <label class="input-group-addon">
+                                         %
+                                     </label> 
+                                </div>
+                                <div class="help-block">
+                                    材重 ：<kbd>{{Number(us.shipping.weight = packageInfo.cm3 / us.shipping.cubePct).toFixed(2)}}</kbd> KG，淡季价格：
+                                    <kbd>{{ Number(us.shipping.cost.value = (us.shipping.weight > packageInfo.totalWeight ? us.shipping.weight : packageInfo.totalWeight) * us.shipping.price).toFixed(2) }}</kbd>
+                                    元/件，
+                                    旺季价格：<kbd>{{Number(us.shipping.cost.busyValue = us.shipping.cost.value * (1 + (us.shipping.cost.incPct/100))).toFixed(2)}}</kbd> 元/件。
+                                </div>
+                            </li>
+                        </ul>
+                        <table class="table table-bordered">
+                            <thead>
+                               <tr class="success">
+                                   <td colspan="8"><h3>利润核算表格</h3><h6>单位：元</h6></td>
+                               </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="2"></td>
+                                    <td rowspan="2">销售额</td>
+                                    <td colspan="3">旺季</td>
+                                    <td colspan="3">淡季</td>
+                                </tr>
+                                <tr>
+                                    <td>总成本</td>
+                                    <td>总利润</td>
+                                    <td>利润率</td>
+                                    <td>总成本</td>
+                                    <td>总利润</td>
+                                    <td>利润率</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        空运
+                                    </td>
+                                    <td rowspan="2">
+                                        {{Number(us.saleTotal * us.exchangeRate).toFixed(2)}}
+                                    </td>
+                                    <td title="空运成本">
+                                        {{Number(us.air.cost.totalBusy = 
+                                            (parseFloat(us.air.cost.busyValue) + parseFloat(us.air.cost.process.value)) * parseFloat(packageInfo.number.value) + parseFloat(us.baseCostTotal)
+                                            ).toFixed(2)}}               
+                                    </td>
+                                    <td>{{Number(us.profitBusy = us.saleTotal * us.exchangeRate - us.air.cost.totalBusy).toFixed(2)}}</td>
+                                    <td>
+                                        销售利润率：{{Number((us.saleTotal * us.exchangeRate - us.air.cost.totalBusy) / (us.saleTotal * us.exchangeRate) * 100).toFixed(2)}}%
+                                        <br/>
+                                        成本利润率：{{Number((us.saleTotal * us.exchangeRate - us.air.cost.totalBusy) / (us.air.cost.totalBusy) * 100).toFixed(2)}}%
+                                    </td>
+                                    <td title="空运淡季成本">
+                                        {{Number(us.air.cost.total = 
+                                            (parseFloat(us.air.cost.value) + parseFloat(us.air.cost.process.value)) * parseFloat(packageInfo.number.value) + parseFloat(us.baseCostTotal)
+                                            ).toFixed(2)}}</td>
+                                    <td>{{Number(us.profit = us.saleTotal * us.exchangeRate - us.air.cost.total).toFixed(2)}}</td>
+                                    <td>
+                                        销售利润率：{{Number((us.saleTotal * us.exchangeRate - us.air.cost.total) / (us.saleTotal * us.exchangeRate)*100).toFixed(2)}}%
+                                        <br/>
+                                        成本利润率：{{Number((us.saleTotal * us.exchangeRate - us.air.cost.total) / (us.air.cost.total)*100).toFixed(2)}}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        海运
+                                    </td>
+                       
+                                    <td title="海运成本">
+                                        {{Number(us.shipping.cost.totalBusy = 
+                                            (parseFloat(us.shipping.cost.busyValue) + parseFloat(us.shipping.cost.process.value)) * parseFloat(packageInfo.number.value) + parseFloat(us.baseCostTotal)
+                                            ).toFixed(2)}}               
+                                    </td>
+                                    <td>{{Number(us.profitBusy = us.saleTotal * us.exchangeRate - us.shipping.cost.totalBusy).toFixed(2)}}</td>
+                                    <td>
+                                        销售利润率：{{Number((us.saleTotal * us.exchangeRate - us.shipping.cost.totalBusy) / (us.saleTotal * us.exchangeRate) * 100).toFixed(2)}}%
+                                        <br/>
+                                        成本利润率：{{Number((us.saleTotal * us.exchangeRate - us.shipping.cost.totalBusy) / (us.shipping.cost.totalBusy) * 100).toFixed(2)}}%
+                                    </td>
+                                    <td title="海运淡季成本">
+                                        {{Number(us.shipping.cost.total = 
+                                            (parseFloat(us.shipping.cost.value) + parseFloat(us.shipping.cost.process.value)) * parseFloat(packageInfo.number.value) + parseFloat(us.baseCostTotal)
+                                            ).toFixed(2)}}</td>
+                                    <td>{{Number(us.profit = us.saleTotal * us.exchangeRate - us.shipping.cost.total).toFixed(2)}}</td>
+                                    <td>
+                                        销售利润率：{{Number((us.saleTotal * us.exchangeRate - us.shipping.cost.total) / (us.saleTotal * us.exchangeRate)*100).toFixed(2)}}%
+                                        <br/>
+                                        成本利润率：{{Number((us.saleTotal * us.exchangeRate - us.shipping.cost.total) / (us.shipping.cost.total)*100).toFixed(2)}}%
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="8">
+                                       总收入 = {{Number(us.saleTotal).toFixed(2)}}
+                                       <br/>
+
+                                       <ul>
+                                           <li>
+                                            基础成本(除国际运费) = 
+                                           
+                                         ({{Number(productInfo.totalCost.value).toFixed(2)}})采购成本 
+                                           + ({{Number(shipping.inter.cost.value).toFixed(2)}})国内运费 
+                                           + ({{Number(productInfo.otherCost.value).toFixed(2)}})其他成本 
+                                           + (({{Number(us.marketingCostTotal).toFixed(2)}})营销成本 
+                                          + ({{Number(us.discard.total).toFixed(2) }})弃货成本 
+                                           + ({{Number(us.storeCostTotal).toFixed(2)}})库存成本 
+                                          + ({{Number(us.taxesCostTotal).toFixed(2) }})纳税额 
+                                           + ({{Number(us.platFormCostTotal).toFixed(2)}})平台佣金 
+                                           + ({{Number(us.fbaCostTotal).toFixed(2)}})FBA费用
+                                         
+                                            ) * ({{us.exchangeRate}})汇率
+     
+                                          = {{ Number(
+                                                 us.baseCostTotal =  
+                                                   parseFloat(productInfo.totalCost.value)
+                                                 + parseFloat(shipping.inter.cost.value)  
+                                                 + parseFloat(productInfo.otherCost.value)
+                                                 + (
+                                                     parseFloat(us.marketingCostTotal) 
+                                                     + parseFloat(us.discard.total )
+                                                     + parseFloat(us.storeCostTotal) 
+                                                     + parseFloat(us.taxesCostTotal )
+                                                     + parseFloat(us.platFormCostTotal) 
+                                                     + parseFloat(us.fbaCostTotal)
+                                                 ) * us.exchangeRate
+                                                 ).toFixed(2)
+                                             }} 元 
+                                           </li>
+                                       </ul>
+
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+
+    </form>
+
+        <div class="row" style="z-index: 9999999; position: fixed; top: 70px; right: -130px;">
+            <div class="col-xs-6 col-md-6">
+                <a href="#" class="thumbnail">
+                    <img src="./qrcode.jpg" alt="扫码关注">
+                  </a>
+            </div>
+        </div>
+  </div>
+
+
+    <!-- built files will be auto injected -->
+
+    <script>
+        const caculatorApp = {
+            data(){
+                return {
+                    message : "Caculator V1.0",
+                    shipping:{
+                        inter:{
+                            cost:{
+                                placeholder:'',
+                                value:0,
+                            },
+                        },
+                    },
+                    productInfo:{
+                        size:{
+                            long: {
+                                value: null,
+                                placeholder: '长',
+                            },
+                            width: {
+                                value: null,
+                                placeholder: '宽',
+                            },
+                            height:{
+                                value: null,
+                                placeholder: '高',
+                            },
+                            norms: 1,
+                        },
+                        cm3 : 0,
+                        weight:{
+                            norms:1, //产品重量单位换算
+                            value:null,
+                            placeholder:'重量',
+                            kg:0,
+                        },
+                        number:{
+                            value:0,
+                            placeholder:'数量',
+                        },
+                        initPrice:0,
+                        price:{
+                            value:0.00,
+                            placeholder:'价格',
+                        },
+                        totalCost:{
+                            value:0,
+                            placeholder:'采购成本'
+                        },
+                        otherCost:{
+                            value:0,
+                            placeholder:'其他成本',
+                        }
+                    }, 
+                    packageInfo:{
+                        size:{
+                            long: {
+                                value: null,
+                                placeholder: '长',
+                            },
+                            width: {
+                                value: null,
+                                placeholder: '宽',
+                            },
+                            height:{
+                                value: null,
+                                placeholder: '高',
+                            },
+                            norms: 1,
+                        },
+                        cm3 : 0,
+                        weight:{
+                            norms:1, //重量单位换算
+                            value:null,
+                            placeholder:'重量',
+                            kg:0,
+                        },
+                        number:{
+                            value:0,
+                            placeholder:'箱子数量',
+                        },
+                        productNumber:{
+                            value:null,
+                            placeholder:'产品数量',
+                        },
+                        totalWeight: 0,
+                    },
+                    us:{
+                        country: 'US',
+                        currency: 'USD',
+                        currencySymbol:'💲',
+                        shipping:{
+                            price:12, //每公斤价格
+                            cubePct: 6000, //泡重比
+                            weight: 0, //泡重
+                            cost:{
+                                process:{ //处理费
+                                    value:0,
+                                    placeholder:'处理费',
+                                },
+                                incPct:20,//旺季涨幅
+                                value:0, //淡季运费
+                                busyValue:0, //旺季运费
+                            },
+                        },
+                        air:{
+                            price:67, //每公斤价格
+                            cubePct: 5000, //泡重比
+                            weight: 0, //泡重
+                            cost:{
+                                process:{ //处理费
+                                    value:0,
+                                    placeholder:'处理费',
+                                },
+                                incPct:20,//旺季涨幅
+                                value:0, //淡季运费
+                                busyValue:0, //旺季运费
+                                total:0, //空运总成本呢
+                            },
+                        },
+
+                        discard:{
+                            value:0.2,
+                            placeholder:'比例',
+                            total:0,
+                        },
+
+                        salePrice:{
+                            value: 0,
+                            placeholder:'USD',
+                        },
+                        saleTotal:0,
+
+                        exchangeRate:6.55, //汇率
+                        
+                        taxesRate:0,  //税率
+                        taxesCostTotal : 0, //总税费
+
+                        platformRate: 15.3, //平台佣金比例
+                        platFormCostTotal : 0,
+                        
+                        marketingCostPercent:6, //营销比例
+                        marketingCostTotal:0, //营销费用
+                        
+                        storeMonth:2,
+                        storeCost:0,
+                        storeCostTotal:0,
+
+                        fbaCost:0,
+                        fbaCostTotal:0,
+
+                        baseCostTotal:0, //除运费外的成本
+                    }
+                }
+            },
+            watch:{
+                productInfoSizeLong:function(val){this.productInfoSizeLong = Number(val)},
+                productInfoSizeWidth: function(val){this.productInfoSizeWidth = Number(val)}, //单个产品宽
+                productInfoSizeHeight: function(val){this.productInfoSizeHeight = Number(val)}, //单个产品高
+ 
+                productInfoWeight: function(val){this.productInfoWeight = Number(val)} , //单个产品重量
+ 
+                productNumbers: function(val){this.productNumbers = Number(val)}, //产品数量
+                productPrice:function(val){this.productPrice = Number(val)}, //产品价格
+ 
+                //外包装
+                packageInfoSizeLong: function(val){this.packageInfoSizeLong = Number(val)}, //单个产品长
+                packageInfoSizeWidth: function(val){this.packageInfoSizeWidth = Number(val)}, //单个产品宽
+                packageInfoSizeHeight: function(val){this.packageInfoSizeHeight = Number(val)}, //单个产品高
+ 
+
+                packageInfoWeight: function(val){this.packageInfoWeight = Number(val)} , //单个产品重量
+ 
+
+                packageOfNumbers: function(val){this.packageOfNumbers = Number(val)}, //产品数量
+                packageNumbers:function(val){this.packageNumbers = Number(val)}, //产品价格
+ 
+                //运输
+                trainPricePerKG: function(val){this.packageOfNumbers = Number(val)},
+                shippingPricePerKG: function(val){this.packageOfNumbers = Number(val)},
+                airPricePerKG: function(val){this.packageOfNumbers = Number(val)},
+            }
+       
+        }
+
+        Vue.createApp(caculatorApp)
+        // .component('v-chart', VueECharts)
+        .mount("#caculator");
+ 
+
+
+    </script>
+
+<script src="https://readmore.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'caculator',
+        blogId: '26437-1619169501455-647',
+        name: '宋先生',
+        qrcode: 'https://www.hessentec.top/amz/fbacaculator/qrcode.jpg',
+        keyword: 'FBA',
+    });
+</script>
+  </body>
+</html>

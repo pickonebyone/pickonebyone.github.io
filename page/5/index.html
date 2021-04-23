@@ -365,8 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/10/19/Tree/">
-      B+ Tree
+    <a href="/2020/11/04/%E6%96%87%E4%BB%B6/">
+      MySQL 文件
     </a>
   </h2>
 
@@ -389,6 +389,14 @@
           
             
               
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Mysql</p>
+    </a>
+  </div>
+
 
             
           
@@ -396,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年10月19日</p>
+    <p>发布于：2020年11月4日</p>
   </a>
 </div>
 
@@ -424,12 +432,59 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="B-树的特征与结构"><a href="#B-树的特征与结构" class="headerlink" title="B+树的特征与结构"></a>B+树的特征与结构</h2><ul>
-<li>每个子树不保存数据，值用来保存索引数据，所有的数据都保存在叶子结点上；</li>
-<li>所有的叶子结点中包含了全部元素的信息，以及指向这些元素记录的指针，且叶子结点本身依关键字大小有效到大顺序链接。</li>
-<li>所有的中间结点元素都同时存在于子结点，在子结点元素中是最大/最小元素</li>
+        <h2 id="参数文件"><a href="#参数文件" class="headerlink" title="参数文件"></a>参数文件</h2><h3 id="动态参数"><a href="#动态参数" class="headerlink" title="动态参数"></a>动态参数</h3><p>  动态参数可以在Mysql实例运行中进行更改，可以通过SET命令对动态参数值进行修改。<br>  SET [global|session]  key = value;</p>
+<h3 id="静态参数"><a href="#静态参数" class="headerlink" title="静态参数"></a>静态参数</h3><p>  静态参数在整个实例生命周期内不得进行更改，需要重新启动实例才会生效。</p>
+<h2 id="日志文件"><a href="#日志文件" class="headerlink" title="日志文件"></a>日志文件</h2><h3 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h3><p>记录了对Mysql的启动、运行、关闭过程中所有的错误、警告和正确的信息。</p>
+<h3 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h3><p>可以帮助定位可能存在问题的SQL语句，从而进行SQL层面的优化。Mysql在启动时设置一个阈值，将运行时间超过该值的所有SQL语句都记录到慢查询日志文件中。<br>通过设置 long_query_time 来设置，单位为秒。<br>log_queries_not_using_indexes: 记录没有使用索引的查询日志。<br>log_throttle_queries_not_using_indexes:每分钟允许记录到showLog的且未使用索引的SQL语句次数，0表示不限制。</p>
+<p>查看慢日志</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysqldumpslow *.log</span><br><span class="line">&#x2F;&#x2F;查看执行时间最长的10条sql语句</span><br><span class="line">mysqldumpslow -s al -n 10 *.log</span><br></pre></td></tr></table></figure>
+
+<h3 id="查询日志"><a href="#查询日志" class="headerlink" title="查询日志"></a>查询日志</h3><p>查询日志记录了所有对MySQL数据库请求的信息，无论这些请求是否得到了正确的执行。</p>
+<p>查看查询日志：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail *.log</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="二进制日志"><a href="#二进制日志" class="headerlink" title="二进制日志"></a>二进制日志</h3><p>二进制日志记录了对MySQL数据库执行更改的所有操作，但是不包括SELECT和SHOW这类对数据本身没有修改的操作。二进制日志还包括了执行数据库更改操作的时间等其他额外信息。</p>
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul>
+<li>恢复<br>某些数据的恢复需要二进制日志，如在一个数据库全备文件恢复后，用户可以通过二进制日志进行pint-in-time的恢复。</li>
+<li>复制<br>与恢复类似，通过复制和执行二进制日志使另一台远程的MySQL数据库与当前数据库进行实时同步。</li>
+<li>审计<br>通过二进制日志中的信息来进行审计，判断是否有对数据库进行注入的攻击。</li>
 </ul>
-<p><a href="http://www.liuzk.com/410.html" target="_blank" rel="noopener">Mysql索引B+树</a></p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><ul>
+<li>max_binlog_size: 单个日志文件的最大值，默认1G</li>
+<li>binlog_cache_size: 所有未提交的二进制日志会被记录到一个缓存中，等该事务提交时直接将缓冲中的二进制日志写入二进制日志文件，该缓冲的大小默认为32。该值是基于会话的，每个会话会申请32K的空间。</li>
+<li>binlog_cache_use: 记录了使用临时文件写二进制日志的次数。</li>
+<li>sync_binlog：表示每写缓冲多少次就同步到磁盘，为1时，表示采用同步写磁盘的方式来写二进制日志，这时写操作不使用操作系统的缓冲来写二进制日志。默认值为0.</li>
+<li>binlog-do-db：写入哪些库的日志，默认为空表示同步所有库的日志到二进制日志。</li>
+<li>binlog-ignore-db：忽略哪些库的日志</li>
+<li>log-slave-update：当前库为slave时，如果需要将从master取得并执行的二进制日志写入自己的二进制日志文件中时需要设置该值。</li>
+<li>binlog_format：STATEMENT/ROW/MIXED<br>STATEMENT：格式基于SQL语句，如果主服务器运行rand、uuid等函数或者触发器等操作时，就会导致主从服务器上表中的数据库表中的数据库不一致。<br>ROW：二进制的日志，记录了表的更改情况，解决了Statement下复制的问题。可以设置InnoDB的事务隔离设置为READ_COMMITTED，以获得更好的并发性。<br>MIXED：默认采用STATEMENT，但是在特殊情况下会转为ROW。</li>
+</ul>
+<h2 id="套接字文件"><a href="#套接字文件" class="headerlink" title="套接字文件"></a>套接字文件</h2><p>名为mysql.sock,可以通过Unix域套接字方式进行与本地MySQL进行连接。套接字文件由参数socket控制。</p>
+<h2 id="PID文件"><a href="#PID文件" class="headerlink" title="PID文件"></a>PID文件</h2><p>MySQL实例启动时，会将自己的进程ID写入一个文件中，该文件为PID文件。</p>
+<h2 id="表结构定义文件"><a href="#表结构定义文件" class="headerlink" title="表结构定义文件"></a>表结构定义文件</h2><p>因为MySQL插件式存储引擎的体系结构关系，MySQL数据的存储是根据表进行的，每个表都会有与之对应的文件。但不论表采用哪种存储引擎，MySQL都有一个以frm为后缀名的文件，记录了这个表结构或者视图的定义。</p>
+<h2 id="Innodb存储引擎文件"><a href="#Innodb存储引擎文件" class="headerlink" title="Innodb存储引擎文件"></a>Innodb存储引擎文件</h2><h3 id="表空间文件"><a href="#表空间文件" class="headerlink" title="表空间文件"></a>表空间文件</h3><p>InnoDB采用将存储的数据按照表空间进行存放的设计。默认配置喜爱会有一个初始大小为10MB，名为ibdata1的默认表空间文件。</p>
+<p>将ibdata1,ibdata2两个文件用来组成表空间。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">innodb_data_file_path&#x3D;&#x2F;db&#x2F;ibdata1:2000M;&#x2F;dr2&#x2F;db&#x2F;ibdata2:2000M:autoextend</span><br></pre></td></tr></table></figure>
+<p>如果该两个文件位于不同的磁盘上，磁盘的负载可能被平均，因此可以提高数据库的整体性能。<br>设置innodb_data_file_path后，所有给予innoDB存储引擎的表的数据都会记录带该共享表空间中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">innodb_file_per_table&#x3D;ON &#x2F;&#x2F;每个基于InnoDB存储引擎的表产生一个独立表空间。命名规则是：表名.ibd</span><br></pre></td></tr></table></figure>
+<p>单独的表空间文件仅存储该表的数据、索引和插入缓冲BITMAP等信息，其余信息还存放在默认的表空间中。</p>
+<p><img src="/2020/11/04/%E6%96%87%E4%BB%B6/table_space.jpg" alt="表空间"></p>
+<h3 id="重做日志文件"><a href="#重做日志文件" class="headerlink" title="重做日志文件"></a>重做日志文件</h3><p>默认情况下，在InnoDB存储引擎的数据目录下会有两个名为ib_logfile0和ib_logfile1的文件。<br>他们记录了对于InnoDB存储引擎的事务日志。</p>
+<p>重做日志用于由于主机宕机导致实例失败时，恢复到失败前的状态，一次来保证数据的完整性。</p>
+<p>每个InnoDB存储引擎至少有1个重做日志文件组，每个文件组下至少有2个重做日志文件。为了得到更高的可靠性，用户可以设置多个的景象日志组。将不同的组存放在不同的磁盘上，以此提高重做日志的高可用性。在日志组中每个重做日志文件的大小一致，并以循环写入的方式运行。<br>InnoDB存储引擎献血重做日志文件1，当达到文件的最后时，会切换到重做日志文件2，再当重做日志文件2也被写满时，再切换到重做日志文件1中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">innodb_log_file_size:每个重做日志文件的大小</span><br><span class="line">innodb_log_files_in_group: 日志文件组中重做日志文件的数量，默认为2</span><br><span class="line">innodb_mirrored_log_groups: 日志镜像文件组的数量，默认为1，表示没有镜像。</span><br><span class="line">innodb_log_group_home_dir: 日志文件组所在的路径，默认为.&#x2F;</span><br></pre></td></tr></table></figure>
+
+
+<p>重做日志文件的大小对InnoDB存储性能有非常大的影响。<br>如果设置太大，在恢复时可能需要很长的时间。<br>如果设置太小，会导致一个事务的日志需要多次切换重做日志文件。同时会导致频繁地发生 async checkpoint， 导致性能抖动。</p>
+<h4 id="二进制文件与重做日志"><a href="#二进制文件与重做日志" class="headerlink" title="二进制文件与重做日志"></a>二进制文件与重做日志</h4><p>层次不同：<br>二进制日志：记录所有与MySQL数据库有关的日志记录，包括InnoDB，MyISAM，Heap等其他存储引擎的日志。<br>重做日志：值记录InnoDB存储引擎本身的事务日志。</p>
+<p>内容不同：<br>二进制日志文件记录的是一个事务的具体操作内容，为逻辑日志。<br>重做日志记录的是关于每个页的更改的物理情况。</p>
+<p>写入时间不同：<br>二进制文件仅在事务提交前进行，无论事务大小，只写磁盘一次。<br>在事务进行的过程后再难过，不断有重做日志条目被写入到重做日志文件中。</p>
+<h4 id="重做日志条目结构"><a href="#重做日志条目结构" class="headerlink" title="重做日志条目结构"></a>重做日志条目结构</h4><p>redo_log_type | space | page_no | redo_log_body<br>redo_log_type ： 占用1字节，表示重做日志的类型<br>space： 表示表空间的ID，采用压缩的方式，占用空间可能小于4字节<br>page_no：表示页的偏移量，压缩方式<br>redo_log_body:每个重做日志的数据部分，恢复时需要调用相应函数解析。</p>
+<h4 id="重做日志写入"><a href="#重做日志写入" class="headerlink" title="重做日志写入"></a>重做日志写入</h4><p>重做日志的写入不是直接写，而是先写入重做日志缓冲（redo log buffer）中，然后按照一定的条件顺序地写入日志文件。</p>
+<p>从重做日志缓冲网磁盘写入时，按照写入的最小单位（扇区大小：512个字节）进行写入，因此可以保证写入必定是成功的，因此在重做日志的写入过程不需要有doublewrite。</p>
+<p>写入时机：<br>1） 不论事务已经提交，主线程每秒都会将重做日志缓冲写入到磁盘的重做日志文件中。<br>2） 事务提交时，设置了innodb_flush_log_at_trx_commit。<br>    值为0时，不将事物的重做日志写入磁盘上的日志文件，<br>    1表示在执行commit时将重做日志缓冲同步写到磁盘，<br>    2表示将重做日志异步写到磁盘（也就是写到文件系统的缓存中）</p>
+<p>因此，为了保证ACID中的D（持久性），必须将innodb_flush_log_at_trx_commit设置为1，当数据库因为意外宕机时，可以通过重做日志文件恢复，并保证可以恢复已经提交的事务。</p>
 
       
     </div>
@@ -456,8 +511,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">
-      DataBase-分布式事务
+    <a href="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/">
+      InnoDB体系架构
     </a>
   </h2>
 
@@ -482,9 +537,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%95%B0%E6%8D%AE%E5%BA%93/' rel="nofollow">
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/数据库</p>
+      <p>Java技术栈/Mysql</p>
     </a>
   </div>
 
@@ -495,7 +550,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年10月16日</p>
+    <p>发布于：2020年11月3日</p>
   </a>
 </div>
 
@@ -523,39 +578,65 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <p>随着业务的增长，需要进行分表、分库，甚至拆分应用演化成微服务。<br>因此一次交易需要跨库、跨服务保证每个系统中的交易要么全部成功，否则全部回滚。这里就涉及到分布式事务。</p>
-<p>XA协议时一个基于数据库的分布式事务协议，其分为两部分：事务管理器和本地资源管理器。<br>事务管理器作为一个全局调度着，负责对各个本地资源管理器统一发送提交或者回滚命令。<br>二阶段提交和三阶段提交都是根据此协议衍生而来，Oracle和Mysql均已实现了XA接口。<br>除了二阶段提交和三阶段提交外还有Try Confirm Cancel (TCC)、本地消息队列等分布式事务解决方案。</p>
-<h3 id="二阶段提交-2PC"><a href="#二阶段提交-2PC" class="headerlink" title="二阶段提交 2PC"></a>二阶段提交 2PC</h3><p>二阶段提交需要进行两个阶段的操作，准备阶段和提交阶段。</p>
-<p>准备阶段就是事务管理器（协调者）分别给不同的系统发送“准备”命令，这些系统出了提交数据库事务之外的所有操作，都要在准备阶段操作完成。</p>
-<p>提交阶段就是事务管理器（协调者）给不同的系统发送“提交”命令，每个系统提交自己的数据库事务，然后给协调者返回“提交成功”， 协调者收到所有响应以后，返回给客户端成功响应。<br>如果遇到异常情况提交不成功，需要做一些补偿机制来保证成功。</p>
-<p><img src="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/2pc.jpg" alt="二阶段提交"></p>
-<p>对于二阶段提交：<br>如果准备阶段全部返回成功， 那么进入提交阶段，该必须保证成功。<br>如果准备阶段有一个失败，那么协调者通知每个系统回滚。</p>
-<p>二阶段提交保证了原子性与隔离性。所以2PC适合对数据一致性高的场景。</p>
-<p>缺陷：<br>性能低：整个事务的执行过程需要阻塞服务端线程和数据库会话。<br>协调者单点故障：一旦协调者宕机，就会导致事务回话一致处于等待提交阶段，直到事务超时自动回滚。<br>超时导致同步阻塞：当某个参与者节点通信处于超时，其余参与者都会被懂阻塞导致占用的资源不能释放。</p>
-<p>适合场景：只有病发量不大且需要强一致的情况下才考虑使用2PC。</p>
-<h3 id="三阶段提交-3PC"><a href="#三阶段提交-3PC" class="headerlink" title="三阶段提交 3PC"></a>三阶段提交 3PC</h3><p>三阶段提交是对二阶段提交的一种升级优化，它在二阶段提交的中间增加了precommit阶段。保证了在最后提交阶段之前，各个参与者节点状态都一致。<br>同时在协调者与参与者中都引入超时机制，当参与者由于各种原因未收到协调者的commit请求后，会对本地事务进行commit，不会一直阻塞等待，解决了2pc的单点故障问题，但是3pc还是没有能从根本上解决数据一致性的问题。</p>
-<p>三个阶段分别是can commit、Pre Commit 、Do Commit；</p>
-<p><img src="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/3pc.jpg" alt="三阶段提交"></p>
-<h4 id="CanCommit"><a href="#CanCommit" class="headerlink" title="CanCommit"></a>CanCommit</h4><p>类似于二阶段提交的准备阶段，协调者向所有参与者发送CanCommit命令，询问是否可以执行事务提交操作，如果可以提交就返回YES，否则返回NO。如果全部响应YES则进入下一个阶段。</p>
-<h4 id="PreCommit"><a href="#PreCommit" class="headerlink" title="PreCommit"></a>PreCommit</h4><p>协调者根据参与者的反应情况来决定是否可以进行事务的PreCommit操作。根据响应情况，有两种可能</p>
-<p>所有参与者的反馈都是YES那么执行事务的预执行：<br>  1）发送于提交请求，协调者向参与者发送Precommit请求，并进入Prepared阶段。<br>  2）事务预提交，参与者接收到PreCommit请求后，会执行事务操作，并将undo和redo信息记录到事务日志中。<br>  3）响应反馈：如果参与者成功的执行了事务操作，则返回ACK响应，同时开始等待最终指令。</p>
-<p>假如任何一个参与者向协调者发送了NO响应，或者等待超时之后，协调者都没有接到参与者的响应，那么就执行事务的中断。<br>  1）发送终端请求： 协调者向所有参与者发送abort请求。<br>  2）中断事务：参与者收到来自协调者的abort请求之后（或者超时之后，仍未收到协调者的请求）执行事务的中断。</p>
-<h4 id="DoCommit"><a href="#DoCommit" class="headerlink" title="DoCommit"></a>DoCommit</h4><p>该阶段进行真正的事务提交，也分为两种情况。</p>
-<h5 id="执行提交"><a href="#执行提交" class="headerlink" title="执行提交"></a>执行提交</h5><p>发送提交请求： 协调者接收到参与者发送的ACK响应，那么它将从预提交状态进入到提交状态。<br>并向所有参与者发送doCommit请求。<br>事务提交：参与者收到docommit请求之后，执行正式的事务提交。并在完成事务提交之后释放所有的事务资源。<br>响应反馈：参与者事务提交之后，向协调者发送ACK请求<br>完成事务： 协调者接收到所有参与者的ACK响应之后，完成事务。</p>
-<h5 id="中断事务"><a href="#中断事务" class="headerlink" title="中断事务"></a>中断事务</h5><p>协调者没有接收到参与者发送的ACK响应（可能是参与者发送的不是ACK响应，也可能是响应超时），那么就会执行中断事务。</p>
-<p>发送中断请求：协调者向所有参与者发送abort请求。<br>事务回滚：参与者接收到abort请求后，利用其在阶段二记录的undo信息来执行事务的回滚操作，并在完成回滚之后释放所有的事务资源。<br>反馈结果：参与者完成事务回滚之后，向协调者发送ACK信息<br>中断事务：协调者接收到参与者反馈的ACK消息之后，执行事务的中断操作。</p>
-<p><img src="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/3pc-status.jpg" alt="三阶段提交状态图"></p>
-<p>如果已经完成了Precommit进入到Docommit阶段，有的参与者由于超时没有收到Docommit请求时，会自动提交本地事务，并且释放资源。</p>
-<p>三阶段提交解决了二阶段提交无法释放资源的问题。<br>也保证了在提交事务之前所有参与者的状态都一致</p>
-<h3 id="补偿事务（TCC）"><a href="#补偿事务（TCC）" class="headerlink" title="补偿事务（TCC）"></a>补偿事务（TCC）</h3><p>针对每个操作都要注册一个与其对应的确认和补偿（撤销操作）</p>
-<p>它分为三个操作：</p>
-<h5 id="Try阶段"><a href="#Try阶段" class="headerlink" title="Try阶段"></a>Try阶段</h5><p>主要针对业务系统做检测以及资源预留。</p>
-<h5 id="Confirm阶段"><a href="#Confirm阶段" class="headerlink" title="Confirm阶段"></a>Confirm阶段</h5><p>确认执行业务操作。</p>
-<h5 id="Cancel阶段"><a href="#Cancel阶段" class="headerlink" title="Cancel阶段"></a>Cancel阶段</h5><p>取消执行业务操作。</p>
-<p>TCC处理流程与2PC类似，不过2PC通常是在跨库的DB层面，TCC本质上就是一个应用层面的2PC，需要通过业务逻辑来实现。这种分布式事务的实现方式的优势在于，可以让应用自己定义数据库操作的粒度，是的降低锁冲突、提高吞吐量成为可能。</p>
-<p>不足之处在于对应用的侵入性非常强，业务逻辑的每个分支都需要实现try、confirm、cancel三个操作。<br>此外其实现难度也比较大，需要按照网络状态、系统故障等不同的失败原因实现不同的回滚策略。<br>为了满足一致性的要求，confirm和cancel必须实现幂等。</p>
-<p><img src="/2020/10/16/DataBase-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/TCC.png" alt="TCC(图片来源于网络)"></p>
-<h3 id="本地消息队列"><a href="#本地消息队列" class="headerlink" title="本地消息队列"></a>本地消息队列</h3><p>如果只需要保证数据的最终一致性，那么可以使用消息队列来解决。</p>
+        <h2 id="InnoDB-体系架构"><a href="#InnoDB-体系架构" class="headerlink" title="InnoDB 体系架构"></a>InnoDB 体系架构</h2><h3 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h3><h4 id="Master-Thread"><a href="#Master-Thread" class="headerlink" title="Master Thread"></a>Master Thread</h4><p>主要负责将缓冲池中的数据异步刷新到磁盘，保证数据的一致性。<br>包括脏页的刷新、合并插入缓冲、UNDO页的会后等。</p>
+<h4 id="IO-Thread"><a href="#IO-Thread" class="headerlink" title="IO Thread"></a>IO Thread</h4><p>InnoDB中使用了AIO（AsyncIO）来处理写IO请求，提高了数据库性能。<br>IO线程的工作主要是负责AIO的回调处理。</p>
+<p>可以使用innodb_read_io_threads和innodb_write_io_threads进行设置。</p>
+<h4 id="Purge-Thread"><a href="#Purge-Thread" class="headerlink" title="Purge Thread"></a>Purge Thread</h4><p>事务被提交后，其所用的undolog可能不再需要，因此需要Perge Thread来回收已经使用并分配的undo页。<br>可以使用 innodb_purge_thread 来设置线程数量。</p>
+<h4 id="Page-Cleaner-Thread"><a href="#Page-Cleaner-Thread" class="headerlink" title="Page Cleaner Thread"></a>Page Cleaner Thread</h4><p>为了减轻MasterThread的工作，以及用户查询线程的阻塞提升性能。<br>将之前版本中脏页的舒心操作都放入到单独的线程中完成。</p>
+<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><h4 id="缓冲池"><a href="#缓冲池" class="headerlink" title="缓冲池"></a>缓冲池</h4><p>InnoDB存储引擎是基于磁盘存储的，将其中的记录按照页的方式进行管理。缓冲池就是一块内存区域，通过内存的速度来弥补磁盘速度较慢对数据库的性能影响。</p>
+<p>在数据库中进行读取页的操作，首先从磁盘读取到的页放在缓冲池中，下一次再读取相同的页时，首先判断该页是否在缓冲池中。如果在缓冲池中，则直接读取该页，否则读取磁盘上的页。</p>
+<p>对于数据库中页的修改操作，首先修改在缓冲池中的页，然后再以一定的频率刷新到磁盘上。</p>
+<p>页从缓冲池刷新到磁盘上的操作是通过Checkpoint的机制刷新回到磁盘。</p>
+<p>因此缓冲池的大小直接影响着数据库的整体性能。可以使用 innodb_buffer_pool_size 来设置缓冲池大小。</p>
+<p>缓冲池中缓存的数据页类型有：索引页、数据页、undo页、插入缓冲、自使用哈希索引、InnoDB存储的锁信息、数据字典信息等。</p>
+<p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/buffer_pool.jpeg" alt="缓冲池"></p>
+<p>InnoDB可以有多个缓冲池实例，每个页根据哈希值平均分配到不同的缓冲池实例中。这样减少了数据库内部的资源竞争，增加了数据库的兵法处理能力。可以使用 innodb_buffer_pool_instances来进行配置。</p>
+<h4 id="缓冲池管理算法"><a href="#缓冲池管理算法" class="headerlink" title="缓冲池管理算法"></a>缓冲池管理算法</h4><h5 id="LRU-List"><a href="#LRU-List" class="headerlink" title="LRU List"></a>LRU List</h5><p>LRU List 用来管理已经读取的页，最频繁使用的页存放在LRU列表的前端，最少使用的页存放在LRU列表的尾端。当缓冲池不能存放新读取到的页时，首先释放LRU列表中尾端的页。</p>
+<p>新读取的页并不直接存放在LRUList列表的前端，而是存放在midPoint的位置。midPoint之后的列表称为Old列表，之前的列表称为New列表，New列表中的页都是活跃的热点数据。</p>
+<p>这是因为，如果新读取的页如果放在最前端时，如果遇到需要访问和扫描大部分甚至全部页的时候，热点页面被刷出缓存，但是非热点数据却存放在了LRU列表的最前端。 </p>
+<p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/mid_point.jpg" alt="MID POINT"></p>
+<p>使用参数：innodb_old_blocks_pct 来控制midPoint的位置。<br>         innodb_old_blocks_times 来控制读取到MidPoint位置后需要等待多久才会被加入到LRU列表的New列表。</p>
+<h5 id="Free-List"><a href="#Free-List" class="headerlink" title="Free List"></a>Free List</h5><p>数据库刚启动的时候，LRUList是空的没有任何页。此时页都存放在FreeList中。当需要从缓冲中分页时，县从Free列表中查找是否有可用的空闲页，如果有可用的空闲页，则将该页从FreeList中删除，存放到LRUList中。如果FreeList中没有可用的空闲页，根据LRU算法，淘汰LRU尾部的页，将该页内存空间分配给新的页。</p>
+<h5 id="Flush-List"><a href="#Flush-List" class="headerlink" title="Flush List"></a>Flush List</h5><p>在LRU列表中的页被修改后，该页需要通过CheckPoint机制刷回磁盘。<br>FlushList中的页称为脏页里诶包，脏页既存在于LRUList，也存在于FlushList。<br>LRUList用来管理缓冲池中页的可用性，FlushList用来管理将页刷新回磁盘。</p>
+<h4 id="重做缓冲日志"><a href="#重做缓冲日志" class="headerlink" title="重做缓冲日志"></a>重做缓冲日志</h4><p>InnoDB存储引擎首先将重做日志信息先放入到这个缓冲区，然后按照一定的频率（每秒一次）将其刷新到重做日志文件。<br>可以使用参数：innodb_log_buffer_size来调整该缓冲区域的大小，默认为8MB。</p>
+<h4 id="额外的内存池"><a href="#额外的内存池" class="headerlink" title="额外的内存池"></a>额外的内存池</h4><p>例如：分配了缓冲池（innodb_buffer_pool），但是每个缓冲池中的帧缓冲还有对应的缓冲控制对象，这些对象记录了一些如LRU、锁、等待信息，而这个对象的内存需要从额外内存池中申请。</p>
+<p>在对一些数据结构本身的内存进行分配是，需要从额外的内存池中进行申请。因此在申请了很大的InnoDB缓冲池是，需要相应地增加额外的内存池。</p>
+<h2 id="Checkpoint技术"><a href="#Checkpoint技术" class="headerlink" title="Checkpoint技术"></a>Checkpoint技术</h2><p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/check_point.png" alt="CheckPoint"></p>
+<p>Write Pos 是当前记录的位置，一边写好一遍往后移。<br>CheckPoint 是当前要擦除的位置，也就是往后推移并且循环的，擦除记录前要把记录更新到数据文件。<br>Write Pos和 CheckPoint之间是可以写入的部分，用来记录新的操作。</p>
+<p>1） 缩短数据库的恢复时间；<br>    当数据库发生宕机时，数据库不需要重做所有的日志，因为CheckPoint之前的页都已经刷新回磁盘，因此只需要对checkPoint之后的重做日志进行恢复，这样大大缩短了数据库的恢复时间。</p>
+<p>2） 缓冲池不够用时，将脏页刷新到磁盘；<br>    当缓冲池不够用时，根据LRU算法会移除最近最少使用的页，如果当前页为脏页，则需要刷新该脏页到磁盘。</p>
+<p>3） 重做日志不可用时，刷新脏页；<br>    重做日志中Write Pos和checkPint之间没有空间来记录RedoLog时，强制刷新脏页，使得CheckPoint后移。</p>
+<h2 id="InnoDB关键特性"><a href="#InnoDB关键特性" class="headerlink" title="InnoDB关键特性"></a>InnoDB关键特性</h2><h3 id="插入缓冲"><a href="#插入缓冲" class="headerlink" title="插入缓冲"></a>插入缓冲</h3><h4 id="Insert-Buffer"><a href="#Insert-Buffer" class="headerlink" title="Insert Buffer"></a>Insert Buffer</h4><p>对于非聚集索引的插入或者更新操作，不是每一次直接插入到索引页中，而是先判断插入的非聚集索引页是否在缓冲池中，如果存在则直接插入；如果不在则先放入到一个InsertBuffer对象中。然后再以一定的频率进行InsertBuffer和辅助索引页子结点的Merge操作。<br>通常会将多个插入操作合并到一个操作中，大大提高了非聚集索引插入的性能。</p>
+<p>InsertBuffer的使用要同时满足两个条件：<br>1） 索引是辅助索引（非聚集索引）<br>    如果是聚集索引，则直接按照顺序写就行了，很高效。<br>2） 索引不是唯一的<br>    因为在插入缓冲时，数据库并不去查找索引页来判断插入的记录唯一性。如果去查找肯定又会有离散读取的情况发生，从而导致InsertBuffer失去意义。</p>
+<p>当满足索引是辅助索引且非唯一时，InnoDB存储引擎会使用InsertBuffer， 这样就可以提高插入操作的性能。</p>
+<p>当应用程序进行大量的插入操作时数据库发生了宕机，这个时候会有大量的InsertBuffer并没有合并到实际的非聚集索引中，因此恢复可能需要很长的时间。</p>
+<p>同时在写密集的情况下，InsertBuffer会占用过多的缓冲池内存（innodb_buffer_pool），默认最大可以占用1/2的缓冲池内存。修改IBUF_POOL_SIZE_PER_MAX_SIZE 可以对 InsertBuffer大小进行控制，比如改为3则最大只能使用1/3的缓冲池内存。</p>
+<h4 id="Change-Buffer"><a href="#Change-Buffer" class="headerlink" title="Change Buffer"></a>Change Buffer</h4><p>InsertBuffer 的升级版本，可以对Insert、Delete、Update都进行缓冲，分别是InsertBuffer、DeleteBuffer、PurgeBuffer。</p>
+<p>ChangeBuffer适用对象依然是非唯一的辅助索引。</p>
+<p>对一条记录进行UPDATE操作需要分为：<br>1）将记录标记为删除（DeleteBuffer对应该过程）；<br>2）真正将记录删除（PurgeBuffer对应删除操作）</p>
+<p>开启Buffer选项：<br>innodb_change_buffering: [inserts、deletes、purges、changes、all、none]<br>changes表示启用inserts、deletes<br>all表示启用所有，默认值<br>none表示都不启用。</p>
+<p>可以通过innodb_change_buffer_max_size控制changebuffer最大使用内存的数量：<br>该参数的最大有效值为50， 表示只能占用缓冲池的50%。</p>
+<h4 id="Merge-InsertBuffer"><a href="#Merge-InsertBuffer" class="headerlink" title="Merge InsertBuffer"></a>Merge InsertBuffer</h4><ul>
+<li>辅助索引页被读取到缓冲池时；<br>  执行SELECT语句时，要确认该辅助索引页是否有记录存放于InsertBufferB+树中。<br>  有，则将InsertBufferB+树中该页的记录插入到该辅助索引页中。</li>
+<li>InsertBuffer BitMap 追踪到该辅助索引页已无可用空间时；<br>  InsertBuffer BitMap用来追踪每个辅助索引页的可用空间，并至少有1/32页的可用空间。如果插入辅助索引记录时监测到插入记录后可用空间小雨1/32页，则会强制进行一个合并操作。<br>  （强制读取辅助索引页，将InsertBufferB+树中该页的记录以及待插入的记录插入到辅助索引页中。）</li>
+<li>Master Thread<br> Master Thread 每秒或者每10秒 根据srv_innodb_io_capacity 的百分比来进行一个Merge InsertBuffer操作。</li>
+</ul>
+<p>如果在merge时，要进行的merge表已经被删除，此时直接丢弃已经被Insert/Change Buffer的数据记录。</p>
+<h3 id="两次写"><a href="#两次写" class="headerlink" title="两次写"></a>两次写</h3><p>DoubleWrite为了提升InnoDB存储引擎的数据页可靠性。</p>
+<p>当InnoDB存储引擎正在将某个页写入到表中，当这个页只被写了一部分（16k的页，只写了前4k）就发生了宕机，这种情况被称为写失效（partial page write）。</p>
+<p>为了解决partial page write，InnoDB实现了Double write buffer，就是在写数据页之前，先把这个数据页写到一块独立的物理文件位置（ibdata），然后再写到数据页。<br>这样在宕机重启时，如果出现数据页损坏，就需要通过该页的副本来还愿该页，然后再进行redo log重做。</p>
+<p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/double_write.png" alt="两次写"></p>
+<p>double write由两部分组成，一部分是内存中的double write buffer，大小是2MB， 另一部分是磁盘上的共享表空间中连续的128个页，大小也是2M。<br>1）当触发数据缓冲池中的脏页刷新时，并不直接写入磁盘数据文件中，而是先拷贝到内存中的doublewrite buffer中；<br>2）接着从两次写缓冲区分两次写入磁盘共享表空间中（连续存储、顺序写）每次写1MB；<br>3）再将doublewrite buffer中的脏页数据写入实际的各个表空间中（离散写）。</p>
+<p><img src="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/double_write_recovery.png" alt="两次写恢复"></p>
+<p>当不需要开启doublewrite时，使用skip_innodb_doublewrite 关闭。</p>
+<p>innodb_buffer_pool_flushed : 当前从缓冲池中刷新到磁盘页的数量<br>innodb_dblwr_pages_written: double write 的数量</p>
+<h3 id="自适应哈希索引"><a href="#自适应哈希索引" class="headerlink" title="自适应哈希索引"></a>自适应哈希索引</h3><p>InnoDB存储引擎会监控对标上各索引页的查询，如果观察到建立哈希索引可以带来速度上的提升，则建立哈希索引。自适应哈希索引是通过缓冲池的B+树页构造而来，因此建立的速度很快，不需要对整张表建立哈希索引。 InnoDB存储引擎会自动根据访问的频率和模式来自动地为某些热点页建立哈希索引。</p>
+<p>自使用哈希索引有一个要求，对这个页的查询条件是一样的。<br>如：where a = xxx;<br>   where a = xxx and b = xxx;</p>
+<p>自使用哈希索引是数据库自优化的，无需DBA对数据库进行调整。<br>可以通过innodb_adaptive_hash_index 来启用或者禁用。</p>
+<h3 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h3><p>1）提升吞吐量<br>2）IO Merge操作</p>
+<h3 id="刷新邻接页"><a href="#刷新邻接页" class="headerlink" title="刷新邻接页"></a>刷新邻接页</h3><p>当刷新一个脏页时，InnoDB存储引擎会检测该页所在区的所有页，如果是脏页，那么一起进行刷新。<br>通过AIO可以将多个IO卸乳操作合并为一个IO操作。</p>
+<p>可以通过innodb_flush_neighbors 来关闭或者开启该特性。</p>
+<p>select version();<br>show variables like ‘innodb_%_threads’;<br>show variables like ‘innodb_buffer_pool_size’;<br>show variables like ‘innodb_buffer_pool_instances’;<br>show variables like ‘innodb_change_buffering’;<br>show engine innodb status;</p>
 
       
     </div>
@@ -582,7 +663,7 @@
           </a>
         
         <p class="current">
-          5 / 38
+          5 / 39
         </p>
         
           <a class="next" rel="next" href="/page/6/">
@@ -643,7 +724,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(42)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(44)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
@@ -663,7 +744,7 @@
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/"
             id="categoriesJavaE68A80E69CAFE6A088Mysql"
-            ><div class='name'>Mysql</div><div class='badge'>(7)</div></a></li>
+            ><div class='name'>Mysql</div><div class='badge'>(9)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/"
@@ -726,6 +807,11 @@
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
+            id="categoriesE7A28EE7A28EE5BFB5"
+            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
             ><div class='name'>设计模式</div><div class='badge'>(26)</div></a></li>
@@ -772,7 +858,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.25px; color: #6f6f6f">JVM</a> <a href="/tags/Java/" style="font-size: 16.5px; color: #888">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 19px; color: #777">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.5px; color: #666">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.25px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 17.75px; color: #808080">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.25px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.75px; color: #5e5e5e">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.25px; color: #6f6f6f">JVM</a> <a href="/tags/Java/" style="font-size: 16.5px; color: #888">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 20.25px; color: #6f6f6f">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.5px; color: #666">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.25px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 17.75px; color: #808080">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.25px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.75px; color: #5e5e5e">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
     </div>
   </section>
 

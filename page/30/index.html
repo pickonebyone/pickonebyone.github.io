@@ -365,8 +365,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/12/Linux%E6%9F%A5%E7%9C%8BSwap/">
-      Linux查看Swap
+    <a href="/2020/06/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8E%9F%E5%88%99/">
+      设计模式和原则
     </a>
   </h2>
 
@@ -391,9 +391,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Linux/VIM/' rel="nofollow">
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Linux/VIM</p>
+      <p>设计模式/设计原则</p>
     </a>
   </div>
 
@@ -404,7 +404,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月12日</p>
+    <p>发布于：2020年6月18日</p>
   </a>
 </div>
 
@@ -432,8 +432,63 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"># Get current swap usage for all running processes</span><br><span class="line"># Erik Ljungstrom 27&#x2F;05&#x2F;2011</span><br><span class="line">SUM&#x3D;0</span><br><span class="line">OVERALL&#x3D;0</span><br><span class="line">for DIR in &#96;find &#x2F;proc&#x2F; -maxdepth 1 -type d | egrep &quot;^&#x2F;proc&#x2F;[0-9]&quot;&#96; ;</span><br><span class="line">do</span><br><span class="line">    PID&#x3D;&#96;echo $DIR | cut -d &#x2F; -f 3&#96;</span><br><span class="line">    PROGNAME&#x3D;&#96;ps -p $PID -o comm --no-headers&#96;</span><br><span class="line">    for SWAP in &#96;grep Swap $DIR&#x2F;smaps 2&gt;&#x2F;dev&#x2F;null| awk &#39;&#123; print $2 &#125;&#39;&#96;</span><br><span class="line">        do</span><br><span class="line">            let SUM&#x3D;$SUM+$SWAP</span><br><span class="line">        done</span><br><span class="line">    echo &quot;PID&#x3D;$PID - Swap used: $SUM - ($PROGNAME )&quot;</span><br><span class="line">    let OVERALL&#x3D;$OVERALL+$SUM</span><br><span class="line">        SUM&#x3D;0</span><br><span class="line">done</span><br><span class="line">echo &quot;Overall swap used: $OVERALL&quot;</span><br></pre></td></tr></table></figure>
-
+        <p>创建软件应用程序时为了满足不断变化和发展的需求，一个成功的应用程序应该提供一种简单的方法来扩展它以满足不断变化的期望。</p>
+<h2 id="SOLID设计原则"><a href="#SOLID设计原则" class="headerlink" title="SOLID设计原则"></a>SOLID设计原则</h2><h3 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h3><p>有且仅有一个原因引起类的变更。</p>
+<p>问题：<br>Class IUser 负责两个不同的职责,职责1维护User的属性(id, name, age)，职责2维护DB操作（save/update/delete/find）.<br>当由于职责1需求发生改变要增加一个sex的时候，有可能会导致原本运行正常的职责2功能发生故障。</p>
+<p>解决方法：<br>将IUser拆分为 UserInfo和UserDao。</p>
+<p>优点：<br>降低类的复杂性，一个类只负责一项职责；<br>提高类的可读性，提高系统的可维护性；<br>降低变更引起的风险，当修改一个接口的功能时，可以降低对其他功能的影响。</p>
+<h3 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h3><p>一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。<br>也就是说通过扩展来实现变化，而不是通过修改已有的代码来实现变化。</p>
+<p>可以通过抽象约束、封装变化来实现开闭原则。<br>通过接口或者抽象类为软件实体定义一个相对稳定的抽象层，而将相同的可变因素封装在相同的具体实现类中。</p>
+<h3 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h3><p>派生类型必须完全可替代其基类型。在设计模块和类时，必须确保派生类型从行为的角度来看是可替代的。当派生类型被其父类替换时，其余代码就像它是自类型那样使用它。</p>
+<ul>
+<li>子类必须完全实现父类的方法</li>
+<li>子类可以有自己的个性</li>
+<li>覆盖或者实现父类的方法时，输入参数可以被放大</li>
+<li>腹泻或者实现父类的方法时，输出结果可以被缩小</li>
+</ul>
+<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><p>客户端不应该依赖于它所不需要的接口。接口隔离原则减少了代码耦合，使软件更强壮，更易于维护和扩展。接口隔离原则要求接口的定义和设计尽量的细化。</p>
+<ul>
+<li>接口尽量小，但是要有限度。<br>对接口进行细化可以提高程序设计的灵活性，但是如果过小，会造成接口数量过多，使设计复杂化。</li>
+<li>为依赖接口的类定制服务，只暴露给调用的类它需要的方法，不需要的方法隐藏起来，只有专注地为一个模块提供定制服务，才能建立最小依赖关系。</li>
+<li>提高内聚，减少对外交互。使接口用最少的方法完成最多的事情。</li>
+</ul>
+<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><p>高级模块不应该依赖低级模块，两者都应该依赖抽象。<br>抽象不应该依赖于细节，细节应该依赖于抽象。</p>
+<ul>
+<li>模块间的依赖通过抽象发生，实现类之间不发生直接的依赖关系，器依赖关系是通过接口或者抽象类产生。</li>
+<li>接口或者抽象类不依赖实现类</li>
+<li>实现类依赖接口或者抽象类</li>
+</ul>
+<h2 id="创建型模式-6-6"><a href="#创建型模式-6-6" class="headerlink" title="创建型模式(6/6)"></a>创建型模式(6/6)</h2><ul>
+<li><a href="/2020/06/18/单例模式">单例模式</a></li>
+<li><a href="/2020/06/19/工厂方法模式">工厂方法模式</a></li>
+<li><a href="/2020/06/22/抽象工厂模式">抽象工厂模式</a></li>
+<li><a href="/2020/06/23/建造者模式">建造者模式</a></li>
+<li><a href="/2020/06/24/原型模式">原型模式</a></li>
+<li><a href="/2020/06/24/对象池模式">对象池模式</a></li>
+</ul>
+<h2 id="行为型模式-12-12"><a href="#行为型模式-12-12" class="headerlink" title="行为型模式(12/12)"></a>行为型模式(12/12)</h2><ul>
+<li><a href="/2020/06/28/策略模式/">策略模式</a></li>
+<li><a href="/2020/06/29/状态模式/">状态模式</a></li>
+<li><a href="/2020/06/30/访问者模式/">访问者模式</a> </li>
+<li><a href="/2020/07/01/迭代器模式/">迭代器模式</a></li>
+<li><a href="/2020/07/02/责任链模式/">责任链模式</a></li>
+<li><a href="/2020/07/02/模版方法模式/">模版方法模式</a></li>
+<li><a href="/2020/07/03/命令模式/">命令模式</a></li>
+<li><a href="/2020/07/04/备忘录模式/">备忘录模式</a></li>
+<li><a href="/2020/07/05/解释器模式/">解释器模式</a></li>
+<li><a href="/2020/07/07/观察者模式/">观察者模式</a></li>
+<li><a href="/2020/07/06/中介者模式/">中介者模式</a></li>
+<li><a href="/2020/07/06/空对象模式/">空对象模式</a></li>
+</ul>
+<h2 id="结构型模式-7-7"><a href="#结构型模式-7-7" class="headerlink" title="结构型模式(7/7)"></a>结构型模式(7/7)</h2><ul>
+<li><a href="/2020/06/28/代理模式/">代理模式</a></li>
+<li><a href="/2020/07/01/组合模式/">组合模式</a></li>
+<li><a href="/2020/07/08/装饰器模式/">装饰器模式</a></li>
+<li><a href="/2020/07/09/桥接模式/">桥接模式</a></li>
+<li><a href="/2020/07/10/适配器模式/">适配器模式</a> </li>
+<li><a href="/2020/07/11/门面模式/">门面模式</a></li>
+<li><a href="/2020/07/12/享元模式/">享元模式</a></li>
+</ul>
 
       
     </div>
@@ -460,8 +515,8 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/11/%E5%88%86%E5%B8%83%E5%BC%8FID/">
-      分布式ID生成器
+    <a href="/2020/06/17/%E5%B8%B8%E7%94%A8JVM%E5%8F%82%E6%95%B0/">
+      常用JVM参数
     </a>
   </h2>
 
@@ -486,9 +541,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
+      <p>Java技术栈/Java虚拟机</p>
     </a>
   </div>
 
@@ -499,7 +554,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月11日</p>
+    <p>发布于：2020年6月17日</p>
   </a>
 </div>
 
@@ -527,33 +582,111 @@
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="Centos-简单优化"><a href="#Centos-简单优化" class="headerlink" title="Centos 简单优化"></a>Centos 简单优化</h3><h5 id="安装基本工具"><a href="#安装基本工具" class="headerlink" title="安装基本工具"></a>安装基本工具</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget vim net-tools lrzsz</span><br></pre></td></tr></table></figure>
-
-<h2 id="删除UUID"><a href="#删除UUID" class="headerlink" title="删除UUID"></a>删除UUID</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim ifcfg-ens33</span><br><span class="line">vim ifcfg-eth0</span><br><span class="line">vim em1</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="配置静态IP"><a href="#配置静态IP" class="headerlink" title="配置静态IP"></a>配置静态IP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">IPADDR&#x3D;10.0.0.130</span><br><span class="line">GATEWAY&#x3D;10.0.0.2</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">DNS1&#x3D;10.0.0.2</span><br><span class="line">DNS2&#x3D;1.2.4.8</span><br></pre></td></tr></table></figure>
-
-<h4 id="关闭防火墙以及NetworkManager和SELINX"><a href="#关闭防火墙以及NetworkManager和SELINX" class="headerlink" title="关闭防火墙以及NetworkManager和SELINX"></a>关闭防火墙以及NetworkManager和SELINX</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line">systemctl stop NetworkManager</span><br><span class="line">systemctl disable NetworkManager</span><br></pre></td></tr></table></figure>
-
-<h4 id="替换YUM源"><a href="#替换YUM源" class="headerlink" title="替换YUM源"></a>替换YUM源</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum clean all &amp;&amp; yum makecache</span><br><span class="line">cd &#x2F;etc&#x2F;yum.repos.d&#x2F;</span><br><span class="line">mv CentOS-Base.repo CentOS-Base.repo.bak</span><br><span class="line">vim CentOS-Base.repo</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <p>HotSpot 虚拟机常用配置</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-Xms1g</td>
+<td>最小堆内存</td>
+</tr>
+<tr>
+<td>-Xmx4g</td>
+<td>最大堆内存</td>
+</tr>
+<tr>
+<td>-XX:+UseG1GC</td>
+<td>使用G1垃圾回收器</td>
+</tr>
+<tr>
+<td>-Xss256k</td>
+<td>每个线程栈大小256k</td>
+</tr>
+<tr>
+<td>-XX:MetaspaceSize=256m</td>
+<td>元数据区大小256M</td>
+</tr>
+<tr>
+<td>-XX:MaxMetaspaceSize=256m</td>
+<td>元数据区最大256M</td>
+</tr>
+<tr>
+<td>-XX:MaxGCPauseMillis=500</td>
+<td>GC最大停顿毫秒数</td>
+</tr>
+<tr>
+<td>-XX:+DisableExplicitGC</td>
+<td>禁用代码中显式调用GC，System.gc()将会失效</td>
+</tr>
+<tr>
+<td>-XX:+UnlockExperimentalVMOptions</td>
+<td>解锁实验参数</td>
+</tr>
+<tr>
+<td>-XX:+UseStringDeduplication</td>
+<td>GC的同时做重复字符串消除，只用于G1</td>
+</tr>
+<tr>
+<td>-XX:InitiatingHeapOccupancyPercent=60</td>
+<td>启动并发GC周期时的堆内存占用百分比. G1之类的垃圾收集器用它来触发并发GC周期,基于整个堆的使用率,而不只是某一代内存的使用比. 值为 0 则表示”一直执行GC循环”. 默认值为 45.</td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=8</td>
+<td>设置垃圾收集器在并行阶段使用的线程数,默认值随JVM运行的平台不同而不同.</td>
+</tr>
+<tr>
+<td>-XX:G1MixedGCCountTarget=4</td>
+<td>设置在标记周期完成之后混合收集的数量，以维持old region（也就是老年代）中，最多有G1MixedGCLiveThresholdPercent的存活对象。默认值为8，混合收集的数量将维持在这个值之内。（JVM build &gt; 23）</td>
+</tr>
+<tr>
+<td>-XX:MaxTenuringThreshold=7</td>
+<td>年老代的最大临界值(tenuring threshold). 默认值为 15.</td>
+</tr>
+<tr>
+<td>-XX:+UseGCLogFileRotation</td>
+<td>滚动记录GC日志文件</td>
+</tr>
+<tr>
+<td>-XX:NumberOfGCLogFiles=5</td>
+<td>GC日志文件数量为5个</td>
+</tr>
+<tr>
+<td>-XX:GCLogFileSize=64M</td>
+<td>单个GC日志文件大小64M</td>
+</tr>
+<tr>
+<td>-Xloggc:/app/data/logs/gc-<code>date +%Y%m%d-%H-%M</code>.log</td>
+<td>GC日志文件存储目录和名称</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDetails</td>
+<td>打印GC详情</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDateStamps</td>
+<td>打印GC时时间戳</td>
+</tr>
+<tr>
+<td>-XX:+PrintHeapAtGC</td>
+<td>GC时打印堆信息</td>
+</tr>
+<tr>
+<td>-XX:+PrintAdaptiveSizePolicy</td>
+<td>自适应大小策略，每次 GC 后会重新计算 Eden、From 和 To 区的大小，计算依据是 GC 过程中统计的 GC 时间、吞吐量、内存占用量。</td>
+</tr>
+<tr>
+<td>-XX:+UseFastAccessorMethods</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:SoftRefLRUPolicyMSPerMB=0</td>
+<td>softly reachable objects will remain alive for some amount of time after the last time they were referenced. The default value is one second of lifetime per free megabyte in the heap</td>
+</tr>
+</tbody></table>
 
       
     </div>
@@ -580,7 +713,7 @@
           </a>
         
         <p class="current">
-          30 / 38
+          30 / 39
         </p>
         
           <a class="next" rel="next" href="/page/31/">
@@ -641,7 +774,7 @@
           <li><a class="flat-box"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/"
             id="categoriesJavaE68A80E69CAFE6A088"
-            ><div class='name'>Java技术栈</div><div class='badge'>(42)</div></a></li>
+            ><div class='name'>Java技术栈</div><div class='badge'>(44)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Etcd/"
@@ -661,7 +794,7 @@
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/"
             id="categoriesJavaE68A80E69CAFE6A088Mysql"
-            ><div class='name'>Mysql</div><div class='badge'>(7)</div></a></li>
+            ><div class='name'>Mysql</div><div class='badge'>(9)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/" href="/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Reids/"
@@ -724,6 +857,11 @@
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
+            id="categoriesE7A28EE7A28EE5BFB5"
+            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
             id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
             ><div class='name'>设计模式</div><div class='badge'>(26)</div></a></li>
@@ -770,7 +908,7 @@
 
 
     <div class='content'>
-      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.25px; color: #6f6f6f">JVM</a> <a href="/tags/Java/" style="font-size: 16.5px; color: #888">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 19px; color: #777">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.5px; color: #666">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.25px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 17.75px; color: #808080">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.25px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.75px; color: #5e5e5e">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
+      <a href="/tags/ClassLoader/" style="font-size: 14px; color: #999">ClassLoader</a> <a href="/tags/Class%E7%BB%93%E6%9E%84/" style="font-size: 14px; color: #999">Class结构</a> <a href="/tags/DI/" style="font-size: 14px; color: #999">DI</a> <a href="/tags/Etcd/" style="font-size: 14px; color: #999">Etcd</a> <a href="/tags/GC/" style="font-size: 14px; color: #999">GC</a> <a href="/tags/IOC/" style="font-size: 14px; color: #999">IOC</a> <a href="/tags/JMM/" style="font-size: 14px; color: #999">JMM</a> <a href="/tags/JVM/" style="font-size: 20.25px; color: #6f6f6f">JVM</a> <a href="/tags/Java/" style="font-size: 16.5px; color: #888">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/Mysql/" style="font-size: 20.25px; color: #6f6f6f">Mysql</a> <a href="/tags/Spring/" style="font-size: 21.5px; color: #666">Spring</a> <a href="/tags/Spring-Bean/" style="font-size: 14px; color: #999">Spring-Bean</a> <a href="/tags/Spring-BeanFactory/" style="font-size: 14px; color: #999">Spring-BeanFactory</a> <a href="/tags/comm/" style="font-size: 14px; color: #999">comm</a> <a href="/tags/linux/" style="font-size: 14px; color: #999">linux</a> <a href="/tags/sort/" style="font-size: 14px; color: #999">sort</a> <a href="/tags/sublime/" style="font-size: 14px; color: #999">sublime</a> <a href="/tags/swap/" style="font-size: 14px; color: #999">swap</a> <a href="/tags/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">中介者模式</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 15.25px; color: #919191">事务</a> <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">享元模式</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">代理模式</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">优化</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 14px; color: #999">作用域</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/" style="font-size: 14px; color: #999">依赖处理</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">依赖查找</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 14px; color: #999">依赖注入</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" style="font-size: 14px; color: #999">内存分配</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 14px; color: #999">分布式事务</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 17.75px; color: #808080">创建型模式</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">原型模式</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 14px; color: #999">参数</a> <a href="/tags/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">外观模式</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 14px; color: #999">字节码执行引擎</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E6%B1%A0%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">对象池模式</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">工厂方法模式</a> <a href="/tags/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">常用工具</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">建造者模式</a> <a href="/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" style="font-size: 14px; color: #999">快捷键</a> <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">抽象工厂模式</a> <a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" style="font-size: 14px; color: #999">故障排查</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15.25px; color: #919191">数据库</a> <a href="/tags/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">桥接模式</a> <a href="/tags/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">模版方法模式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">状态模式</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E5%8A%9B/" style="font-size: 14px; color: #999">生产力</a> <a href="/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" style="font-size: 14px; color: #999">生命周期</a> <a href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">策略模式</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" style="font-size: 14px; color: #999">类加载机制</a> <a href="/tags/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">组合模式</a> <a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 19px; color: #777">结构型模式</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 14px; color: #999">编译</a> <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 22.75px; color: #5e5e5e">行为型模式</a> <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">观察者模式</a> <a href="/tags/%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 15.25px; color: #919191">解释器模式</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" style="font-size: 14px; color: #999">设计原则</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 24px; color: #555">设计模式</a> <a href="/tags/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">访问者模式</a> <a href="/tags/%E8%B0%83%E4%BC%98/" style="font-size: 14px; color: #999">调优</a> <a href="/tags/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 16.5px; color: #888">责任链模式</a> <a href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 14px; color: #999">资源管理</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8C%BA%E5%9F%9F/" style="font-size: 14px; color: #999">运行时区域</a> <a href="/tags/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">迭代器模式</a> <a href="/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">适配器模式</a>
     </div>
   </section>
 
