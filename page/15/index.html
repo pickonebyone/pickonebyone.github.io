@@ -429,122 +429,6 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/12/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/">
-      享元模式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://www.hessentec.top" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/结构型模式</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月12日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h2><p>享元模式的目的在于运用共享技术，使得一些细粒度的对象可以共享。<br>多食用细粒度的对象，以便于重用或者重构。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>使用共享对象可以有效地支持大量的细粒度的对象。</p>
-<p>大量的细粒度对象，需要把对象的共有属性提取出来，做为内部状态，剩余的非共有做为外部状态。<br>内部状态：可以共享出来的信息，存储在襄垣对象内部，并且不会随着环境的改变而改变。<br>外部状态：对象得以依赖的一个标记，是随着环境的改变而改变的，不可以共享的状态。</p>
-<p><img src="/2020/07/12/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/fly_weight.jpeg" alt="享元模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Flyweight"><a href="#Flyweight" class="headerlink" title="Flyweight"></a>Flyweight</h4><p>抽象享元角色，产品抽象类，同时定义出对象的外部状态和内部状态的接口或者实现。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span>  <span class="class"><span class="keyword">class</span> <span class="title">Flyweight</span></span>&#123;</span><br><span class="line">   <span class="keyword">private</span> String instrinsic; <span class="comment">//inner status</span></span><br><span class="line">   <span class="keyword">protected</span> <span class="keyword">final</span> String extrinsic; <span class="comment">//external status</span></span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">Flyweight</span><span class="params">(String extrinsic)</span></span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.extrinsic = extrinsic;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">getInstrinsic</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.instrinsic;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setInstrinsic</span><span class="params">(String instrinsic)</span></span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.instrinsic = instrinsic;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="ConcreteFlyweight"><a href="#ConcreteFlyweight" class="headerlink" title="ConcreteFlyweight"></a>ConcreteFlyweight</h4><p>具体享元角色，实现抽象角色的定义业务，该角色中需要注意的是内部状态处理应该与环境无关。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteFlyweight1</span> <span class="keyword">extends</span> <span class="title">Flyweight</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteFlyweight1</span><span class="params">(String _Extrinsic)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(_Extrinsic);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteFlyweight2</span> <span class="keyword">extends</span> <span class="title">Flyweight</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteFlyweight2</span><span class="params">(String _Extrinsic)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(_Extrinsic);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="unsharConcreteFlyweight"><a href="#unsharConcreteFlyweight" class="headerlink" title="unsharConcreteFlyweight"></a>unsharConcreteFlyweight</h4><p>不可共享的享元角色</p>
-<p>不存在外部状态或者安全要求不能够使用共享技术的对象，该对象一般不会出现在享元工厂中。</p>
-<h4 id="FlyweightFactory"><a href="#FlyweightFactory" class="headerlink" title="FlyweightFactory"></a>FlyweightFactory</h4><p>享元工厂，构造一个池容器，同时提供从池中获得对象的方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlyweightFactory</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HashMap&lt;String, Flyweight&gt; pool = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Flyweight <span class="title">getFlyweight</span><span class="params">(String extrinsic)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        Flyweight flyweight = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(pool.containsKey(extrinsic))&#123;</span><br><span class="line">            flyweight = pool.get(extrinsic);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            flyweight = <span class="keyword">new</span> ConcreteFlyweight1(extrinsic);</span><br><span class="line">            pool.put(extrinsic, flyweight);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> flyweight;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>可以减少应用程序创建的对象，降低程序内存的占用，增强程序的性能。</p>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>提高了程序的复杂性，需要分离出内部状态和外部状态，而且外部状态具有固话特征，不能随着内部状态的改变而改变。</p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li>线程安全的问题<br>创建的对象尽量多，多到满足业务对象为止。</li>
-<li>性能平衡<br>外部状态最好以基本类型为标志，如String, Int等可以大幅提升效率。</li>
-</ul>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
     <a href="/2020/07/11/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/">
       门面模式
     </a>
@@ -636,6 +520,122 @@
 <li>一个子系统可以有多个门面</li>
 <li>门面不参与子系统内的业务逻辑</li>
 </ul>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+      适配器模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://www.hessentec.top" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/结构型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月10日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p>当我们去国外旅行时，我们国内的插头不能直接插入到国外的插线板上，我们需要购买一个电源适配器来适配国外的插线板。</p>
+<p>或者最新版的macbook pro 用的是utypec，并不能直接插入usb3.0的u盘，我们需要购买一个适配器做转换。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将一个类的接口编程客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。</p>
+<p><img src="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/adaptor_class.jpeg" alt="适配器模式通用类图"></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h4><p>目标角色是一个接口或者抽象类，是一个已经存在的角色，不可能去修改角色中的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ConcreteTarget"><a href="#ConcreteTarget" class="headerlink" title="ConcreteTarget"></a>ConcreteTarget</h4><p>具体的目标角色实现类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteTarget</span> <span class="keyword">implements</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Adaptee"><a href="#Adaptee" class="headerlink" title="Adaptee"></a>Adaptee</h4><p>源角色，已经使用中的角色。需要将Adaptee转换为Target。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adaptee</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Adaptor"><a href="#Adaptor" class="headerlink" title="Adaptor"></a>Adaptor</h4><p>适配器角色。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adaptor</span> <span class="keyword">extends</span> <span class="title">Adaptee</span> <span class="keyword">implements</span> <span class="title">Target</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">request</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Target target = <span class="keyword">new</span> ConcreteTarget();</span><br><span class="line">target.request();</span><br><span class="line"></span><br><span class="line">Target target2 = <span class="keyword">new</span> Adaptor();</span><br><span class="line">target2.request();</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>当需要把多个Adaptee转换为Target的时候，就不能使用继承了，因为Java中不支持多继承。<br>这种方式叫做对象适配器。<br>我们可以使用聚合（关联）来完成适配。</p>
+<p><img src="/2020/07/10/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/adaptor_calss2.jpeg" alt="对象适配器类图"></p>
+<p>类适配器是由类的继承关系完成的。<br>对象适配器是由类的关联关系纪念性耦合。</p>
 
       
     </div>
@@ -804,11 +804,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"

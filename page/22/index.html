@@ -429,123 +429,6 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/02/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/">
-      责任链模式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://www.hessentec.top" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>设计模式/行为型模式</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月2日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h2><p>责任链模式的核心在链上， 链是有多个处理者组成的。就像流水线上的质检员。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的关系。<br>将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。</p>
-<p><img src="/2020/07/02/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/chain_class.jpg" alt="责任链模式通用类图"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="抽象事件"><a href="#抽象事件" class="headerlink" title="抽象事件"></a>抽象事件</h4><p>抽象事件类型表明这类型的事件是需要被处理的。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IEvent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getType</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="具体的事件"><a href="#具体的事件" class="headerlink" title="具体的事件"></a>具体的事件</h4><p>不同类型的子类事件。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventClick</span> <span class="keyword">implements</span> <span class="title">IEvent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventEnter</span> <span class="keyword">implements</span> <span class="title">IEvent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventBlank</span> <span class="keyword">implements</span> <span class="title">IEvent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="抽象的事件处理器"><a href="#抽象的事件处理器" class="headerlink" title="抽象的事件处理器"></a>抽象的事件处理器</h4><p>定义了只有Ievent类型的事件会被处理。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IEventHandler</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">check</span><span class="params">(IEvent event)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="具体的事件处理器"><a href="#具体的事件处理器" class="headerlink" title="具体的事件处理器"></a>具体的事件处理器</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClickEventHandler</span> <span class="keyword">implements</span> <span class="title">IEventHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">check</span><span class="params">(IEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (event.getType() != <span class="number">1</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"Father check Ok. "</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnterEventHandler</span> <span class="keyword">implements</span> <span class="title">IEventHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">check</span><span class="params">(IEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (event.getType() == <span class="number">2</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"Husband Ok."</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlankEventHandler</span> <span class="keyword">implements</span> <span class="title">IEventHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">check</span><span class="params">(IEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (event.getType() != <span class="number">3</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"Son Ok"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="事件处理链"><a href="#事件处理链" class="headerlink" title="事件处理链"></a>事件处理链</h4><p>用于组织事件处理器，符合条件的处理器处理完成后或者没有处理器处理都会停止。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventHandlerChain</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;IEventHandler&gt; eventChains = <span class="keyword">new</span> ArrayList&lt;IEventHandler&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(IEventHandler eventHandler)</span> </span>&#123;</span><br><span class="line">        eventChains.add(eventHandler);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">check</span><span class="params">(IEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (IEventHandler eventChain : <span class="keyword">this</span>.eventChains) &#123;</span><br><span class="line">            <span class="keyword">if</span> (eventChain.check(event)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Use"><a href="#Use" class="headerlink" title="Use"></a>Use</h4><p>可以随意组织责任链的顺序，然后检查需要检查的类型。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">EventHandlerChain chain = <span class="keyword">new</span> EventHandlerChain();</span><br><span class="line">chain.add(<span class="keyword">new</span> ClickEventHandler());</span><br><span class="line">chain.add(<span class="keyword">new</span> EnterEventHandler());</span><br><span class="line">chain.add(<span class="keyword">new</span> BlankEventHandler());</span><br><span class="line"></span><br><span class="line">chain.check(<span class="keyword">new</span> EventClick());</span><br><span class="line">chain.check(<span class="keyword">new</span> EventEnter());</span><br><span class="line">chain.check(<span class="keyword">new</span> EventBlank());</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>将请求和处理分开。请求着可以不用知道是谁处理的，处理者可以不用知道请求着的全貌。<br>两者解耦，提高了系统的灵活性。</p>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>性能问题， 最差的情况下，请求从头遍历到尾，链条特别长的时候，性能损耗是个大的问题。<br>因此在使用的过程中要注意责任链的长短。<br>调试不方便。</p>
-<p>在广告系统中，由不同的事件来触发不同类型的广告时根据责任链模式来处理。<br>每个Handler可以专注自己的业务处理逻辑。具体Handler还可以抽象一个抽象类，把公用的逻辑写在抽象类里面，每个具体的实现类只负责业务的处理即可（优化为模版方法模式）。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
     <a href="/2020/07/01/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/">
       迭代器模式
     </a>
@@ -645,6 +528,128 @@
 
 
 
+
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/07/01/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/">
+      组合模式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://www.hessentec.top" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>设计模式/结构型模式</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月1日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h2><p>也叫合成模式或者部分整体模式，主要用来描述部分与整体的关系。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>将对象组合成树形结构以表示部分整体的层次结构，使得用于对单个对象和组合对象的使用具有一致性。</p>
+<p><img src="/2020/07/01/%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/combination_class.jpeg" alt="组合模式的通用类图"></p>
+<h4 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h4><p>定义参加组合对象的共有方法和属性，可以定义一些默认的行为或者属性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Component parent = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Component&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">         c.parent = <span class="keyword">this</span>;</span><br><span class="line">         <span class="keyword">this</span>.list.add(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list.remove(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Component&gt; <span class="title">getChildren</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Component <span class="title">getParent</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.parent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Composite"><a href="#Composite" class="headerlink" title="Composite"></a>Composite</h4><p>树枝对象，作用是组合树枝节点和叶子结点形成一个树形结构。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Composite</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Leaf"><a href="#Leaf" class="headerlink" title="Leaf"></a>Leaf</h4><p>叶子对象，下面没有分支，最小的遍历单位。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaf</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>高层模块调用简单<br>一颗属性结构中的所有节点都是Component，局部和整体对调用者来说没有任何区别，也就是说高层模块不必关心自己处理的是单个对象还是整个组合结构，简化了高层模块的代码。</li>
+<li>节点自由度增加<br>使用组合模式后，如果想增加一个树枝节点、树叶节点都非常容易。<br>如何开闭原则，利于维护。</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>（安全模式）直接使用了实现类(可以扩展)。与依赖倒置原则冲突，限制了接口的影响范围。</p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="透明的组合模式"><a href="#透明的组合模式" class="headerlink" title="透明的组合模式"></a>透明的组合模式</h4><p>以上的例子就是透明的组合模式，吧用来组合使用的方法放到抽象类中，无论叶子对象还是树枝对象都有相同的结构，通过getChildren();判断当前节点是否为叶子节点还是根节点。</p>
+<p>透明模式的好处是遵循了依赖倒置原则</p>
+<h4 id="安全的组合模式"><a href="#安全的组合模式" class="headerlink" title="安全的组合模式"></a>安全的组合模式</h4><p>安全模式是将叶子节点和树枝节点彻底分开，树枝节点单独拥有用来组合的方法。</p>
+<h5 id="Component-1"><a href="#Component-1" class="headerlink" title="Component"></a>Component</h5><p>定义参加组合对象的共有方法和属性，可以定义一些默认的行为或者属性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Component parent = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Component <span class="title">getParent</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.parent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Composite-1"><a href="#Composite-1" class="headerlink" title="Composite"></a>Composite</h5><p>树枝对象，作用是组合树枝节点和叶子结点形成一个树形结构。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Composite</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Component&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">         c.parent = <span class="keyword">this</span>;</span><br><span class="line">         <span class="keyword">this</span>.list.add(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Component c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list.remove(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Component&gt; <span class="title">getChildren</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Leaf-1"><a href="#Leaf-1" class="headerlink" title="Leaf"></a>Leaf</h5><p>叶子对象，下面没有分支，最小的遍历单位。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaf</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -814,11 +819,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"

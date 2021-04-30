@@ -429,116 +429,6 @@
         
           
   <h2 class="title">
-    <a href="/2020/06/22/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB/">
-      前后端分离
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://www.hessentec.top" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月22日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>动静分离技术：CDN、<br>负载均衡：<br>     实现手段：<br>     1） lvs / lb / 四层数据包， 速度快，不解包。</p>
-<pre><code>2）   反向代理（nginx 、 Node.js 七层  URI/location 建立三次握手，请求传递、转发
-      存储ip、请求uri、次数、时间等，
-     ）
-
-     Load Balance 健康检查
-
-算法：
-随机
-轮训
-哈希
-最少连接数
-
-权重/动态权重</code></pre><p>多级缓存<br>防穿透</p>
-<p>限流<br>熔断<br>降级<br>灰度发布</p>
-<p>服务无状态：分布式问题</p>
-<p>update user set status = 2 where status = 1 and id = 1;</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
     <a href="/2020/06/22/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
       抽象工厂模式
     </a>
@@ -624,6 +514,108 @@
 <li>如果要扩展产品等级时，从抽象产品到工厂类，原有的代码都需要变动，违背了开闭原则。</li>
 </ul>
 <p>参阅：<br><a href="http://c.biancheng.net/view/1351.html" target="_blank" rel="noopener">抽象工厂模式（详解版）</a></p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/06/20/%E5%88%86%E5%B8%83%E5%BC%8FID%E7%94%9F%E6%88%90%E5%99%A8/">
+      分布式ID生成器
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://www.hessentec.top" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E5%88%86%E5%B8%83%E5%BC%8F/ID%E7%94%9F%E6%88%90%E5%99%A8/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>分布式/ID生成器</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月20日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1)资源锁细粒度化<br>  将100个资源拆分成10份。<br>  这10份分别上锁，应用场景如秒杀。</p>
+<p>2）业务使用锁细粒度化<br>   只对需要的资源加锁，避免大范围加锁。</p>
+<p>3）无锁化（真无锁，假无锁）<br>    ThreadLocal 真无锁<br>    CAS  假无锁<br>4）异步+线程池<br>   Completeable</p>
+<p> hystrix/sentinel 限流</p>
+<p> Leaf / </p>
+<p> Snowflake<br> 缺点：<br> 1）依赖于时间，需要ntp<br> 2）依赖于NodeId和AreaID的分发，用ZK解决<br>   通过zk的顺序性分配唯一的node和area</p>
+<p>基于Mysql的发布<br>基于Mysql的优化</p>
+<p>基于雪花算法</p>
+<p>基于ZK</p>
 
       
     </div>
@@ -792,11 +784,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"

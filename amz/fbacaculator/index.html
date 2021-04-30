@@ -47,29 +47,36 @@
    
         <!--单套产品基本信息-->
         <div class="panel panel-primary">
-            <div class="panel-heading">单套产品基本信息</div>
+            <div class="panel-heading">产品基本信息(含包装)</div>
             <div class="panel-body">
 
                 <!--单套产品体积-->
                 <div class="form-group">
                     <div class="input-group">
                         <label class="input-group-addon">
-                           单套产品体积(含包装) =
+                           单套产品体积=
                         </label> 
                         <div class="form-inline">
-                            <input type="number" class="form-control input-sm" id="productInfo_size_long" v-bind:placeholder="productInfo.size.long.placeholder" v-model="productInfo.size.long.value">
-                            <input type="number" class="form-control input-sm" id="productInfo_size_weidht" v-bind:placeholder="productInfo.size.width.placeholder" v-model="productInfo.size.width.value">
-                            <input type="number" class="form-control input-sm" id="productInfo_size_height" v-bind:placeholder="productInfo.size.height.placeholder" v-model="productInfo.size.height.value">
+                            <input type="number" class="form-control input-sm"  v-bind:placeholder="productInfo.size.long.placeholder" v-trimzero v-model="productInfo.size.long.value" >
+                            <input type="number" class="form-control input-sm"  v-bind:placeholder="productInfo.size.width.placeholder"  v-trimzero v-model="productInfo.size.width.value">
+                            <input type="number" class="form-control input-sm"  v-bind:placeholder="productInfo.size.height.placeholder" v-trimzero v-model="productInfo.size.height.value">
                         </div>  
-                        <label class="input-group-addon">
-                            <input type="radio" name="productInfo_size_norms" id="productInfo_size_norms_cm" value="1" checked="checked" v-model="productInfo.size.norms">CM
-                            <input type="radio" name="productInfo_size_norms" id="productInfo_size_norms_inch" value="2.54" v-model="productInfo.size.norms">英寸
+                        <label class="input-group-addon" v-bind:title="config.size.norms.cm">
+                            <input type="radio" name="productInfo_size_norms"  v-bind:value="config.size.norms.cm"  checked="checked" v-model="productInfo.size.norms"> CM
                         </label> 
+                        <label class="input-group-addon" v-bind:title="config.size.norms.inch">
+                            <input type="radio" name="productInfo_size_norms"  v-bind:value="config.size.norms.inch"  v-model="productInfo.size.norms"> 英寸
+                        </label>
                     </div>
     
                     <div class="input-group">
                         <div id="productInfoNormsHelpBlock">
-                            = <kbd>{{productInfo.size.cm3 = 
+                            = 
+                            (长)<code>{{Number(productInfo.size.long.value * productInfo.size.norms).toFixed(2)}}</code> cm
+                            * (宽)<code>{{Number(productInfo.size.width.value * productInfo.size.norms).toFixed(2)}}</code> cm
+                            * (高)<code>{{Number(productInfo.size.height.value * productInfo.size.norms).toFixed(2)}}</code> cm
+                             = 
+                            <kbd>{{productInfo.size.cm3 = 
                                 Number((productInfo.size.long.value * productInfo.size.norms) * 
                                 (productInfo.size.width.value * productInfo.size.norms) * 
                                 (productInfo.size.height.value * productInfo.size.norms)).toFixed(2)
@@ -84,15 +91,17 @@
                 <div class="form-group">
                     <div class="input-group">
                         <label class="input-group-addon">
-                            单套产品重量(含包装) =
+                            单套产品重量=
                          </label> 
                         <div class="form-inline">
-                            <input type="number" class="form-control input-sm" id="productInfo_weight" v-bind:placeholder="productInfo.weight.placeholder" v-model="productInfo.weight.value"/>
+                            <input type="number" class="form-control input-sm" id="productInfo_weight" v-bind:placeholder="productInfo.weight.placeholder" v-trimzero v-model="productInfo.weight.value"/>
                         </div>  
-                        <label class="input-group-addon">
-                            <input type="radio" name="productInfoWeightNorms" id="productInfoWeightNorms1" value="1" checked="checked" v-model="productInfo.weight.norms">KG
-                            <input type="radio" name="productInfoWeightNorms" id="productInfoWeightNorms2" value="2.2046226" v-model="productInfo.weight.norms">英镑(lbs)
-                        </label>   
+                        <label class="input-group-addon" title="1KG = 1KG">
+                            <input type="radio" name="productInfoWeightNorms" id="productInfoWeightNorms1" value="1" checked="checked" v-model="productInfo.weight.norms"> KG
+                        </label> 
+                        <label class="input-group-addon" title="1英镑 = 2.2046226KG">
+                            <input type="radio" name="productInfoWeightNorms" id="productInfoWeightNorms2" value="2.2046226" v-model="productInfo.weight.norms"> 英镑(lbs)
+                        </label>  
                      </div>
                      <div class="input-group">
                         <div id="productInfoNormsHelpBlock">
@@ -106,10 +115,10 @@
                 <div class="form-group">
                      <div class="input-group">
                         <label class="input-group-addon">
-                            单套采购价格(含包装) =
+                            单套采购价格=
                          </label> 
                         <div class="form-inline">
-                            <input type="number" class="form-control input-sm" id="productPrice" v-bind:placeholder="productInfo.price.placeholder" v-model="productInfo.price.value"/>
+                            <input type="number" class="form-control input-sm" id="productPrice" v-bind:placeholder="productInfo.price.placeholder"  v-trimzero  v-model="productInfo.price.value"/>
                         </div>  
                         <label class="input-group-addon">
                             元/套
@@ -124,7 +133,7 @@
                             共采购
                          </label> 
                         <div class="form-inline">
-                            <input type="number" class="form-control input-sm" id="productNumbers" v-bind:placeholder="productInfo.number.placeholder" v-model="productInfo.number.value"/>
+                            <input type="number" class="form-control input-sm" id="productNumbers" v-bind:placeholder="productInfo.number.placeholder"  v-trimzero  v-model="productInfo.number.value"/>
                         </div>  
                         <label class="input-group-addon">
                             套
@@ -137,7 +146,7 @@
                     <div class="input-group">
                         <div id="productInfoNormsHelpBlock">
                             <h5>采购成本 = 
-                            <kbd>{{productInfo.totalCost.value = (productInfo.number.value * productInfo.price.value)}}</kbd> 元
+                            <kbd>{{Number(productInfo.totalCost.value = (productInfo.number.value * productInfo.price.value)).toFixed(2)}}</kbd> 元
                             </h5>
                         </div>
                     </div>
@@ -150,7 +159,7 @@
 
        <!-- Package Infomation. -->
         <div class="panel panel-primary">
-            <div class="panel-heading">包装箱基本信息</div>
+            <div class="panel-heading">包装箱基本信息(han)</div>
             <div class="panel-body">
 
                 <!-- 包装箱体积 -->
@@ -160,9 +169,9 @@
                             单个包装箱体积(外径) =
                          </label> 
                         <div class="form-inline">
-                            <input type="number" class="form-control input-sm" id="packageInfoSizeLong" v-bind:placeholder="packageInfo.size.long.placeholder" v-model="packageInfo.size.long.value">
-                            <input type="number" class="form-control input-sm" id="packageInfoSizeWidth" v-bind:placeholder="packageInfo.size.width.placeholder" v-model="packageInfo.size.width.value"/>
-                            <input type="number" class="form-control input-sm" id="packageInfoSizeHeight" v-bind:placeholder="packageInfo.size.height.placeholder"  v-model="packageInfo.size.height.value"/>
+                            <input type="number" class="form-control input-sm" id="packageInfoSizeLong" v-bind:placeholder="packageInfo.size.long.placeholder" v-trimzero v-model="packageInfo.size.long.value">
+                            <input type="number" class="form-control input-sm" id="packageInfoSizeWidth" v-bind:placeholder="packageInfo.size.width.placeholder" v-trimzero v-model="packageInfo.size.width.value"/>
+                            <input type="number" class="form-control input-sm" id="packageInfoSizeHeight" v-bind:placeholder="packageInfo.size.height.placeholder" v-trimzero  v-model="packageInfo.size.height.value"/>
                         </div>  
                         <label class="input-group-addon">
                             <input type="radio" name="packageInfoNorms" id="packageInfoNormsCM" value="1" checked="checked" v-model="packageInfo.size.norms">CM
@@ -172,6 +181,11 @@
     
                     <div class="input-group">
                         <div id="packageInfoNormsHelpBlock">
+                                                        = 
+                            <code>{{Number(packageInfo.size.long.value * packageInfo.size.norms).toFixed(2)}}</code> cm
+                            * <code>{{Number(packageInfo.size.width.value * packageInfo.size.norms).toFixed(2)}}</code> cm
+                            * <code>{{Number(packageInfo.size.height.value * packageInfo.size.norms).toFixed(2)}}</code> cm
+                            
                            = <kbd>{{packageInfo.cm3 = 
                                 Number(
                                   (packageInfo.size.long.value * packageInfo.size.norms) 
@@ -190,7 +204,7 @@
                             单个箱子重量(不含商品)
                          </label> 
                         <div class="form-inline">
-                            <input type="number" class="form-control input-sm" id="packageInfoWeight" v-bind:placeholder="packageInfo.weight.placeholder" v-model="packageInfo.weight.value"/>
+                            <input type="number" class="form-control input-sm" id="packageInfoWeight" v-bind:placeholder="packageInfo.weight.placeholder" v-model.trim.number="packageInfo.weight.value"/>
                         </div>  
                         <label class="input-group-addon">
                             <input type="radio" name="packageInfoWeightNorms" id="packageInfoWeightNorms1" value="1" checked="checked" v-model="packageInfo.weight.norms">KG
@@ -214,7 +228,7 @@
                             每箱装
                          </label> 
                         <div class="form-inline">
-                            <input type="number" class="form-control input-sm" id="packageOfNumbers" v-bind:placeholder="packageInfo.productNumber.placeholder" v-model="packageInfo.productNumber.value"/>
+                            <input type="number" class="form-control input-sm" id="packageOfNumbers" v-bind:placeholder="packageInfo.productNumber.placeholder" v-model.trim.number="packageInfo.productNumber.value"/>
                         </div>  
                         <label class="input-group-addon">
                             套
@@ -225,7 +239,7 @@
                             共装
                          </label> 
                         <div class="form-inline">
-                            <input type="number" class="form-control input-sm" id="packageNumbers" v-bind:placeholder="packageInfo.number.placeholder" v-model="packageInfo.number.value"/>
+                            <input type="number" class="form-control input-sm" id="packageNumbers" v-bind:placeholder="packageInfo.number.placeholder" v-model.trim.number="packageInfo.number.value"/>
                         </div>  
                         <label class="input-group-addon">
                             箱
@@ -272,7 +286,7 @@
                                         国内运费
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" id="interShippCost" v-bind:placeholder="shipping.inter.cost.placeholder" v-model="shipping.inter.cost.value"/>
+                                        <input type="number" class="form-control input-sm" id="interShippCost" v-bind:placeholder="shipping.inter.cost.placeholder" v-model.trim.number="shipping.inter.cost.value"/>
                                     </div>  
                                     <label class="input-group-addon">
                                         元
@@ -289,7 +303,7 @@
                                         其他成本
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm"  v-bind:placeholder="productInfo.otherCost.placeholder" v-model="productInfo.otherCost.value"/>
+                                        <input type="number" class="form-control input-sm"  v-bind:placeholder="productInfo.otherCost.placeholder" v-model.trim.number="productInfo.otherCost.value"/>
                                     </div>  
                                     <label class="input-group-addon">
                                         元
@@ -309,7 +323,7 @@
                                         1{{us.currency}}兑
                                         </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" id="exchangeRateUS" placeholder="汇率" v-model="us.exchangeRate">
+                                        <input type="number" class="form-control input-sm" id="exchangeRateUS" placeholder="汇率" v-model.trim.number="us.exchangeRate">
                                     </div>  
                                     <label class="input-group-addon">
                                         元
@@ -324,7 +338,7 @@
                                         产品售价
                                         </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.salePrice.placeholder" v-model="us.salePrice.value"/>
+                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.salePrice.placeholder" v-model.trim.number="us.salePrice.value"/>
                                     </div>  
                                     <label class="input-group-addon"><strong>{{us.currencySymbol}} </strong></label> 
                                 </div>
@@ -349,7 +363,7 @@
                                         营销占比
                                         </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm"  placeholder="营销费用比例" v-model="us.marketingCostPercent">
+                                        <input type="number" class="form-control input-sm"  placeholder="营销费用比例" v-model.trim.number="us.marketingCostPercent">
                                     </div>  
                                     <label class="input-group-addon">
                                         %
@@ -374,7 +388,7 @@
                                         弃货比例
                                         </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm"  v-bind:placeholder="us.discard.placeholder" v-model="us.discard.value"/>
+                                        <input type="number" class="form-control input-sm"  v-bind:placeholder="us.discard.placeholder" v-model.trim.number="us.discard.value"/>
                                     </div>  
                                     <label class="input-group-addon">%</label> 
                                 </div>
@@ -395,7 +409,7 @@
                                         税率
                                         </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" id="taxesRateUS" placeholder="税率" v-model="us.taxesRate">
+                                        <input type="number" class="form-control input-sm" id="taxesRateUS" placeholder="税率" v-model.trim.number="us.taxesRate">
                                     </div>  
                                     <label class="input-group-addon">
                                         %
@@ -418,7 +432,7 @@
                                         平台费率
                                         </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" id="platformRateUS" placeholder="平台费率" v-model="us.platformRate">
+                                        <input type="number" class="form-control input-sm" id="platformRateUS" placeholder="平台费率" v-model.trim.number="us.platformRate">
                                     </div>  
                                     <label class="input-group-addon">
                                         %
@@ -438,7 +452,7 @@
                                         FBA费用
                                         </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" placeholder="FBA费用" v-model="us.fbaCost">
+                                        <input type="number" class="form-control input-sm" placeholder="FBA费用" v-model.trim.number="us.fbaCost">
                                     </div>  
                                     <label class="input-group-addon" style="width: 82px;">
                                         {{us.currencySymbol}}/件
@@ -456,13 +470,13 @@
                                         库存时长
                                         </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm"  placeholder="库存时常" v-model="us.storeMonth">
+                                        <input type="number" class="form-control input-sm"  placeholder="库存时常" v-model.trim.number="us.storeMonth">
                                     </div>  
                                     <label class="input-group-addon">
                                         月，每月
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm"  placeholder="成本" v-model="us.storeCost">
+                                        <input type="number" class="form-control input-sm"  placeholder="成本" v-model.trim.number="us.storeCost">
                                     </div>  
                                     <label class="input-group-addon">
                                         {{us.currencySymbol}}
@@ -481,25 +495,25 @@
                                         空运
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" placeholder="价格" v-model="us.air.price">
+                                        <input type="number" class="form-control input-sm" placeholder="价格" v-model.trim.number="us.air.price">
                                     </div>  
                                     <label class="input-group-addon">
                                         元/KG，体积重比
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm"  placeholder="体积重比" v-model="us.air.cubePct">
+                                        <input type="number" class="form-control input-sm"  placeholder="体积重比" v-model.trim.number="us.air.cubePct">
                                     </div> 
                                     <label class="input-group-addon">
                                         处理费
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.air.cost.process.placeholder" v-model="us.air.cost.process.value">
+                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.air.cost.process.placeholder" v-model.trim.number="us.air.cost.process.value">
                                     </div> 
                                     <label class="input-group-addon">
                                        元/件，旺季涨幅
                                     </label>                            
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm"  placeholder="旺季涨幅比" v-model="us.air.cost.incPct">
+                                        <input type="number" class="form-control input-sm"  placeholder="旺季涨幅比" v-model.trim.number="us.air.cost.incPct">
                                     </div>  
                                     <label class="input-group-addon">
                                         %
@@ -521,25 +535,25 @@
                                         海运
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" placeholder="价格" v-model="us.shipping.price">
+                                        <input type="number" class="form-control input-sm" placeholder="价格" v-model.trim.number="us.shipping.price">
                                     </div>  
                                     <label class="input-group-addon">
                                         元/KG，体积重比
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm"  placeholder="体积重比" v-model="us.shipping.cubePct">
+                                        <input type="number" class="form-control input-sm"  placeholder="体积重比" v-model.trim.number="us.shipping.cubePct">
                                     </div> 
                                     <label class="input-group-addon">
                                         处理费
                                     </label> 
                                     <div class="form-inline">
-                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.shipping.cost.process.placeholder" v-model="us.shipping.cost.process.value">
+                                        <input type="number" class="form-control input-sm" v-bind:placeholder="us.shipping.cost.process.placeholder" v-model.trim.number="us.shipping.cost.process.value">
                                     </div> 
                                     <label class="input-group-addon">
                                         元/件，旺季涨幅
                                      </label>                            
                                      <div class="form-inline">
-                                         <input type="number" class="form-control input-sm"  placeholder="旺季涨幅比" v-model="us.shipping.cost.incPct">
+                                         <input type="number" class="form-control input-sm"  placeholder="旺季涨幅比" v-model.trim.number="us.shipping.cost.incPct">
                                      </div>  
                                      <label class="input-group-addon">
                                          %
@@ -556,7 +570,7 @@
                         <table class="table table-bordered">
                             <thead>
                                <tr class="success">
-                                   <td colspan="8"><h3>利润核算表格</h3><h6>单位：元</h6></td>
+                                   <td colspan="8"><h3>利润核算表</h3><h6>单位：元</h6></td>
                                </tr>
                             </thead>
                             <tbody>
@@ -634,9 +648,6 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="8">
-                                       总收入 = {{Number(us.saleTotal).toFixed(2)}}
-                                       <br/>
-
                                        <ul>
                                            <li>
                                             基础成本(除国际运费) = 
@@ -700,6 +711,23 @@
             data(){
                 return {
                     message : "Caculator V1.0",
+
+                    config:{
+                        weight:{
+                            norms:{
+                                kg: 1,
+                                pound: 2.2046226,
+                            },
+                        },
+                        size:{
+                           norms:{
+                               cm:1,
+                               inch:2.54,
+                           },
+                        },
+                    },
+
+
                     shipping:{
                         inter:{
                             cost:{
@@ -851,37 +879,25 @@
                 }
             },
             watch:{
-                productInfoSizeLong:function(val){this.productInfoSizeLong = Number(val)},
-                productInfoSizeWidth: function(val){this.productInfoSizeWidth = Number(val)}, //单个产品宽
-                productInfoSizeHeight: function(val){this.productInfoSizeHeight = Number(val)}, //单个产品高
- 
-                productInfoWeight: function(val){this.productInfoWeight = Number(val)} , //单个产品重量
- 
-                productNumbers: function(val){this.productNumbers = Number(val)}, //产品数量
-                productPrice:function(val){this.productPrice = Number(val)}, //产品价格
- 
-                //外包装
-                packageInfoSizeLong: function(val){this.packageInfoSizeLong = Number(val)}, //单个产品长
-                packageInfoSizeWidth: function(val){this.packageInfoSizeWidth = Number(val)}, //单个产品宽
-                packageInfoSizeHeight: function(val){this.packageInfoSizeHeight = Number(val)}, //单个产品高
- 
+               
 
-                packageInfoWeight: function(val){this.packageInfoWeight = Number(val)} , //单个产品重量
- 
 
-                packageOfNumbers: function(val){this.packageOfNumbers = Number(val)}, //产品数量
-                packageNumbers:function(val){this.packageNumbers = Number(val)}, //产品价格
- 
-                //运输
-                trainPricePerKG: function(val){this.packageOfNumbers = Number(val)},
-                shippingPricePerKG: function(val){this.packageOfNumbers = Number(val)},
-                airPricePerKG: function(val){this.packageOfNumbers = Number(val)},
+
+
+
+
+
             }
        
         }
 
         Vue.createApp(caculatorApp)
         // .component('v-chart', VueECharts)
+        .directive('trimzero',{
+            updated(el){
+                el.value = Number(el.value);
+            }
+        })
         .mount("#caculator");
  
 
@@ -891,13 +907,13 @@
 <script src="https://readmore.openwrite.cn/js/readmore.js" type="text/javascript"></script>
 <script>
     const btw = new BTWPlugin();
-    btw.init({
-        id: 'caculator',
-        blogId: '26437-1619169501455-647',
-        name: '宋先生的跨境日志',
-        qrcode: 'https://pickonebyone.github.io/amz/fbacaculator/qrcode.jpg',
-        keyword: 'FBA',
-    });
+    // btw.init({
+    //     id: 'caculator',
+    //     blogId: '26437-1619169501455-647',
+    //     name: '宋先生',
+    //     qrcode: 'https://pickonebyone.github.io/amz/fbacaculator/qrcode.jpg',
+    //     keyword: 'FBA',
+    // });
 </script>
   </body>
 </html>

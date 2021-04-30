@@ -429,486 +429,6 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/28/Spring-Bean%E9%85%8D%E7%BD%AE%E5%85%83%E4%BF%A1%E6%81%AF/">
-      Spring-Bean配置元信息
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://www.hessentec.top" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月28日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Spring-配置元信息"><a href="#Spring-配置元信息" class="headerlink" title="Spring 配置元信息"></a>Spring 配置元信息</h2><p>  Bean配置元信息：BeanDefinition<br>  Bean属性元信息：PropertyValues<br>  容器配置元信息<br>  外部化配置元信息： PropertySource<br>  Profile 元信息： @Profile</p>
-<p>Spring Bean 配置元信息</p>
-<pre><code>GenericBeanDefinition
-RootBeanDefinition
-AnnotatedBeanDefinition</code></pre><p>Spring Bean 属性元信息<br> PropertyValues<br>  MutablePropertyValues<br>  PropertyValue<br>Bean 属性上下文存储<br>  AttributeAccessor<br>Bean 元信息元素<br>   BeanMetadataElement</p>
-<p>Spring 容器配置元信息</p>
-<h4 id="beans-元素"><a href="#beans-元素" class="headerlink" title="beans 元素"></a>beans 元素</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- outter --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">profile</span>=<span class="string">"dev"</span> <span class="attr">default-lazy-init</span>=<span class="string">"default"</span> <span class="attr">default-merge</span>=<span class="string">"default"</span> <span class="attr">default-autowire</span>=<span class="string">"default"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">default-autowire-candidates</span>=<span class="string">""</span> <span class="attr">default-init-method</span>=<span class="string">""</span> <span class="attr">default-destroy-method</span>=<span class="string">""</span></span></span><br><span class="line"><span class="tag">&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- inner --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">import</span> <span class="attr">resource</span>=<span class="string">"applicationContext-lookup.xml"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userRepository"</span> <span class="attr">class</span>=<span class="string">"com.github.springframework.repository.UserRepository"</span> <span class="attr">autowire</span>=<span class="string">"byType"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<table>
-<thead>
-<tr>
-<th>Beans元素属性</th>
-<th>默认值</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>profile</td>
-<td>null（留空）</td>
-<td>SpringProfiles 配置值</td>
-</tr>
-<tr>
-<td>default-lazy-init</td>
-<td>default</td>
-<td>当outter Beans “default-lazy-init”属性存在时，继承该值，否则为false</td>
-</tr>
-<tr>
-<td>default-merge</td>
-<td>default</td>
-<td>当outter beans ‘default-merge’ 属性存在时，继承该值，否则为“false”</td>
-</tr>
-<tr>
-<td>default-autowire</td>
-<td>default</td>
-<td>当outter beans “default-autowire”存在时，继承该值，否则为no</td>
-</tr>
-<tr>
-<td>default-autowire-candidates</td>
-<td>null</td>
-<td>默认SpringBean名称的pattern</td>
-</tr>
-<tr>
-<td>default-init-method</td>
-<td>null</td>
-<td>默认springBeans 自定义初始化方法</td>
-</tr>
-<tr>
-<td>default-destroy-method</td>
-<td>null</td>
-<td>默认SpringBean自定义的销毁方法</td>
-</tr>
-</tbody></table>
-<h4 id="Spring-Xml-配置元信息"><a href="#Spring-Xml-配置元信息" class="headerlink" title="Spring Xml 配置元信息"></a>Spring Xml 配置元信息</h4><table>
-<thead>
-<tr>
-<th>xml元素</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&lt;context:annotation-config/&gt;</td>
-<td>激活Spring注解驱动</td>
-</tr>
-<tr>
-<td>&lt;context:component-scan/&gt;</td>
-<td>Spring @Component 以及自定义注解扫描</td>
-</tr>
-<tr>
-<td>&lt;context:load-time-weaver /&gt;</td>
-<td>激活Spring LoadTimeWeaver</td>
-</tr>
-<tr>
-<td>&lt;context:mbean-export /&gt;</td>
-<td>暴露Springbeans 做为JMX beans</td>
-</tr>
-<tr>
-<td>&lt;context:mbean-server /&gt;</td>
-<td>将当前平台作为MBeanServer</td>
-</tr>
-<tr>
-<td>&lt;context:property-placeholder /&gt;</td>
-<td>加载外部化配置资源作为Spring属性配置</td>
-</tr>
-<tr>
-<td>&lt;context:property-override /&gt;</td>
-<td>利用外部化配置资源覆盖Spring属性值</td>
-</tr>
-</tbody></table>
-<p>底层实现 <code> BeanDefinitionParserDelegate </code> </p>
-<h4 id="基于XML文件装载"><a href="#基于XML文件装载" class="headerlink" title="基于XML文件装载"></a>基于XML文件装载</h4><p>Spring Bean 配置元信息</p>
-<table>
-<thead>
-<tr>
-<th>xml元素</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&lt;beans:beans /&gt;</td>
-<td>单XML资源下的多个SpringBean配置</td>
-</tr>
-<tr>
-<td>&lt;beans:bean /&gt;</td>
-<td>单个SpringBean定义Beandefinition 配置</td>
-</tr>
-<tr>
-<td>&lt;beans:alias /&gt;</td>
-<td>为SpringBean 定义（BeanDefinition）映射别名</td>
-</tr>
-<tr>
-<td>&lt;beans:import /&gt;</td>
-<td>加载外部SpringXML 配置资源</td>
-</tr>
-</tbody></table>
-<p>底层实现 <code> XmlBeanDefinitionReader </code> 和 <code> BeanDefinitionDocumentReader</code> 和  <code> BeanDefinitionHolder</code></p>
-<h4 id="基于Properties文件装载"><a href="#基于Properties文件装载" class="headerlink" title="基于Properties文件装载"></a>基于Properties文件装载</h4><p>Spring Bean 配置元信息</p>
-<table>
-<thead>
-<tr>
-<th>Properties 属性名</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>(class)</td>
-<td>Bean类全称限定名</td>
-</tr>
-<tr>
-<td>(abstract)</td>
-<td>是否为抽象的BeanDefinition</td>
-</tr>
-<tr>
-<td>(parent)</td>
-<td>指定 parent BeanDefinition</td>
-</tr>
-<tr>
-<td>(lazy-init)</td>
-<td>是否延迟初始化</td>
-</tr>
-<tr>
-<td>(ref)</td>
-<td>引用其他Bean的名称</td>
-</tr>
-<tr>
-<td>(scope)</td>
-<td>设置Bean的scope属性</td>
-</tr>
-<tr>
-<td>${n}</td>
-<td>n标示第n个构造器参数</td>
-</tr>
-<tr>
-<td>底层实现<code>PropertiesBeanDefinitionReader</code></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>基于Java注解装载SpringBean的配置元信息</p>
-<table>
-<thead>
-<tr>
-<th>Spring注解</th>
-<th>场景说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>@Repository</td>
-<td>数据仓储模式</td>
-</tr>
-<tr>
-<td>@Component</td>
-<td>通用组建模式</td>
-</tr>
-<tr>
-<td>@Service</td>
-<td>服务模式</td>
-</tr>
-<tr>
-<td>@Controller</td>
-<td>Web控制器模式</td>
-</tr>
-<tr>
-<td>@Configuration</td>
-<td>配置类模式</td>
-</tr>
-<tr>
-<td>@Autowired</td>
-<td>Bean依赖注入，支持多种依赖查找方式</td>
-</tr>
-<tr>
-<td>@Qualifier</td>
-<td>细粒度的@Autowired 依赖查找</td>
-</tr>
-<tr>
-<td>@Resource</td>
-<td>Java注解，类似于@Autowired</td>
-</tr>
-<tr>
-<td>@Inject</td>
-<td>Java注解，类似于@Autowired</td>
-</tr>
-<tr>
-<td>@Profile</td>
-<td>配置话条件装配</td>
-</tr>
-<tr>
-<td>@Conditional</td>
-<td>编程条件装配</td>
-</tr>
-<tr>
-<td>@PostConstructor</td>
-<td>替换XML元素 &lt;bean init-method=” /&gt; 或者 initializingBean</td>
-</tr>
-<tr>
-<td>@PreDestroy</td>
-<td>替换XML元素 <bean destroy-method> 或者 DisposableBean</bean></td>
-</tr>
-</tbody></table>
-<p>ClassPathScanningCandidateComponentProvider<br>AutowiredAnnotationBeanPostProcessor<br>CommonAnnotationBeanPostProcessor</p>
-<p>SpringBean配置元信息底层实现</p>
-<ul>
-<li><p>Xml资源 BeanDefinition解析与注册</p>
-<ul>
-<li>核心API: XmlBeanDefinitionReader<ul>
-<li>资源： Resource</li>
-<li>底层： BeanDefinitionDocumentReader<ul>
-<li>XML 解析： JavaDOM Level 3 API</li>
-<li>BeanDefinition  解析 BeanDefinitionParserDelegate</li>
-<li>BeanDefinition 注册 BeanDefinitionRegistry<br>DefaultBeanDefinitionDocumentReader</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Properties 资源 BeanDefinition 解析与注册</p>
-<ul>
-<li>核心API：PropertiesBeanDefinitionReader<ul>
-<li>资源<ul>
-<li>字节流：Resource</li>
-<li>字符流：EncodeResource</li>
-</ul>
-</li>
-<li>底层：<ul>
-<li>存储：java.util.Properties</li>
-<li>BeanDefinition 解析： API内部实现</li>
-<li>BeanDefinition 注册： BeanDefinitionRegistry</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Annotation 解析与注册</p>
-<ul>
-<li>核心API：AnnotatedBeanDefinitionReader<ul>
-<li>资源<ul>
-<li>类对象： java.lang.Class</li>
-</ul>
-</li>
-<li>底层<ul>
-<li>条件评估： ConditionEvaluator</li>
-<li>Bean范围解析： ScopeMetadataResolver</li>
-<li>BeanDefinition解析：内部API实现</li>
-<li>BeanDefinition处理：AnnotationConfigUtils.processCommonDefinitionAnnotations</li>
-<li>BeanDefinition注册：BeanDefinitionRegistry</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>基于XML文件装载SpringIOC容器配置元信息</p>
-<table>
-<thead>
-<tr>
-<th>命名空间</th>
-<th>所属模块</th>
-<th>Schema资源URL</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>beans</td>
-<td>spring-beans</td>
-<td><a href="https://www.springframework.org/schema/beans/spring-beans.xsd" target="_blank" rel="noopener">https://www.springframework.org/schema/beans/spring-beans.xsd</a></td>
-</tr>
-<tr>
-<td>context</td>
-<td>spring-context</td>
-<td><a href="https://www.springframework.org/schema/context/spring-context.xsd" target="_blank" rel="noopener">https://www.springframework.org/schema/context/spring-context.xsd</a></td>
-</tr>
-<tr>
-<td>aop</td>
-<td>spring-aop</td>
-<td><a href="https://www.springframework.org/schema/aop/spring-aop.xsd" target="_blank" rel="noopener">https://www.springframework.org/schema/aop/spring-aop.xsd</a></td>
-</tr>
-<tr>
-<td>tx</td>
-<td>spring-tx</td>
-<td><a href="https://www.springframework.org/schema/tx/spring-tx.xsd" target="_blank" rel="noopener">https://www.springframework.org/schema/tx/spring-tx.xsd</a></td>
-</tr>
-<tr>
-<td>util</td>
-<td>spring-util</td>
-<td><a href="https://www.springframework.org/schema/util/spring-util.xsd" target="_blank" rel="noopener">https://www.springframework.org/schema/util/spring-util.xsd</a></td>
-</tr>
-<tr>
-<td>tool</td>
-<td>spring-tool</td>
-<td><a href="https://www.springframework.org/schema/tool/spring-tool.xsd" target="_blank" rel="noopener">https://www.springframework.org/schema/tool/spring-tool.xsd</a></td>
-</tr>
-</tbody></table>
-<p>基于Java注解装载SpringIOC容器配置元信息</p>
-<table>
-<thead>
-<tr>
-<th>Spring注解</th>
-<th>场景说明</th>
-<th>Since</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>@ImportResource</td>
-<td>替换XML元素 &lt;/import&gt;</td>
-<td>3.0</td>
-</tr>
-<tr>
-<td>@Import</td>
-<td>导入Configuration Class</td>
-<td>3.0</td>
-</tr>
-<tr>
-<td>@ComponentScan</td>
-<td>扫描指定package下标注Spring模式注解的类</td>
-<td>3.1</td>
-</tr>
-<tr>
-<td>@PropertySource</td>
-<td>配置属性抽象</td>
-<td>3.1</td>
-</tr>
-<tr>
-<td>@PropertySources</td>
-<td>@PropertySource集合注解</td>
-<td>4.0</td>
-</tr>
-</tbody></table>
-<p>基于ExtensibleXML authoring扩展Spring XML元素</p>
-<ul>
-<li>编写 XML Schema 文件，定义XML结构</li>
-<li>自定义NameSpaceHandler， 实现命名空间绑定</li>
-<li>自定义BeanDefinitionParser， 实现XML元素与BeanDefinition解析</li>
-<li>注册XML扩展：命名空间与XML Schema 映射</li>
-</ul>
-<p>Extensible XML authoring扩展原理</p>
-<ul>
-<li>AbstractApplicationcontext.obtainFreshBeanFactory<ul>
-<li>AbstractRefreshableApplicationContext.refreshBeanFactory<ul>
-<li>AbstractXmlApplicationContext.loadBeanDefinitions<ul>
-<li>XmlBeanDefinitionReader.doLoadBeanDefinitions<ul>
-<li>BeanDefinitionParserDelegate.parseCustomElement</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>BewanDefinitionParserDelegate.parseCustomElement(Element, BeanDefinition);</p>
-<ul>
-<li>获取namespace</li>
-<li>通过namespace 解析NamespaceHandler</li>
-<li>构造ParserContext</li>
-<li>解析元素，获取BeanDefinition</li>
-</ul>
-<p>基于Properties文件装载外部化配置<br>基于YAML文件装载外部化配置</p>
-<ul>
-<li>org.springfrmework.beans.factory.config.YamlProcessor<ul>
-<li>org.springframework.beans.factory.config.YamlMapFactoryBean</li>
-<li>org.springframework.beans.factory.config.YamlPropertiesFactoryBean</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
     <a href="/2020/07/22/Spring-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
       Spring-生命周期
     </a>
@@ -1054,6 +574,101 @@ AnnotatedBeanDefinition</code></pre><p>Spring Bean 属性元信息<br> PropertyV
 <h5 id="AbstractAutowireCapableBeanFactory"><a href="#AbstractAutowireCapableBeanFactory" class="headerlink" title="AbstractAutowireCapableBeanFactory"></a>AbstractAutowireCapableBeanFactory</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Initialize the given bean instance, applying factory callbacks</span></span><br><span class="line"><span class="comment"> * as well as init methods and bean post processors.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;Called from &#123;<span class="doctag">@link</span> #createBean&#125; for traditionally defined beans,</span></span><br><span class="line"><span class="comment"> * and from &#123;<span class="doctag">@link</span> #initializeBean&#125; for existing bean instances.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> beanName the bean name in the factory (for debugging purposes)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> bean the new bean instance we may need to initialize</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> mbd the bean definition that the bean was created with</span></span><br><span class="line"><span class="comment"> * (can also be &#123;<span class="doctag">@code</span> null&#125;, if given an existing bean instance)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the initialized bean instance (potentially wrapped)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanNameAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanClassLoaderAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> BeanFactoryAware</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #applyBeanPostProcessorsBeforeInitialization</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #invokeInitMethods</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> #applyBeanPostProcessorsAfterInitialization</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">initializeBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> Object bean, @Nullable RootBeanDefinition mbd)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (System.getSecurityManager() != <span class="keyword">null</span>) &#123;</span><br><span class="line">    AccessController.doPrivileged((PrivilegedAction&lt;Object&gt;) () -&gt; &#123;</span><br><span class="line">      invokeAwareMethods(beanName, bean);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;, getAccessControlContext());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    invokeAwareMethods(beanName, bean);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Object wrappedBean = bean;</span><br><span class="line">  <span class="keyword">if</span> (mbd == <span class="keyword">null</span> || !mbd.isSynthetic()) &#123;</span><br><span class="line">    wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    invokeInitMethods(beanName, wrappedBean, mbd);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">        (mbd != <span class="keyword">null</span> ? mbd.getResourceDescription() : <span class="keyword">null</span>),</span><br><span class="line">        beanName, <span class="string">"Invocation of init method failed"</span>, ex);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (mbd == <span class="keyword">null</span> || !mbd.isSynthetic()) &#123;</span><br><span class="line">    wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> wrappedBean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Spring  Bean 销毁<br>    销毁前<br>      DestructionAwareBeanPostProcessor#postProcessorBeforeDestruction<br>    销毁<br>      @PreDestroy<br>      实现DisposableBean接口的destroy方法<br>      自定义销毁方法<br>    垃圾回收<br>      关闭Spring 容器<br>      执行GC<br>      SpringBean 覆盖finalize()方法被回调</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/07/21/Spring-%E4%BD%9C%E7%94%A8%E5%9F%9F/">
+      Spring-作用域
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://www.hessentec.top" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月21日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Spring Bean 作用域<br> 单例模式<br>singleton Bean 作用域：在BeanFactory中唯一。<br> 原型模式<br>prototype Bean 作用域：</p>
+<p>servlet 引擎：<br>request Bean 作用域： 将Spring Bean 存储在Servlet Request上下文中<br>session Bean 作用域：将SpringBean存储在HttpSession中<br>application bean 作用域：将SpringBean存储在ServletContext中。<br>自定义Bean 作用域</p>
 
       
     </div>
@@ -1222,11 +837,6 @@ AnnotatedBeanDefinition</code></pre><p>Spring Bean 属性元信息<br> PropertyV
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"

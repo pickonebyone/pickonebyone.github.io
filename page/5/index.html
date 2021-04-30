@@ -429,152 +429,6 @@
         
           
   <h2 class="title">
-    <a href="/2020/11/04/%E6%96%87%E4%BB%B6/">
-      MySQL 文件
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://www.hessentec.top" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Mysql</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年11月4日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="参数文件"><a href="#参数文件" class="headerlink" title="参数文件"></a>参数文件</h2><h3 id="动态参数"><a href="#动态参数" class="headerlink" title="动态参数"></a>动态参数</h3><p>  动态参数可以在Mysql实例运行中进行更改，可以通过SET命令对动态参数值进行修改。<br>  SET [global|session]  key = value;</p>
-<h3 id="静态参数"><a href="#静态参数" class="headerlink" title="静态参数"></a>静态参数</h3><p>  静态参数在整个实例生命周期内不得进行更改，需要重新启动实例才会生效。</p>
-<h2 id="日志文件"><a href="#日志文件" class="headerlink" title="日志文件"></a>日志文件</h2><h3 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h3><p>记录了对Mysql的启动、运行、关闭过程中所有的错误、警告和正确的信息。</p>
-<h3 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h3><p>可以帮助定位可能存在问题的SQL语句，从而进行SQL层面的优化。Mysql在启动时设置一个阈值，将运行时间超过该值的所有SQL语句都记录到慢查询日志文件中。<br>通过设置 long_query_time 来设置，单位为秒。<br>log_queries_not_using_indexes: 记录没有使用索引的查询日志。<br>log_throttle_queries_not_using_indexes:每分钟允许记录到showLog的且未使用索引的SQL语句次数，0表示不限制。</p>
-<p>查看慢日志</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysqldumpslow *.log</span><br><span class="line">&#x2F;&#x2F;查看执行时间最长的10条sql语句</span><br><span class="line">mysqldumpslow -s al -n 10 *.log</span><br></pre></td></tr></table></figure>
-
-<h3 id="查询日志"><a href="#查询日志" class="headerlink" title="查询日志"></a>查询日志</h3><p>查询日志记录了所有对MySQL数据库请求的信息，无论这些请求是否得到了正确的执行。</p>
-<p>查看查询日志：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail *.log</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="二进制日志"><a href="#二进制日志" class="headerlink" title="二进制日志"></a>二进制日志</h3><p>二进制日志记录了对MySQL数据库执行更改的所有操作，但是不包括SELECT和SHOW这类对数据本身没有修改的操作。二进制日志还包括了执行数据库更改操作的时间等其他额外信息。</p>
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul>
-<li>恢复<br>某些数据的恢复需要二进制日志，如在一个数据库全备文件恢复后，用户可以通过二进制日志进行pint-in-time的恢复。</li>
-<li>复制<br>与恢复类似，通过复制和执行二进制日志使另一台远程的MySQL数据库与当前数据库进行实时同步。</li>
-<li>审计<br>通过二进制日志中的信息来进行审计，判断是否有对数据库进行注入的攻击。</li>
-</ul>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><ul>
-<li>max_binlog_size: 单个日志文件的最大值，默认1G</li>
-<li>binlog_cache_size: 所有未提交的二进制日志会被记录到一个缓存中，等该事务提交时直接将缓冲中的二进制日志写入二进制日志文件，该缓冲的大小默认为32。该值是基于会话的，每个会话会申请32K的空间。</li>
-<li>binlog_cache_use: 记录了使用临时文件写二进制日志的次数。</li>
-<li>sync_binlog：表示每写缓冲多少次就同步到磁盘，为1时，表示采用同步写磁盘的方式来写二进制日志，这时写操作不使用操作系统的缓冲来写二进制日志。默认值为0.</li>
-<li>binlog-do-db：写入哪些库的日志，默认为空表示同步所有库的日志到二进制日志。</li>
-<li>binlog-ignore-db：忽略哪些库的日志</li>
-<li>log-slave-update：当前库为slave时，如果需要将从master取得并执行的二进制日志写入自己的二进制日志文件中时需要设置该值。</li>
-<li>binlog_format：STATEMENT/ROW/MIXED<br>STATEMENT：格式基于SQL语句，如果主服务器运行rand、uuid等函数或者触发器等操作时，就会导致主从服务器上表中的数据库表中的数据库不一致。<br>ROW：二进制的日志，记录了表的更改情况，解决了Statement下复制的问题。可以设置InnoDB的事务隔离设置为READ_COMMITTED，以获得更好的并发性。<br>MIXED：默认采用STATEMENT，但是在特殊情况下会转为ROW。</li>
-</ul>
-<h2 id="套接字文件"><a href="#套接字文件" class="headerlink" title="套接字文件"></a>套接字文件</h2><p>名为mysql.sock,可以通过Unix域套接字方式进行与本地MySQL进行连接。套接字文件由参数socket控制。</p>
-<h2 id="PID文件"><a href="#PID文件" class="headerlink" title="PID文件"></a>PID文件</h2><p>MySQL实例启动时，会将自己的进程ID写入一个文件中，该文件为PID文件。</p>
-<h2 id="表结构定义文件"><a href="#表结构定义文件" class="headerlink" title="表结构定义文件"></a>表结构定义文件</h2><p>因为MySQL插件式存储引擎的体系结构关系，MySQL数据的存储是根据表进行的，每个表都会有与之对应的文件。但不论表采用哪种存储引擎，MySQL都有一个以frm为后缀名的文件，记录了这个表结构或者视图的定义。</p>
-<h2 id="Innodb存储引擎文件"><a href="#Innodb存储引擎文件" class="headerlink" title="Innodb存储引擎文件"></a>Innodb存储引擎文件</h2><h3 id="表空间文件"><a href="#表空间文件" class="headerlink" title="表空间文件"></a>表空间文件</h3><p>InnoDB采用将存储的数据按照表空间进行存放的设计。默认配置喜爱会有一个初始大小为10MB，名为ibdata1的默认表空间文件。</p>
-<p>将ibdata1,ibdata2两个文件用来组成表空间。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">innodb_data_file_path&#x3D;&#x2F;db&#x2F;ibdata1:2000M;&#x2F;dr2&#x2F;db&#x2F;ibdata2:2000M:autoextend</span><br></pre></td></tr></table></figure>
-<p>如果该两个文件位于不同的磁盘上，磁盘的负载可能被平均，因此可以提高数据库的整体性能。<br>设置innodb_data_file_path后，所有给予innoDB存储引擎的表的数据都会记录带该共享表空间中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">innodb_file_per_table&#x3D;ON &#x2F;&#x2F;每个基于InnoDB存储引擎的表产生一个独立表空间。命名规则是：表名.ibd</span><br></pre></td></tr></table></figure>
-<p>单独的表空间文件仅存储该表的数据、索引和插入缓冲BITMAP等信息，其余信息还存放在默认的表空间中。</p>
-<p><img src="/2020/11/04/%E6%96%87%E4%BB%B6/table_space.jpg" alt="表空间"></p>
-<h3 id="重做日志文件"><a href="#重做日志文件" class="headerlink" title="重做日志文件"></a>重做日志文件</h3><p>默认情况下，在InnoDB存储引擎的数据目录下会有两个名为ib_logfile0和ib_logfile1的文件。<br>他们记录了对于InnoDB存储引擎的事务日志。</p>
-<p>重做日志用于由于主机宕机导致实例失败时，恢复到失败前的状态，一次来保证数据的完整性。</p>
-<p>每个InnoDB存储引擎至少有1个重做日志文件组，每个文件组下至少有2个重做日志文件。为了得到更高的可靠性，用户可以设置多个的景象日志组。将不同的组存放在不同的磁盘上，以此提高重做日志的高可用性。在日志组中每个重做日志文件的大小一致，并以循环写入的方式运行。<br>InnoDB存储引擎献血重做日志文件1，当达到文件的最后时，会切换到重做日志文件2，再当重做日志文件2也被写满时，再切换到重做日志文件1中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">innodb_log_file_size:每个重做日志文件的大小</span><br><span class="line">innodb_log_files_in_group: 日志文件组中重做日志文件的数量，默认为2</span><br><span class="line">innodb_mirrored_log_groups: 日志镜像文件组的数量，默认为1，表示没有镜像。</span><br><span class="line">innodb_log_group_home_dir: 日志文件组所在的路径，默认为.&#x2F;</span><br></pre></td></tr></table></figure>
-
-
-<p>重做日志文件的大小对InnoDB存储性能有非常大的影响。<br>如果设置太大，在恢复时可能需要很长的时间。<br>如果设置太小，会导致一个事务的日志需要多次切换重做日志文件。同时会导致频繁地发生 async checkpoint， 导致性能抖动。</p>
-<h4 id="二进制文件与重做日志"><a href="#二进制文件与重做日志" class="headerlink" title="二进制文件与重做日志"></a>二进制文件与重做日志</h4><p>层次不同：<br>二进制日志：记录所有与MySQL数据库有关的日志记录，包括InnoDB，MyISAM，Heap等其他存储引擎的日志。<br>重做日志：值记录InnoDB存储引擎本身的事务日志。</p>
-<p>内容不同：<br>二进制日志文件记录的是一个事务的具体操作内容，为逻辑日志。<br>重做日志记录的是关于每个页的更改的物理情况。</p>
-<p>写入时间不同：<br>二进制文件仅在事务提交前进行，无论事务大小，只写磁盘一次。<br>在事务进行的过程后再难过，不断有重做日志条目被写入到重做日志文件中。</p>
-<h4 id="重做日志条目结构"><a href="#重做日志条目结构" class="headerlink" title="重做日志条目结构"></a>重做日志条目结构</h4><p>redo_log_type | space | page_no | redo_log_body<br>redo_log_type ： 占用1字节，表示重做日志的类型<br>space： 表示表空间的ID，采用压缩的方式，占用空间可能小于4字节<br>page_no：表示页的偏移量，压缩方式<br>redo_log_body:每个重做日志的数据部分，恢复时需要调用相应函数解析。</p>
-<h4 id="重做日志写入"><a href="#重做日志写入" class="headerlink" title="重做日志写入"></a>重做日志写入</h4><p>重做日志的写入不是直接写，而是先写入重做日志缓冲（redo log buffer）中，然后按照一定的条件顺序地写入日志文件。</p>
-<p>从重做日志缓冲网磁盘写入时，按照写入的最小单位（扇区大小：512个字节）进行写入，因此可以保证写入必定是成功的，因此在重做日志的写入过程不需要有doublewrite。</p>
-<p>写入时机：<br>1） 不论事务已经提交，主线程每秒都会将重做日志缓冲写入到磁盘的重做日志文件中。<br>2） 事务提交时，设置了innodb_flush_log_at_trx_commit。<br>    值为0时，不将事物的重做日志写入磁盘上的日志文件，<br>    1表示在执行commit时将重做日志缓冲同步写到磁盘，<br>    2表示将重做日志异步写到磁盘（也就是写到文件系统的缓存中）</p>
-<p>因此，为了保证ACID中的D（持久性），必须将innodb_flush_log_at_trx_commit设置为1，当数据库因为意外宕机时，可以通过重做日志文件恢复，并保证可以恢复已经提交的事务。</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
     <a href="/2020/11/03/InnoDB%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84/">
       InnoDB体系架构
     </a>
@@ -701,6 +555,124 @@
 <h3 id="刷新邻接页"><a href="#刷新邻接页" class="headerlink" title="刷新邻接页"></a>刷新邻接页</h3><p>当刷新一个脏页时，InnoDB存储引擎会检测该页所在区的所有页，如果是脏页，那么一起进行刷新。<br>通过AIO可以将多个IO卸乳操作合并为一个IO操作。</p>
 <p>可以通过innodb_flush_neighbors 来关闭或者开启该特性。</p>
 <p>select version();<br>show variables like ‘innodb_%_threads’;<br>show variables like ‘innodb_buffer_pool_size’;<br>show variables like ‘innodb_buffer_pool_instances’;<br>show variables like ‘innodb_change_buffering’;<br>show engine innodb status;</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/11/03/Mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/">
+      Mysql体系结构和存储引擎
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://www.hessentec.top" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Mysql/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Mysql</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年11月3日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Mysql-体系结构"><a href="#Mysql-体系结构" class="headerlink" title="Mysql 体系结构"></a>Mysql 体系结构</h2><p><img src="/2020/11/03/Mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/Mysql_struct.jpeg" alt="MySQL体系结构"></p>
+<ul>
+<li>链接池组件</li>
+<li>管理服务和工具组件</li>
+<li>SQL接口组件</li>
+<li>查询分析器组件</li>
+<li>优化器组件</li>
+<li>缓存组件</li>
+<li>插件式表存储引擎</li>
+<li>物理文件</li>
+</ul>
+<h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p>可以根据MySQL官方手册给出的定义存储引擎的过程来编写符合自己需求的存储引擎。<br>或者使用官方提供的存储引擎。</p>
+<h3 id="InnoDB存储引擎"><a href="#InnoDB存储引擎" class="headerlink" title="InnoDB存储引擎"></a>InnoDB存储引擎</h3><p>InnoDB存储引擎支持事务，其设计目标主要面向在线事务处理的应用。其特点是行锁设计、支持外间，并支持类似于Oracle的非锁定读（默认读取操作不会产生锁）。</p>
+<p>InnoDB存储引擎将数据放在一个逻辑的表空间中，这个表空间就像黑盒一样由InnoDB存储引擎自身进行管理。可以将每个独立的表单独存放在一个idb文件中。InnoDB存储引擎支持使用裸设备来建立其表空间。</p>
+<p>InnoDB通过多版本并发控制（MVCC）来获得高并发性；<br>实现了SQL标准的4种隔离级别，默认为REPEATABLE；<br>使用Next-KeyLocking策略避免欢度现象的产生；<br>提供了插入缓冲（Insert Buffer）；<br>二次写（Double Write）；<br>预读（Read Ahead）。</p>
+<p>Innodb存储引擎采用了聚集的方式，每张表的存储都是按照主键的顺序进行存放。如果没有显式地在表定义时制定主键，InnoDB存储引擎会为每一行生成一个6字节的RowId，并以此作为主键。</p>
+<h3 id="MyISAM存储引擎"><a href="#MyISAM存储引擎" class="headerlink" title="MyISAM存储引擎"></a>MyISAM存储引擎</h3><p>MyISAM引擎主要面向一些OLAP（联机分析处理）的应用。 因此不支持事务、表锁设计，但支持全文索引。</p>
+<p>它的缓存池只缓存索引文件，不缓存数据文件，数据文件的缓存交给操作系统来完成。<br>MYISAM存储引擎表由MYD和MYI组成，MYD用来存放数据文件，MYI用来存放索引文件。</p>
+<h3 id="Maria存储引擎"><a href="#Maria存储引擎" class="headerlink" title="Maria存储引擎"></a>Maria存储引擎</h3><p>其目标是用来替代原有的MYISAM，可以看作是MyISAM的后续版本。<br>特点是支持缓存数据和索引文件，应用了行锁设计，提供了MVCC功能，支持事务和非事务安全的选项。<br>更好的BLOB自负类型的处理性能。</p>
+<h3 id="NDB存储引擎"><a href="#NDB存储引擎" class="headerlink" title="NDB存储引擎"></a>NDB存储引擎</h3><p>也叫NDBCluster存储引擎，壮阳药用于MySQL Cluster分布式集群环境。</p>
+<p>NDB的特点是数据全部放在内存中，因此主键查找的速度极快，并且通过添加NDB数据存储结点可以线性地提高数据库性能，是高可用、高性能的集群系统。<br>由于其存储引擎特性，Join操作是在Muysql数据库层完成，而不是在存储引擎层完成。</p>
+<h3 id="Memory存储引擎"><a href="#Memory存储引擎" class="headerlink" title="Memory存储引擎"></a>Memory存储引擎</h3><p>表中的数据存放在内存中，适合用于存储临时数据的临时表，以及数据仓库中的纬度表。Memory存储引擎默认使用哈希索引。</p>
+<p>Memory存储引擎不支持表锁，并发行能差，不支持TEXT和BLOB列类型。存储varchar时是按照char的方式进行的。</p>
+<p>MySQL数据库使用Memory存储引擎作为临时表来存放查询的中间结果集。<br>如果中间爱护你接过机大于Memory存储引擎表的容量设置，又或者包含有TEXT或者BLOB列类型的字段，Mysql会把中间结果集转换到MyISAM存储引擎表存放到磁盘中（因为MyISAM不缓存数据文件），因此会有性能损失。</p>
+<h3 id="Archive存储引擎"><a href="#Archive存储引擎" class="headerlink" title="Archive存储引擎"></a>Archive存储引擎</h3><p>用来存储归档数据，如日志信息等。<br>使用zlib算法将数据行进行压缩后存储，压缩比达到1:10.<br>该引擎只支持INSERT和SELECT操作，该引擎使用行锁来实现高并发的插入操作。</p>
 
       
     </div>
@@ -869,11 +841,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"

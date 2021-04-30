@@ -429,101 +429,6 @@
         
           
   <h2 class="title">
-    <a href="/2020/07/21/Spring-%E4%BD%9C%E7%94%A8%E5%9F%9F/">
-      Spring-作用域
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://www.hessentec.top" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈/Spring</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月21日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Spring Bean 作用域<br> 单例模式<br>singleton Bean 作用域：在BeanFactory中唯一。<br> 原型模式<br>prototype Bean 作用域：</p>
-<p>servlet 引擎：<br>request Bean 作用域： 将Spring Bean 存储在Servlet Request上下文中<br>session Bean 作用域：将SpringBean存储在HttpSession中<br>application bean 作用域：将SpringBean存储在ServletContext中。<br>自定义Bean 作用域</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
     <a href="/2020/07/18/Spring-%E4%BE%9D%E8%B5%96%E5%A4%84%E7%90%86/">
       Spring-依赖处理
     </a>
@@ -592,6 +497,107 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>入口：DefaltListableBeanFactory#resolveDependency<br>依赖描述符：DependencyDescriptor<br>自定绑定候选对象处理器：AutowireCandidateResolver</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/07/17/Spring-BeanFactory/">
+      Spring-BeanFactory
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://www.hessentec.top" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月17日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/2020/07/17/Spring-BeanFactory/BeanFactory.jpg" alt="Spring BeanFactory 类图"></p>
+<p>BeanFactory是访问Spring bean容器的根接口。提供了一些获取Bean的基础方法定义。</p>
+<p><img src="/2020/07/17/Spring-BeanFactory/BeanFactoryMethods.jpg" alt="BeanFactory"></p>
+<p>ListableBeanFactory 和 ConfigurableBeanFactory 提供了一些更具体的特殊目标。</p>
+<p>ListableBeanFactory继承了BeanFactory, 容器可以以列表的形式获取bean的相关信息，提供了获取多个beanName的基础方法。<br><img src="/2020/07/17/Spring-BeanFactory/listable_bean_factory.jpg" alt="ListableBeanFactory"></p>
+<p>ConfigurableBeanFactory 继承了 hierarchicalBeanFactory, 提供了IOC容器的可配置能力，几乎所有的BeanFactory都会实现这个接口。<br><img src="/2020/07/17/Spring-BeanFactory/configurable_bean_factory.jpg" alt="ConfigurableBeanFactory"></p>
+<p>AutowireCapableBeanFactory 提供了自动装配Bean的能力。</p>
+<p><img src="/2020/07/17/Spring-BeanFactory/AutowireCapableBeanFactory.jpg" alt="AutowireCapableBeanFactory"></p>
 
       
     </div>
@@ -760,11 +766,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"

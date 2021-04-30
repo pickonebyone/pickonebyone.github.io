@@ -429,140 +429,6 @@
         
           
   <h2 class="title">
-    <a href="/2020/08/18/Spring-%E6%B3%A8%E8%A7%A3/">
-      Spring-注解
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a href="https://www.hessentec.top" rel="nofollow">
-    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
-    <p>June</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java技术栈</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年8月18日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Spring 注解驱动编程发展历程</p>
-<p> 1.2 @Transactional<br>     @ManagedResource<br> 2.0 @Component<br>     @Repository<br> 3.0 @Bean<br>     @Import</p>
-<p> 4.0 @Profile<br>     @Conditional<br>     @Indexed<br>Spring 核心注解场景分类</p>
-<pre><code>|注解|场景说明|起始版本|
-|---|---|---|
-|@Repository| 数据仓储模式注解| 2.0|
-|@Component| 通用组件模式注解| 2.5|
-|@Service| 服务模式注解| 2.5|
-|@Controller| Web控制器模式注解| 2.5|
-|@Configuration| 配置类模式注解| 3.0|</code></pre><h4 id="装配注解"><a href="#装配注解" class="headerlink" title="装配注解"></a>装配注解</h4><pre><code>|注解|场景说明|起始版本|
-|---|---|---|
-|@ImportResource| 替换XML元素\&lt;import\&gt;| 2.5|
-|@Import| 导入Configuration类，无论是否标记@Configuration| 2.5|
-|@ComponentScan| 扫描指定package下标注Spring模式注解的类| 3.1|</code></pre><h4 id="依赖注入注解"><a href="#依赖注入注解" class="headerlink" title="依赖注入注解"></a>依赖注入注解</h4><pre><code>|注解|场景说明|起始版本|
-|---|---|---|
-|@Autowired| Bean依赖注入，支持多种依赖查找方式| 2.5|
-|@Qualifier| 细粒度的@Autowired查找| 2.5|</code></pre><h2 id="Spring-注解编程模型"><a href="#Spring-注解编程模型" class="headerlink" title="Spring 注解编程模型"></a>Spring 注解编程模型</h2><p>   元注解<br>   Spring 模式注解<br>   Spring 组合注解<br>   Spring 注解属性别名/覆盖</p>
-<h2 id="Spring-元注解（Meta-Annotations）"><a href="#Spring-元注解（Meta-Annotations）" class="headerlink" title="Spring 元注解（Meta-Annotations）"></a>Spring 元注解（Meta-Annotations）</h2><p> A meta-annotation is an annotation that is declared on another annotation.<br> An annotation is therefore meta-annotated if it is annotated with another annotation. For example, any annotation that is declared to be documented is meta-annotated with @Documented from the java.lang.annotation package.</p>
-<ul>
-<li>java.lang.annotation.Documented</li>
-<li>java.lang.annotation.Inherited</li>
-<li>java.lang.annotation.Repeatable</li>
-</ul>
-<h2 id="Spring-模式注解（Stereotype-Annotations）"><a href="#Spring-模式注解（Stereotype-Annotations）" class="headerlink" title="Spring 模式注解（Stereotype Annotations）"></a>Spring 模式注解（Stereotype Annotations）</h2><p>  元标注@Component的注解在XML元素 <a href="context:component-scan">context:component-scan</a> 或 注解 @ComponentScan 扫描中派生了 @Component 特性， 并且从Spring Framework 4.0 开始支持多层次派生。</p>
-<ul>
-<li>@Repository</li>
-<li>@Service</li>
-<li>@Controller</li>
-<li>@Configuration</li>
-<li>@SpringBootConfiguration </li>
-</ul>
-<p>Spring 组合注解（Composed Annotations）</p>
-<p>  A composed annotation is an annotation that is meta-annotated withy one or more annotations with the intent of combining the behavor associated with those meta-annotations into a single custom annotation.<br>  For example, an annotation named @TransactionalService that is meta-annotation with Spring’s @Transactional and @Service annotations is a composed annotation that combines the semantics of @Transactional and @Service.<br>  @TransactionalService is technically also a custom stereotype annotation.</p>
-<p>  基本定义： </p>
-<p>  spring组合注解中的元注解允许是Spring模式注解与其他Spring功能性注解的任意组合。</p>
-<p>Spring 注解属性别名（Attribute Alias）</p>
-<p>Spring 注解属性覆盖（Attribute Ovverides）</p>
-<p>Spring @Enable 模块驱动</p>
-<p>  @Import(@Configuration)<br>  @Import(ImportSelector)<br>  @Import(ImportBeanDefinitionRegistrar)<br>    AnnotatedBeanDefinition ad = new AnnotatedGenericBeanDefinition();<br>    BeanDefinitionReaderUtils.registerWithGeneratedName(ad, register);</p>
-<p>Spring 条件注解</p>
-<p>上下文对象： org.springframework.context.annotation.ConditionContext<br>条件判断：org.springframework.context.annotation.ConditionEvaluator<br>配置阶段：org.sprignframework.context.annotation.ConfigurationCondition.ConfigurationPhase<br>判断入口：org.springframework.context.annotation.ConfigurationClassPostProcessor<br>        org.springframework.context.annotation.ConfigurationClassPasser<br>ConditionContext<br>ConditionEvaluator</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
     <a href="/2020/08/15/Spring-DataBind/">
       Spring-DataBind
     </a>
@@ -631,6 +497,106 @@
     <div class="article-entry" itemprop="articleBody">
       
         
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/08/14/Spring-Validator/">
+      Spring-Validator
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a href="https://www.hessentec.top" rel="nofollow">
+    <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/avatar/avatar.png">
+    <p>June</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E6%8A%80%E6%9C%AF%E6%A0%88/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java技术栈</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年8月14日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Spring 校验使用场景<br>   Spring 常规校验 Validator<br>   Spring 数据绑定 Databinder<br>   Spring Web 参数绑定 WebDataBinder<br>   Spring WebMVC/WebFlux 处理方法参数校验</p>
+<p>Validator 接口设计</p>
+<p>Errors 接口设计</p>
+<p>Errors 文案来源</p>
+<p>自定义Validator</p>
+<p>Validator的救赎</p>
+<p>面试题</p>
+
       
     </div>
     
@@ -798,11 +764,6 @@
             title="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/" href="/categories/%E7%94%9F%E4%BA%A7%E5%8A%9B/sublime%E5%BF%AB%E6%8D%B7%E9%94%AE/"
             id="categoriesE7949FE4BAA7E58A9BsublimeE5BFABE68DB7E994AE"
             ><div class='name'>sublime快捷键</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-            id="categoriesE7A28EE7A28EE5BFB5"
-            ><div class='name'>碎碎念</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
